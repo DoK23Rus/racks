@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block page %}
+    <b>Устройство №{{ device.id }}</b>
+    <br>
+    <br>
+    Статус: {{ device.status }}
+    <br>
+    Описание: {{ device.device_description }}
+    <br>
+    {% if device.frontside_location == True %}
+        Расположено на фронтальной части стойки: Да
+    {% else %}
+        Расположено на фронтальной части стойки: Нет
+    {% endif %}
+    <br>
+    Первый юнит: {{ device.first_unit}}
+    <br>
+    Последний юнит: {{ device.last_unit}}
+    <br>
+    Зона ответсвенности: {{ device.ownership }}
+    <br>
+    Проект: {{ device.project }}
+    <br>
+    Инвентарный номер: {{ device.device_inventory_number}}
+    <br>
+    МОЛ: {{ device.financially_responsible_person }}
+    <br>
+    <br>
+    Вендор: {{ device.device_vendor }}
+    <br>
+    Модель: {{ device.device_model }}
+    <br>
+    Тип оборудования: {{ device.device_type }}
+    <br>
+    Hostname: {{ device.device_hostname }}
+    <br>
+    {% if device.device_stack != None %}
+        Stack/Резерв: <a href="{% url 'device_detail' device.device_stack %}" target="_blank">Устройство №{{ device.device_stack }}</a>
+    {% else %}
+        Stack/Резерв:
+    {% endif %}
+    <br>
+    Серийный номер: {{ device.device_serial_number }}
+    <br>
+    Подключение к электросети: {{ device.power_type }}
+    <br>
+    {% if device.power_w != None %}
+        Потребляемая мощность (Вт): {{ device.power_w }}
+    {% else %}
+        Потребляемая мощность (Вт):
+    {% endif %}
+    <br>
+    {% if device.power_v != None %}
+        Рабочее напряжение (В): {{ device.power_v }}
+    {% else %}
+        Рабочее напряжение (В):
+    {% endif %}
+    <br>
+    Полярность тока: {{ device.power_ac_dc }}
+    <br>
+    <br>
+    <div class="small-size">Обновлено сотрудник: {{ device.updated_by}}</div>
+    <div class="small-size">Обновлено дата: {{ device.updated_at}}</div>
+    <br>
+    <a class="btn-link third" href="{% url 'device_upd' device.pk %}">&#9998; Изменить</a>
+    <a class="btn-link third" href="{% url 'device_del' device.pk %}">&#10006; Удалить</a>
+{% endblock %}

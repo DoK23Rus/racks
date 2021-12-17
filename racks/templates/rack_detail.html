@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block page %}
+    <b>Стойка №{{ rack.id }}</b>
+    <br>
+    <br>
+    Наименование стойки: {{ rack.rack_name }}
+    <br>
+    Ответственный: {{ rack.responsible }}
+    <br>
+    Ряд: {{ rack.row }}
+    <br>
+    Место: {{ rack.place }}
+    <br>
+    Описание: {{ rack.rack_description }}
+    <br>
+    Инвентарный номер: {{ rack.rack_inventory_number }}
+    <br>
+    МОЛ: {{ rack.rack_financially_responsible_person }} 
+    <br>
+    <br>
+    Фирма производитель: {{ rack.rack_vendor }}
+    <br>
+    Модель стойки: {{ rack.rack_model }}
+    <br>
+    Вместимость стойки (юниты): {{ rack.rack_amount }}
+    <br>
+    {% if rack.numbering_from_bottom_to_top == True %}
+        Нумерация снизу вверх: Да
+    {% else %}
+        Нумерация снизу вверх: Нет
+    {% endif %}
+    <br>
+    {% if rack.rack_height != None %}
+        Высота стойки (мм): {{ rack.rack_height }}
+    {% else %}
+        Высота стойки (мм):
+    {% endif %}
+    <br>
+    {% if rack.rack_width != None %}
+        Ширина стойки (мм): {{ rack.rack_width }}
+    {% else %}
+        Ширина стойки (мм):
+    {% endif %}
+    <br>
+    {% if rack.rack_depth != None %}
+        Глубина стойки (мм): {{ rack.rack_depth }}
+    {% else %}
+        Глубина стойки (мм):
+    {% endif %}
+    <br>
+    {% if rack.rack_unit_width != None %}
+        Полезная ширина стойки (дюймы): {{ rack.rack_unit_width }}
+    {% else %}
+        Полезная ширина стойки (дюймы):
+    {% endif %}
+    <br>
+    {% if rack.rack_unit_depth != None %}
+        Полезная глубина стойки (мм): {{ rack.rack_unit_depth }}
+    {% else %}
+        Полезная глубина стойки (мм):
+    {% endif %}
+    <br>
+    Вариант исполнения: {{ rack.rack_type }}
+    <br>
+    Тип расположения: {{ rack.rack_palce_type }}
+    <br>
+    {% if rack.max_load != None %}
+        Максимальная нагрузка (кг): {{ rack.max_load }}
+    {% else %}
+        Максимальная нагрузка (кг):
+    {% endif %}
+    <br>
+    {% if rack.power_sockets != None %}
+        Свободных электророзеток: {{ rack.power_sockets }}
+    {% else %}
+        Свободных электророзеток:
+    {% endif %}
+    <br>
+    {% if rack.power_sockets_ups != None %}
+        Свободных электророзеток UPS: {{ rack.power_sockets_ups }}
+    {% else %}
+        Свободных электророзеток UPS:
+    {% endif %}
+    <br>
+    {% if rack.cooler == True %}
+        Активная вентиляция: Да
+    {% else %}
+        Активная вентиляция: Нет
+    {% endif %}
+    <br>
+    {% if rack.external_ups == True %}
+        Внешняя система резервного электроснабжения: Да
+    {% else %}
+        Внешняя система резервного электроснабжения: Нет
+    {% endif %}
+    <br>
+    <br>
+    <div class="small-size">Обновлено сотрудник: {{ rack.updated_by}}</div>
+    <div class="small-size">Обновлено дата: {{ rack.updated_at}}</div>
+    <br>
+    <a class="btn-link third" href="{% url 'rack_upd' rack.pk %}">&#9998; Изменить</a>
+    <a class="btn-link third" href="{% url 'rack_del' rack.pk %}">&#10006; Удалить</a>
+{% endblock %}

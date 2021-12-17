@@ -1,0 +1,130 @@
+body {
+  margin: 25px;
+  background-color: #F0F0F0;
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td, th {
+  border-width: 2px;
+  algin: right: ;
+  font-family: Trebuchet MS, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Дерево */
+ul, #racks {
+  list-style-type: none;
+}
+
+#racks {
+  margin: 0;
+  padding: 0;
+}
+
+.caret {
+  cursor: pointer;
+  user-select: none;
+}
+
+.caret::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.caret-down::before {
+  transform: rotate(90deg);  
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+
+/* Прочее */
+.main_text {
+  font-size: 140%;
+  padding: 3px; 
+  line-height: 2;
+}
+
+.other_text {
+  font-size: 120%;
+  padding: 3px;
+  line-height: 2; 
+}
+
+.myheader {
+  float: right;
+}
+
+.small-size {
+  font-size: 9pt;
+}
+
+.btn-link {
+  font-size: 70%; 
+  padding: 3px;
+  line-height: 1;
+  background-color: #4CAF50; /* Зеленый */
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 5px;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.4s;
+}
+
+.second {
+    background-color: #006e99; /* Синий */
+  }
+
+.third {
+    background-color: #e46161; /* Красный */
+  }
+
+.btn-link:hover {
+    background-color: #F0F0F0; 
+    color: black;
+}
+
+.id {
+  min-width: 8ch;
+  max-width: 8ch;
+}
+
+.device {
+  min-width: 70ch;
+  max-width: 70ch;
+}
+
+.device_coll {
+  font-size: 14pt;
+}
+
+.unit {
+  min-width: 4ch;
+  max-width: 4ch;
+}
+
+.zebra_green {
+  background: repeating-linear-gradient(-45deg, #ABEBC6 0, #ABEBC6 10px, transparent 10px, transparent 20px);
+}
+
+.zebra_red {
+  background: repeating-linear-gradient(-45deg, #F5B7B1 0, #F5B7B1 10px, transparent 10px, transparent 20px);
+}

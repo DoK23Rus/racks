@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block page %}
+	<form method='POST'>
+	{% csrf_token %}
+	!!!ВНИМНИЕ!!! 
+	<br>
+	Удаление стойки влечет за собой удаление всех привязанных к ней элементов по схеме:
+	<br>
+	Стойка &rArr; Все устройства в стойке
+	<br>
+	<br>
+    <b>Вы действительно хотите удалить "{{ rack.rack_name }}"?</b>
+    <br>
+    <br>
+    <input type="submit" value="Удалить">
+{% endblock %}
