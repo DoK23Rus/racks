@@ -1,11 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Region, Department, Site, Building, Room, Rack, Device
 from django.forms.models import model_to_dict
 from .forms import *
 from django.db import models
-import csv
 import logging
 from .services import (
 	_queryset_devices, 
@@ -21,6 +19,9 @@ from .services import (
 	_unit_check_exist, 
 	_unit_check_busy, 
 	_unique_check,
+	_export_devices,
+	_export_racks,
+	_queryset_header,
 )
 
 logger = logging.getLogger(__name__)
@@ -88,33 +89,7 @@ def units_view(request, pk):
 	Каждая стойка отображается с двух сторон
 	Для каждой стороны свой набор данных
 	"""
-	queryset_header = Rack.objects.raw("""select rack.id as id, 
-									   rack.rack_name,
-									   room.room_name, 
-									   building.building_name, 
-									   site.site_name, 
-									   department.department_name, 
-									   region.region_name 
-									   from rack 
-									   join room on 
-									   room.id = 
-									   rack.room_id_id 
-									   join building on 
-									   building.id = 
-									   room.building_id_id 
-									   join site on 
-									   site.id = 
-									   building.site_id_id 
-									   join department on 
-									   department.id = 
-									   site.department_id_id 
-									   join region on 
-									   region.id = 
-									   department.region_id_id 
-									   where 
-									   rack.id='""" + 
-									   str(pk) + 
-									   """';""") 
+	queryset_header = _queryset_header(pk) 
 	# Наборы данных для отрисовки роуспанов для устройств шириной больше одного юнита
 	queryset_rack = Rack.objects.get(id=pk)
 	queryset_devices_front = _queryset_devices(pk, True)
@@ -125,7 +100,6 @@ def units_view(request, pk):
 	first_units_back = _first_units(pk, direction, False)
 	spans_front = _spans(pk, True)
 	spans_back = _spans(pk, False)
-
 	return render(request, 'units.html', {
 		'rack': queryset_rack, 
 		'header': queryset_header, 
@@ -224,272 +198,18 @@ def units_back_print_view(request, pk):
 @login_required(login_url='login/')
 def export_devices_view(request):
 	"""
-	Отчет по устройствам
+	Вьюшка для отчета по устройствам
 	"""
-	device_link = 'http://127.0.0.1:80001/device_detail/'
-	response = HttpResponse(content_type='text/csv')
-	response.write(u'\ufeff'.encode('utf8'))
-	writer = csv.writer(response, delimiter=';', dialect='excel')
-	writer.writerow([
-		'Номер устройства', 
-		'Статус',
-		'Вендор', 
-		'Модель', 
-		'Серийный номер', 
-		'Описание', 
-		'Проект', 
-		'Зона ответственности', 
-		'МОЛ', 
-		'Инвентарный номер', 
-		'Первый юнит', 
-		'Последний юнит', 
-		'Расположено на фронтальной части', 
-		'Тип оборудования',
-		'Hostname',
-		'Stack/Резерв',
-		'Подключение к электросети',
-		'Потребляемая мощность (Вт)',
-		'Рабочее напряжение (В)',
-		'Полярность тока',
-		'Обновлено сотрудник', 
-		'Обновлено дата', 
-		'Стойка', 
-		'Помещение', 
-		'Здание', 
-		'Узел', 
-		'Отдел', 
-		'Регион',
-		'Ссылка на устройство',
-	])
-	raw_report =  Device.objects.raw("""select device.id as id,
-									 device.status, 
-									 device.device_vendor, 
-									 device.device_model,
-									 device.device_serial_number, 
-									 device.device_description, 
-									 device.project,  
-									 device.ownership, 
-									 device.financially_responsible_person, 
-									 device.device_inventory_number, 
-									 device.first_unit, 
-									 device.last_unit, 
-									 device.frontside_location, 
-									 device.device_type, 
-									 device.device_hostname, 
-									 device.device_stack, 
-									 device.power_type,
-									 device.power_w, 
-									 device.power_v, 
-									 device.power_ac_dc,
-									 device.updated_by, 
-									 device.updated_at,
-									 rack.rack_name, 
-									 room.room_name, 
-									 building.building_name, 
-									 site.site_name, 
-									 department.department_name, 
-									 region.region_name 
-									 from device 
-									 join rack on 
-									 rack.id = 
-									 device.rack_id_id 
-									 join room on 
-									 room.id = 
-									 rack.room_id_id 
-									 join building on 
-									 building.id = 
-									 room.building_id_id 
-									 join site on 
-									 site.id = 
-									 building.site_id_id 
-									 join department on 
-									 department.id = 
-									 site.department_id_id 
-									 join region on 
-									 region.id = 
-									 department.region_id_id;""")
-	for device in raw_report:
-		if device.device_stack != None:
-			device_stack = device_link + str(device.device_stack)
-		else:
-			device_stack = None
-		if device.frontside_location == True:
-			frontside_location = 'Да'
-		else:
-			frontside_location = 'Нет'
-		writer.writerow([
-			device.id,
-			device.status,
-			device.device_vendor, 
-			device.device_model, 
-			device.device_serial_number,
-			device.device_description,
-			device.project,
-			device.ownership,
-			device.financially_responsible_person,
-			device.device_inventory_number,
-			device.first_unit,
-			device.last_unit,
-			frontside_location, 
-			device.device_type, 
-			device.device_hostname, 
-			device_stack,
-			device.power_type,
-			device.power_w, 
-			device.power_v, 
-			device.power_ac_dc,
-			device.updated_by,
-			device.updated_at,
-			device.rack_name,
-			device.room_name,
-			device.building_name,
-			device.site_name,
-			device.department_name,
-			device.region_name,
-			device_link + str(device.id),
-		])
-	response['Content-Disposition'] = 'attachment; filename="devices.csv"'
+	response = _export_devices()
 	return response
 
 
 @login_required(login_url='login/')
 def export_racks_view(request):
 	"""
-	Отчет по стойкам
+	Вьюшка для отчета по стойкам
 	"""
-	rack_link = 'http://127.0.0.1:80001/rack_detail/'
-	response = HttpResponse(content_type='text/csv')
-	response.write(u'\ufeff'.encode('utf8'))
-	writer = csv.writer(response, delimiter=';', dialect='excel')
-	writer.writerow([
-		'Номер стойки',
-		'Наименование', 
-		'Вместимость стойки', 
-		'Фирма производитель', 
-		'Модель', 
-		'Описание', 
-		'Нумерация снизу вверх', 
-		'Ответственный', 
-		'МОЛ', 
-		'Инвентарный номер', 
-		'Ряд', 
-		'Место', 
-		'Высота стойки (мм)',
-		'Ширина стойки (мм)',
-		'Глубина стойки (мм)',
-		'Полезная ширина стойки (дюймы)',
-		'Полезная глубина стойки (мм)',
-		'Вариант исполнения',
-		'Тип расположения',
-		'Максимальная нагрузка (кг)',
-		'Свободных электророзеток',
-		'Свободных электророзеток UPS',
-		'Внешняя система резервного электроснабжения',
-		'Активная вентиляция',
-		'Обновлено сотрудник', 
-		'Обновлено дата', 
-		'Помещение', 
-		'Здание', 
-		'Узел', 
-		'Отдел', 
-		'Регион',
-		'Ссылка на стойку',
-	])
-	raw_report =  Rack.objects.raw("""select rack.id as id, 
-									 rack.rack_name, 
-									 rack.rack_amount,
-									 rack.rack_vendor, 
-									 rack.rack_model, 
-									 rack.rack_description,  
-									 rack.numbering_from_bottom_to_top, 
-									 rack.responsible, 
-									 rack.rack_financially_responsible_person, 
-									 rack.rack_inventory_number, 
-									 rack.row, 
-									 rack.place,
-									 rack.rack_height,
-									 rack.rack_width,
-									 rack.rack_depth, 
-									 rack.rack_unit_width,
-									 rack.rack_unit_depth,
-									 rack.rack_type,
-									 rack.rack_palce_type,
-									 rack.max_load,
-									 rack.power_sockets,
-									 rack.power_sockets_ups,
-									 rack.external_ups,
-									 rack.cooler,
-									 rack.updated_by, 
-									 rack.updated_at, 
-									 room.room_name, 
-									 building.building_name, 
-									 site.site_name, 
-									 department.department_name, 
-									 region.region_name 
-									 from rack  
-									 join room on 
-									 room.id = 
-									 rack.room_id_id 
-									 join building on 
-									 building.id = 
-									 room.building_id_id 
-									 join site on 
-									 site.id = 
-									 building.site_id_id 
-									 join department on 
-									 department.id = 
-									 site.department_id_id 
-									 join region on 
-									 region.id = 
-									 department.region_id_id;""")
-	for rack in raw_report:
-		if rack.numbering_from_bottom_to_top == True:
-			numbering_from_bottom_to_top = 'Да'
-		else:
-			numbering_from_bottom_to_top = 'Нет'
-		if rack.external_ups == True:
-			external_ups = 'Да'
-		else:
-			external_ups = 'Нет'
-		if rack.cooler == True:
-			cooler = 'Да'
-		else:
-			cooler = 'Нет'
-		writer.writerow([
-			rack.id,
-			rack.rack_name, 
-			rack.rack_amount,
-			rack.rack_vendor, 
-			rack.rack_model, 
-			rack.rack_description,  
-			numbering_from_bottom_to_top, 
-			rack.responsible, 
-			rack.rack_financially_responsible_person, 
-			rack.rack_inventory_number, 
-			rack.row, 
-			rack.place, 
-			rack.rack_height,
-			rack.rack_width,
-			rack.rack_depth, 
-			rack.rack_unit_width,
-			rack.rack_unit_depth,
-			rack.rack_type,
-			rack.rack_palce_type,
-			rack.max_load,
-			rack.power_sockets,
-			rack.power_sockets_ups,
-			external_ups,
-			cooler,
-			rack.updated_by, 
-			rack.updated_at, 
-			rack.room_name,
-			rack.building_name,
-			rack.site_name,
-			rack.department_name,
-			rack.region_name,
-			rack_link + str(rack.id),
-		])
-	response['Content-Disposition'] = 'attachment; filename="racks.csv"'
+	response = _export_racks()
 	return response
 
 
@@ -504,7 +224,6 @@ def site_add_view(request, pk):
 		"updated_by": request.user.get_full_name(), 
 		"department_id": pk
 	})
-
 	if request.method == 'POST':
 		if form.is_valid():
 			if _check_group(request, pk, model=Department):
@@ -530,7 +249,6 @@ def site_upd_view(request, pk):
 	form_class = SiteForm
 	site = Site.objects.get(id=pk)
 	old_form = form_class(instance=site)
-
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=site)
 		if form.is_valid():
@@ -556,7 +274,6 @@ def site_upd_view(request, pk):
 @login_required(login_url='login/')
 def site_del_view(request, pk):
 	site = Site.objects.get(id=pk)
-
 	if request.method == 'POST':
 		if _check_group(request, pk, model=Site):
 			site.delete()
@@ -586,7 +303,6 @@ def building_add_view(request, pk):
 		"updated_by": request.user.get_full_name(), 
 		"site_id": pk
 	})
-
 	if request.method == 'POST':
 		if form.is_valid():
 			if _check_group(request, pk, model=Site):
@@ -617,7 +333,6 @@ def building_upd_view(request, pk):
 	form_class = BuildingForm
 	building = Building.objects.get(id=pk)
 	old_form = form_class(instance=building)
-
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=building)
 		if form.is_valid():
@@ -649,7 +364,6 @@ def building_upd_view(request, pk):
 @login_required(login_url='login/')
 def building_del_view(request, pk):
 	building = Building.objects.get(id=pk)
-
 	if request.method == 'POST':
 		if _check_group(request, pk, model=Building):
 			building.delete()
@@ -679,7 +393,6 @@ def room_add_view(request, pk):
 		"updated_by": request.user.get_full_name(), 
 		"building_id": pk
 	})
-
 	if request.method == 'POST':
 		if form.is_valid():
 			if _check_group(request, pk, model=Building):
@@ -710,7 +423,6 @@ def room_upd_view(request, pk):
 	form_class = RoomForm
 	room = Room.objects.get(id=pk)
 	old_form = form_class(instance=room)
-
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=room)
 		if form.is_valid():
@@ -742,7 +454,6 @@ def room_upd_view(request, pk):
 @login_required(login_url='login/')
 def room_del_view(request, pk):
 	room = Room.objects.get(id=pk)
-
 	if request.method == 'POST':
 		if _check_group(request, pk, model=Room):
 			room.delete()
@@ -771,7 +482,6 @@ def rack_add_view(request, pk):
 	form = form_class(request.POST or None, initial = {
 		"updated_by": request.user.get_full_name(), "room_id": pk
 	})
-
 	if request.method == 'POST':
 		if form.is_valid():
 			if _check_group(request, pk, model=Room):
@@ -801,7 +511,6 @@ def rack_upd_view(request, pk):
 	form_class = UpdRackForm
 	rack = Rack.objects.get(id=pk)
 	old_form = form_class(instance=rack)
-
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=rack)
 		if form.is_valid():
@@ -832,7 +541,6 @@ def rack_upd_view(request, pk):
 @login_required(login_url='login/')
 def rack_del_view(request, pk):
 	rack = Rack.objects.get(id=pk)
-
 	if request.method == 'POST':
 		if _check_group(request, pk, model=Rack):
 			rack.delete()
@@ -862,7 +570,6 @@ def device_add_view(request, pk):
 		"updated_by": request.user.get_full_name(), 
 		"rack_id": pk
 	})
-
 	if request.method == 'POST':
 		if form.is_valid():
 			if _check_group(request, pk, model=Rack):
@@ -899,7 +606,6 @@ def device_upd_view(request, pk):
 	form_class = DeviceForm
 	device = Device.objects.get(id=pk)
 	old_form = form_class(instance=device)
-
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=device)
 		if form.is_valid():
@@ -938,7 +644,6 @@ def device_upd_view(request, pk):
 @login_required(login_url='login/')
 def device_del_view(request, pk):
 	device = Device.objects.get(id=pk)
-
 	if request.method == 'POST':
 		if _check_group(request, pk, model=Device):
 			device.delete()
