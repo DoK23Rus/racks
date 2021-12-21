@@ -96,96 +96,96 @@ def _check_group(request, pk, model):
 	"""
 	if model == Department:
 		department_raw_query = Department.objects.raw("""select department.id as id,
-											  department.department_name 
-											  from department 
-	 										  where 
-	 										  department.id='""" + 
-	 										  str(pk) + 
-	 										  """';""")
+													  department.department_name 
+													  from department 
+	 												  where 
+	 												  department.id='""" + 
+	 												  str(pk) + 
+	 												  """';""")
 	elif model == Site:
 		department_raw_query = Department.objects.raw("""select department.id as id, 
-											  department.department_name 
-											  from site 
-											  join department on 
-											  department.id = 
-											  site.department_id_id 
-											  where 
-											  site.id='""" + 
-											  str(pk) + 
-											  """';""")
+													  department.department_name 
+													  from site 
+													  join department on 
+													  department.id = 
+													  site.department_id_id 
+													  where 
+													  site.id='""" + 
+													  str(pk) + 
+													  """';""")
 	elif model == Building:
 		department_raw_query = Department.objects.raw("""select department.id as id, 
-											  department.department_name 
-											  from building 
-											  join site on 
-											  site.id = building.site_id_id 
-											  join department on 
-											  department.id = 
-											  site.department_id_id 
-											  where 
-											  building.id='""" + 
-											  str(pk) + 
-											  """';""")
+													  department.department_name 
+													  from building 
+													  join site on 
+													  site.id = building.site_id_id 
+													  join department on 
+													  department.id = 
+													  site.department_id_id 
+													  where 
+													  building.id='""" + 
+													  str(pk) + 
+													  """';""")
 	elif model == Room:
 		department_raw_query = Department.objects.raw("""select department.id as id, 
-											  department.department_name 
-											  from room
-											  join building on 
-											  building.id = 
-											  room.building_id_id  
-											  join site on 
-											  site.id = 
-											  building.site_id_id
-											  join department on 
-											  department.id = 
-											  site.department_id_id 
-											  where 
-											  room.id='""" + 
-											  str(pk) + 
-											  """';""")
+													  department.department_name 
+													  from room
+													  join building on 
+													  building.id = 
+													  room.building_id_id  
+													  join site on 
+													  site.id = 
+													  building.site_id_id
+													  join department on 
+													  department.id = 
+													  site.department_id_id 
+													  where 
+													  room.id='""" + 
+													  str(pk) + 
+													  """';""")
 	elif model == Rack:
 		department_raw_query = Department.objects.raw("""select department.id as id, 
-											  department.department_name 
-											  from rack
-											  join room on 
-											  room.id = 
-											  rack.room_id_id 
-											  join building on 
-											  building.id = 
-											  room.building_id_id  
-											  join site on 
-											  site.id = 
-											  building.site_id_id
-											  join department on 
-											  department.id = 
-											  site.department_id_id 
-											  where 
-											  rack.id='""" + 
-											  str(pk) + 
-											  """';""")
+													  department.department_name 
+													  from rack
+													  join room on 
+													  room.id = 
+													  rack.room_id_id 
+													  join building on 
+													  building.id = 
+													  room.building_id_id  
+													  join site on 
+													  site.id = 
+													  building.site_id_id
+													  join department on 
+													  department.id = 
+													  site.department_id_id 
+													  where 
+													  rack.id='""" + 
+													  str(pk) + 
+													  """';""")
 	elif model == Device:
 		department_raw_query = Department.objects.raw("""select department.id as id, 
-											  department.department_name 
-											  from device
-											  join rack on 
-											  rack.id = 
-											  device.rack_id_id
-											  join room on 
-											  room.id = 
-											  rack.room_id_id 
-											  join building on 
-											  building.id = 
-											  room.building_id_id  
-											  join site on 
-											  site.id = 
-											  building.site_id_id
-											  join department on 
-											  department.id = 
-											  site.department_id_id 
-											  where 
-											  device.id='""" + 
-											  str(pk) + 
-											  """';""")
+													  department.department_name 
+													  from device
+													  join rack on 
+													  rack.id = 
+													  device.rack_id_id
+													  join room on 
+													  room.id = 
+													  rack.room_id_id 
+													  join building on 
+													  building.id = 
+													  room.building_id_id  
+													  join site on 
+													  site.id = 
+													  building.site_id_id
+													  join department on 
+													  department.id = 
+													  site.department_id_id 
+													  where 
+													  device.id='""" + 
+													  str(pk) + 
+													  """';""")
 	user_groups = list(request.user.groups.values_list('name', flat=True))
 	department_name = str([department_name for department_name in department_raw_query][0])
 	if department_name in user_groups:
@@ -464,52 +464,52 @@ def _export_racks():
 		'Ссылка на стойку',
 	])
 	raw_report =  Rack.objects.raw("""select rack.id as id, 
-									 rack.rack_name, 
-									 rack.rack_amount,
-									 rack.rack_vendor, 
-									 rack.rack_model, 
-									 rack.rack_description,  
-									 rack.numbering_from_bottom_to_top, 
-									 rack.responsible, 
-									 rack.rack_financially_responsible_person, 
-									 rack.rack_inventory_number, 
-									 rack.row, 
-									 rack.place,
-									 rack.rack_height,
-									 rack.rack_width,
-									 rack.rack_depth, 
-									 rack.rack_unit_width,
-									 rack.rack_unit_depth,
-									 rack.rack_type,
-									 rack.rack_palce_type,
-									 rack.max_load,
-									 rack.power_sockets,
-									 rack.power_sockets_ups,
-									 rack.external_ups,
-									 rack.cooler,
-									 rack.updated_by, 
-									 rack.updated_at, 
-									 room.room_name, 
-									 building.building_name, 
-									 site.site_name, 
-									 department.department_name, 
-									 region.region_name 
-									 from rack  
-									 join room on 
-									 room.id = 
-									 rack.room_id_id 
-									 join building on 
-									 building.id = 
-									 room.building_id_id 
-									 join site on 
-									 site.id = 
-									 building.site_id_id 
-									 join department on 
-									 department.id = 
-									 site.department_id_id 
-									 join region on 
-									 region.id = 
-									 department.region_id_id;""")
+								   rack.rack_name, 
+								   rack.rack_amount,
+								   rack.rack_vendor, 
+								   rack.rack_model, 
+								   rack.rack_description,  
+								   rack.numbering_from_bottom_to_top, 
+								   rack.responsible, 
+								   rack.rack_financially_responsible_person, 
+								   rack.rack_inventory_number, 
+								   rack.row, 
+								   rack.place,
+								   rack.rack_height,
+								   rack.rack_width,
+								   rack.rack_depth, 
+								   rack.rack_unit_width,
+								   rack.rack_unit_depth,
+								   rack.rack_type,
+								   rack.rack_palce_type,
+								   rack.max_load,
+								   rack.power_sockets,
+								   rack.power_sockets_ups,
+								   rack.external_ups,
+								   rack.cooler,
+								   rack.updated_by, 
+								   rack.updated_at, 
+								   room.room_name, 
+								   building.building_name, 
+								   site.site_name, 
+								   department.department_name, 
+								   region.region_name 
+								   from rack  
+								   join room on 
+								   room.id = 
+								   rack.room_id_id 
+								   join building on 
+								   building.id = 
+								   room.building_id_id 
+								   join site on 
+								   site.id = 
+								   building.site_id_id 
+								   join department on 
+								   department.id = 
+								   site.department_id_id 
+								   join region on 
+								   region.id = 
+								   department.region_id_id;""")
 	for rack in raw_report:
 		if rack.numbering_from_bottom_to_top == True:
 			numbering_from_bottom_to_top = 'Да'
