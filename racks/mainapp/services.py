@@ -12,9 +12,8 @@ def _queryset_devices(pk, side):
 	Данные об устройствах в зависимости от стороны стойки
 	Для отрисовки стоек
 	"""
-	queryset_devices = Device.objects.filter(rack_id_id=pk) \
+	return Device.objects.filter(rack_id_id=pk) \
 						 .filter(frontside_location=side)
-	return queryset_devices
 
 
 def _direction(pk):
@@ -22,9 +21,8 @@ def _direction(pk):
 	Напрвление нумерации стойки
 	Для отрисовки стоек
 	"""
-	direction = model_to_dict(Rack.objects \
+	return model_to_dict(Rack.objects \
 						 .get(id=pk))['numbering_from_bottom_to_top']
-	return direction
 
 
 def _start_list(pk, direction):
@@ -34,11 +32,9 @@ def _start_list(pk, direction):
 	"""
 	rack_query_dict = model_to_dict(Rack.objects.get(id=pk))
 	if direction == False:
-		start_list = list(range(1, (int(rack_query_dict['rack_amount']) + 1)))
-		return start_list
+		return list(range(1, (int(rack_query_dict['rack_amount']) + 1)))
 	else:
-		start_list = list(range(1, (int(rack_query_dict['rack_amount']) + 1)))[::-1]
-		return start_list
+		return list(range(1, (int(rack_query_dict['rack_amount']) + 1)))[::-1]
 
 
 def _first_units(pk, direction, side):
@@ -218,8 +214,7 @@ def _check_rack_id(pk):
 	"""
 	ID стойки
 	"""
-	rack_id = model_to_dict(Device.objects.get(id=pk))['rack_id']
-	return rack_id
+	return model_to_dict(Device.objects.get(id=pk))['rack_id']
 
 
 def _check_new_units(form):
@@ -286,17 +281,14 @@ def _unique_check(pk, model):
 	в рамках зоны ответственности одного отдела
 	"""
 	if model == Site:
-		buildings = [building.building_name for building 
+		return [building.building_name for building 
 				in Building.objects.filter(site_id_id=pk)]
-		return buildings
 	elif model == Building:
-		rooms = [room.room_name for room 
+		return [room.room_name for room 
 				in Room.objects.filter(building_id_id=pk)]
-		return rooms
 	elif model == Room:
-		racks = [rack.rack_name for rack 
+		return [rack.rack_name for rack 
 				in Rack.objects.filter(room_id_id=pk)]
-		return racks
 
 
 def _export_devices():
@@ -573,7 +565,7 @@ def _queryset_header(pk):
 	"""
 	Набор данных для шапки стойки (местонахождение)
 	"""
-	queryset_header = Rack.objects.raw("""select rack.id as id, 
+	return Rack.objects.raw("""select rack.id as id, 
 									   rack.rack_name,
 									   room.room_name, 
 									   building.building_name, 
@@ -600,4 +592,3 @@ def _queryset_header(pk):
 									   rack.id='""" + 
 									   str(pk) + 
 									   """';""")
-	return queryset_header

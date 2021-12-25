@@ -48,9 +48,8 @@ def device_view(request, pk):
 	"""
 	Карточка устройства
 	"""
-	device_queryset = Device.objects.get(id=pk)
 	return render(request, 'device_detail.html', {
-		'device': device_queryset
+		'device': Device.objects.get(id=pk)
 	})
 
 
@@ -59,9 +58,8 @@ def rack_view(request, pk):
 	"""
 	Карточка стойки
 	"""
-	rack_queryset = Rack.objects.get(id=pk)
 	return render(request, 'rack_detail.html', {
-		'rack': rack_queryset
+		'rack': Rack.objects.get(id=pk)
 	})
 
 
@@ -89,27 +87,16 @@ def units_view(request, pk):
 	Каждая стойка отображается с двух сторон
 	Для каждой стороны свой набор данных
 	"""
-	queryset_header = _queryset_header(pk) 
-	# Наборы данных для отрисовки роуспанов для устройств шириной больше одного юнита
-	queryset_rack = Rack.objects.get(id=pk)
-	queryset_devices_front = _queryset_devices(pk, True)
-	queryset_devices_back = _queryset_devices(pk, False)
-	direction = _direction(pk)
-	start_list = _start_list(pk, direction)
-	first_units_front = _first_units(pk, direction, True)
-	first_units_back = _first_units(pk, direction, False)
-	spans_front = _spans(pk, True)
-	spans_back = _spans(pk, False)
 	return render(request, 'units.html', {
-		'rack': queryset_rack, 
-		'header': queryset_header, 
-		'start_list': start_list, 
-		'devices_front': queryset_devices_front, 
-		'devices_back': queryset_devices_back, 
-		'first_units_front': first_units_front, 
-		'first_units_back': first_units_back, 
-		'spans_front': spans_front, 
-		'spans_back': spans_back,
+		'rack': Rack.objects.get(id=pk), 
+		'header': _queryset_header(pk), 
+		'start_list': _start_list(pk, _direction(pk)), 
+		'devices_front': _queryset_devices(pk, True), 
+		'devices_back': _queryset_devices(pk, False), 
+		'first_units_front': _first_units(pk, _direction(pk), True), 
+		'first_units_back': _first_units(pk, _direction(pk), False), 
+		'spans_front': _spans(pk, True), 
+		'spans_back': _spans(pk, False),
 	})
 
 
@@ -118,39 +105,20 @@ def units_front_print_view(request, pk):
 	"""
 	Черновики для фронтальной части стойки
 	"""
-	# Наборы данных для отрисовки роуспанов для устройств шириной больше одного юнита
-	queryset_rack = Rack.objects.get(id=pk)
-	queryset_devices_front = _queryset_devices(pk, True)
-	direction = _direction(pk)
-	first_units_front = _first_units(pk, direction, True)
-	spans_front = _spans(pk, True)
-	start_list = _start_list(pk, direction)
-	if len(start_list) <= 32:
-		return render(request, 'print_front.html', {
-			'rack': queryset_rack,  
-			'start_list': start_list, 
-			'devices_front': queryset_devices_front, 
-			'first_units_front': first_units_front,  
-			'spans_front': spans_front, 
-			'font_size': '100',
-		})
-	elif len(start_list) > 32 and len(start_list) <= 42:
-		return render(request, 'print_front.html', {
-			'rack': queryset_rack,  
-			'start_list': start_list, 
-			'devices_front': queryset_devices_front, 
-			'first_units_front': first_units_front,  
-			'spans_front': spans_front, 
-			'font_size': '75',
-		})
-	else:
-		return render(request, 'print_front.html', {
-			'rack': queryset_rack,  
-			'start_list': start_list, 
-			'devices_front': queryset_devices_front, 
-			'first_units_front': first_units_front,  
-			'spans_front': spans_front, 
-			'font_size': '50',
+	rack_size = len(_start_list(pk, _direction(pk)))
+	if rack_size <= 32: 
+		font_size = '100'
+	elif rack_size > 32 and rack_size <= 42:
+		font_size = '75'
+	else:  
+		font_size = '50'
+	return render(request, 'print_front.html', {
+			'rack': Rack.objects.get(id=pk),  
+			'start_list': _start_list(pk, _direction(pk)), 
+			'devices_front': _queryset_devices(pk, True), 
+			'first_units_front': _first_units(pk, _direction(pk), True),  
+			'spans_front': _spans(pk, True),  
+			'font_size': font_size,
 		})
 
 
@@ -159,39 +127,20 @@ def units_back_print_view(request, pk):
 	"""
 	Черновики для тыльной части стойки
 	"""
-	# Наборы данных для отрисовки роуспанов для устройств шириной больше одного юнита
-	queryset_rack = Rack.objects.get(id=pk)
-	queryset_devices_back = _queryset_devices(pk, False)
-	direction = _direction(pk)
-	first_units_back = _first_units(pk, direction, False)
-	spans_back = _spans(pk, False)
-	start_list = _start_list(pk, direction)
-	if len(start_list) <= 32:
-		return render(request, 'print_back.html', {
-			'rack': queryset_rack,  
-			'start_list': start_list,  
-			'devices_back': queryset_devices_back,  
-			'first_units_back': first_units_back, 
-			'spans_back': spans_back,
-			'font_size': '100',
-		})
-	elif len(start_list) > 32 and len(start_list) <= 42:
-		return render(request, 'print_back.html', {
-			'rack': queryset_rack,  
-			'start_list': start_list,  
-			'devices_back': queryset_devices_back,  
-			'first_units_back': first_units_back, 
-			'spans_back': spans_back,
-			'font_size': '73',
-		})
-	else:
-		return render(request, 'print_back.html', {
-			'rack': queryset_rack,  
-			'start_list': start_list, 
-			'devices_back': queryset_devices_back,  
-			'first_units_back': first_units_back, 
-			'spans_back': spans_back,
-			'font_size': '50',
+	rack_size = len(_start_list(pk, _direction(pk)))
+	if rack_size <= 32: 
+		font_size = '100'
+	elif rack_size > 32 and rack_size <= 42:
+		font_size = '75'
+	else:  
+		font_size = '50'
+	return render(request, 'print_front.html', {
+			'rack': Rack.objects.get(id=pk),  
+			'start_list': _start_list(pk, _direction(pk)), 
+			'devices_front': _queryset_devices(pk, False), 
+			'first_units_front': _first_units(pk, _direction(pk), False),  
+			'spans_front': _spans(pk, False),  
+			'font_size': font_size,
 		})
 
 
@@ -200,8 +149,7 @@ def export_devices_view(request):
 	"""
 	Вьюшка для отчета по устройствам
 	"""
-	response = _export_devices()
-	return response
+	return _export_devices()
 
 
 @login_required(login_url='login/')
@@ -209,8 +157,7 @@ def export_racks_view(request):
 	"""
 	Вьюшка для отчета по стойкам
 	"""
-	response = _export_racks()
-	return response
+	return _export_racks()
 
 
 #############################################
@@ -218,7 +165,6 @@ def export_racks_view(request):
 #############################################
 @login_required(login_url='login/')
 def site_add_view(request, pk):
-	template_name = 'add.html'
 	form_class = SiteForm
 	form = form_class(request.POST or None, initial = {
 		"updated_by": request.user.get_full_name(), 
@@ -238,16 +184,15 @@ def site_add_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'add.html', {
 		'form': form
 	})
 
 
 @login_required(login_url='login/')
 def site_upd_view(request, pk):
-	template_name = 'update.html'
-	form_class = SiteForm
 	site = Site.objects.get(id=pk)
+	form_class = SiteForm
 	old_form = form_class(instance=site)
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=site)
@@ -266,7 +211,7 @@ def site_upd_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'update.html', {
 		'form': old_form
 	})
 
@@ -297,7 +242,6 @@ def site_del_view(request, pk):
 #############################################
 @login_required(login_url='login/')
 def building_add_view(request, pk):
-	template_name = 'add.html'
 	form_class = BuildingForm
 	form = form_class(request.POST or None, initial = {
 		"updated_by": request.user.get_full_name(), 
@@ -322,16 +266,15 @@ def building_add_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'add.html', {
 		'form': form
 	})
 
 
 @login_required(login_url='login/')
 def building_upd_view(request, pk):
-	template_name = 'update.html'
-	form_class = BuildingForm
 	building = Building.objects.get(id=pk)
+	form_class = BuildingForm
 	old_form = form_class(instance=building)
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=building)
@@ -356,7 +299,7 @@ def building_upd_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'update.html', {
 		'form': old_form
 	})
 
@@ -387,7 +330,6 @@ def building_del_view(request, pk):
 #############################################
 @login_required(login_url='login/')
 def room_add_view(request, pk):
-	template_name = 'add.html'
 	form_class = RoomForm
 	form = form_class(request.POST or None, initial = {
 		"updated_by": request.user.get_full_name(), 
@@ -412,16 +354,15 @@ def room_add_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'add.html', {
 		'form': form
 	})
 
 
 @login_required(login_url='login/')
 def room_upd_view(request, pk):
-	template_name = 'update.html'
-	form_class = RoomForm
 	room = Room.objects.get(id=pk)
+	form_class = RoomForm
 	old_form = form_class(instance=room)
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=room)
@@ -446,7 +387,7 @@ def room_upd_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'update.html', {
 		'form': old_form
 	})
 
@@ -477,7 +418,6 @@ def room_del_view(request, pk):
 #############################################
 @login_required(login_url='login/')
 def rack_add_view(request, pk):
-	template_name = 'add.html'
 	form_class = RackForm
 	form = form_class(request.POST or None, initial = {
 		"updated_by": request.user.get_full_name(), "room_id": pk
@@ -500,16 +440,15 @@ def rack_add_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'add.html', {
 		'form': form
 	})
 
 
 @login_required(login_url='login/')
 def rack_upd_view(request, pk):
-	template_name = 'update.html'
-	form_class = UpdRackForm
 	rack = Rack.objects.get(id=pk)
+	form_class = UpdRackForm
 	old_form = form_class(instance=rack)
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=rack)
@@ -533,7 +472,7 @@ def rack_upd_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'update.html', {
 		'form': old_form
 	})
 
@@ -564,7 +503,6 @@ def rack_del_view(request, pk):
 #############################################
 @login_required(login_url='login/')
 def device_add_view(request, pk):
-	template_name = 'add.html'
 	form_class = DeviceForm
 	form = form_class(request.POST or None, initial = {
 		"updated_by": request.user.get_full_name(), 
@@ -595,16 +533,15 @@ def device_add_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'add.html', {
 		'form': form
 	})
 
 
 @login_required(login_url='login/')
 def device_upd_view(request, pk):
-	template_name = 'update.html'
-	form_class = DeviceForm
 	device = Device.objects.get(id=pk)
+	form_class = DeviceForm
 	old_form = form_class(instance=device)
 	if request.method == 'POST':
 		form = form_class(request.POST, instance=device)
@@ -636,7 +573,7 @@ def device_upd_view(request, pk):
 				return render(request, 'answer.html', {
 					'answer': 'У вас нет прав на изменения'
 				})
-	return render(request, template_name, {
+	return render(request, 'update.html', {
 		'form': old_form
 	})
 
