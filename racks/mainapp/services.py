@@ -300,6 +300,7 @@ def _export_devices():
 	response.write(u'\ufeff'.encode('utf8'))
 	writer = csv.writer(response, delimiter=';', dialect='excel')
 	writer.writerow([
+		'№'
 		'Номер устройства', 
 		'Статус',
 		'Вендор', 
@@ -331,27 +332,7 @@ def _export_devices():
 		'Ссылка на устройство',
 	])
 	raw_report =  Device.objects.raw("""select device.id as id,
-									 device.status, 
-									 device.device_vendor, 
-									 device.device_model,
-									 device.device_serial_number, 
-									 device.device_description, 
-									 device.project,  
-									 device.ownership, 
-									 device.financially_responsible_person, 
-									 device.device_inventory_number, 
-									 device.first_unit, 
-									 device.last_unit, 
-									 device.frontside_location, 
-									 device.device_type, 
-									 device.device_hostname, 
-									 device.device_stack, 
-									 device.power_type,
-									 device.power_w, 
-									 device.power_v, 
-									 device.power_ac_dc,
-									 device.updated_by, 
-									 device.updated_at,
+									 device.*,
 									 rack.rack_name, 
 									 room.room_name, 
 									 building.building_name, 
@@ -464,31 +445,7 @@ def _export_racks():
 		'Ссылка на стойку',
 	])
 	raw_report =  Rack.objects.raw("""select rack.id as id, 
-								   rack.rack_name, 
-								   rack.rack_amount,
-								   rack.rack_vendor, 
-								   rack.rack_model, 
-								   rack.rack_description,  
-								   rack.numbering_from_bottom_to_top, 
-								   rack.responsible, 
-								   rack.rack_financially_responsible_person, 
-								   rack.rack_inventory_number, 
-								   rack.row, 
-								   rack.place,
-								   rack.rack_height,
-								   rack.rack_width,
-								   rack.rack_depth, 
-								   rack.rack_unit_width,
-								   rack.rack_unit_depth,
-								   rack.rack_type,
-								   rack.rack_palce_type,
-								   rack.max_load,
-								   rack.power_sockets,
-								   rack.power_sockets_ups,
-								   rack.external_ups,
-								   rack.cooler,
-								   rack.updated_by, 
-								   rack.updated_at, 
+								   rack.*, 
 								   room.room_name, 
 								   building.building_name, 
 								   site.site_name, 
@@ -566,29 +523,29 @@ def _queryset_header(pk):
 	Набор данных для шапки стойки (местонахождение)
 	"""
 	return Rack.objects.raw("""select rack.id as id, 
-									   rack.rack_name,
-									   room.room_name, 
-									   building.building_name, 
-									   site.site_name, 
-									   department.department_name, 
-									   region.region_name 
-									   from rack 
-									   join room on 
-									   room.id = 
-									   rack.room_id_id 
-									   join building on 
-									   building.id = 
-									   room.building_id_id 
-									   join site on 
-									   site.id = 
-									   building.site_id_id 
-									   join department on 
-									   department.id = 
-									   site.department_id_id 
-									   join region on 
-									   region.id = 
-									   department.region_id_id 
-									   where 
-									   rack.id='""" + 
-									   str(pk) + 
-									   """';""")
+							rack.rack_name,
+							room.room_name, 
+							building.building_name, 
+							site.site_name, 
+							department.department_name, 
+							region.region_name 
+							from rack 
+							join room on 
+							room.id = 
+							rack.room_id_id 
+							join building on 
+							building.id = 
+							room.building_id_id 
+							join site on 
+							site.id = 
+							building.site_id_id 
+							join department on 
+							department.id = 
+							site.department_id_id 
+							join region on 
+							region.id = 
+							department.region_id_id 
+							where 
+							rack.id='""" + 
+							str(pk) + 
+							"""';""")
