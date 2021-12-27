@@ -12,6 +12,7 @@
 **Стек:**
 - Python 3.6
 - Django 2.2
+- Gunicorn 19.9.0
 - PostgreSQL 11
 
 # Функционал
