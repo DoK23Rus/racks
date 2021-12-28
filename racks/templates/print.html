@@ -17,11 +17,7 @@
                             {% if dev_num == device.id %}
                                 {% for key, value in spans.items %}
                                     {% if key|stringformat:"s" == device.id|stringformat:"s" %}
-                                        {% if device.ownership == 'Оборудование Управления связи' %}
-                                            <th style="font-size:{{ font_size }}%" rowspan="{{ value }}">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font><a></th>
-                                        {% else %}
-                                            <th style="font-size:{{ font_size }}%" rowspan="{{ value }}">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}<a></th>
-                                        {% endif %}
+                                        <th style="font-size:{{ font_size }}%" rowspan="{{ value }}">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font><a></th>
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
