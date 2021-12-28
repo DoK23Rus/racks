@@ -105,6 +105,10 @@ def units_print_view(request, pk, side):
     """
     Черновик для одной части стойки
     """
+    if side == "True":
+        side_name = "Фронтальная сторона стойки"
+    else:
+        side_name = "Тыльная сторона стойки"
     rack_size = len(_start_list(pk, _direction(pk)))
     if rack_size <= 32: 
         font_size = '100'
@@ -112,12 +116,13 @@ def units_print_view(request, pk, side):
         font_size = '75'
     else:  
         font_size = '50'
-    return render(request, 'print_front.html', {
+    return render(request, 'print.html', {
+            'side_name': side_name,
             'rack': Rack.objects.get(id=pk),  
             'start_list': _start_list(pk, _direction(pk)), 
-            'devices_front': _queryset_devices(pk, side), 
-            'first_units_front': _first_units(pk, _direction(pk), side),  
-            'spans_front': _spans(pk, side),  
+            'devices': _queryset_devices(pk, side), 
+            'first_units': _first_units(pk, _direction(pk), side),  
+            'spans': _spans(pk, side),  
             'font_size': font_size,
         })
 
