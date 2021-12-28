@@ -2,63 +2,63 @@
 {% block page %}
 <div style="float: right"><a class="btn-link second" href="{% url 'export_devices'  %}">&#10004; Скачать отчет по УСТРОЙСТВАМ</a> <a class="btn-link second" href="{% url 'export_racks'  %}">&#10004; Скачать отчет по СТОЙКАМ</a></div>
 <ul id="racks">
-	{% for region in regions %}
-		<li><span class="caret"><b><a class="main_text">{{ region.region_name }}</a></b></span>
-			<ul class="nested">
-			{% for department in departments %}
-				{% if region.id == department.region_id_id %}
-					<li><span class="caret"><i><a class="other_text">{{ department.department_name }}</a></i></span>
-						<a class="btn-link" href="{% url 'site_add' department.pk %}">&#10010; Добавить ОБЪЕКТ</a>
-						<ul class="nested">
-						{% for site in sites %}
-							{% if department.id == site.department_id_id %}
-								<li><span class="caret"><a class="other_text">{{ site.site_name|truncatechars:40 }}</a></span>
-									<a class="btn-link" href="{% url 'building_add' site.pk %}">&#10010; Добавить ЗДАНИЕ</a>
-									<a class="btn-link third" href="{% url 'site_upd' site.pk %}">&#9998; Изменить</a>
-									<a class="btn-link third" href="{% url 'site_del' site.pk %}">&#10006; Удалить</a>
-									<ul class="nested">
-									{% for building in buildings %}
-										{% if site.id == building.site_id_id %}
-											<li><span class="caret"><a class="other_text">{{ building.building_name|truncatechars:40 }}</a></span>
-												<a class="btn-link" href="{% url 'room_add' building.pk %}">&#10010; Добавить ПОМЕЩЕНИЕ</a>
-												<a class="btn-link third" href="{% url 'building_upd' building.pk %}">&#9998; Изменить</a>
-												<a class="btn-link third" href="{% url 'building_del' building.pk %}">&#10006; Удалить</a>
-												<ul class="nested">
-												{% for room in rooms %}
-													{% if building.id == room.building_id_id %}
-														<li><span class="caret"><a class="other_text">{{ room.room_name|truncatechars:40 }}</a></span>
-															<a class="btn-link" href="{% url 'rack_add' room.pk %}">&#10010; Добавить СТОЙКУ</a>
-															<a class="btn-link third" href="{% url 'room_upd' room.pk %}">&#9998; Изменить</a>
-															<a class="btn-link third" href="{% url 'room_del' room.pk %}">&#10006; Удалить</a>
-															<ul class="nested">
-															{% for rack in racks %}
-																{% if room.id == rack.room_id_id %}
-																	<li><a class="other_text" href="{% url 'units' rack.pk %}" target="_blank">&#9619;&nbsp;&nbsp;{{ rack.rack_name|truncatechars:40 }}</a>
-																		<a class="btn-link third" href="{% url 'rack_upd' rack.pk %}">&#9998; Изменить</a>
-																		<a class="btn-link third" href="{% url 'rack_del' rack.pk %}">&#10006; Удалить</a>
-																	</li>
-																{% endif %}
-															{% endfor %}	
-															</ul>
-														</li>
-													{% endif %}	
-												{% endfor %}
-												</ul>		
-											</li>			
-										{% endif %}
-									{% endfor %}
-									</ul>	
-								</li>			
-							{% endif %}
-						{% endfor %}
-						</ul>		
-					</li>	
-				{% endif %}
-			{% endfor %}
-			</ul>
-		</li>
-	{% endfor %}
-	</ul>
+    {% for region in regions %}
+        <li><span class="caret"><b><a class="main_text">{{ region.region_name }}</a></b></span>
+            <ul class="nested">
+            {% for department in departments %}
+                {% if region.id == department.region_id_id %}
+                    <li><span class="caret"><i><a class="other_text">{{ department.department_name }}</a></i></span>
+                        <a class="btn-link" href="{% url 'site_add' department.pk %}">&#10010; Добавить ОБЪЕКТ</a>
+                        <ul class="nested">
+                        {% for site in sites %}
+                            {% if department.id == site.department_id_id %}
+                                <li><span class="caret"><a class="other_text">{{ site.site_name|truncatechars:40 }}</a></span>
+                                    <a class="btn-link" href="{% url 'building_add' site.pk %}">&#10010; Добавить ЗДАНИЕ</a>
+                                    <a class="btn-link third" href="{% url 'site_upd' site.pk %}">&#9998; Изменить</a>
+                                    <a class="btn-link third" href="{% url 'site_del' site.pk %}">&#10006; Удалить</a>
+                                    <ul class="nested">
+                                    {% for building in buildings %}
+                                        {% if site.id == building.site_id_id %}
+                                            <li><span class="caret"><a class="other_text">{{ building.building_name|truncatechars:40 }}</a></span>
+                                                <a class="btn-link" href="{% url 'room_add' building.pk %}">&#10010; Добавить ПОМЕЩЕНИЕ</a>
+                                                <a class="btn-link third" href="{% url 'building_upd' building.pk %}">&#9998; Изменить</a>
+                                                <a class="btn-link third" href="{% url 'building_del' building.pk %}">&#10006; Удалить</a>
+                                                <ul class="nested">
+                                                {% for room in rooms %}
+                                                    {% if building.id == room.building_id_id %}
+                                                        <li><span class="caret"><a class="other_text">{{ room.room_name|truncatechars:40 }}</a></span>
+                                                            <a class="btn-link" href="{% url 'rack_add' room.pk %}">&#10010; Добавить СТОЙКУ</a>
+                                                            <a class="btn-link third" href="{% url 'room_upd' room.pk %}">&#9998; Изменить</a>
+                                                            <a class="btn-link third" href="{% url 'room_del' room.pk %}">&#10006; Удалить</a>
+                                                            <ul class="nested">
+                                                            {% for rack in racks %}
+                                                                {% if room.id == rack.room_id_id %}
+                                                                    <li><a class="other_text" href="{% url 'units' rack.pk %}" target="_blank">&#9619;&nbsp;&nbsp;{{ rack.rack_name|truncatechars:40 }}</a>
+                                                                        <a class="btn-link third" href="{% url 'rack_upd' rack.pk %}">&#9998; Изменить</a>
+                                                                        <a class="btn-link third" href="{% url 'rack_del' rack.pk %}">&#10006; Удалить</a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% endfor %}    
+                                                            </ul>
+                                                        </li>
+                                                    {% endif %} 
+                                                {% endfor %}
+                                                </ul>       
+                                            </li>           
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>   
+                                </li>           
+                            {% endif %}
+                        {% endfor %}
+                        </ul>       
+                    </li>   
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
 <script type="text/javascript">
 var toggler = document.getElementsByClassName("caret");
 var i;

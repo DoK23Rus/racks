@@ -1,124 +1,124 @@
 {% extends 'base_units.html' %}
 {% block page %}
 {% for head in header %}
-	<div class="small-size">
-		<b>{{ head.region_name }}</b> &rArr; 
-		<i>{{ head.department_name }}</i> &rArr; 
-		{{ head.site_name }} &rArr; 
-		{{ head.building_name }} &rArr; 
-		{{ head.room_name }} &rArr; 
-		{{ head.rack_name }}
-	</div>
+    <div class="small-size">
+        <b>{{ head.region_name }}</b> &rArr; 
+        <i>{{ head.department_name }}</i> &rArr; 
+        {{ head.site_name }} &rArr; 
+        {{ head.building_name }} &rArr; 
+        {{ head.room_name }} &rArr; 
+        {{ head.rack_name }}
+    </div>
 {% endfor %}
 <br>
 <br>
 <table width="60%" align="center" >
-	<tr>
-		<td>Название стойки: {{ rack.rack_name }}</td>
-	</tr>	
-	<tr>
-		<td>Ряд: {{ rack.row }}</td>
-	</tr>
-	<tr>
-		<td>Место: {{ rack.place }}</td>
-	</tr>
-	<tr>
-		<td><a style='font-size:80%' class="btn-link second" href="{% url 'rack_detail' rack.pk %}" target="_blank">&#9755; Информация о СТОЙКЕ</a></th></td>
-	</tr>
-	<tr>
-		<td><a style='font-size:80%' class="btn-link" href="{% url 'device_add' rack.pk %}" target="_blank">&#10010; Добавить УСТРОЙСТВО</a></th></td>
-	</tr>
+    <tr>
+        <td>Название стойки: {{ rack.rack_name }}</td>
+    </tr>   
+    <tr>
+        <td>Ряд: {{ rack.row }}</td>
+    </tr>
+    <tr>
+        <td>Место: {{ rack.place }}</td>
+    </tr>
+    <tr>
+        <td><a style='font-size:80%' class="btn-link second" href="{% url 'rack_detail' rack.pk %}" target="_blank">&#9755; Информация о СТОЙКЕ</a></th></td>
+    </tr>
+    <tr>
+        <td><a style='font-size:80%' class="btn-link" href="{% url 'device_add' rack.pk %}" target="_blank">&#10010; Добавить УСТРОЙСТВО</a></th></td>
+    </tr>
 </table>
 <br>
-	<font size="2">
-	<table border="2" width="60%" align="center">
-		<tr>
-	    	<th colspan="3" style="line-height:250%; font-size:120%">Фронтальная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_front_print' rack.pk %}" target="_blank"> &#9113; Шаблон для печати</a></th>
-	    </tr>
-		<tr>
-			<th class="unit">№</th>	
-			<th class="device">Устройство</th>
-			<th class="id">ID</th>
-	    </tr>
-	    {% for list in start_list %}
-	    <tr>
-			<th height="30px" width="30px">{{ list }}</th>
-				{% for device in devices_front %}
-					{% for dev_num, first_unit in first_units_front.items %}
-						{% if first_unit == list %}
-							{% if dev_num == device.id %}
-								{% for key, value in spans_front.items %}
-									{% if key|stringformat:"s" == device.id|stringformat:"s" %}
-										{% if device.status == 'Устройство в работе' %}
-											{% if device.ownership == 'Оборудование подразделения' %}
-												<th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-												<th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% else %}
-												<th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-												<th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% endif %}
-										{% else %}
-											{% if device.ownership == 'Оборудование подразделения' %}
-												<th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-												<th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% else %}
-												<th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-												<th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% endif %}
-										{% endif %}
-									{% endif %}
-								{% endfor %}
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				{% endfor %}
-	    </tr>
-	    {% endfor %}
-	</table>
-	<br>
-	<br>
-	<font size="2">
-	<table border="2" width="60%" align="center">
-		<tr>
-	    	<th colspan="3" style="line-height:250%; font-size:120%">Тыльная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_back_print' rack.pk %}" target="_blank"> &#9113; Шаблон для печати</a></th></i></th>
-	    </tr>
-		<tr>
-			<th class="unit">№</th>	
-			<th class="device">Устройство</th>
-			<th class="id">ID</th>
-	    </tr>
-	    {% for list in start_list %}
-	    <tr>
-			<th height="30px" width="30px">{{ list }}</th>
-				{% for device in devices_back %}
-					{% for dev_num, first_unit in first_units_back.items %}
-						{% if first_unit == list %}
-							{% if dev_num == device.id %}
-								{% for key, value in spans_back.items %}
-									{% if key|stringformat:"s" == device.id|stringformat:"s" %}
-										{% if device.status == 'Устройство в работе' %}
-											{% if device.ownership == 'Оборудование подразделения' %}
-												<th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-												<th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% else %}
-												<th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-												<th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% endif %}
-										{% else %}
-											{% if device.ownership == 'Оборудование подразделения' %}
-												<th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-												<th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% else %}
-												<th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-												<th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
-											{% endif %}
-										{% endif %}
-									{% endif %}
-								{% endfor %}
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				{% endfor %}
-	    </tr>
-	    {% endfor %}
+    <font size="2">
+    <table border="2" width="60%" align="center">
+        <tr>
+            <th colspan="3" style="line-height:250%; font-size:120%">Фронтальная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_front_print' rack.pk %}" target="_blank"> &#9113; Шаблон для печати</a></th>
+        </tr>
+        <tr>
+            <th class="unit">№</th> 
+            <th class="device">Устройство</th>
+            <th class="id">ID</th>
+        </tr>
+        {% for list in start_list %}
+        <tr>
+            <th height="30px" width="30px">{{ list }}</th>
+                {% for device in devices_front %}
+                    {% for dev_num, first_unit in first_units_front.items %}
+                        {% if first_unit == list %}
+                            {% if dev_num == device.id %}
+                                {% for key, value in spans_front.items %}
+                                    {% if key|stringformat:"s" == device.id|stringformat:"s" %}
+                                        {% if device.status == 'Устройство в работе' %}
+                                            {% if device.ownership == 'Оборудование подразделения' %}
+                                                <th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% else %}
+                                                <th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if device.ownership == 'Оборудование подразделения' %}
+                                                <th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% else %}
+                                                <th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <font size="2">
+    <table border="2" width="60%" align="center">
+        <tr>
+            <th colspan="3" style="line-height:250%; font-size:120%">Тыльная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_back_print' rack.pk %}" target="_blank"> &#9113; Шаблон для печати</a></th></i></th>
+        </tr>
+        <tr>
+            <th class="unit">№</th> 
+            <th class="device">Устройство</th>
+            <th class="id">ID</th>
+        </tr>
+        {% for list in start_list %}
+        <tr>
+            <th height="30px" width="30px">{{ list }}</th>
+                {% for device in devices_back %}
+                    {% for dev_num, first_unit in first_units_back.items %}
+                        {% if first_unit == list %}
+                            {% if dev_num == device.id %}
+                                {% for key, value in spans_back.items %}
+                                    {% if key|stringformat:"s" == device.id|stringformat:"s" %}
+                                        {% if device.status == 'Устройство в работе' %}
+                                            {% if device.ownership == 'Оборудование подразделения' %}
+                                                <th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% else %}
+                                                <th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if device.ownership == 'Оборудование подразделения' %}
+                                                <th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% else %}
+                                                <th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+        </tr>
+        {% endfor %}
 {% endblock %}

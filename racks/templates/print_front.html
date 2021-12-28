@@ -1,33 +1,33 @@
 <table border="1" width="60%" align="center" cellspacing="0" cellpadding="3">
-		<tr>
-	    	<th colspan="2">{{rack}}</th>
-	    </tr>
-		<tr>
-	    	<th style="font-size:{{ font_size }}%" colspan="2"><i>Фронтальная сторона стойки</i></th>
-	    </tr>
-		<tr>
-			<th style="font-size:{{ font_size }}%" class="unit">№</th>	
-			<th style="font-size:{{ font_size }}%" class="device">Устройство</th>
-	    {% for list in start_list %}
-	    <tr>
-			<th style="font-size:{{ font_size }}%" height="10px" width="10px">{{ list }}</th>
-				{% for device in devices_front %}
-					{% for dev_num, first_unit in first_units_front.items %}
-						{% if first_unit == list %}
-							{% if dev_num == device.id %}
-								{% for key, value in spans_front.items %}
-									{% if key|stringformat:"s" == device.id|stringformat:"s" %}
-										{% if device.ownership == 'Оборудование Управления связи' %}
-											<th style="font-size:{{ font_size }}%" rowspan="{{ value }}">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font><a></th>
-										{% else %}
-											<th style="font-size:{{ font_size }}%" rowspan="{{ value }}">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}<a></th>
-										{% endif %}
-									{% endif %}
-								{% endfor %}
-							{% endif %}
-						{% endif %}
-					{% endfor %}
-				{% endfor %}
-	    </tr>
-	    {% endfor %}
+        <tr>
+            <th colspan="2">{{rack}}</th>
+        </tr>
+        <tr>
+            <th style="font-size:{{ font_size }}%" colspan="2"><i>Фронтальная сторона стойки</i></th>
+        </tr>
+        <tr>
+            <th style="font-size:{{ font_size }}%" class="unit">№</th>  
+            <th style="font-size:{{ font_size }}%" class="device">Устройство</th>
+        {% for list in start_list %}
+        <tr>
+            <th style="font-size:{{ font_size }}%" height="10px" width="10px">{{ list }}</th>
+                {% for device in devices_front %}
+                    {% for dev_num, first_unit in first_units_front.items %}
+                        {% if first_unit == list %}
+                            {% if dev_num == device.id %}
+                                {% for key, value in spans_front.items %}
+                                    {% if key|stringformat:"s" == device.id|stringformat:"s" %}
+                                        {% if device.ownership == 'Оборудование Управления связи' %}
+                                            <th style="font-size:{{ font_size }}%" rowspan="{{ value }}">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font><a></th>
+                                        {% else %}
+                                            <th style="font-size:{{ font_size }}%" rowspan="{{ value }}">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}<a></th>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+        </tr>
+        {% endfor %}
 </table>
