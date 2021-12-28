@@ -101,31 +101,9 @@ def units_view(request, pk):
 
 
 @login_required(login_url='login/')
-def units_front_print_view(request, pk):
+def units_print_view(request, pk, side):
     """
-    Черновики для фронтальной части стойки
-    """
-    rack_size = len(_start_list(pk, _direction(pk)))
-    if rack_size <= 32: 
-        font_size = '100'
-    elif rack_size > 32 and rack_size <= 42:
-        font_size = '75'
-    else:  
-        font_size = '50'
-    return render(request, 'print_front.html', {
-            'rack': Rack.objects.get(id=pk),  
-            'start_list': _start_list(pk, _direction(pk)), 
-            'devices_front': _queryset_devices(pk, True), 
-            'first_units_front': _first_units(pk, _direction(pk), True),  
-            'spans_front': _spans(pk, True),  
-            'font_size': font_size,
-        })
-
-
-@login_required(login_url='login/')
-def units_back_print_view(request, pk):
-    """
-    Черновики для тыльной части стойки
+    Черновик для одной части стойки
     """
     rack_size = len(_start_list(pk, _direction(pk)))
     if rack_size <= 32: 
@@ -137,9 +115,9 @@ def units_back_print_view(request, pk):
     return render(request, 'print_front.html', {
             'rack': Rack.objects.get(id=pk),  
             'start_list': _start_list(pk, _direction(pk)), 
-            'devices_front': _queryset_devices(pk, False), 
-            'first_units_front': _first_units(pk, _direction(pk), False),  
-            'spans_front': _spans(pk, False),  
+            'devices_front': _queryset_devices(pk, side), 
+            'first_units_front': _first_units(pk, _direction(pk), side),  
+            'spans_front': _spans(pk, side),  
             'font_size': font_size,
         })
 

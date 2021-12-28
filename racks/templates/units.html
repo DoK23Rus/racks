@@ -33,7 +33,7 @@
     <font size="2">
     <table border="2" width="60%" align="center">
         <tr>
-            <th colspan="3" style="line-height:250%; font-size:120%">Фронтальная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_front_print' rack.pk %}" target="_blank"> &#9113; Шаблон для печати</a></th>
+            <th colspan="3" style="line-height:250%; font-size:120%">Фронтальная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_print' pk=rack.pk side=True %}" target="_blank"> &#9113; Шаблон для печати</a></th>
         </tr>
         <tr>
             <th class="unit">№</th> 
@@ -80,7 +80,7 @@
     <font size="2">
     <table border="2" width="60%" align="center">
         <tr>
-            <th colspan="3" style="line-height:250%; font-size:120%">Тыльная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_back_print' rack.pk %}" target="_blank"> &#9113; Шаблон для печати</a></th></i></th>
+            <th colspan="3" style="line-height:250%; font-size:120%">Тыльная сторона стойки&emsp;<a style='font-size:80%' class="btn-link second" href="{% url 'units_print' pk=rack.pk side=False %}" target="_blank"> &#9113; Шаблон для печати</a></th></i></th>
         </tr>
         <tr>
             <th class="unit">№</th> 
