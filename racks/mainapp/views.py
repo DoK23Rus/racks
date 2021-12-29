@@ -5,15 +5,12 @@ from django.forms.models import model_to_dict
 from .forms import *
 from django.db import models
 import logging
-from .services import (
-    _queryset_devices, 
-    _direction, 
+from .services import ( 
     _start_list, 
     _first_units, 
     _spans, 
     _check_group, 
     _check_old_units, 
-    _check_rack_id, 
     _check_new_units, 
     _check_all_units, 
     _unit_check_exist, 
@@ -22,6 +19,8 @@ from .services import (
     _export_devices,
     _export_racks,
     _queryset_header,
+    _side_name,
+    _font_size,
 )
 
 logger = logging.getLogger(__name__)
@@ -87,14 +86,18 @@ def units_view(request, pk):
     Каждая стойка отображается с двух сторон
     Для каждой стороны свой набор данных
     """
+    direction = model_to_dict(Rack.objects \
+                              .get(id=pk))['numbering_from_bottom_to_top']
     return render(request, 'units.html', {
         'rack': Rack.objects.get(id=pk), 
         'header': _queryset_header(pk), 
-        'start_list': _start_list(pk, _direction(pk)), 
-        'devices_front': _queryset_devices(pk, True), 
-        'devices_back': _queryset_devices(pk, False), 
-        'first_units_front': _first_units(pk, _direction(pk), True), 
-        'first_units_back': _first_units(pk, _direction(pk), False), 
+        'start_list': _start_list(pk, direction), 
+        'devices_front': Device.objects.filter(rack_id_id=pk) \
+                                       .filter(frontside_location=True),
+        'devices_back': Device.objects.filter(rack_id_id=pk) \
+                                      .filter(frontside_location=False),
+        'first_units_front': _first_units(pk, direction, True), 
+        'first_units_back': _first_units(pk, direction, False), 
         'spans_front': _spans(pk, True), 
         'spans_back': _spans(pk, False),
     })
@@ -105,25 +108,18 @@ def units_print_view(request, pk, side):
     """
     Черновик для одной части стойки
     """
-    if side == "True":
-        side_name = "Фронтальная сторона стойки"
-    else:
-        side_name = "Тыльная сторона стойки"
-    rack_size = len(_start_list(pk, _direction(pk)))
-    if rack_size <= 32: 
-        font_size = '100'
-    elif rack_size > 32 and rack_size <= 42:
-        font_size = '75'
-    else:  
-        font_size = '50'
+    rack = Rack.objects.get(id=pk)
+    direction = model_to_dict(Rack.objects \
+                              .get(id=pk))['numbering_from_bottom_to_top']
     return render(request, 'print.html', {
-            'side_name': side_name,
-            'rack': Rack.objects.get(id=pk),  
-            'start_list': _start_list(pk, _direction(pk)), 
-            'devices': _queryset_devices(pk, side), 
-            'first_units': _first_units(pk, _direction(pk), side),  
+            'side_name': _side_name(side),
+            'rack': rack,  
+            'start_list': _start_list(pk, direction), 
+            'devices': Device.objects.filter(rack_id_id=pk) \
+                                     .filter(frontside_location=side),
+            'first_units': _first_units(pk, direction, side),  
             'spans': _spans(pk, side),  
-            'font_size': font_size,
+            'font_size': _font_size(rack.rack_amount),
         })
 
 
@@ -531,7 +527,7 @@ def device_upd_view(request, pk):
         if form.is_valid():
             if _check_group(request, pk, model=Device):
                 units = _check_old_units(pk)
-                pk = _check_rack_id(pk)
+                pk = model_to_dict(Device.objects.get(id=pk))['rack_id']
                 units.update(_check_new_units(form))
                 units.update(_check_all_units(pk))
                 if _unit_check_exist(units, form, pk): 

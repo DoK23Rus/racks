@@ -7,24 +7,6 @@ from django.http import HttpResponse
 import csv
 
 
-def _queryset_devices(pk, side):
-    """
-    Данные об устройствах в зависимости от стороны стойки
-    Для отрисовки стоек
-    """
-    return Device.objects.filter(rack_id_id=pk) \
-                         .filter(frontside_location=side)
-
-
-def _direction(pk):
-    """
-    Напрвление нумерации стойки
-    Для отрисовки стоек
-    """
-    return model_to_dict(Rack.objects \
-                         .get(id=pk))['numbering_from_bottom_to_top']
-
-
 def _start_list(pk, direction):
     """
     Список юнитов (всего)
@@ -208,13 +190,6 @@ def _check_old_units(pk):
         units['old_first_unit'] = model_to_dict(Device.objects \
                                                 .get(id=pk))['last_unit']
     return units
-
-
-def _check_rack_id(pk):
-    """
-    ID стойки
-    """
-    return model_to_dict(Device.objects.get(id=pk))['rack_id']
 
 
 def _check_new_units(form):
@@ -549,3 +524,25 @@ def _queryset_header(pk):
                             rack.id='""" + 
                             str(pk) + 
                             """';""")
+
+
+def _side_name(side):
+    """
+    Указание стороны для черновика
+    """
+    if side == "True":
+        return "Фронтальная сторона стойки"
+    else:
+        return "Тыльная сторона стойки"
+
+
+def _font_size(rack_size):
+    """
+    Размер шрифта для черновика
+    """
+    if rack_size <= 32: 
+        return '100'
+    elif rack_size > 32 and rack_size <= 42:
+        return '75'
+    else:  
+        return '50'
