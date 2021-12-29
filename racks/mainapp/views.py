@@ -6,6 +6,17 @@ from .forms import *
 from django.db import models
 import logging
 from .services import ( 
+    _regions,
+    _departments,
+    _sites,
+    _buildings,
+    _rooms,
+    _racks,
+    _device,
+    _rack,
+    _direction,
+    _devices,
+    _rack_id,
     _start_list, 
     _first_units, 
     _spans, 
@@ -32,13 +43,12 @@ def tree_view(request):
     Карта стоек
     """
     return render(request, 'tree.html', {
-        'regions' : Region.objects.all(), 
-        'departments' : Department.objects.all(), 
-        'sites': Site.objects.all(), 
-        'buildings': Building.objects.all(), 
-        'rooms': Room.objects.all(), 
-        'racks': Rack.objects.all(), 
-        'devices': Device.objects.all(), 
+        'regions' : _regions(), 
+        'departments' : _departments(), 
+        'sites': _sites(), 
+        'buildings': _buildings(), 
+        'rooms': _rooms(), 
+        'racks': _racks(),  
     })
 
 
@@ -48,7 +58,7 @@ def device_view(request, pk):
     Карточка устройства
     """
     return render(request, 'device_detail.html', {
-        'device': Device.objects.get(id=pk)
+        'device': _device(pk),
     })
 
 
@@ -58,7 +68,7 @@ def rack_view(request, pk):
     Карточка стойки
     """
     return render(request, 'rack_detail.html', {
-        'rack': Rack.objects.get(id=pk)
+        'rack': _rack(pk),
     })
 
 
@@ -86,16 +96,13 @@ def units_view(request, pk):
     Каждая стойка отображается с двух сторон
     Для каждой стороны свой набор данных
     """
-    direction = model_to_dict(Rack.objects \
-                              .get(id=pk))['numbering_from_bottom_to_top']
+    direction = _direction(pk)
     return render(request, 'units.html', {
-        'rack': Rack.objects.get(id=pk), 
+        'rack': _rack(pk), 
         'header': _queryset_header(pk), 
         'start_list': _start_list(pk, direction), 
-        'devices_front': Device.objects.filter(rack_id_id=pk) \
-                                       .filter(frontside_location=True),
-        'devices_back': Device.objects.filter(rack_id_id=pk) \
-                                      .filter(frontside_location=False),
+        'devices_front': _devices(pk, True),
+        'devices_back': _devices(pk, False),
         'first_units_front': _first_units(pk, direction, True), 
         'first_units_back': _first_units(pk, direction, False), 
         'spans_front': _spans(pk, True), 
@@ -108,15 +115,13 @@ def units_print_view(request, pk, side):
     """
     Черновик для одной части стойки
     """
-    rack = Rack.objects.get(id=pk)
-    direction = model_to_dict(Rack.objects \
-                              .get(id=pk))['numbering_from_bottom_to_top']
+    rack = _rack(pk)
+    direction = _direction(pk)
     return render(request, 'print.html', {
             'side_name': _side_name(side),
             'rack': rack,  
             'start_list': _start_list(pk, direction), 
-            'devices': Device.objects.filter(rack_id_id=pk) \
-                                     .filter(frontside_location=side),
+            'devices': _devices(pk, side),
             'first_units': _first_units(pk, direction, side),  
             'spans': _spans(pk, side),  
             'font_size': _font_size(rack.rack_amount),
@@ -527,7 +532,7 @@ def device_upd_view(request, pk):
         if form.is_valid():
             if _check_group(request, pk, model=Device):
                 units = _check_old_units(pk)
-                pk = model_to_dict(Device.objects.get(id=pk))['rack_id']
+                pk = _rack_id(pk)
                 units.update(_check_new_units(form))
                 units.update(_check_all_units(pk))
                 if _unit_check_exist(units, form, pk): 

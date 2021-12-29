@@ -7,6 +7,85 @@ from django.http import HttpResponse
 import csv
 
 
+def _regions():
+    """
+    Все регионы
+    """
+    return Region.objects.all()
+
+
+def _departments():
+    """
+    Все отделы
+    """
+    return Department.objects.all()
+
+
+def _sites():
+    """
+    Все объекты
+    """
+    return Site.objects.all()
+
+
+def _buildings():
+    """
+    Все здания
+    """
+    return Building.objects.all()
+
+
+def _rooms():
+    """
+    Все помещения
+    """
+    return Room.objects.all()
+
+
+def _racks():
+    """
+    Все стойки
+    """
+    return Rack.objects.all()
+
+
+def _device(pk):
+    """
+    Устройство
+    """
+    return Device.objects.get(id=pk)
+
+
+def _rack(pk):
+    """
+    Стойка
+    """
+    return Rack.objects.get(id=pk)
+
+
+def _direction(pk):
+    """
+    Направление нумерации стойки
+    """
+    return model_to_dict(Rack.objects \
+                         .get(id=pk))['numbering_from_bottom_to_top']
+
+
+def _devices(pk, side):
+    """
+    Устройства в стойке для указанной стороны
+    """
+    return Device.objects.filter(rack_id_id=pk) \
+                                 .filter(frontside_location=side)
+
+
+def _rack_id(pk):
+    """
+    ID стойки
+    """
+    return model_to_dict(Device.objects.get(id=pk))['rack_id']
+
+
 def _start_list(pk, direction):
     """
     Список юнитов (всего)
