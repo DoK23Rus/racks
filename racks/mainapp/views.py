@@ -580,11 +580,3 @@ def device_del_view(request, pk):
     return render(request, 'device_del.html', {
         'device': device
     })
-
-
-
-
-
-
-
-
