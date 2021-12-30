@@ -23,10 +23,10 @@
         <td>Место: {{ rack.place }}</td>
     </tr>
     <tr>
-        <td><a style='font-size:80%' class="btn-link second" href="{% url 'rack_detail' rack.pk %}" target="_blank">&#9755; Информация о СТОЙКЕ</a></th></td>
+        <td><a style='font-size:80%' class="btn-link second" href="{% url 'rack_detail' pk=rack.pk %}" target="_blank">&#9755; Информация о СТОЙКЕ</a></th></td>
     </tr>
     <tr>
-        <td><a style='font-size:80%' class="btn-link" href="{% url 'device_add' rack.pk %}" target="_blank">&#10010; Добавить УСТРОЙСТВО</a></th></td>
+        <td><a style='font-size:80%' class="btn-link" href="{% url 'device_add' pk=rack.pk %}" target="_blank">&#10010; Добавить УСТРОЙСТВО</a></th></td>
     </tr>
 </table>
 <br>
@@ -51,19 +51,19 @@
                                     {% if key|stringformat:"s" == device.id|stringformat:"s" %}
                                         {% if device.status == 'Устройство в работе' %}
                                             {% if device.ownership == 'Оборудование подразделения' %}
-                                                <th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% else %}
-                                                <th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% endif %}
                                         {% else %}
                                             {% if device.ownership == 'Оборудование подразделения' %}
-                                                <th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% else %}
-                                                <th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}
@@ -98,19 +98,19 @@
                                     {% if key|stringformat:"s" == device.id|stringformat:"s" %}
                                         {% if device.status == 'Устройство в работе' %}
                                             {% if device.ownership == 'Оборудование подразделения' %}
-                                                <th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% else %}
-                                                <th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% endif %}
                                         {% else %}
                                             {% if device.ownership == 'Оборудование подразделения' %}
-                                                <th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
-                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll zebra_green" bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</font></a></th>
+                                                <th bgcolor="#ABEBC6" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% else %}
-                                                <th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
-                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' device.pk %}" target="_blank">№{{ device.id }}</a></th>
+                                                <th class="device_coll zebra_red" bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">{{ device.device_vendor|truncatechars:18 }} {{ device.device_model|truncatechars:18 }}</a></th>
+                                                <th bgcolor="#F5B7B1" rowspan="{{ value }}"><a href="{% url 'device_detail' pk=device.pk %}" target="_blank">№{{ device.id }}</a></th>
                                             {% endif %}
                                         {% endif %}
                                     {% endif %}

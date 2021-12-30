@@ -86,6 +86,13 @@ def _rack_id(pk):
     return model_to_dict(Device.objects.get(id=pk))['rack_id']
 
 
+def _rack_name(pk):
+    """
+    Наименование стойки
+    """
+    return model_to_dict(Rack.objects.get(id=pk))['rack_name']       
+
+
 def _start_list(pk, direction):
     """
     Список юнитов (всего)
@@ -141,7 +148,7 @@ def _spans(pk, side):
     return spans
 
 
-def _check_group(request, pk, model):
+def _group_check(request, pk, model):
     """
     Проверка есть ли в списке групп пользователя группа 
     с наминованием отдела совпадающая с принадлежностью объекта модели к 
@@ -253,7 +260,7 @@ def _check_group(request, pk, model):
         return True
 
 
-def _check_old_units(pk):
+def _old_units(pk):
     """
     Уже заполненные юниты
     Для перемещения устройства в стойке
@@ -271,7 +278,7 @@ def _check_old_units(pk):
     return units
 
 
-def _check_new_units(form):
+def _new_units(form):
     """
     Юниты для вновь добавляемого устройства
     """
@@ -286,7 +293,7 @@ def _check_new_units(form):
     return units
 
 
-def _check_all_units(pk):
+def _all_units(pk):
     """
     Всего юнитов в стойке
     """
@@ -295,7 +302,7 @@ def _check_all_units(pk):
     return units
     
 
-def _unit_check_exist(units, form, pk):
+def _unit_exist_check(units, form, pk):
     """
     Есть ли вообще такие юниты (болше или меньше указанного)?
     """
@@ -304,7 +311,7 @@ def _unit_check_exist(units, form, pk):
         return True
         
 
-def _unit_check_busy(units, form, pk, update):
+def _unit_busy_check(units, form, pk, update):
     """
     Заняты ли юниты (добавление, перемещение устройства)?
     """
@@ -329,7 +336,7 @@ def _unit_check_busy(units, form, pk, update):
         return True
 
 
-def _unique_check(pk, model):
+def _unique_list(pk, model):
     """
     Чтобы наименования зданий помещений и стоек могли повторяться 
     в рамках зоны ответственности одного отдела
@@ -572,7 +579,7 @@ def _export_racks():
     return response
 
 
-def _queryset_header(pk):
+def _header(pk):
     """
     Набор данных для шапки стойки (местонахождение)
     """
