@@ -236,7 +236,7 @@ def building_add_view(request, pk):
         if form.is_valid():
             if _group_check(request, pk, model=Site):
                 if form.instance.building_name in _unique_list(pk, 
-                                                                model=Site):
+                                                               model=Site):
                     return render(request, 'answer.html', {
                         'answer': 'Здание с таким названием уже существует'
                     })
@@ -266,7 +266,7 @@ def building_upd_view(request, pk, site_id):
         if form.is_valid():
             if _group_check(request, pk, model=Building):
                 if form.instance.building_name in _unique_list(site_id, 
-                                                                model=Site):
+                                                               model=Site):
                     return render(request, 'answer.html', {
                         'answer': 'Здание с таким названием уже существует'
                     })
@@ -324,7 +324,7 @@ def room_add_view(request, pk):
         if form.is_valid():
             if _group_check(request, pk, model=Building):
                 if form.instance.room_name in _unique_list(pk, 
-                                                            model=Building):
+                                                           model=Building):
                     return render(request, 'answer.html', {
                         'answer': 'Помещение с таким названием уже существует'
                     })
