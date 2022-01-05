@@ -148,7 +148,7 @@ def _spans(pk, side):
     return spans
 
 
-def _group_check(request, pk, model):
+def _group_check(user_groups, pk, model):
     """
     Проверка есть ли в списке групп пользователя группа 
     с наминованием отдела совпадающая с принадлежностью объекта модели к 
@@ -254,7 +254,6 @@ def _group_check(request, pk, model):
                                                       device.id='""" + 
                                                       str(pk) + 
                                                       """';""")
-    user_groups = list(request.user.groups.values_list('name', flat=True))
     department_name = str([department_name for department_name in department_raw_query][0])
     if department_name in user_groups:
         return True
@@ -278,16 +277,14 @@ def _old_units(pk):
     return units
 
 
-def _new_units(form):
+def _new_units(first_unit, last_unit):
     """
     Юниты для вновь добавляемого устройства
     """
     units= {}
-    new_first_unit = form.instance.first_unit
-    new_last_unit = form.instance.last_unit
-    if new_first_unit > new_last_unit:
-        new_last_unit = form.instance.first_unit
-        new_first_unit = form.instance.last_unit
+    if first_unit > last_unit:
+        new_last_unit = first_unit
+        new_first_unit = last_unit
     units['new_first_unit'] = new_first_unit
     units['new_last_unit'] = new_last_unit
     return units
@@ -302,7 +299,7 @@ def _all_units(pk):
     return units
     
 
-def _unit_exist_check(units, form, pk):
+def _unit_exist_check(units, pk):
     """
     Есть ли вообще такие юниты (болше или меньше указанного)?
     """
@@ -311,13 +308,13 @@ def _unit_exist_check(units, form, pk):
         return True
         
 
-def _unit_busy_check(units, form, pk, update):
+def _unit_busy_check(location, units, pk, update):
     """
     Заняты ли юниты (добавление, перемещение устройства)?
     """
     filled_list = []
     queryset_devices = Device.objects.filter(rack_id_id=pk) \
-                .filter(frontside_location=form.instance.frontside_location)
+                .filter(frontside_location=location)
     if len(list(queryset_devices)) > 0:
         for device in queryset_devices:
             devices_dict = model_to_dict(device)

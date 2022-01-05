@@ -157,7 +157,8 @@ def site_add_view(request, pk):
     })
     if request.method == 'POST':
         if form.is_valid():
-            if _group_check(request, pk, model=Department):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Department):
                 form.save()
                 logger.info(request.user.username + 
                             ' ADD SITE: ' + 
@@ -182,7 +183,8 @@ def site_upd_view(request, pk):
     if request.method == 'POST':
         form = form_class(request.POST or None, instance=site)
         if form.is_valid():
-            if _group_check(request, pk, model=Site):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Site):
                 form.instance.updated_by = request.user.get_full_name()
                 form.save()
                 logger.info(request.user.username + 
@@ -205,7 +207,8 @@ def site_upd_view(request, pk):
 def site_del_view(request, pk):
     site = Site.objects.get(id=pk)
     if request.method == 'POST':
-        if _group_check(request, pk, model=Site):
+        if _group_check(list(request.user.groups \
+            .values_list('name', flat=True)), pk, model=Site):
             site.delete()
             logger.info(request.user.username + 
                         ' DELETE SITE: ' + 
@@ -234,7 +237,8 @@ def building_add_view(request, pk):
     })
     if request.method == 'POST':
         if form.is_valid():
-            if _group_check(request, pk, model=Site):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Site):
                 if form.instance.building_name in _unique_list(pk, 
                                                                model=Site):
                     return render(request, 'answer.html', {
@@ -264,7 +268,8 @@ def building_upd_view(request, pk, site_id):
     if request.method == 'POST':
         form = form_class(request.POST or None, instance=building)
         if form.is_valid():
-            if _group_check(request, pk, model=Building):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Building):
                 if form.instance.building_name in _unique_list(site_id, 
                                                                model=Site):
                     return render(request, 'answer.html', {
@@ -293,7 +298,8 @@ def building_upd_view(request, pk, site_id):
 def building_del_view(request, pk):
     building = Building.objects.get(id=pk)
     if request.method == 'POST':
-        if _group_check(request, pk, model=Building):
+        if _group_check(list(request.user.groups \
+            .values_list('name', flat=True)), pk, model=Building):
             building.delete()
             logger.info(request.user.username + 
                         ' DELETE BUILDING: ' + 
@@ -322,7 +328,8 @@ def room_add_view(request, pk):
     })
     if request.method == 'POST':
         if form.is_valid():
-            if _group_check(request, pk, model=Building):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Building):
                 if form.instance.room_name in _unique_list(pk, 
                                                            model=Building):
                     return render(request, 'answer.html', {
@@ -352,7 +359,8 @@ def room_upd_view(request, pk, building_id):
     if request.method == 'POST':
         form = form_class(request.POST or None, instance=room)
         if form.is_valid():
-            if _group_check(request, pk, model=Room):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Room):
                 if form.instance.room_name in _unique_list(building_id, 
                                                            model=Building):
                     return render(request, 'answer.html', {
@@ -381,7 +389,8 @@ def room_upd_view(request, pk, building_id):
 def room_del_view(request, pk):
     room = Room.objects.get(id=pk)
     if request.method == 'POST':
-        if _group_check(request, pk, model=Room):
+        if _group_check(list(request.user.groups \
+            .values_list('name', flat=True)), pk, model=Room):
             room.delete()
             logger.info(request.user.username + 
                         ' DELETE ROOM: ' + 
@@ -409,7 +418,8 @@ def rack_add_view(request, pk):
     })
     if request.method == 'POST':
         if form.is_valid():
-            if _group_check(request, pk, model=Room):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Room):
                 if form.instance.rack_name in _unique_list(pk, model=Room):
                     return render(request, 'answer.html', {
                         'answer': 'Стойка с таким названием уже существует'
@@ -438,7 +448,8 @@ def rack_upd_view(request, pk, room_id):
     if request.method == 'POST':
         form = form_class(request.POST or None, instance=rack)
         if form.is_valid():
-            if _group_check(request, pk, model=Rack):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Rack):
                 if _rack_name(pk) != form.instance.rack_name:
                     if form.instance.rack_name in _unique_list(room_id, 
                                                                model=Room):
@@ -467,7 +478,8 @@ def rack_upd_view(request, pk, room_id):
 def rack_del_view(request, pk):
     rack = Rack.objects.get(id=pk)
     if request.method == 'POST':
-        if _group_check(request, pk, model=Rack):
+        if _group_check(list(request.user.groups \
+            .values_list('name', flat=True)), pk, model=Rack):
             rack.delete()
             logger.info(request.user.username + 
                         ' DELETE RACK: ' + 
@@ -496,14 +508,17 @@ def device_add_view(request, pk):
     })
     if request.method == 'POST':
         if form.is_valid():
-            if _group_check(request, pk, model=Rack):
-                units = _new_units(form)
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Rack):
+                units = _new_units(form.instance.first_unit, 
+                                   form.instance.last_unit)
                 units.update(_all_units(pk))
-                if _unit_exist_check(units, form, pk): 
+                if _unit_exist_check(units, pk): 
                     return render(request, 'answer.html', {
                         'answer': 'Указанных юнитов нет в стойке'
                     })
-                if _unit_busy_check(units, form, pk, update=False):
+                if _unit_busy_check(form.instance.frontside_location, 
+                                    units, pk, update=False):
                     return render(request, 'answer.html', {
                         'answer': 'Указанные юниты заняты'
                     })
@@ -531,16 +546,19 @@ def device_upd_view(request, pk):
     if request.method == 'POST':
         form = form_class(request.POST or None, instance=device)
         if form.is_valid():
-            if _group_check(request, pk, model=Device):
+            if _group_check(list(request.user.groups \
+                .values_list('name', flat=True)), pk, model=Device):
                 units = _old_units(pk)
                 rack_id = _rack_id(pk)
-                units.update(_new_units(form))
+                units.update(_new_units(form.instance.first_unit, 
+                                        form.instance.last_unit))
                 units.update(_all_units(rack_id))
-                if _unit_exist_check(units, form, rack_id): 
+                if _unit_exist_check(units, rack_id): 
                     return render(request, 'answer.html', {
                         'answer': 'Указанных юнитов нет в стойке'
                     })
-                if _unit_busy_check(units, form, rack_id, update=True):
+                if _unit_busy_check(form.instance.frontside_location, 
+                                    units, rack_id, update=True):
                     return render(request, 'answer.html', {
                         'answer': 'Указанные юниты заняты'
                     })
@@ -567,7 +585,8 @@ def device_upd_view(request, pk):
 def device_del_view(request, pk):
     device = Device.objects.get(id=pk)
     if request.method == 'POST':
-        if _group_check(request, pk, model=Device):
+        if _group_check(list(request.user.groups \
+            .values_list('name', flat=True)), pk, model=Device):
             device.delete()
             logger.info(request.user.username + 
                         ' DELETE DEVICE: ' + 
