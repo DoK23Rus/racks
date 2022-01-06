@@ -448,6 +448,10 @@ def _export_devices():
 
 
 def _device_stack(device_link, device_stack):
+    """
+    Стековое устройство
+    Для отчета по устройствам
+    """
     if device_stack != None:
         return device_link + str(device_stack)
     else:
@@ -455,6 +459,10 @@ def _device_stack(device_link, device_stack):
 
 
 def _frontside_location(frontside_location):
+    """
+    Расположение
+    Для отчета по устройствам
+    """
     if frontside_location == True:
         return 'Да'
     else:
@@ -566,6 +574,10 @@ def _export_racks():
 
 
 def _numbering(numbering):
+    """
+    Нумерация
+    Для отчета по стойкам
+    """
     if numbering == True:
         return 'Да'
     else:
@@ -573,6 +585,10 @@ def _numbering(numbering):
 
 
 def _external_ups(external_ups):
+    """
+    Наличие бесперебойника
+    Для отчета по стойкам
+    """
     if external_ups == True:
         return 'Да'
     else:
@@ -580,6 +596,10 @@ def _external_ups(external_ups):
 
 
 def _cooler(cooler):
+    """
+    Наличие вентиляции
+    Для отчета по стойкам
+    """
     if cooler == True:
         return 'Да'
     else:
