@@ -9,7 +9,6 @@ from .models import (
     Rack, 
     Device,
 )
-from django.forms.models import model_to_dict
 from .forms import *
 from django.db import models
 import logging
