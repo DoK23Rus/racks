@@ -7,6 +7,7 @@ from django.http import HttpResponse
 import csv
 
 
+
 def _regions():
     """
     Все регионы
@@ -67,8 +68,7 @@ def _direction(pk):
     """
     Направление нумерации стойки
     """
-    return model_to_dict(Rack.objects \
-                         .get(id=pk))['numbering_from_bottom_to_top']
+    return Rack.objects.get(id=pk).numbering_from_bottom_to_top
 
 
 def _devices(pk, side):
@@ -83,14 +83,14 @@ def _rack_id(pk):
     """
     ID стойки
     """
-    return model_to_dict(Device.objects.get(id=pk))['rack_id']
+    return Device.objects.get(id=pk).rack_id_id
 
 
 def _rack_name(pk):
     """
     Наименование стойки
     """
-    return model_to_dict(Rack.objects.get(id=pk))['rack_name']       
+    return Rack.objects.get(id=pk).rack_name       
 
 
 def _start_list(pk, direction):
@@ -98,11 +98,12 @@ def _start_list(pk, direction):
     Список юнитов (всего)
     Для отрисовки стоек
     """
-    rack_query_dict = model_to_dict(Rack.objects.get(id=pk))
     if direction == False:
-        return list(range(1, (int(rack_query_dict['rack_amount']) + 1)))
+        return list(range(1, (int(Rack.objects.get(id=pk) \
+                .rack_amount) + 1)))
     else:
-        return list(range(1, (int(rack_query_dict['rack_amount']) + 1)))[::-1]
+        return list(range(1, (int(Rack.objects.get(id=pk) \
+                .rack_amount) + 1)))[::-1]
 
 
 def _first_units(pk, direction, side):
@@ -115,17 +116,16 @@ def _first_units(pk, direction, side):
     queryset_spans = Device.objects.filter(rack_id_id=pk) \
                                    .filter(frontside_location=side)
     for span in queryset_spans:
-        queryset_spans_dict = model_to_dict(span)
-        last = queryset_spans_dict["last_unit"]
-        first = queryset_spans_dict["first_unit"]
+        last = span.last_unit
+        first = span.first_unit
         if direction == True:
             if last > first:
-                first = queryset_spans_dict["last_unit"]
-            first_units[queryset_spans_dict["id"]] = first
+                first = span.last_unit
+            first_units[span.id] = first
         else:
             if last < first:
-                first = queryset_spans_dict["last_unit"]
-            first_units[queryset_spans_dict["id"]] = first
+                first = sapn.last_unit
+            first_units[span.id] = first
     return first_units
 
 
@@ -138,13 +138,12 @@ def _spans(pk, side):
     queryset_spans = Device.objects.filter(rack_id_id=pk) \
                                    .filter(frontside_location=side)
     for span in queryset_spans:
-        queryset_spans_dict = model_to_dict(span)
-        last = queryset_spans_dict["last_unit"]
-        first = queryset_spans_dict["first_unit"]
+        last = span.last_unit
+        first = span.first_unit
         if last < first:
-            first = queryset_spans_dict["last_unit"]
-            last = queryset_spans_dict["first_unit"]
-        spans[queryset_spans_dict["id"]] = last - first + 1
+            first = span.last_unit
+            last = span.first_unit
+        spans[span.id] = last - first + 1
     return spans
 
 
@@ -265,15 +264,13 @@ def _old_units(pk):
     Для перемещения устройства в стойке
     """
     units = {}
-    units['old_first_unit'] = model_to_dict(Device.objects \
-                                            .get(id=pk))['first_unit']
-    units['old_last_unit'] = model_to_dict(Device.objects \
-                                           .get(id=pk))['last_unit']
+    first_unit = Device.objects.get(id=pk).first_unit
+    last_unit = Device.objects.get(id=pk).last_unit
+    units['old_first_unit'] = first_unit
+    units['old_last_unit'] = last_unit
     if units['old_first_unit'] > units['old_last_unit']:
-        units['old_last_unit'] = model_to_dict(Device.objects \
-                                               .get(id=pk))['first_unit']
-        units['old_first_unit'] = model_to_dict(Device.objects \
-                                                .get(id=pk))['last_unit']
+        units['old_last_unit'] = first_unit
+        units['old_first_unit'] = last_unit
     return units
 
 
@@ -282,11 +279,11 @@ def _new_units(first_unit, last_unit):
     Юниты для вновь добавляемого устройства
     """
     units= {}
-    if first_unit > last_unit:
-        new_last_unit = first_unit
-        new_first_unit = last_unit
-    units['new_first_unit'] = new_first_unit
-    units['new_last_unit'] = new_last_unit
+    units['new_first_unit'] = first_unit
+    units['new_last_unit'] = last_unit
+    if units['new_first_unit'] > units['new_last_unit']:
+        units['new_last_unit'] = first_unit
+        units['new_first_unit'] = last_unit  
     return units
 
 
@@ -295,7 +292,7 @@ def _all_units(pk):
     Всего юнитов в стойке
     """
     units = {}
-    units['all_units'] = model_to_dict(Rack.objects.get(id=pk))['rack_amount']
+    units['all_units'] = Rack.objects.get(id=pk).rack_amount
     return units
     
 
@@ -306,8 +303,8 @@ def _unit_exist_check(units, pk):
     if not set(range(units['new_first_unit'], units['new_last_unit'] + 1)) \
         .issubset(range(1, units['all_units'] + 1)):
         return True
-        
 
+        
 def _unit_busy_check(location, units, pk, update):
     """
     Заняты ли юниты (добавление, перемещение устройства)?
@@ -317,17 +314,16 @@ def _unit_busy_check(location, units, pk, update):
                 .filter(frontside_location=location)
     if len(list(queryset_devices)) > 0:
         for device in queryset_devices:
-            devices_dict = model_to_dict(device)
-            first_unit = devices_dict["first_unit"]
-            last_unit = devices_dict["last_unit"]
+            first_unit = device.first_unit
+            last_unit = device.last_unit
             if first_unit > last_unit:
-                first_unit = devices_dict["last_unit"]
-                last_unit = devices_dict["first_unit"]
+                first_unit = device.last_unit
+                last_unit = device.first_unit
             one_device_list = list(range(first_unit, last_unit + 1))
             filled_list.extend(one_device_list)
     if update == True:
         filled_list = set(filled_list) - set(range(units['old_first_unit'], 
-                                                   units['old_last_unit'] + 1)) 
+                                                   units['old_last_unit'] + 1))
     if any(unit in set(range(units['new_first_unit'], 
            units['new_last_unit'] + 1)) for unit in filled_list):
         return True
@@ -417,14 +413,6 @@ def _export_devices():
                                      region.id = 
                                      department.region_id_id;""")
     for device in raw_report:
-        if device.device_stack != None:
-            device_stack = device_link + str(device.device_stack)
-        else:
-            device_stack = None
-        if device.frontside_location == True:
-            frontside_location = 'Да'
-        else:
-            frontside_location = 'Нет'
         writer.writerow([
             device.id,
             device.status,
@@ -438,10 +426,10 @@ def _export_devices():
             device.device_inventory_number,
             device.first_unit,
             device.last_unit,
-            frontside_location, 
+            _frontside_location(device.frontside_location), 
             device.device_type, 
             device.device_hostname, 
-            device_stack,
+            _device_stack(device_link, device.device_stack),
             device.power_type,
             device.power_w, 
             device.power_v, 
@@ -458,6 +446,20 @@ def _export_devices():
         ])
     response['Content-Disposition'] = 'attachment; filename="devices.csv"'
     return response
+
+
+def _device_stack(device_link, device_stack):
+    if device_stack != None:
+        return device_link + str(device_stack)
+    else:
+        return None
+
+
+def _frontside_location(frontside_location):
+    if frontside_location == True:
+        return 'Да'
+    else:
+        return 'Нет'
 
 
 def _export_racks():
@@ -526,18 +528,6 @@ def _export_racks():
                                    region.id = 
                                    department.region_id_id;""")
     for rack in raw_report:
-        if rack.numbering_from_bottom_to_top == True:
-            numbering_from_bottom_to_top = 'Да'
-        else:
-            numbering_from_bottom_to_top = 'Нет'
-        if rack.external_ups == True:
-            external_ups = 'Да'
-        else:
-            external_ups = 'Нет'
-        if rack.cooler == True:
-            cooler = 'Да'
-        else:
-            cooler = 'Нет'
         writer.writerow([
             rack.id,
             rack.rack_name, 
@@ -545,7 +535,7 @@ def _export_racks():
             rack.rack_vendor, 
             rack.rack_model, 
             rack.rack_description,  
-            numbering_from_bottom_to_top, 
+            _numbering(rack.numbering_from_bottom_to_top), 
             rack.responsible, 
             rack.rack_financially_responsible_person, 
             rack.rack_inventory_number, 
@@ -561,8 +551,8 @@ def _export_racks():
             rack.max_load,
             rack.power_sockets,
             rack.power_sockets_ups,
-            external_ups,
-            cooler,
+            _external_ups(rack.external_ups),
+            _cooler(rack.cooler),
             rack.updated_by, 
             rack.updated_at, 
             rack.room_name,
@@ -574,6 +564,27 @@ def _export_racks():
         ])
     response['Content-Disposition'] = 'attachment; filename="racks.csv"'
     return response
+
+
+def _numbering(numbering):
+    if numbering == True:
+        return 'Да'
+    else:
+        return 'Нет'
+
+
+def _external_ups(external_ups):
+    if external_ups == True:
+        return 'Да'
+    else:
+        return 'Нет'
+
+
+def _cooler(cooler):
+    if cooler == True:
+        return 'Да'
+    else:
+        return 'Нет'
 
 
 def _header(pk):

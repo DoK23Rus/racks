@@ -1,6 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import Region, Department, Site, Building, Room, Rack, Device
+from .models import (
+    Region, 
+    Department, 
+    Site, 
+    Building, 
+    Room, 
+    Rack, 
+    Device,
+)
 from django.forms.models import model_to_dict
 from .forms import *
 from django.db import models
@@ -550,6 +558,7 @@ def device_upd_view(request, pk):
                 .values_list('name', flat=True)), pk, model=Device):
                 units = _old_units(pk)
                 rack_id = _rack_id(pk)
+
                 units.update(_new_units(form.instance.first_unit, 
                                         form.instance.last_unit))
                 units.update(_all_units(rack_id))
