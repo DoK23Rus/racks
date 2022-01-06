@@ -6,7 +6,6 @@ from django.http import HttpResponse
 import csv
 
 
-
 def _regions():
     """
     Все регионы
