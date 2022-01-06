@@ -642,10 +642,10 @@ def _side_name(side):
     """
     Указание стороны для черновика
     """
-    if side == "True":
-        return "Фронтальная сторона стойки"
+    if side == 'True':
+        return 'Фронтальная сторона стойки'
     else:
-        return "Тыльная сторона стойки"
+        return 'Тыльная сторона стойки'
 
 
 def _font_size(rack_size):
