@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from .forms import *
+from django.db import models
+import logging
 from .models import (
     Region, 
     Department, 
@@ -9,9 +12,10 @@ from .models import (
     Rack, 
     Device,
 )
-from .forms import *
-from django.db import models
-import logging
+from .report_services import (
+    export_devices, 
+    export_racks,
+)
 from .services import ( 
     _regions,
     _departments,
@@ -34,8 +38,6 @@ from .services import (
     _unit_exist_check,
     _unit_busy_check,
     _unique_list,
-    _export_devices,
-    _export_racks,
     _header,
     _side_name,
     _font_size,
@@ -142,7 +144,7 @@ def export_devices_view(request):
     """
     Вьюшка для отчета по устройствам
     """
-    return _export_devices()
+    return export_devices()
 
 
 @login_required(login_url='login/')
@@ -150,7 +152,7 @@ def export_racks_view(request):
     """
     Вьюшка для отчета по стойкам
     """
-    return _export_racks()
+    return export_racks()
 
 
 #############################################
