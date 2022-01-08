@@ -523,7 +523,7 @@ def device_add_view(request, pk):
                 units = _new_units(form.instance.first_unit, 
                                    form.instance.last_unit)
                 units.update(_all_units(pk))
-                if _unit_exist_check(units, pk): 
+                if _unit_exist_check(units): 
                     return render(request, 'answer.html', {
                         'answer': 'Указанных юнитов нет в стойке'
                     })
@@ -564,7 +564,7 @@ def device_upd_view(request, pk):
                 units.update(_new_units(form.instance.first_unit, 
                                         form.instance.last_unit))
                 units.update(_all_units(rack_id))
-                if _unit_exist_check(units, rack_id): 
+                if _unit_exist_check(units): 
                     return render(request, 'answer.html', {
                         'answer': 'Указанных юнитов нет в стойке'
                     })

@@ -126,7 +126,7 @@ def _first_units(pk, direction, side):
             first_units[span.id] = first_unit
         else:
             if last_unit < first_unit:
-                first_unit = sapn.last_unit
+                first_unit = span.last_unit
             first_units[span.id] = first_unit
     return first_units
 
@@ -168,9 +168,8 @@ def _group_check(user_groups, pk, model):
                                                       department.department_name 
                                                       from department 
                                                       where 
-                                                      department.id='""" + 
-                                                      str(pk) + 
-                                                      """';""")
+                                                      department.id = %s ;""",  
+                                                      [str(pk)])
     elif model == Site:
         department_raw_query = Department.objects.raw("""select department.id as id, 
                                                       department.department_name 
@@ -179,9 +178,8 @@ def _group_check(user_groups, pk, model):
                                                       department.id = 
                                                       site.department_id_id 
                                                       where 
-                                                      site.id='""" + 
-                                                      str(pk) + 
-                                                      """';""")
+                                                      site.id = %s ;""",  
+                                                      [str(pk)])
     elif model == Building:
         department_raw_query = Department.objects.raw("""select department.id as id, 
                                                       department.department_name 
@@ -192,9 +190,8 @@ def _group_check(user_groups, pk, model):
                                                       department.id = 
                                                       site.department_id_id 
                                                       where 
-                                                      building.id='""" + 
-                                                      str(pk) + 
-                                                      """';""")
+                                                      building.id = %s ;""",  
+                                                      [str(pk)])
     elif model == Room:
         department_raw_query = Department.objects.raw("""select department.id as id, 
                                                       department.department_name 
@@ -209,9 +206,8 @@ def _group_check(user_groups, pk, model):
                                                       department.id = 
                                                       site.department_id_id 
                                                       where 
-                                                      room.id='""" + 
-                                                      str(pk) + 
-                                                      """';""")
+                                                      room.id = %s ;""",  
+                                                      [str(pk)])
     elif model == Rack:
         department_raw_query = Department.objects.raw("""select department.id as id, 
                                                       department.department_name 
@@ -229,9 +225,8 @@ def _group_check(user_groups, pk, model):
                                                       department.id = 
                                                       site.department_id_id 
                                                       where 
-                                                      rack.id='""" + 
-                                                      str(pk) + 
-                                                      """';""")
+                                                      rack.id = %s ;""",  
+                                                      [str(pk)])
     elif model == Device:
         department_raw_query = Department.objects.raw("""select department.id as id, 
                                                       department.department_name 
@@ -252,12 +247,13 @@ def _group_check(user_groups, pk, model):
                                                       department.id = 
                                                       site.department_id_id 
                                                       where 
-                                                      device.id='""" + 
-                                                      str(pk) + 
-                                                      """';""")
+                                                      device.id = %s ;""",  
+                                                      [str(pk)])
     department_name = str([department_name for department_name in department_raw_query][0])
     if department_name in user_groups:
         return True
+    else:
+        return False
 
 
 def _old_units(pk):
@@ -298,13 +294,15 @@ def _all_units(pk):
     return units
     
 
-def _unit_exist_check(units, pk):
+def _unit_exist_check(units):
     """
     Есть ли вообще такие юниты (болше или меньше указанного)?
     """
     if not set(range(units['new_first_unit'], units['new_last_unit'] + 1)) \
         .issubset(range(1, units['all_units'] + 1)):
         return True
+    else:
+        return False
 
         
 def _unit_busy_check(location, units, pk, update):
@@ -329,6 +327,8 @@ def _unit_busy_check(location, units, pk, update):
     if any(unit in set(range(units['new_first_unit'], 
            units['new_last_unit'] + 1)) for unit in filled_list):
         return True
+    else:
+        return False
 
 
 def _unique_list(pk, model):
@@ -430,9 +430,8 @@ def _header(pk):
                             region.id = 
                             department.region_id_id 
                             where 
-                            rack.id='""" + 
-                            str(pk) + 
-                            """';""")
+                            rack.id = %s ;""",  
+                            [str(pk)])
 
 
 def _side_name(side):
