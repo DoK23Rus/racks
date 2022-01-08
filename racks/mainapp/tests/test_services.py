@@ -292,31 +292,31 @@ class ServicesTestCase(TestCase):
         units = {'new_first_unit': 10, 'new_last_unit': 12}
         self.assertFalse(_unit_busy_check(False, units, pk, False))
         units = {
-        'new_first_unit': 4, 
-        'new_last_unit': 5,
-        'old_first_unit': 1,
-        'old_last_unit': 2,
+            'new_first_unit': 4, 
+            'new_last_unit': 5,
+            'old_first_unit': 1,
+            'old_last_unit': 2,
         }
         self.assertTrue(_unit_busy_check(True, units, pk, True))
         units = {
-        'new_first_unit': 2, 
-        'new_last_unit': 3,
-        'old_first_unit': 1,
-        'old_last_unit': 2,
+            'new_first_unit': 2, 
+            'new_last_unit': 3,
+            'old_first_unit': 1,
+            'old_last_unit': 2,
         }
         self.assertFalse(_unit_busy_check(True, units, pk, True))
         units = {
-        'new_first_unit': 7, 
-        'new_last_unit': 8,
-        'old_first_unit': 3,
-        'old_last_unit': 4,
+            'new_first_unit': 7, 
+            'new_last_unit': 8,
+            'old_first_unit': 3,
+            'old_last_unit': 4,
         }
         self.assertTrue(_unit_busy_check(False, units, pk, True))
         units = {
-        'new_first_unit': 10, 
-        'new_last_unit': 11,
-        'old_first_unit': 3,
-        'old_last_unit': 4,
+            'new_first_unit': 10, 
+            'new_last_unit': 11,
+            'old_first_unit': 3,
+            'old_last_unit': 4,
         }
         self.assertFalse(_unit_busy_check(False, units, pk, True))
 
