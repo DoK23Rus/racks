@@ -1,3 +1,4 @@
+import unittest
 from django.test import TestCase
 from django.db import connection
 from mainapp.models import (
@@ -44,7 +45,9 @@ from mainapp.services import (
 
 
 class ServicesTestCase(TestCase):
-    def setUp(self):
+
+    @classmethod
+    def setUpClass(self):
         Region.objects.create(region_name='Test_region1')
         Region.objects.create(region_name='Test_region2')
         Department.objects.create(department_name='Test_department1',
@@ -124,6 +127,10 @@ class ServicesTestCase(TestCase):
                               device_vendor='Test_vendor8',
                               rack_id=Rack.objects \
                               .get(rack_name='Test_rack2'))
+
+    @classmethod
+    def tearDownClass(self):
+        pass
 
     def test_regions(self):
         self.assertEqual(set(_regions() \
