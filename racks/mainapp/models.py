@@ -95,7 +95,7 @@ class Room(models.Model):
  
 class Rack(models.Model):
     rack_name = models.CharField(max_length=128, 
-                                 verbose_name='Стойка') 
+                                 verbose_name='Название стойки') 
     rack_amount = models.IntegerField(verbose_name='Вместимость стойки (юниты)')
     rack_vendor = models.CharField(max_length=128, 
                                    blank=True, 
@@ -261,7 +261,7 @@ class Device(models.Model):
     power_ac_dc = models.CharField(max_length=2, 
                                    choices=power_ac_dc_choices, 
                                    default='AC', 
-                                   verbose_name='Полярность тока')
+                                   verbose_name='AC/DC')
     device_serial_number = models.CharField(max_length=128, 
                                             blank=True, 
                                             verbose_name='Серийный номер устройства')

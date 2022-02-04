@@ -36,8 +36,7 @@ class RackForm(forms.ModelForm):
     class Meta:
         model = Rack
         fields = '__all__'
-        widgets = {
-            #'rack_amount': forms.HiddenInput(),
+        widgets = {            
             'updated_by': forms.HiddenInput(),
             'room_id': forms.HiddenInput(),
           }

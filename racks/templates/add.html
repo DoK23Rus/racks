@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block page %}
 <b>Заполните форму и нажмите "Добавить"</b>
+{% if form.rack_name %}
+    <br>
+    <p style="font-size: 10px">поле "Вместимость стойки" заполняется единожды (впоследствии изменить невозможно)</p>
+{% endif %}
 <br>
 <br>
 <form action = "" method = "post">

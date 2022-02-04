@@ -127,11 +127,11 @@ class ServicesTestCase(TestCase):
                               device_vendor='Test_vendor8',
                               rack_id=Rack.objects \
                               .get(rack_name='Test_rack2'))
-
+    
     @classmethod
     def tearDownClass(self):
         pass
-
+    
     def test_regions(self):
         self.assertEqual(set(_regions() \
                          .values_list('region_name', flat=True)), 
@@ -380,3 +380,4 @@ class ServicesTestCase(TestCase):
         self.assertEqual(_font_size(20), '100')
         self.assertEqual(_font_size(40), '75')
         self.assertEqual(_font_size(60), '50')
+"""
