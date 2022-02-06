@@ -45,6 +45,10 @@ class Locators():
     add_building_button_xpath = '/html/body/ul/li[1]/ul/li[1]/ul/li[1]/a[1]'
     add_room_button_xpath = '/html/body/ul/li[1]/ul/li[1]/ul/li[1]/ul/li[1]/a[1]'
     add_rack_button_xpath = '/html/body/ul/li[1]/ul/li[1]/ul/li[1]/ul/li[1]/ul/li[1]/a[1]'
+    first_device_change_button_xpath = '/html/body/a[1]'
+    second_device_change_button_xpath = '/html/body/a[2]'
+    device_first_unit_xpath = '//*[@id="id_first_unit"]'
+    device_last_unit_xpath = '//*[@id="id_last_unit"]'
 
     # locators
     auth_loc = "//*[contains(text(), 'Вы авторизованы как: Selenium Testing')]"
@@ -52,10 +56,6 @@ class Locators():
     rack_name_loc = "//*[contains(text(), 'Шкаф №1')]"
     first_device_loc = "//*[contains(text(), 'Cisco 2960')]"
     second_device_loc = "//*[contains(text(), 'Cisco 2911')]"
-    first_device_change_button_xpath = '/html/body/a[1]'
-    second_device_change_button_xpath = '/html/body/a[2]'
-    device_first_unit_xpath = '//*[@id="id_first_unit"]'
-    device_last_unit_xpath = '//*[@id="id_last_unit"]'
     unit_outside_loc = "//*[contains(text(), 'Указанных юнитов нет в стойке')]"
     unit_busy_loc = "//*[contains(text(), 'Указанные юниты заняты')]"
     violation_loc = "//*[contains(text(), 'У вас нет прав на изменения')]"
