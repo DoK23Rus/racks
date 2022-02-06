@@ -380,4 +380,3 @@ class ServicesTestCase(TestCase):
         self.assertEqual(_font_size(20), '100')
         self.assertEqual(_font_size(40), '75')
         self.assertEqual(_font_size(60), '50')
-"""
