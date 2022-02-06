@@ -155,9 +155,9 @@ def export_racks_view(request):
     return export_racks()
 
 
-#############################################
-#Вьюшки для объектов
-#############################################
+#######################
+# Вьюшки для объектов #
+#######################
 @login_required(login_url='login/')
 def site_add_view(request, pk):
     form_class = SiteForm
@@ -235,9 +235,9 @@ def site_del_view(request, pk):
     })
 
 
-#############################################
-#Вьюшки для зданий
-#############################################
+#####################
+# Вьюшки для зданий #
+#####################
 @login_required(login_url='login/')
 def building_add_view(request, pk):
     form_class = BuildingForm
@@ -326,9 +326,9 @@ def building_del_view(request, pk):
     })
 
 
-#############################################
-#Вьюшки для помещений
-#############################################
+########################
+# Вьюшки для помещений #
+########################
 @login_required(login_url='login/')
 def room_add_view(request, pk):
     form_class = RoomForm
@@ -417,9 +417,9 @@ def room_del_view(request, pk):
     })
 
 
-#############################################
-#Вьюшки для стоек
-#############################################
+####################
+# Вьюшки для стоек #
+####################
 @login_required(login_url='login/')
 def rack_add_view(request, pk):
     form_class = RackForm
@@ -506,9 +506,9 @@ def rack_del_view(request, pk):
     })
 
 
-#############################################
-#Вьюшки для устройств
-#############################################
+########################
+# Вьюшки для устройств #
+########################
 @login_required(login_url='login/')
 def device_add_view(request, pk):
     form_class = DeviceForm
