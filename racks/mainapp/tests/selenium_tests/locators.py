@@ -6,12 +6,11 @@ class Locators():
     password_textbox_id = 'id_password'
     login_button_id = 'button'
     value_attr = 'value'
-    site_name = 'Test site'
     building_name = 'Центральный офис г. Анапа'
     room_name = 'Кабинет №17 Кроссовая 1 эт.'
     rack_name = 'Шкаф №1'
 
-    #Значения
+    # Значения
     first_device_first_unit_ok = '39'
     first_device_last_unit_ok = '39'
     second_device_first_unit_ok = '35'
@@ -22,7 +21,7 @@ class Locators():
     first_device_last_unit_busy = '36'
     rack_amount = '42'
 
-    #IDs
+    # IDs
     first_unit_textbox_id = 'id_first_unit'
     last_unit_textbox_id = 'id_last_unit'
     site_name_textbox_id = 'id_site_name'
@@ -31,7 +30,7 @@ class Locators():
     rack_name_textbox_id = 'id_rack_name'
     rack_amount_textbox_id = 'id_rack_amount'
 
-    #XPATHs
+    # XPATHs
     region_xpath = '/html/body/ul/li[1]/span/b/a'
     department_xpath = '/html/body/ul/li[1]/ul/li[1]/span/i/a'
     site_xpath = '/html/body/ul/li[1]/ul/li[1]/ul/li[1]/span/a'
@@ -47,7 +46,7 @@ class Locators():
     add_room_button_xpath = '/html/body/ul/li[1]/ul/li[1]/ul/li[1]/ul/li[1]/a[1]'
     add_rack_button_xpath = '/html/body/ul/li[1]/ul/li[1]/ul/li[1]/ul/li[1]/ul/li[1]/a[1]'
 
-    #locators
+    # locators
     auth_loc = "//*[contains(text(), 'Вы авторизованы как: Selenium Testing')]"
     department_name_loc = "//*[contains(text(), 'Техподдержка Анапа')]"
     rack_name_loc = "//*[contains(text(), 'Шкаф №1')]"
