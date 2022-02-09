@@ -94,5 +94,5 @@ db.sqlite3
 !**/migrations/__init__.py
 
 #qrs
-**/static/device_qr/**
-**/static/rack_qr/**
+/home/slunk/code/racks_project/racks/mainapp/static/device_qr/**
+/home/slunk/code/racks_project/racks/mainapp/static/rack_qr/**
