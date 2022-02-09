@@ -132,6 +132,9 @@ def units_view(request, pk):
 
 @login_required(login_url='login/')
 def device_qr_view(request, pk):
+    """
+    QR-код для устройства
+    """
     return render(request, 'device_qr.html', {
         'date': _date(),
         'device': _device(pk),
@@ -141,6 +144,9 @@ def device_qr_view(request, pk):
 
 @login_required(login_url='login/')
 def rack_qr_view(request, pk):
+    """
+    QR-код для стойки
+    """
     return render(request, 'rack_qr.html', {
         'date': _date(),
         'rack': _rack(pk),
@@ -150,6 +156,9 @@ def rack_qr_view(request, pk):
 
 @login_required(login_url='login/')
 def qr_list_view(request, pk):
+    """
+    QR-коды стойки и всех устройств в ней
+    """
     devices_list = _devices_list(pk)
     return render(request, 'qr_list.html', {
         'date': _date(),
@@ -194,6 +203,39 @@ def export_racks_view(request):
     Вьюшка для отчета по стойкам
     """
     return export_racks()
+
+
+@login_required(login_url='login/')
+def search(request):
+    """
+    Поиск устройства или стойки по ID
+    """
+    form = SearchForm(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            if request.POST.get('object_type') == "Устройство":
+                value = form.cleaned_data
+                pk = value['object_id']
+                try:
+                    _device(pk)
+                    return device_view(request, pk)
+                except:
+                    return render(request, 'answer.html', {
+                        'answer': 'Устройство с таким ID в базе отсутствует'
+                    })
+            elif request.POST.get('object_type') == "Стойка":
+                value = form.cleaned_data
+                pk = value['object_id']
+                try: 
+                    _rack(pk)
+                    return units_view(request, pk)
+                except:
+                    return render(request, 'answer.html', {
+                        'answer': 'Стойка с таким ID в базе отсутствует'
+                    })
+    return render(request, 'search.html', {
+        'form': form
+    })
 
 
 #######################

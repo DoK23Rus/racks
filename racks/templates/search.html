@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block page %}
+<b>Выберите объект, введите его ID и нажмите "Перейти"</b>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Перейти">
+</form>
+{% endblock %}

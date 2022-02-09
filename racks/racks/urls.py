@@ -23,6 +23,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', tree_view, name='tree'),
+    path('search/', search, name='search'),
     path('export_devices_view/', export_devices_view, name='export_devices'),
     path('export_racks_view/', export_racks_view, name='export_racks'),
     path('units/<int:pk>', units_view, name='units'),
@@ -51,5 +52,6 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page="/login/"), name='authapp-logout'),
     path('answer/<str:args>', answer_view, name='answer'),
     path('admin/logout/login/', admin.site.urls), 
+
 ]
 urlpatterns += staticfiles_urlpatterns() 

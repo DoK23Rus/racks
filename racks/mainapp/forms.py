@@ -61,3 +61,17 @@ class DeviceForm(forms.ModelForm):
             'updated_by': forms.HiddenInput(),
             'rack_id': forms.HiddenInput(),
           }
+
+
+class SearchForm(forms.Form):
+    choises = (
+        ('Устройство', 'Устройство'),
+        ('Стойка', 'Стойка'),
+    )
+    object_type = forms.ChoiceField(choices=choises, 
+        label='', 
+        error_messages={'required': ''}
+    )
+    object_id = forms.IntegerField(label='', 
+        error_messages={'required': ''}
+    )
