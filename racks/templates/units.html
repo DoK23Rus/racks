@@ -23,8 +23,11 @@
         <td>Место: {{ rack.place }}</td>
     </tr>
     <tr>
-        <td><a style='font-size:80%' class="btn-link second" href="{% url 'rack_detail' pk=rack.pk %}" target="_blank">&#9755; Информация о СТОЙКЕ</a></th></td>
+        <td><a style='font-size:80%' class="btn-link second" href="{% url 'rack_detail' pk=rack.pk %}">&#9755; Информация о СТОЙКЕ</a></th></td>
     </tr>
+    <tr>
+        <td><a style='font-size:80%' class="btn-link second" href="{% url 'qr_list' pk=rack.pk %}" target="_blank"> &#9113; QR-коды устройств и стойки</a></th></td>
+    </tr>    
     <tr>
         <td><a style='font-size:80%' class="btn-link" href="{% url 'device_add' pk=rack.pk %}" target="_blank">&#10010; Добавить УСТРОЙСТВО</a></th></td>
     </tr>

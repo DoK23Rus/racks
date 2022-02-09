@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block page %}
 <div style="float: right"><a class="btn-link second" href="{% url 'export_devices'  %}">&#10004; Скачать отчет по УСТРОЙСТВАМ</a> <a class="btn-link second" href="{% url 'export_racks'  %}">&#10004; Скачать отчет по СТОЙКАМ</a></div>
-<ul id="racks">
+<ul id="racks"> 
     {% for region in regions %}
         <li><span class="caret"><b><a class="main_text">{{ region.region_name }}</a></b></span>
             <ul class="nested">
@@ -60,14 +60,14 @@
     {% endfor %}
     </ul>
 <script type="text/javascript">
-var toggler = document.getElementsByClassName("caret");
-var i;
+    var toggler = document.getElementsByClassName("caret");
+    var i;
 
-for (i = 0; i < toggler.length; i++) {
-  toggler[i].addEventListener("click", function() {
-    this.parentElement.querySelector(".nested").classList.toggle("active");
-    this.classList.toggle("caret-down");
-  });
-}
+    for (i = 0; i < toggler.length; i++) {
+      toggler[i].addEventListener("click", function() {
+        this.parentElement.querySelector(".nested").classList.toggle("active");
+        this.classList.toggle("caret-down");
+      });
+    }
 </script>
 {% endblock %}

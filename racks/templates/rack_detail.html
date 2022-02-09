@@ -5,7 +5,7 @@
     <br>
     Наименование стойки: {{ rack.rack_name }}
     <br>
-    Ответственный: {{ rack.responsible }}
+    Ответственный за техническое обслуживание: {{ rack.responsible }}
     <br>
     Ряд: {{ rack.row }}
     <br>
@@ -15,7 +15,11 @@
     <br>
     Инвентарный номер: {{ rack.rack_inventory_number }}
     <br>
-    МОЛ: {{ rack.rack_financially_responsible_person }} 
+    МОЛ: {{ rack.rack_financially_responsible_person }}
+    <br>
+    Основное средство: {{ rack.main_assert }}
+    <br>
+    Ссылка на ресурс: <a href="{{ rack.link }}">{{ rack.link }}</a>
     <br>
     <br>
     Фирма производитель: {{ rack.rack_vendor }}
@@ -98,6 +102,7 @@
     <div class="small-size">Обновлено сотрудник: {{ rack.updated_by}}</div>
     <div class="small-size">Обновлено дата: {{ rack.updated_at}}</div>
     <br>
-    <a class="btn-link third" href="{% url 'rack_upd' rack.pk %}">&#9998; Изменить</a>
-    <a class="btn-link third" href="{% url 'rack_del' rack.pk %}">&#10006; Удалить</a>
+    <a class="btn-link second" href="{% url 'rack_qr' pk=rack.pk %}">&#9113; QR-код стойки</a>
+    <a class="btn-link third" href="{% url 'rack_upd' pk=rack.pk room_id=rack.room_id_id %}">&#9998; Изменить</a>
+    <a class="btn-link third" href="{% url 'rack_del' pk=rack.pk %}">&#10006; Удалить</a>
 {% endblock %}

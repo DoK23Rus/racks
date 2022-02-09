@@ -13,17 +13,25 @@
         Расположено на фронтальной части стойки: Нет
     {% endif %}
     <br>
+    Установлено: <a href="{% url 'units' pk=device.rack_id_id %}" target="_blank">Стойка №{{ device.rack_id_id }}</a>
+    <br>
     Первый юнит: {{ device.first_unit}}
     <br>
     Последний юнит: {{ device.last_unit}}
     <br>
     Зона ответсвенности: {{ device.ownership }}
     <br>
+    Ответственный за техническое обслуживание: {{ device.responsible }}
+    <br>
     Проект: {{ device.project }}
     <br>
     Инвентарный номер: {{ device.device_inventory_number}}
     <br>
     МОЛ: {{ device.financially_responsible_person }}
+    <br>
+    Основное средство: {{ device.main_asset }}
+    <br>
+    Ссылка на ресурс: <a href="{{ device.link }}">{{ device.link }}</a>
     <br>
     <br>
     Вендор: {{ device.device_vendor }}
@@ -56,12 +64,13 @@
         Рабочее напряжение (В):
     {% endif %}
     <br>
-    Полярность тока: {{ device.power_ac_dc }}
+    AC/DC: {{ device.power_ac_dc }}
     <br>
     <br>
     <div class="small-size">Обновлено сотрудник: {{ device.updated_by}}</div>
     <div class="small-size">Обновлено дата: {{ device.updated_at}}</div>
     <br>
-    <a class="btn-link third" href="{% url 'device_upd' device.pk %}">&#9998; Изменить</a>
-    <a class="btn-link third" href="{% url 'device_del' device.pk %}">&#10006; Удалить</a>
+    <a class="btn-link second" href="{% url 'device_qr' pk=device.pk %}">&#9113; QR-код устройства</a>
+    <a class="btn-link third" href="{% url 'device_upd' pk=device.pk %}">&#9998; Изменить</a>
+    <a class="btn-link third" href="{% url 'device_del' pk=device.pk %}">&#10006; Удалить</a>
 {% endblock %}

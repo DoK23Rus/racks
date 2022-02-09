@@ -39,14 +39,17 @@ urlpatterns = [
     path('rack_add/<int:pk>', rack_add_view, name='rack_add'),
     path('rack_upd/<int:pk>/<int:room_id>', rack_upd_view, name='rack_upd'),
     path('rack_del/<int:pk>', rack_del_view, name='rack_del'),
+    path('rack_detail/<int:pk>', rack_view, name='rack_detail'),
     path('device_add/<int:pk>', device_add_view, name='device_add'),
     path('device_upd/<int:pk>', device_upd_view, name='device_upd'),
     path('device_del/<int:pk>', device_del_view, name='device_del'),
     path('device_detail/<int:pk>', device_view, name='device_detail'),
-    path('rack_detail/<int:pk>', rack_view, name='rack_detail'),
+    path('device_qr/<int:pk>', device_qr_view, name='device_qr'),
+    path('rack_qr/<int:pk>', rack_qr_view, name='rack_qr'),
+    path('qr_list/<int:pk>', qr_list_view, name='qr_list'),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='authapp-login'),
     path('logout/', auth_views.LogoutView.as_view(next_page="/login/"), name='authapp-logout'),
     path('answer/<str:args>', answer_view, name='answer'),
     path('admin/logout/login/', admin.site.urls), 
 ]
-urlpatterns += staticfiles_urlpatterns()
+urlpatterns += staticfiles_urlpatterns() 

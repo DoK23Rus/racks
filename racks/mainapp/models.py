@@ -109,13 +109,19 @@ class Rack(models.Model):
                                                        verbose_name='Нумерация снизу вверх')
     responsible = models.CharField(max_length=128, 
                                    blank=True, 
-                                   verbose_name='Ответственный')
+                                   verbose_name='Ответственный за техническое обслуживание')
     rack_financially_responsible_person = models.CharField(max_length=128, 
                                                            blank=True, 
                                                            verbose_name='МОЛ')
     rack_inventory_number = models.CharField(max_length=128, 
                                              blank=True, 
                                              verbose_name='Инвентарный номер')
+    main_asset = models.CharField(max_length=128, 
+                                  blank=True, 
+                                  verbose_name='Основное средство')
+    link = models.CharField(max_length=128, 
+                            blank=True, 
+                            verbose_name='Ссылка на ресурс')
     row = models.CharField(max_length=128, 
                            blank=True, 
                            verbose_name='Ряд')
@@ -273,12 +279,21 @@ class Device(models.Model):
     ownership = models.CharField(max_length=128, 
                                  default='Оборудование подразделения', 
                                  verbose_name='Зона ответственности')
+    responsible = models.CharField(max_length=128, 
+                                   blank=True, 
+                                   verbose_name='Ответственный за техническое обслуживание')
     financially_responsible_person = models.CharField(max_length=128, 
                                                       blank=True, 
                                                       verbose_name='МОЛ')
     device_inventory_number = models.CharField(max_length=128, 
                                                blank=True, 
                                                verbose_name='Инвентарный номер устройства')
+    main_asset = models.CharField(max_length=128, 
+                                  blank=True, 
+                                  verbose_name='Основное средство')
+    link = models.CharField(max_length=128, 
+                            blank=True, 
+                            verbose_name='Ссылка на ресурс')
     updated_by = models.CharField(max_length=128, 
                                   verbose_name='Обновлено сотрудник')
     updated_at = models.DateTimeField(auto_now=True, 

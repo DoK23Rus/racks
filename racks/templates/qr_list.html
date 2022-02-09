@@ -1,0 +1,52 @@
+{% load static %}
+{% block page %}
+<h3>{{ rack.rack_name }}</h3>
+<br>
+QR-код стойки:
+<br>
+<font size="2">
+<table border="1px" cellspacing="0" cellpadding="3">
+    <tr>
+        <th style="font-family: sans-serif; font-size:50%">r-{{ rack.id }} {{ date }}</th>   
+    </tr>
+    <tr>
+        <th><img src="{% static '' %}{{ rack_image }}"></th>
+    </tr>
+</table>
+</font>
+<br>
+QR-коды устройств:
+<br>
+{% for image in images %}
+    {% for device_num in devices_list %}
+        {% if image|slice:"13:" == device_num|stringformat:"s"|add:'.png' %}
+            {% for device in devices_all %}
+                {% if device_num == device.id %}
+                    <font size="2">
+                    {% if device.frontside_location != True %}
+                    <table style="display: inline-block;" border="1px" cellspacing="0" cellpadding="3">
+                        <tr>
+                            <th style="font-family: sans-serif; font-size:50%">d-{{ device.id }} back {{ device.first_unit }}-{{ device.last_unit }} {{ date }}</th>   
+                        </tr>
+                        <tr>
+                            <th><img src="{% static '' %}{{ image }}"></th>
+                        </tr>
+                    </table>
+                    {% else %}
+                    <table style="float: left;" border="1px" cellspacing="0" cellpadding="3">
+                        <tr>
+                            <th style="font-family: sans-serif; font-size:50%">d-{{ device.id }} front {{ device.first_unit }}-{{ device.last_unit }} {{ date }}</th>
+                        </tr>
+                        <tr>
+                            <th><img src="{% static '' %}{{ image }}"></th>
+                        </tr>
+                    </table>
+                    </font>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+<br>
+{% endblock %}

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.db import models
 import logging
+import os
 from .models import (
     Region, 
     Department, 
@@ -42,6 +43,14 @@ from .services import (
     _side_name,
     _font_size,
     _rack_name,
+    _create_qr,
+    _img_name,
+    _qr_data,
+    _show_qr,
+    _date,
+    _devices_list,
+    _devices_all,
+    _remove_qr,
 )
 
 
@@ -54,8 +63,8 @@ def tree_view(request):
     Карта стоек
     """
     return render(request, 'tree.html', {
-        'regions' : _regions(), 
-        'departments' : _departments(), 
+        'regions': _regions(), 
+        'departments': _departments(), 
         'sites': _sites(), 
         'buildings': _buildings(), 
         'rooms': _rooms(), 
@@ -118,6 +127,38 @@ def units_view(request, pk):
         'first_units_back': _first_units(pk, direction, False), 
         'spans_front': _spans(pk, True), 
         'spans_back': _spans(pk, False),
+    })
+
+
+@login_required(login_url='login/')
+def device_qr_view(request, pk):
+    return render(request, 'device_qr.html', {
+        'date': _date(),
+        'device': _device(pk),
+        'image': _show_qr(_qr_data(pk, True), pk, True)
+    })
+
+
+@login_required(login_url='login/')
+def rack_qr_view(request, pk):
+    return render(request, 'rack_qr.html', {
+        'date': _date(),
+        'rack': _rack(pk),
+        'image': _show_qr(_qr_data(pk, False), pk, False)
+    })
+
+
+@login_required(login_url='login/')
+def qr_list_view(request, pk):
+    devices_list = _devices_list(pk)
+    return render(request, 'qr_list.html', {
+        'date': _date(),
+        'rack': _rack(pk),
+        'devices_all': _devices_all(pk),
+        'devices_list': devices_list,
+        'images': [_show_qr(_qr_data(device, True), device, True) for 
+                   device in devices_list],
+        'rack_image': _show_qr(_qr_data(pk, False), pk, False)
     })
 
 
@@ -491,6 +532,7 @@ def rack_del_view(request, pk):
         if _group_check(list(request.user.groups \
             .values_list('name', flat=True)), pk, model=Rack):
             rack.delete()
+            _remove_qr(pk, False)
             logger.info(request.user.username + 
                         ' DELETE RACK: ' + 
                         str(rack))
@@ -599,6 +641,7 @@ def device_del_view(request, pk):
         if _group_check(list(request.user.groups \
             .values_list('name', flat=True)), pk, model=Device):
             device.delete()
+            _remove_qr(pk, True)
             logger.info(request.user.username + 
                         ' DELETE DEVICE: ' + 
                         str(device))
