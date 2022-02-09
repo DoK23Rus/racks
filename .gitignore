@@ -93,8 +93,3 @@ db.sqlite3
 !**/migrations
 !**/migrations/__init__.py
 
-#qrs
-**/static/device_qr/**
-!**/static/device_qr
-**/static/rack_qr/**
-!**/static/rack_qr
