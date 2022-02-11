@@ -42,11 +42,25 @@
     <br>
     Hostname: {{ device.device_hostname }}
     <br>
+    {% if device.ip != None %}
+        IP-адрес: {{ device.ip }}
+    {% else %}
+        IP-адрес:
+    {% endif %}
+    <br>
     {% if device.device_stack != None %}
         Stack/Резерв: <a href="{% url 'device_detail' device.device_stack %}" target="_blank">Устройство №{{ device.device_stack }}</a>
     {% else %}
         Stack/Резерв:
     {% endif %}
+    <br>
+    {% if device.ports_amout != None %}
+        Портовая ёмкость: {{ device.ports_amout }}
+    {% else %}
+        Портовая ёмкость:
+    {% endif %}
+    <br>
+    Версия ПО (прошивка/дистрибутив): {{ device.version }}
     <br>
     Серийный номер: {{ device.device_serial_number }}
     <br>

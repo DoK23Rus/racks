@@ -239,9 +239,18 @@ class Device(models.Model):
     device_hostname = models.CharField(max_length=128, 
                                        blank=True, 
                                        verbose_name='Hostname')
+    ip = models.GenericIPAddressField(blank=True,
+                                      null=True, 
+                                      verbose_name='IP-адрес')
     device_stack = models.IntegerField(blank=True, 
                                        null=True, 
                                        verbose_name='Stack/Резерв (ID резерва)')
+    ports_amout = models.IntegerField(blank=True, 
+                                      null=True,
+                                      verbose_name='Портовая ёмкость')
+    version = models.CharField(max_length=128, 
+                               blank=True, 
+                               verbose_name='Версия ПО (прошивка/дистрибутив)')
     power_type_choices = [
         ('Внешний БП', 'Внешний БП'),
         ('Клеммы', 'Клеммы'),
