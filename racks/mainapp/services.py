@@ -544,7 +544,7 @@ def _devices_all(pk):
 
 def _device_vendors():
     """
-    Список вендоров
+    Список вендоров для устройств
     """
     vendors = list(Device.objects.values_list('device_vendor', flat=True).distinct())
     vendors.sort()
@@ -553,7 +553,7 @@ def _device_vendors():
 
 def _device_models():
     """
-    Список моделей
+    Список моделей для устройств
     """
     models = list(Device.objects.values_list('device_model', flat=True).distinct())
     models.sort()
@@ -561,7 +561,7 @@ def _device_models():
 
 def _rack_vendors():
     """
-    Список вендоров
+    Список вендоров для стоек
     """
     vendors = list(Rack.objects.values_list('rack_vendor', flat=True).distinct())
     vendors.sort()
@@ -570,7 +570,7 @@ def _rack_vendors():
 
 def _rack_models():
     """
-    Список моделей
+    Список моделей для стоек
     """
     models = list(Rack.objects.values_list('rack_model', flat=True).distinct())
     models.sort()
