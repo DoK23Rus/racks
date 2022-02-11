@@ -5,7 +5,258 @@
 <br>
 <form action = "" method = "post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Изменить">
+    {{ form.errors }}
+    {% if form.device_vendor %}
+        <br>
+        <br>
+            <label>Первый юнит: </label>
+            {{ form.first_unit }}
+        <br>
+        <br>
+            <label>Последний юнит: </label>
+            {{ form.last_unit }}
+        <br>
+        <br>
+            <label>Установлено на фронтальной стороне:</label>
+            {{ form.frontside_location }}
+        <br>
+        <br>
+            <label>Статус: </label>
+            {{ form.status }}
+        <br>
+        <br>
+            <label>Тип оборудования: </label>
+            {{ form.device_type }}
+        <br>
+        <br>
+            <label>Фирма производитель: </label>
+            {{ form.device_vendor }}
+        <br>     
+            <ul id="racks"> 
+                <li><span style="font-size:15px;" class="caret">
+                    <i>выбрать из списка:</i>
+                    <ul class="nested">
+                        {% for choice_vendor in choices_vendor %}
+                        <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="document.getElementById('id_device_vendor').value = document.getElementById('{{ choice_vendor }}').innerText;">{{ choice_vendor }}</button></span>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        <br>
+        <br>
+            <label>Модель устройства: </label>
+            {{ form.device_model }}
+        <br>
+            <ul id="racks"> 
+                <span style="font-size:15px;" class="caret">
+                    <i>выбрать из списка:</i>
+                    <ul class="nested">
+                        {% for choice_model in choices_model %}
+                        <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="document.getElementById('id_device_model').value = document.getElementById('{{ choice_model }}').innerText;">{{ choice_model }}</button></span>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        <br>
+        <br>
+            <label>Hostname: </label>
+            {{ form.device_hostname }}
+        <br>
+        <br>
+            <label>Stack/Резерв (ID резерва): </label>
+            {{ form.device_stack }}
+        <br>
+        <br>
+            <label>Подключение к электросети: </label>
+            {{ form.power_type }}
+        <br>
+        <br>
+            <label>Потребляемая мощность (Вт): </label>
+            {{ form.power_w }}
+        <br>
+        <br>
+            <label>Рабочее напряжение (В): </label>
+            {{ form.power_v }}
+        <br>
+        <br>
+            <label>AC/DC: </label>
+            {{ form.power_ac_dc }}
+        <br>
+        <br>
+            <label>Серийный номер устройства: </label>
+            {{ form.device_serial_number }}
+        <br>
+        <br>
+            <label>Дополнительная информация (описание): </label>
+            {{ form.device_description }}
+        <br>
+        <br>
+            <label>Проект: </label>
+            {{ form.project }}
+        <br>
+        <br>
+            <label>Зона ответственности: </label>
+            {{ form.ownership }}
+        <br>
+        <br>
+            <label>Ответственный за ТО: </label>
+            {{ form.responsible }}
+        <br>
+        <br>
+            <label>МОЛ: </label>
+            {{ form.financially_responsible_person }}
+        <br>
+        <br>
+            <label>Инвентарный номер устройства: </label>
+            {{ form.device_inventory_number }}
+        <br>
+        <br>
+            <label>Основное средство: </label>
+            {{ form.main_asset }}
+        <br>
+        <br>
+            <label>Ссылка на ресурс: </label>
+            {{ form.link }}
+        <br>
+            <div style="display:none">{{ form.rack_id }}</div>
+            <div style="display:none">{{ form.updated_by }}</div>
+    {% elif form.rack_name %}
+        <br>
+            <label>Название стойки: </label>
+            {{ form.rack_name }}
+            <div style="display:none">{{ form.rack_amount }}</div>
+        <br>
+        <br>
+            <label>Фирма производитель:</label>
+            {{ form.rack_vendor }}
+        <br>     
+            <ul id="racks"> 
+                <li><span style="font-size:15px;" class="caret">
+                    <i>выбрать из списка:</i>
+                    <ul class="nested">
+                        {% for choice_vendor in choices_vendor %}
+                        <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="document.getElementById('id_rack_vendor').value = document.getElementById('{{ choice_vendor }}').innerText;">{{ choice_vendor }}</button></span>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        <br>
+        <br>
+            <label>Модель стойки: </label>
+            {{ form.rack_model }}
+        <br>
+            <ul id="racks"> 
+                <span style="font-size:15px;" class="caret">
+                    <i>выбрать из списка:</i>
+                    <ul class="nested">
+                        {% for choice_model in choices_model %}
+                        <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="document.getElementById('id_rack_model').value = document.getElementById('{{ choice_model }}').innerText;">{{ choice_model }}</button></span>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        <br>
+        <br>
+            <label>Дополнительная информация (описание): </label>
+            {{ form.rack_description }}
+        <br>
+        <br>        
+            <label>Нумерация снизу вверх: </label>
+            {{ form.numbering_from_bottom_to_top }}
+        <br>
+        <br>
+            <label>Ответственный за ТО: </label>
+            {{ form.responsible }}
+        <br>
+        <br>
+            <label>МОЛ: </label>
+            {{ form.rack_financially_responsible_person }}
+        <br>
+        <br>
+            <label>Инвентарный номер: </label>
+            {{ form.rack_inventory_number }}
+        <br>
+        <br>
+            <label>Основное средство: </label>
+            {{ form.main_asset }}
+        <br>
+        <br>
+            <label>Ссылка на ресурс: </label>
+            {{ form.link }}
+        <br>
+        <br>
+            <label>Ряд: </label>
+            {{ form.row }}
+        <br>
+        <br>
+            <label>Место: </label>
+            {{ form.place }}
+        <br>
+        <br>
+            <label>Высота стойки (мм): </label>
+            {{ form.rack_height }}
+        <br>
+        <br>
+            <label>Ширина стойки (мм): </label>
+            {{ form.rack_width }}
+        <br>
+        <br>
+            <label>Глубина стойки (мм): </label>
+            {{ form.rack_depth }}
+        <br>
+        <br>
+            <label>Полезная ширина стойки (дюймы): </label>
+            {{ form.rack_unit_width }}
+        <br>
+        <br>
+            <label>Полезная глубина стойки (мм): </label>
+            {{ form.rack_unit_depth }}
+        <br>
+        <br>
+            <label>Вариант исполнения: </label>
+            {{ form.rack_type }}
+        <br>
+        <br>
+            <label>Тип расположения: </label>
+            {{ form.rack_palce_type }}
+        <br>
+        <br>
+            <label>Максимальная нагрузка (кг): </label>
+            {{ form.max_load }}
+        <br>
+        <br>
+            <label>Свободных электророзеток: </label>
+            {{ form.power_sockets }}
+        <br>
+        <br>
+            <label>Свободных электророзеток UPS: </label>
+            {{ form.power_sockets_ups }}
+        <br>
+        <br>
+            <label>Внешняя система резервного электроснабжения: </label>
+            {{ form.external_ups }}
+        <br>
+        <br>
+            <label>Активная вентиляция: </label>
+            {{ form.cooler }}
+        <br>
+            <div style="display:none">{{ form.room_id }}</div>
+            <div style="display:none">{{ form.updated_by }}</div>
+    {% else %}
+        {{ form.as_p}}
+    {% endif %}
+<br>
+<input type="submit" value="Изменить">
 </form>
+<script type="text/javascript">
+    var toggler = document.getElementsByClassName("caret");
+    var i;
+
+    for (i = 0; i < toggler.length; i++) {
+      toggler[i].addEventListener("click", function() {
+        this.parentElement.querySelector(".nested").classList.toggle("active");
+        this.classList.toggle("caret-down");
+      });
+    }
+</script>
 {% endblock %}

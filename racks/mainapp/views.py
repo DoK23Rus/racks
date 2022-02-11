@@ -51,6 +51,10 @@ from .services import (
     _devices_list,
     _devices_all,
     _remove_qr,
+    _device_vendors,
+    _device_models,
+    _rack_vendors,
+    _rack_models,
 )
 
 
@@ -529,7 +533,9 @@ def rack_add_view(request, pk):
                     'answer': 'У вас нет прав на изменения'
                 })
     return render(request, 'add.html', {
-        'form': form
+        'form': form,
+        'choices_vendor': _rack_vendors(),
+        'choices_model': _rack_models(),
     })
 
 
@@ -563,7 +569,9 @@ def rack_upd_view(request, pk, room_id):
                     'answer': 'У вас нет прав на изменения'
                 })
     return render(request, 'update.html', {
-        'form': old_form
+        'form': old_form,
+        'choices_vendor': _rack_vendors(),
+        'choices_model': _rack_models(),
     })
 
 
@@ -598,7 +606,7 @@ def device_add_view(request, pk):
     form_class = DeviceForm
     form = form_class(request.POST or None, initial = {
         "updated_by": request.user.get_full_name(), 
-        "rack_id": pk
+        "rack_id": pk,
     })
     if request.method == 'POST':
         if form.is_valid():
@@ -628,7 +636,9 @@ def device_add_view(request, pk):
                     'answer': 'У вас нет прав на изменения'
                 })
     return render(request, 'add.html', {
-        'form': form
+        'form': form,
+        'choices_vendor': _device_vendors(),
+        'choices_model': _device_models(),
     })
 
 
@@ -672,7 +682,9 @@ def device_upd_view(request, pk):
                     'answer': 'У вас нет прав на изменения'
                 })
     return render(request, 'update.html', {
-        'form': old_form
+        'form': old_form,
+        'choices_vendor': _device_vendors(),
+        'choices_model': _device_models(),
     })
 
 

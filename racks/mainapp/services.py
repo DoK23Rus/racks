@@ -540,3 +540,38 @@ def _devices_all(pk):
     Все устройства в стойке
     """
     return Device.objects.filter(rack_id_id=pk)
+
+
+def _device_vendors():
+    """
+    Список вендоров
+    """
+    vendors = list(Device.objects.values_list('device_vendor', flat=True).distinct())
+    vendors.sort()
+    return vendors
+
+
+def _device_models():
+    """
+    Список моделей
+    """
+    models = list(Device.objects.values_list('device_model', flat=True).distinct())
+    models.sort()
+    return models
+
+def _rack_vendors():
+    """
+    Список вендоров
+    """
+    vendors = list(Rack.objects.values_list('rack_vendor', flat=True).distinct())
+    vendors.sort()
+    return vendors
+
+
+def _rack_models():
+    """
+    Список моделей
+    """
+    models = list(Rack.objects.values_list('rack_model', flat=True).distinct())
+    models.sort()
+    return models
