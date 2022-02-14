@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block page %}
-    <b>Устройство №{{ device.id }}</b>
+    <b style="font-size: 140%">Устройство №{{ device.id }}&#8287;&#8287;</b><a class="btn-link second" href="{% url 'device_qr' pk=device.pk %}">&#9113; QR-код устройства</a>
+    <a class="btn-link third" href="{% url 'device_upd' pk=device.pk %}">&#9998; Изменить</a>
+    <a class="btn-link third" href="{% url 'device_del' pk=device.pk %}">&#10006; Удалить</a>
     <br>
     <br>
     Статус: {{ device.status }}
@@ -83,8 +85,4 @@
     <br>
     <div class="small-size">Обновлено сотрудник: {{ device.updated_by}}</div>
     <div class="small-size">Обновлено дата: {{ device.updated_at}}</div>
-    <br>
-    <a class="btn-link second" href="{% url 'device_qr' pk=device.pk %}">&#9113; QR-код устройства</a>
-    <a class="btn-link third" href="{% url 'device_upd' pk=device.pk %}">&#9998; Изменить</a>
-    <a class="btn-link third" href="{% url 'device_del' pk=device.pk %}">&#10006; Удалить</a>
 {% endblock %}

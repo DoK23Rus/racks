@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-{% block page %}
-    <form method='POST'>
-    {% csrf_token %}
-    <b>Вы действительно хотите удалить "Устройство №{{ device.id }} - {{ device.device_vendor }} {{ device.device_model }}"?</b>
-    <br>
-    <br>
-    <input type="submit" value="Удалить">
-{% endblock %}

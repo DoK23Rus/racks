@@ -1,7 +1,14 @@
+:root {
+  --bs-font-sans-serif: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
 body {
   margin: 25px;
-  background-color: #F0F0F0;
-  font-family: sans-serif;
+  font-family: var(--bs-font-sans-serif)
+}
+
+font {
+  font-family: var(--bs-font-sans-serif)
 }
 
 table {
@@ -11,11 +18,12 @@ table {
 td, th {
   border-width: 2px;
   algin: right: ;
-  font-family: Trebuchet MS, sans-serif;
+  font-family: var(--bs-font-sans-serif)
 }
 
 a {
   text-decoration: none;
+  font-family: var(--bs-font-sans-serif)
 }
 
 /* Дерево */
@@ -98,7 +106,7 @@ ul, #racks {
   }
 
 .btn-link:hover {
-    background-color: #F0F0F0; 
+    background-color: #FFFFFF; 
     color: black;
 }
 

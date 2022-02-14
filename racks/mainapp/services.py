@@ -508,13 +508,13 @@ def _qr_data(pk, device):
     Данные для QR-кода
     """
     if device == True:
-        return 'd-' + str(pk) + \
+        return 'http://127.0.0.1:80001/device_detail/' + str(pk) + \
             '\nОзТО: ' + _device(pk).responsible + \
             '\nМОЛ: ' + _device(pk).financially_responsible_person + \
             '\nИнв: ' + _device(pk).device_inventory_number + \
             '\nОС: ' + _device(pk).main_asset
     else:
-        return 'r-' + str(pk) + \
+        return 'http://127.0.0.1:80001/rack_detail/' + str(pk) + \
             '\nОзТО: ' + _rack(pk).responsible + \
             '\nМОЛ: ' + _rack(pk).rack_financially_responsible_person + \
             '\nИнв: ' + _rack(pk).rack_inventory_number + \
