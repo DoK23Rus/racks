@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block page %}
+{% load staticfiles %}
 <b>Внесите изменения и нажмите "Изменить"</b>
 <br>
 <br>
@@ -260,15 +261,5 @@
 <br>
 <input type="submit" value="Изменить">
 </form>
-<script type="text/javascript">
-    var toggler = document.getElementsByClassName("caret");
-    var i;
-
-    for (i = 0; i < toggler.length; i++) {
-      toggler[i].addEventListener("click", function() {
-        this.parentElement.querySelector(".nested").classList.toggle("active");
-        this.classList.toggle("caret-down");
-      });
-    }
-</script>
+<script src="{% static '/js/tree.js' %}"></script>
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block page %}
+{% load staticfiles %}
 <div style="float: right"><a class="btn-link second" href="{% url 'search'  %}">&#10004; Перейти по ID</a> <a class="btn-link second" href="{% url 'export_devices'  %}">&#10004; Скачать отчет по УСТРОЙСТВАМ</a> <a class="btn-link second" href="{% url 'export_racks'  %}">&#10004; Скачать отчет по СТОЙКАМ</a></div>
 
 <ul id="racks"> 
@@ -60,15 +61,5 @@
     </li>
 {% endfor %}
 </ul>
-<script type="text/javascript">
-    var toggler = document.getElementsByClassName("caret");
-    var i;
-
-    for (i = 0; i < toggler.length; i++) {
-      toggler[i].addEventListener("click", function() {
-        this.parentElement.querySelector(".nested").classList.toggle("active");
-        this.classList.toggle("caret-down");
-      });
-    }
-</script>
+<script src="{% static '/js/tree.js' %}"></script>
 {% endblock %}
