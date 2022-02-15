@@ -198,7 +198,7 @@ def export_devices_view(request):
     """
     Вьюшка для отчета по устройствам
     """
-    return export_devices()
+    return _export_devices()
 
 
 @login_required(login_url='login/')
@@ -206,7 +206,7 @@ def export_racks_view(request):
     """
     Вьюшка для отчета по стойкам
     """
-    return export_racks()
+    return _export_racks()
 
 
 @login_required(login_url='login/')
