@@ -1,15 +1,7 @@
 {% extends 'base.html' %}
 {% block page %}
 {% load staticfiles %}
-{% if add == True %}
-    <b>Заполните форму и нажмите "Добавить"</b>
-    {% if form.rack_name %}
-        <br>
-        <p style="font-size: 10px">поле "Вместимость стойки" заполняется единожды (впоследствии изменить невозможно)</p>
-    {% endif %}
-{% else %}
-    <b>Внесите изменения и нажмите "Изменить"</b>
-{% endif %}
+<b>Внесите изменения и нажмите "Изменить"</b>
 <br>
 <form action = "" method = "post">
     {% csrf_token %}
@@ -41,11 +33,11 @@
             {{ form.device_vendor }}
         <br>     
             <ul id="racks"> 
-                <li><span style="font-size:12px;" class="caret">
+                <li><span class="caret choice-header">
                     <i>выбрать из списка:</i>
-                    <ul style="font-size:15px;" class="nested">
+                    <ul class="nested choice-button">
                         {% for choice_vendor in choices_vendor %}
-                        <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="document.getElementById('id_device_vendor').value = document.getElementById('{{ choice_vendor }}').innerText;">{{ choice_vendor }}</button></span>
+                        <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="copyOnClick('id_device_vendor', '{{ choice_vendor }}')">{{ choice_vendor }}</button></span>
                         {% endfor %}
                     </ul>
                 </li>
@@ -56,11 +48,11 @@
             {{ form.device_model }}
         <br>
             <ul id="racks"> 
-                <span style="font-size:12px;" class="caret">
+                <span class="caret choice-header">
                     <i>выбрать из списка:</i>
-                    <ul style="font-size:15px;" class="nested">
+                    <ul class="nested choice-button">
                         {% for choice_model in choices_model %}
-                        <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="document.getElementById('id_device_model').value = document.getElementById('{{ choice_model }}').innerText;">{{ choice_model }}</button></span>
+                        <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="copyOnClick('id_device_model', '{{ choice_model }}')">{{ choice_model }}</button></span>
                         {% endfor %}
                     </ul>
                 </li>
@@ -146,24 +138,17 @@
             {{ form.rack_name }}
         <br>
         <br>
-        {% if add == True %}
-            <label>Вместимость стойки (юниты): </label>
-            {{ form.rack_amount }}
-        <br>
-        <br>
-        {% else %}
             <div style="display:none"><label>Вместимость стойки (юниты): </label></div>
             <div style="display:none">{{ form.rack_amount }}</div>
-        {% endif %}
             <label>Фирма производитель:</label>
             {{ form.rack_vendor }}
         <br>     
             <ul id="racks"> 
-                <li><span style="font-size:12px;" class="caret">
+                <li><span class="caret choice-header">
                     <i>выбрать из списка:</i>
-                    <ul style="font-size:15px;" class="nested">
+                    <ul class="nested choice-button">
                         {% for choice_vendor in choices_vendor %}
-                        <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="document.getElementById('id_rack_vendor').value = document.getElementById('{{ choice_vendor }}').innerText;">{{ choice_vendor }}</button></span>
+                        <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="copyOnClick('id_rack_vendor', '{{ choice_vendor }}')">{{ choice_vendor }}</button></span>
                         {% endfor %}
                     </ul>
                 </li>
@@ -174,11 +159,11 @@
             {{ form.rack_model }}
         <br>
             <ul id="racks"> 
-                <span style="font-size:12px;" class="caret">
+                <span class="caret choice-header">
                     <i>выбрать из списка:</i>
-                    <ul style="font-size:15px;" class="nested">
+                    <ul class="nested choice-button">
                         {% for choice_model in choices_model %}
-                        <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="document.getElementById('id_rack_model').value = document.getElementById('{{ choice_model }}').innerText;">{{ choice_model }}</button></span>
+                        <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="copyOnClick('id_rack_model', '{{ choice_model }}')">{{ choice_model }}</button></span>
                         {% endfor %}
                     </ul>
                 </li>
@@ -273,11 +258,7 @@
     {% else %}
         {{ form.as_p}}
     {% endif %}
-<br>
-{% if add == True %}
-    <input type="submit" value="Добавить">
-{% else %}
-    <input type="submit" value="Изменить">
-{% endif %}
+<input type="submit" value="Изменить">
+<script src="{% static '/js/copy.js' %}"></script>
 <script src="{% static '/js/tree.js' %}"></script>
 {% endblock %}

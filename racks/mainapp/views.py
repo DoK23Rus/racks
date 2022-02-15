@@ -13,9 +13,14 @@ from .models import (
     Rack, 
     Device,
 )
+from .qr_services import (
+    _remove_qr,
+    _qr_data, 
+    _show_qr, 
+)
 from .report_services import (
-    export_devices, 
-    export_racks,
+    _export_devices, 
+    _export_racks,
 )
 from .services import ( 
     _regions,
@@ -43,14 +48,9 @@ from .services import (
     _side_name,
     _font_size,
     _rack_name,
-    _create_qr,
-    _img_name,
-    _qr_data,
-    _show_qr,
     _date,
     _devices_list,
     _devices_all,
-    _remove_qr,
     _device_vendors,
     _device_models,
     _rack_vendors,
@@ -267,7 +267,7 @@ def site_add_view(request, pk):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'add.html', {
         'form': form
     })
 
@@ -295,7 +295,7 @@ def site_upd_view(request, pk):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'update.html', {
         'form': old_form
     })
 
@@ -317,7 +317,7 @@ def site_del_view(request, pk):
             return render(request, 'answer.html', {
                 'answer': 'У вас нет прав на изменения'
             })
-    return render(request, 'del.html', {
+    return render(request, 'delete.html', {
         'site': site,
         'object': 'site',
     })
@@ -353,7 +353,7 @@ def building_add_view(request, pk):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'add.html', {
         'form': form
     })
 
@@ -387,7 +387,7 @@ def building_upd_view(request, pk, site_id):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'update.html', {
         'form': old_form
     })
 
@@ -409,7 +409,7 @@ def building_del_view(request, pk):
             return render(request, 'answer.html', {
                 'answer': 'У вас нет прав на изменения'
             })
-    return render(request, 'del.html', {
+    return render(request, 'delete.html', {
         'building': building,
         'object': 'building',
     })
@@ -445,7 +445,7 @@ def room_add_view(request, pk):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'add.html', {
         'form': form
     })
 
@@ -479,7 +479,7 @@ def room_upd_view(request, pk, building_id):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'update.html', {
         'form': old_form
     })
 
@@ -501,7 +501,7 @@ def room_del_view(request, pk):
             return render(request, 'answer.html', {
                 'answer': 'У вас нет прав на изменения'
             })
-    return render(request, 'del.html', {
+    return render(request, 'delete.html', {
         'room': room,
         'object': 'room',
     })
@@ -535,11 +535,10 @@ def rack_add_view(request, pk):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'add.html', {
         'form': form,
         'choices_vendor': _rack_vendors(),
         'choices_model': _rack_models(),
-        'add': True,
     })
 
 
@@ -572,11 +571,10 @@ def rack_upd_view(request, pk, room_id):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'update.html', {
         'form': old_form,
         'choices_vendor': _rack_vendors(),
         'choices_model': _rack_models(),
-        'add': False,
     })
 
 
@@ -598,7 +596,7 @@ def rack_del_view(request, pk):
             return render(request, 'answer.html', {
                 'answer': 'У вас нет прав на изменения'
             })
-    return render(request, 'del.html', {
+    return render(request, 'delete.html', {
         'rack': rack,
         'object': 'rack',
     })
@@ -641,11 +639,10 @@ def device_add_view(request, pk):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'add.html', {
         'form': form,
         'choices_vendor': _device_vendors(),
         'choices_model': _device_models(),
-        'add': True, 
     })
 
 
@@ -688,11 +685,10 @@ def device_upd_view(request, pk):
                 return render(request, 'answer.html', {
                     'answer': 'У вас нет прав на изменения'
                 })
-    return render(request, 'add-update.html', {
+    return render(request, 'update.html', {
         'form': old_form,
         'choices_vendor': _device_vendors(),
         'choices_model': _device_models(),
-        'add': False,
     })
 
 
@@ -714,7 +710,7 @@ def device_del_view(request, pk):
             return render(request, 'answer.html', {
                 'answer': 'У вас нет прав на изменения'
             })
-    return render(request, 'del.html', {
+    return render(request, 'delete.html', {
         'device': device,
         'object': 'device',
     })

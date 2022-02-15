@@ -19,7 +19,7 @@ from .models import (
 )
 
 
-def export_devices():
+def _export_devices():
     """
     Отчет по устройствам
     """
@@ -134,7 +134,7 @@ def export_devices():
     return response
 
 
-def export_racks():
+def _export_racks():
     """
     Отчет по стойкам
     """

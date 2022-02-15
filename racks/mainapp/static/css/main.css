@@ -60,28 +60,7 @@ ul, #racks {
   display: block;
 }
 
-
-/* Прочее */
-.main_text {
-  font-size: 140%;
-  padding: 3px; 
-  line-height: 2;
-}
-
-.other_text {
-  font-size: 120%;
-  padding: 3px;
-  line-height: 2; 
-}
-
-.myheader {
-  float: right;
-}
-
-.small-size {
-  font-size: 9pt;
-}
-
+/* Кнопки */
 .btn-link {
   font-size: 70%; 
   padding: 3px;
@@ -110,6 +89,31 @@ ul, #racks {
     color: black;
 }
 
+.choice-button {
+  font-size: 15px;
+}
+
+/* Прочее */
+.main-text {
+  font-size: 140%;
+  padding: 3px; 
+  line-height: 2;
+}
+
+.other-text {
+  font-size: 120%;
+  padding: 3px;
+  line-height: 2; 
+}
+
+.myheader {
+  float: right;
+}
+
+.small-size {
+  font-size: 9pt;
+}
+
 .id {
   min-width: 8ch;
   max-width: 8ch;
@@ -120,7 +124,7 @@ ul, #racks {
   max-width: 70ch;
 }
 
-.device_coll {
+.device-coll {
   font-size: 14pt;
 }
 
@@ -129,10 +133,23 @@ ul, #racks {
   max-width: 4ch;
 }
 
-.zebra_green {
+.rack-header {
+  line-height: 250%; 
+  font-size: 120%;
+}
+
+.smaller {
+  font-size: 80%;
+}
+
+.choice-header {
+  font-size: 12px;
+}
+
+.zebra-green {
   background: repeating-linear-gradient(-45deg, #ABEBC6 0, #ABEBC6 10px, transparent 10px, transparent 20px);
 }
 
-.zebra_red {
+.zebra-red {
   background: repeating-linear-gradient(-45deg, #F5B7B1 0, #F5B7B1 10px, transparent 10px, transparent 20px);
 }
