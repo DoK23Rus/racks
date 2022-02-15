@@ -152,6 +152,14 @@ class Rack(models.Model):
                                  choices=rack_type_choices, 
                                  default='Стойка', 
                                  verbose_name='Вариант исполнения')
+    frame_choices = [
+        ('Однорамная', 'Однорамная'),
+        ('Двухрамная', 'Двухрамная'),
+    ]
+    rack_frame = models.CharField(max_length=32, 
+                                 choices=frame_choices, 
+                                 default='Двухрамная', 
+                                 verbose_name='Конструкция')
     rack_palce_type_choices = [
         ('Напольный', 'Напольный'),
         ('Настенный', 'Настенный'),
