@@ -232,12 +232,18 @@
     {% elif form.site_name %}
         <br>
             Наименование объекта: {{ form.site_name }}
+            <div style="display:none">{{ form.department_id }}</div>
+            <div style="display:none">{{ form.updated_by }}</div>
     {% elif form.building_name %}
         <br>
             Наименование здания: {{ form.building_name }}
+            <div style="display:none">{{ form.site_id }}</div>
+            <div style="display:none">{{ form.updated_by }}</div>
     {% elif form.room_name %}
         <br>
             Наименование помещения: {{ form.room_name }}
+            <div style="display:none">{{ form.building_id }}</div>
+            <div style="display:none">{{ form.updated_by }}</div>
     {% endif %}
 <br>
 <input type="submit" value="Добавить">

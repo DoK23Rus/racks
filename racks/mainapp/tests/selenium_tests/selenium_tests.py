@@ -21,8 +21,8 @@ class ServicesTestCase(unittest.TestCase):
 
     def setUp(self):
         options = Options()
-        options.headless = True
-        #options.headless = False
+        #options.headless = True
+        options.headless = False
         self.driver = webdriver.Firefox(options=options, 
             executable_path='/home/slunk/selenium/geckodriver')
         self.driver.implicitly_wait(10)
@@ -104,7 +104,7 @@ class ServicesTestCase(unittest.TestCase):
         time.sleep(1)
         self.driver.switch_to.window(self.driver.window_handles[2])
         device = DevicePage(self.driver)
-        device.change_first_device()
+        device.change_device()
         time.sleep(1)
         device_form = DeviceFormPage(self.driver)
         self.assertEqual(device_form.get_device_first_unit(), 
@@ -125,7 +125,7 @@ class ServicesTestCase(unittest.TestCase):
         time.sleep(1)
         self.driver.switch_to.window(self.driver.window_handles[2]) 
         device = DevicePage(self.driver)
-        device.change_second_device()
+        device.change_device()
         time.sleep(1)
         device_form = DeviceFormPage(self.driver)
         self.assertEqual(device_form.get_device_first_unit(), 
@@ -149,7 +149,7 @@ class ServicesTestCase(unittest.TestCase):
         time.sleep(1)
         self.driver.switch_to.window(self.driver.window_handles[2])
         device = DevicePage(self.driver)
-        device.change_first_device()
+        device.change_device()
         time.sleep(1)
         device_form = DeviceFormPage(self.driver)
         first_unit = device_form.use_first_unit_textbox()
@@ -177,7 +177,7 @@ class ServicesTestCase(unittest.TestCase):
         time.sleep(1)
         self.driver.switch_to.window(self.driver.window_handles[2])
         device = DevicePage(self.driver)
-        device.change_first_device()
+        device.change_device()
         time.sleep(1)
         device_form = DeviceFormPage(self.driver)
         first_unit = device_form.use_first_unit_textbox()
@@ -303,3 +303,4 @@ class ServicesTestCase(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(
         output='/home/slunk/code/racks_project/racks/mainapp/tests/selenium_tests/test_results'))
+ 

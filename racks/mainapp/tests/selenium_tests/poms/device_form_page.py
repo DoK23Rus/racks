@@ -10,7 +10,7 @@ class DeviceFormPage():
         self.value_attr = Locators.value_attr
         self.first_unit_textbox_id = Locators.first_unit_textbox_id
         self.last_unit_textbox_id = Locators.last_unit_textbox_id
-        self.accept_button_xpath = Locators.accept_button_xpath
+        self.accept_device_button_xpath = Locators.accept_device_button_xpath
 
     def get_device_first_unit(self):
         return self.driver. \
@@ -29,4 +29,5 @@ class DeviceFormPage():
         return self.driver.find_element_by_id(self.last_unit_textbox_id)
 
     def click_change(self):
-        self.driver.find_element_by_xpath(self.accept_button_xpath).click()
+        self.driver. \
+            find_element_by_xpath(self.accept_device_button_xpath).click()
