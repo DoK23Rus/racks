@@ -1,4 +1,5 @@
 import unittest
+import datetime
 from django.test import TestCase
 from django.db import connection
 from mainapp.models import (
@@ -41,6 +42,13 @@ from mainapp.services import (
     _numbering,
     _external_ups,
     _cooler,
+    _date,
+    _devices_list,
+    _devices_all,
+    _device_vendors,
+    _device_models,
+    _rack_vendors,
+    _rack_models,
 )
 
 
@@ -380,3 +388,42 @@ class ServicesTestCase(TestCase):
         self.assertEqual(_font_size(20), '100')
         self.assertEqual(_font_size(40), '75')
         self.assertEqual(_font_size(60), '50')
+
+    def test_date(self):
+        self.assertEqual(_date(), 
+            datetime.datetime.today().strftime("%Y-%m-%d"))
+
+    def test_devices_list(self):
+        pk = Rack.objects.get(rack_name='Test_rack1').id 
+        self.assertEqual(set(_devices_list(pk)), set(Device.objects. \
+            filter(rack_id_id=pk).values_list('id', flat=True)))
+
+    def test_devices_all(self):
+        pk = Rack.objects.get(rack_name='Test_rack1').id 
+        self.assertEqual(set(_devices_all(pk).values_list('id', flat=True)), 
+            set(Device.objects. \
+            filter(rack_id_id=pk).values_list('id', flat=True)))
+
+    def test_device_vendors(self):
+        vendors = list(Device.objects. \
+            values_list('device_vendor', flat=True).distinct())
+        vendors.sort()
+        self.assertEqual(_device_vendors(), vendors)
+
+    def test_device_models(self):
+        models = list(Device.objects. \
+            values_list('device_model', flat=True).distinct())
+        models.sort()
+        self.assertEqual(_device_models(), models)
+
+    def test_rack_vendors(self):
+        vendors = list(Rack.objects. \
+            values_list('rack_vendor', flat=True).distinct())
+        vendors.sort()
+        self.assertEqual(_rack_vendors(), vendors)
+
+    def test_rack_models(self):
+        models = list(Rack.objects. \
+            values_list('rack_model', flat=True).distinct())
+        models.sort()
+        self.assertEqual(_rack_models(), models)

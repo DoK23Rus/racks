@@ -21,8 +21,8 @@ class ServicesTestCase(unittest.TestCase):
 
     def setUp(self):
         options = Options()
-        #options.headless = True
-        options.headless = False
+        options.headless = True
+        #options.headless = False
         self.driver = webdriver.Firefox(options=options, 
             executable_path='/home/slunk/selenium/geckodriver')
         self.driver.implicitly_wait(10)
