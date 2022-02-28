@@ -13,70 +13,70 @@ from .models import (
 
 def _regions():
     """
-    Все регионы
+    All regions
     """
     return Region.objects.all()
 
 
 def _departments():
     """
-    Все отделы
+    All departments
     """
     return Department.objects.all()
 
 
 def _sites():
     """
-    Все объекты
+    All sites
     """
     return Site.objects.all()
 
 
 def _buildings():
     """
-    Все здания
+    All buildings
     """
     return Building.objects.all()
 
 
 def _rooms():
     """
-    Все помещения
+    All rooms
     """
     return Room.objects.all()
 
 
 def _racks():
     """
-    Все стойки
+    All racks
     """
     return Rack.objects.all()
 
 
 def _device(pk):
     """
-    Устройство
+    One device
     """
     return Device.objects.get(id=pk)
 
 
 def _rack(pk):
     """
-    Стойка
+    One rack
     """
     return Rack.objects.get(id=pk)
 
 
 def _direction(pk):
     """
-    Направление нумерации стойки
+    Rack numbering direction
     """
     return Rack.objects.get(id=pk).numbering_from_bottom_to_top
 
 
 def _devices(pk, side):
     """
-    Устройства в стойке для указанной стороны
+    Devices in a rack for a specified side
     """
     return Device.objects.filter(rack_id_id=pk) \
                                  .filter(frontside_location=side)
@@ -84,22 +84,21 @@ def _devices(pk, side):
 
 def _rack_id(pk):
     """
-    ID стойки
+    Rack ID
     """
     return Device.objects.get(id=pk).rack_id_id
 
 
 def _rack_name(pk):
     """
-    Наименование стойки
+    Rack name
     """
     return Rack.objects.get(id=pk).rack_name       
 
 
 def _start_list(pk, direction):
     """
-    Список юнитов (всего)
-    Для отрисовки стоек
+    Units list
     """
     if direction == False:
         return list(range(1, (int(Rack.objects.get(id=pk) \
@@ -111,9 +110,7 @@ def _start_list(pk, direction):
 
 def _first_units(pk, direction, side):
     """
-    Первые юниты по порядку для каждого устройства 
-    в зависимости от напрвления нумерации
-    Для отрисовки стоек
+    First units for each device
     """
     first_units = {}
     queryset_spans = Device.objects.filter(rack_id_id=pk) \
@@ -134,8 +131,7 @@ def _first_units(pk, direction, side):
 
 def _spans(pk, side):
     """
-    Роуспаны для каждого устройства (устройства шириной более одного юнита)
-    Для отрисовки стоек
+    Rowspans for each device
     """
     spans = {}
     queryset_spans = Device.objects.filter(rack_id_id=pk) \
@@ -152,17 +148,18 @@ def _spans(pk, side):
 
 def _group_check(user_groups, pk, model):
     """
-    Проверка есть ли в списке групп пользователя группа 
-    с наминованием отдела совпадающая с принадлежностью объекта модели к 
-    зоне ответственности отдела по первичным ключам 
-                                                          __
-                                              ======      \/
-    _____________ _____________ _____________ | [] |=========
-    \  костыли  / \  костыли  / \  костыли  / |              )
-     ===========   ===========   ===========  ================
-     O-O     O-O   O-O     O-O   O-O     O-O  O-O-O   O-O-O \\
+    Checking if there is a group named department 
+    in the list of user groups that matches 
+    the model object belonging to the area 
+    of responsibility of the department (by primary keys)
+                                                             __
+                                                 ======      \/
+    _____________  _____________  _____________  | [] |=========
+    \  crutches  / \  crutches  / \  crutches  / |              )
+     ===========    ===========    ===========   ================
+     O-O     O-O    O-O     O-O    O-O     O-O   O-O-O   O-O-O \\
 
-    Не дает изменять данные закрепленые за другим отделом
+    Does not allow you to change the data assigned to another department
     """
     if model == Department:
         department_raw_query = Department.objects.raw("""select department.id as id,
@@ -259,8 +256,7 @@ def _group_check(user_groups, pk, model):
 
 def _old_units(pk):
     """
-    Уже заполненные юниты
-    Для перемещения устройства в стойке
+    Already filled units
     """
     units = {}
     first_unit = Device.objects.get(id=pk).first_unit
@@ -275,7 +271,7 @@ def _old_units(pk):
 
 def _new_units(first_unit, last_unit):
     """
-    Юниты для вновь добавляемого устройства
+    Units for newly added device
     """
     units= {}
     units['new_first_unit'] = first_unit
@@ -288,7 +284,7 @@ def _new_units(first_unit, last_unit):
 
 def _all_units(pk):
     """
-    Всего юнитов в стойке
+    Total units per rack
     """
     units = {}
     units['all_units'] = Rack.objects.get(id=pk).rack_amount
@@ -297,7 +293,7 @@ def _all_units(pk):
 
 def _unit_exist_check(units):
     """
-    Есть ли вообще такие юниты (болше или меньше указанного)?
+    Are there any such units?
     """
     if not set(range(units['new_first_unit'], units['new_last_unit'] + 1)) \
         .issubset(range(1, units['all_units'] + 1)):
@@ -308,7 +304,7 @@ def _unit_exist_check(units):
         
 def _unit_busy_check(location, units, pk, update):
     """
-    Заняты ли юниты (добавление, перемещение устройства)?
+    Are units busy? (adding, updating)
     """
     filled_list = []
     queryset_devices = Device.objects.filter(rack_id_id=pk) \
@@ -334,8 +330,8 @@ def _unit_busy_check(location, units, pk, update):
 
 def _unique_list(pk, model):
     """
-    Чтобы наименования зданий помещений и стоек могли повторяться 
-    в рамках зоны ответственности одного отдела
+    Names of building, rooms and racks can be repeated 
+    within the area of responsibility of one department
     """
     if model == Site:
         return [building.building_name for building 
@@ -350,8 +346,7 @@ def _unique_list(pk, model):
 
 def _device_stack(device_link, device_stack):
     """
-    Стековое устройство
-    Для отчета по устройствам
+    Link to backup device (for csv)
     """
     if device_stack != None:
         return device_link + str(device_stack)
@@ -361,51 +356,47 @@ def _device_stack(device_link, device_stack):
 
 def _frontside_location(frontside_location):
     """
-    Расположение
-    Для отчета по устройствам
+    Location (for csv)
     """
     if frontside_location == True:
-        return 'Да'
+        return 'Yes'
     else:
-        return 'Нет'
+        return 'No'
 
 
 def _numbering(numbering):
     """
-    Нумерация
-    Для отчета по стойкам
+    Numbering (for csv)
     """
     if numbering == True:
-        return 'Да'
+        return 'Yes'
     else:
-        return 'Нет'
+        return 'No'
 
 
 def _external_ups(external_ups):
     """
-    Наличие бесперебойника
-    Для отчета по стойкам
+    UPS availability (for csv)
     """
     if external_ups == True:
-        return 'Да'
+        return 'Yes'
     else:
-        return 'Нет'
+        return 'No'
 
 
 def _cooler(cooler):
     """
-    Наличие вентиляции
-    Для отчета по стойкам
+    Venting availability (for csv)
     """
     if cooler == True:
-        return 'Да'
+        return 'Yes'
     else:
-        return 'Нет'
+        return 'No'
 
 
 def _header(pk):
     """
-    Набор данных для шапки стойки (местонахождение)
+    Header data set (location)
     """
     return Rack.objects.raw("""select rack.id as id, 
                             rack.rack_name,
@@ -437,17 +428,17 @@ def _header(pk):
 
 def _side_name(side):
     """
-    Указание стороны для черновика
+    Rack side (for a draft)
     """
     if side == 'True':
-        return 'Фронтальная сторона стойки'
+        return 'Front side of the rack'
     else:
-        return 'Тыльная сторона стойки'
+        return 'Back side of the rack'
 
 
 def _font_size(rack_size):
     """
-    Размер шрифта для черновика
+    Font size (for a draft)
     """
     if rack_size <= 32: 
         return '100'
@@ -459,28 +450,28 @@ def _font_size(rack_size):
 
 def _date():
     """
-    Дата
+    Date
     """
     return datetime.datetime.today().strftime("%Y-%m-%d")
 
 
 def _devices_list(pk):
     """
-    Список id устройств в стойке
+    List of device IDs for rack
     """
     return Device.objects.filter(rack_id_id=pk).values_list('id', flat=True)
 
 
 def _devices_all(pk):
     """
-    Все устройства в стойке
+    All devices in rack
     """
     return Device.objects.filter(rack_id_id=pk)
 
 
 def _device_vendors():
     """
-    Список вендоров для устройств
+    Vendors list (for devices)
     """
     vendors = list(Device.objects. \
         values_list('device_vendor', flat=True).distinct())
@@ -490,16 +481,17 @@ def _device_vendors():
 
 def _device_models():
     """
-    Список моделей для устройств
+    Models list (for devices)
     """
     models = list(Device.objects. \
         values_list('device_model', flat=True).distinct())
     models.sort()
     return models
 
+
 def _rack_vendors():
     """
-    Список вендоров для стоек
+    Vendors list (for racks)
     """
     vendors = list(Rack.objects. \
         values_list('rack_vendor', flat=True).distinct())
@@ -509,7 +501,7 @@ def _rack_vendors():
 
 def _rack_models():
     """
-    Список моделей для стоек
+    Models list (for racks)
     """
     models = list(Rack.objects. \
         values_list('rack_model', flat=True).distinct())

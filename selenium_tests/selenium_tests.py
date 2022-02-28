@@ -21,8 +21,8 @@ class ServicesTestCase(unittest.TestCase):
 
     def setUp(self):
         options = Options()
-        options.headless = True
-        #options.headless = False
+        #options.headless = True
+        options.headless = False
         self.driver = webdriver.Firefox(options=options, 
             executable_path='/home/slunk/selenium/geckodriver')
         self.driver.implicitly_wait(10)
@@ -37,13 +37,13 @@ class ServicesTestCase(unittest.TestCase):
         self.driver.close()
         self.driver.quit()
     
-    ##############################################################
-    # Предварительные тесты 1_1 - 1_7 нужны для проверки сетапа, #
-    # без них не пройдут основные проверки                       #
-    ##############################################################
+    ######################################################
+    # Pretests 1_1 - 1_7 are needed to verify the setup, #
+    # without them, the main checks will not pass        #
+    ######################################################
     def test_1_1_user_check(self):
         """
-        Проверка авторизации
+        Authorization check
         """
         racks = RacksPage(self.driver)
         self.assertTrue(racks.get_auth_loc(),
@@ -51,7 +51,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_1_2_department_exists(self):
         """
-        Есть ли нужный для проверки отдел
+        Is there a particular department that needs to be checked?
         """
         racks = RacksPage(self.driver)
         self.assertTrue(racks.get_department_name_loc(),
@@ -59,7 +59,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_1_3_rack_exists(self):
         """
-        Есть ли нужная для проверки стойка
+        Is there a particular rack that needs to be checked?
         """
         racks = RacksPage(self.driver)
         self.assertTrue(racks.get_rack_name_loc(),
@@ -67,7 +67,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_1_4_first_device_exists(self):
         """
-        Есть ли нужное для проверки первое устройство
+        Is there a first device that needs to be checked?
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -80,7 +80,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_1_5_second_device_exists(self):
         """
-        Есть ли нужное для проверки второе устройство
+        Is there a second device that needs to be checked?
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -93,7 +93,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_1_6_first_device_in_their_place(self):
         """
-        На том ли месте первое устройство
+        Is the first device in the right place?
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -114,7 +114,7 @@ class ServicesTestCase(unittest.TestCase):
     
     def test_1_7_second_device_in_their_place(self):
         """
-        На том ли месте второе устройство
+        Is the second device in the right place?
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -133,12 +133,12 @@ class ServicesTestCase(unittest.TestCase):
         self.assertEqual(device_form.get_device_last_unit(), 
                          Locators.second_device_last_unit_ok)
 
-    #####################
-    # Основные проверки #
-    #####################
+    ###############
+    # Main checks #
+    ###############
     def test_2_move_device_outside(self):
         """
-        Пробуем переместить устройство за пределы стойки
+        Trying to move the device off the rack
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -166,7 +166,7 @@ class ServicesTestCase(unittest.TestCase):
     
     def test_3_move_device_to_busy_place(self):
         """
-        Пробуем переместить устройство на занятое место
+        Trying to move the device to a busy place
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -194,7 +194,8 @@ class ServicesTestCase(unittest.TestCase):
     
     def test_4_permitions(self):
         """
-        Пробуем добавить новый объект в зоне ответственности другого отдела
+        Trying to add a new object 
+        in the area of responsibility of another department
         """
         racks = RacksPage(self.driver)
         racks.expand_region()
@@ -208,7 +209,7 @@ class ServicesTestCase(unittest.TestCase):
     
     def test_5_add_device_outside(self):
         """
-        Пробуем добавить новое устройство за пределы стойки
+        Trying to add a new device outside the rack
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -233,7 +234,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_6_add_device_to_busy_place(self):
         """
-        Пробуем добавить новое устройство на занятое место
+        Trying to add a new device to the busy space
         """
         racks = RacksPage(self.driver)
         racks.open_rack()
@@ -258,7 +259,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_7_add_same_name_building(self):
         """
-        Пробуем добавить здание с повторяющимся названием
+        Trying to add a building with a duplicate name
         """
         racks = RacksPage(self.driver)
         racks.add_new_building()
@@ -272,7 +273,7 @@ class ServicesTestCase(unittest.TestCase):
 
     def test_8_add_same_name_room(self):
         """
-        Пробуем добавить помещение с повторяющимся названием
+        Trying to add a room with a duplicate name
         """
         racks = RacksPage(self.driver)
         racks.add_new_room()
@@ -286,7 +287,7 @@ class ServicesTestCase(unittest.TestCase):
     
     def test_9_add_same_name_rack(self):
         """
-        Пробуем добавить стойку с повторяющися названием
+        Trying to add a rack with a duplicate name
         """
         racks = RacksPage(self.driver)
         racks.add_new_rack()
@@ -302,5 +303,5 @@ class ServicesTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(
-        output='/home/slunk/code/racks_project/racks/mainapp/tests/selenium_tests/test_results'))
+        output='/home/slunk/code/racks_project/selenium_tests/test_results'))
  

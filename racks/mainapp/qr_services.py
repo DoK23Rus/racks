@@ -9,7 +9,7 @@ from .services import (
 
 def _img_name(pk, device):
     """
-    Имя файла
+    File name
     """
     if device == True:
         img_name = '/device_qr/d-' + str(pk) + '.png'
@@ -20,7 +20,7 @@ def _img_name(pk, device):
 
 def _create_qr(data, pk, device):
     """
-    Сгенерировать QR-код
+    Generate QR
     """
     qr = qrcode.QRCode(
         version=1,
@@ -35,7 +35,7 @@ def _create_qr(data, pk, device):
 
 def _remove_qr(pk, device):
     """
-    Удалить QR-код
+    Delete QR
     """
     img_name = settings.BASE_DIR + '/mainapp/static' + _img_name(pk, device)
     if os.path.isfile(img_name):
@@ -44,7 +44,7 @@ def _remove_qr(pk, device):
 
 def _show_qr(data, pk, device):
     """
-    Показать(создать/обновить) QR-код
+    Show (create/update) QR
     """
     _create_qr(data, pk, device)
     return _img_name(pk, device)
@@ -52,17 +52,17 @@ def _show_qr(data, pk, device):
 
 def _qr_data(pk, device):
     """
-    Данные для QR-кода
+    QR data
     """
     if device == True:
         return 'http://127.0.0.1:80001/device_detail/' + str(pk) + \
-            '\nОзТО: ' + _device(pk).responsible + \
-            '\nМОЛ: ' + _device(pk).financially_responsible_person + \
-            '\nИнв: ' + _device(pk).device_inventory_number + \
-            '\nОС: ' + _device(pk).main_asset
+            '\nResp: ' + _device(pk).responsible + \
+            '\nFResp: ' + _device(pk).financially_responsible_person + \
+            '\nInv: ' + _device(pk).device_inventory_number + \
+            '\nAsset: ' + _device(pk).fixed_asset
     else:
         return 'http://127.0.0.1:80001/rack_detail/' + str(pk) + \
-            '\nОзТО: ' + _rack(pk).responsible + \
-            '\nМОЛ: ' + _rack(pk).rack_financially_responsible_person + \
-            '\nИнв: ' + _rack(pk).rack_inventory_number + \
-            '\nОС: ' + _rack(pk).main_asset
+            '\nResp: ' + _rack(pk).responsible + \
+            '\nFResp: ' + _rack(pk).rack_financially_responsible_person + \
+            '\nInv: ' + _rack(pk).rack_inventory_number + \
+            '\nAsset: ' + _rack(pk).fixed_asset

@@ -350,20 +350,20 @@ class ServicesTestCase(TestCase):
         self.assertEqual(_device_stack(device_link, None), None)
 
     def test_frontside_location(self):
-        self.assertEqual(_frontside_location(True), 'Да')
-        self.assertEqual(_frontside_location(False), 'Нет')
+        self.assertEqual(_frontside_location(True), 'Yes')
+        self.assertEqual(_frontside_location(False), 'No')
 
     def test_numbering(self):
-        self.assertEqual(_numbering(True), 'Да')
-        self.assertEqual(_numbering(False), 'Нет')
+        self.assertEqual(_numbering(True), 'Yes')
+        self.assertEqual(_numbering(False), 'No')
 
     def test_external_ups(self):
-        self.assertEqual(_external_ups(True), 'Да')
-        self.assertEqual(_external_ups(False), 'Нет')
+        self.assertEqual(_external_ups(True), 'Yes')
+        self.assertEqual(_external_ups(False), 'No')
 
     def test_cooler(self):
-        self.assertEqual(_cooler(True), 'Да')
-        self.assertEqual(_cooler(False), 'Нет')
+        self.assertEqual(_cooler(True), 'Yes')
+        self.assertEqual(_cooler(False), 'No')
 
     def test_header(self):
         pk = Rack.objects.get(rack_name='Test_rack1').id
@@ -381,8 +381,8 @@ class ServicesTestCase(TestCase):
             ))
 
     def test_side_name(self):
-        self.assertEqual(_side_name('True'), 'Фронтальная сторона стойки')
-        self.assertEqual(_side_name('False'), 'Тыльная сторона стойки')
+        self.assertEqual(_side_name('True'), 'Front side of the rack')
+        self.assertEqual(_side_name('False'), 'Back side of the rack')
 
     def test_font_size(self):
         self.assertEqual(_font_size(20), '100')

@@ -3,45 +3,17 @@
     <form method='POST'>
     {% csrf_token %}
     {% if object == 'device' %}
-        <b>Вы действительно хотите удалить "Устройство №{{ device.id }} - {{ device.device_vendor }} {{ device.device_model }}"?</b>
+        <b>Do you really want to delete "Device №{{ device.id }} - {{ device.device_vendor }} {{ device.device_model }}"?</b>
     {% elif object == 'rack' %}
-        !!!ВНИМАНИЕ!!! 
-        <br>
-        Удаление стойки влечет за собой удаление всех привязанных к ней элементов по схеме:
-        <br>
-        Стойка &rArr; Все устройства в стойке
-        <br>
-        <br>
-        <b>Вы действительно хотите удалить "{{ rack.rack_name }}"?</b>
+        <b>Are you sure you want to delete "{{ rack.rack_name }}" and all related items?</b>
     {% elif object == 'room' %}
-        !!!ВНИМАНИЕ!!! 
-        <br>
-        Удаление помещения влечет за собой удаление всех привязанных к нему элементов по схеме:
-        <br>
-        Помещение &rArr; Все стойки в помещении &rArr; Все устройства в помещении
-        <br>
-        <br>
-        <b>Вы действительно хотите удалить удалить "{{ room.room_name }}"?</b>
+        <b>Are you sure you want to delete "{{ room.room_name }}" and all related items?</b>
     {% elif object == 'building' %}
-        !!!ВНИМАНИЕ!!! 
-        <br>
-        Удаление здания влечет за собой удаление всех привязанных к нему элементов по схеме:
-        <br>
-        Здание &rArr; Все помещения в заднии &rArr; Все стойки в здании &rArr; Все устройства в здании
-        <br>
-        <br>
-        <b>Вы действительно хотите удалить "{{ building.building_name }}"?</b>
+        <b>Are you sure you want to delete "{{ building.building_name }}" and all related items?</b>
     {% elif object == 'site' %}
-        !!!ВНИМАНИЕ!!! 
-        <br>
-        Удаление объекта влечет за собой удаление всех привязанных к нему элементов по схеме:
-        <br>
-        Объект &rArr; Все здания объекта &rArr; Все помещения объекта &rArr; Все стойки объекта &rArr; Все устройства объекта
-        <br>
-        <br>
-        <b>Вы действительно хотите удалить "{{ site.site_name }}"?</b>
+        <b>Are you sure you want to delete "{{ site.site_name }}" and all related items?</b>
     {% endif %}
     <br>
     <br>
-    <input type="submit" value="Удалить">
+    <input type="submit" value="Delete">
 {% endblock %}

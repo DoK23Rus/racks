@@ -46,20 +46,15 @@ class UpdRackForm(forms.ModelForm):
 
 class DeviceForm(forms.ModelForm):
     class Meta:
-
         model = Device
         fields = '__all__'
-        widgets = {
-            #'updated_by': forms.HiddenInput(),
-            #'rack_id': forms.HiddenInput(),
-          }
 
 
 class SearchForm(forms.Form):
 
     choices = (
-        ('Устройство', 'Устройство'),
-        ('Стойка', 'Стойка'),
+        ('Device', 'Device'),
+        ('Racks', 'Racks'),
     )
     object_type = forms.ChoiceField(choices=choices, 
         label='', 
@@ -68,4 +63,3 @@ class SearchForm(forms.Form):
     object_id = forms.IntegerField(label='', 
         error_messages={'required': ''}
     )
-

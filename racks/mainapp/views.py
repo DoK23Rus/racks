@@ -64,7 +64,7 @@ logger = logging.getLogger(__name__)
 @login_required(login_url='login/')
 def tree_view(request):
     """
-    Карта стоек
+    Racks map
     """
     return render(request, 'tree.html', {
         'regions': _regions(), 
@@ -79,7 +79,7 @@ def tree_view(request):
 @login_required(login_url='login/') 
 def device_view(request, pk):
     """
-    Карточка устройства
+    Device info
     """
     return render(request, 'device_detail.html', {
         'device': _device(pk),
@@ -89,7 +89,7 @@ def device_view(request, pk):
 @login_required(login_url='login/') 
 def rack_view(request, pk):
     """
-    Карточка стойки
+    Rack info
     """
     return render(request, 'rack_detail.html', {
         'rack': _rack(pk),
@@ -99,7 +99,7 @@ def rack_view(request, pk):
 @login_required(login_url='login/') 
 def answer_view(request, args):
     """
-    Вьюшка-заглушка
+    Plug-view
     """
     return render(request, 'answer.html', {
         'answer': args 
@@ -109,16 +109,16 @@ def answer_view(request, args):
 @login_required(login_url='login/')
 def units_view(request, pk):
     """
-    Отображение схемы стойки с заполненными юнитами
-                                                          __
-                                              ======      \/
-    _____________ _____________ _____________ | [] |=========
-    \  костыли  / \  костыли  / \  костыли  / |              )
-     ===========   ===========   ===========  ================
-     O-O     O-O   O-O     O-O   O-O     O-O  O-O-O   O-O-O \\
+    Display rack layout with filled units
+                                                             __
+                                                 ======      \/
+    _____________  _____________  _____________  | [] |=========
+    \  crutches  / \  crutches  / \  crutches  / |              )
+     ===========    ===========    ===========   ================
+     O-O     O-O    O-O     O-O    O-O     O-O   O-O-O   O-O-O \\
 
-    Каждая стойка отображается с двух сторон
-    Для каждой стороны свой набор данных
+    Each rack has two sides
+    Each side has its own data set
     """
     direction = _direction(pk)
     return render(request, 'units.html', {
@@ -137,7 +137,7 @@ def units_view(request, pk):
 @login_required(login_url='login/')
 def device_qr_view(request, pk):
     """
-    QR-код для устройства
+    QR-code for device
     """
     return render(request, 'device_qr.html', {
         'date': _date(),
@@ -149,7 +149,7 @@ def device_qr_view(request, pk):
 @login_required(login_url='login/')
 def rack_qr_view(request, pk):
     """
-    QR-код для стойки
+    QR-code for rack
     """
     return render(request, 'rack_qr.html', {
         'date': _date(),
@@ -161,7 +161,7 @@ def rack_qr_view(request, pk):
 @login_required(login_url='login/')
 def qr_list_view(request, pk):
     """
-    QR-коды стойки и всех устройств в ней
+    QR-codes for rack and all devices
     """
     devices_list = _devices_list(pk)
     return render(request, 'qr_list.html', {
@@ -178,7 +178,7 @@ def qr_list_view(request, pk):
 @login_required(login_url='login/')
 def units_print_view(request, pk, side):
     """
-    Черновик для одной части стойки
+    Draft for one part of the rack
     """
     rack = _rack(pk)
     direction = _direction(pk)
@@ -196,7 +196,7 @@ def units_print_view(request, pk, side):
 @login_required(login_url='login/')
 def export_devices_view(request):
     """
-    Вьюшка для отчета по устройствам
+    Devices report
     """
     return _export_devices()
 
@@ -204,7 +204,7 @@ def export_devices_view(request):
 @login_required(login_url='login/')
 def export_racks_view(request):
     """
-    Вьюшка для отчета по стойкам
+    Racks report
     """
     return _export_racks()
 
@@ -212,12 +212,12 @@ def export_racks_view(request):
 @login_required(login_url='login/')
 def search(request):
     """
-    Поиск устройства или стойки по ID
+    Search for device or rack by ID
     """
     form = SearchForm(request.POST)
     if request.method == 'POST':
         if form.is_valid():
-            if request.POST.get('object_type') == "Устройство":
+            if request.POST.get('object_type') == "Device":
                 value = form.cleaned_data
                 pk = value['object_id']
                 try:
@@ -225,9 +225,9 @@ def search(request):
                     return device_view(request, pk)
                 except:
                     return render(request, 'answer.html', {
-                        'answer': 'Устройство с таким ID в базе отсутствует'
+                        'answer': 'There is no device with this ID'
                     })
-            elif request.POST.get('object_type') == "Стойка":
+            elif request.POST.get('object_type') == "Rack":
                 value = form.cleaned_data
                 pk = value['object_id']
                 try: 
@@ -235,16 +235,16 @@ def search(request):
                     return units_view(request, pk)
                 except:
                     return render(request, 'answer.html', {
-                        'answer': 'Стойка с таким ID в базе отсутствует'
+                        'answer': 'There is no rack with this ID'
                     })
     return render(request, 'search.html', {
         'form': form
     })
 
 
-#######################
-# Вьюшки для объектов #
-#######################
+##############
+# Site Views #
+##############
 @login_required(login_url='login/')
 def site_add_view(request, pk):
     form_class = SiteForm
@@ -261,11 +261,11 @@ def site_add_view(request, pk):
                             ' ADD SITE: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Объект добавлен'
+                    'answer': 'Site added'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'add.html', {
         'form': form
@@ -289,11 +289,11 @@ def site_upd_view(request, pk):
                             str(old_form) + 
                             ', NEW_FORM: ' + str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Информация об объекте изменена'
+                    'answer': 'Site information changed'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'update.html', {
         'form': old_form
@@ -311,11 +311,11 @@ def site_del_view(request, pk):
                         ' DELETE SITE: ' + 
                         str(site))
             return render(request, 'answer.html', {
-                'answer': 'Объект удален'
+                'answer': 'Site deleted'
             })
         else:
             return render(request, 'answer.html', {
-                'answer': 'У вас нет прав на изменения'
+                'answer': 'Permission alert, changes are prohibited'
             })
     return render(request, 'delete.html', {
         'site': site,
@@ -323,9 +323,9 @@ def site_del_view(request, pk):
     })
 
 
-#####################
-# Вьюшки для зданий #
-#####################
+##################
+# Building Views #
+##################
 @login_required(login_url='login/')
 def building_add_view(request, pk):
     form_class = BuildingForm
@@ -340,18 +340,18 @@ def building_add_view(request, pk):
                 if form.instance.building_name in _unique_list(pk, 
                                                                model=Site):
                     return render(request, 'answer.html', {
-                        'answer': 'Здание с таким названием уже существует'
+                        'answer': 'A building with the same name already exists'
                     })
                 form.save()
                 logger.info(request.user.username + 
                             ' ADD BUILDING: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Здание добавлено'
+                    'answer': 'Building added'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'add.html', {
         'form': form
@@ -371,7 +371,7 @@ def building_upd_view(request, pk, site_id):
                 if form.instance.building_name in _unique_list(site_id, 
                                                                model=Site):
                     return render(request, 'answer.html', {
-                        'answer': 'Здание с таким названием уже существует'
+                        'answer': 'A building with the same name already exists'
                     })
                 form.instance.updated_by = request.user.get_full_name()
                 form.save()
@@ -381,11 +381,11 @@ def building_upd_view(request, pk, site_id):
                             ', NEW_FORM: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Информация о здании изменена'
+                    'answer': 'Building information changed'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'update.html', {
         'form': old_form
@@ -403,11 +403,11 @@ def building_del_view(request, pk):
                         ' DELETE BUILDING: ' + 
                         str(building))
             return render(request, 'answer.html', {
-                'answer': 'Здание удалено'
+                'answer': 'Building deleted'
             })
         else:
             return render(request, 'answer.html', {
-                'answer': 'У вас нет прав на изменения'
+                'answer': 'Permission alert, changes are prohibited'
             })
     return render(request, 'delete.html', {
         'building': building,
@@ -415,9 +415,9 @@ def building_del_view(request, pk):
     })
 
 
-########################
-# Вьюшки для помещений #
-########################
+##############
+# Room Views #
+##############
 @login_required(login_url='login/')
 def room_add_view(request, pk):
     form_class = RoomForm
@@ -432,18 +432,18 @@ def room_add_view(request, pk):
                 if form.instance.room_name in _unique_list(pk, 
                                                            model=Building):
                     return render(request, 'answer.html', {
-                        'answer': 'Помещение с таким названием уже существует'
+                        'answer': 'A room with the same name already exists'
                     })
                 form.save()
                 logger.info(request.user.username + 
                             ' ADD ROOM: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Помещение добавлено'
+                    'answer': 'Room added'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'add.html', {
         'form': form
@@ -463,7 +463,7 @@ def room_upd_view(request, pk, building_id):
                 if form.instance.room_name in _unique_list(building_id, 
                                                            model=Building):
                     return render(request, 'answer.html', {
-                        'answer': 'Помещение с таким названием уже существует'
+                        'answer': 'A room with the same name already exists'
                     })
                 form.instance.updated_by = request.user.get_full_name()
                 form.save()
@@ -473,11 +473,11 @@ def room_upd_view(request, pk, building_id):
                             ', NEW_FORM: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Информация о помещении изменена'
+                    'answer': 'Room information changed'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'update.html', {
         'form': old_form
@@ -495,11 +495,11 @@ def room_del_view(request, pk):
                         ' DELETE ROOM: ' + 
                         str(room))
             return render(request, 'answer.html', {
-                'answer': 'Помещение удалено'
+                'answer': 'Room deleted'
             })
         else:
             return render(request, 'answer.html', {
-                'answer': 'У вас нет прав на изменения'
+                'answer': 'Permission alert, changes are prohibited'
             })
     return render(request, 'delete.html', {
         'room': room,
@@ -507,9 +507,9 @@ def room_del_view(request, pk):
     })
 
 
-####################
-# Вьюшки для стоек #
-####################
+###############
+# Racks Views #
+###############
 @login_required(login_url='login/')
 def rack_add_view(request, pk):
     form_class = RackForm
@@ -522,18 +522,18 @@ def rack_add_view(request, pk):
                 .values_list('name', flat=True)), pk, model=Room):
                 if form.instance.rack_name in _unique_list(pk, model=Room):
                     return render(request, 'answer.html', {
-                        'answer': 'Стойка с таким названием уже существует'
+                        'answer': 'A rack with the same name already exists'
                     })
                 form.save()
                 logger.info(request.user.username + 
                             ' ADD RACK: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Стойка добавлена'
+                    'answer': 'Rack added'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'add.html', {
         'form': form,
@@ -556,7 +556,7 @@ def rack_upd_view(request, pk, room_id):
                     if form.instance.rack_name in _unique_list(room_id, 
                                                                model=Room):
                         return render(request, 'answer.html', {
-                            'answer': 'Стойка с таким названием уже существует'
+                            'answer': 'A rack with the same name already exists'
                         })
                 form.instance.updated_by = request.user.get_full_name()
                 form.save()
@@ -565,11 +565,11 @@ def rack_upd_view(request, pk, room_id):
                             str(old_form) + ', NEW_FORM: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Информация о стойке изменена'
+                    'answer': 'Rack information changed'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'update.html', {
         'form': old_form,
@@ -590,11 +590,11 @@ def rack_del_view(request, pk):
                         ' DELETE RACK: ' + 
                         str(rack))
             return render(request, 'answer.html', {
-                'answer': 'Стойка удалена'
+                'answer': 'Rack deleted'
             })
         else:
             return render(request, 'answer.html', {
-                'answer': 'У вас нет прав на изменения'
+                'answer': 'Permission alert, changes are prohibited'
             })
     return render(request, 'delete.html', {
         'rack': rack,
@@ -602,9 +602,9 @@ def rack_del_view(request, pk):
     })
 
 
-########################
-# Вьюшки для устройств #
-########################
+#################
+# Devices Views #
+#################
 @login_required(login_url='login/')
 def device_add_view(request, pk):
     form_class = DeviceForm
@@ -621,23 +621,23 @@ def device_add_view(request, pk):
                 units.update(_all_units(pk))
                 if _unit_exist_check(units): 
                     return render(request, 'answer.html', {
-                        'answer': 'Указанных юнитов нет в стойке'
+                        'answer': 'There are no such units in this rack'
                     })
                 if _unit_busy_check(form.instance.frontside_location, 
                                     units, pk, update=False):
                     return render(request, 'answer.html', {
-                        'answer': 'Указанные юниты заняты'
+                        'answer': 'These units are busy'
                     })
                 form.save()
                 logger.info(request.user.username + 
                             ' ADD DEVICE: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Устройство добавлено'
+                    'answer': 'Device added'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'add.html', {
         'form': form,
@@ -664,12 +664,12 @@ def device_upd_view(request, pk):
                 units.update(_all_units(rack_id))
                 if _unit_exist_check(units): 
                     return render(request, 'answer.html', {
-                        'answer': 'Указанных юнитов нет в стойке'
+                        'answer': 'There are no such units in this rack'
                     })
                 if _unit_busy_check(form.instance.frontside_location, 
                                     units, rack_id, update=True):
                     return render(request, 'answer.html', {
-                        'answer': 'Указанные юниты заняты'
+                        'answer': 'These units are busy'
                     })
                 form.instance.updated_by = request.user.get_full_name()
                 form.save()
@@ -679,11 +679,11 @@ def device_upd_view(request, pk):
                             ', NEW_FORM: ' + 
                             str(form))
                 return render(request, 'answer.html', {
-                    'answer': 'Информация об устройстве изменена'
+                    'answer': 'Device information changed'
                 })
             else:
                 return render(request, 'answer.html', {
-                    'answer': 'У вас нет прав на изменения'
+                    'answer': 'Permission alert, changes are prohibited'
                 })
     return render(request, 'update.html', {
         'form': old_form,
@@ -704,11 +704,11 @@ def device_del_view(request, pk):
                         ' DELETE DEVICE: ' + 
                         str(device))
             return render(request, 'answer.html', {
-                'answer': 'Устройство удалено'
+                'answer': 'Device deleted'
             })
         else:
             return render(request, 'answer.html', {
-                'answer': 'У вас нет прав на изменения'
+                'answer': 'Permission alert, changes are prohibited'
             })
     return render(request, 'delete.html', {
         'device': device,
