@@ -17,8 +17,7 @@
 
 It's a typical MVP project.  
 On the main page there is a diagram of racks in the form of an unfolding tree.
-Before adding a rack to fill, you need to create objects to place them. In turn, the rack page displays the units added to it. System prototype also provides the possibility of generating **QR codes** for devices and racks, as well as uploading reports in csv format.  
-* *In order to use the system, you need to add a user to a group with the name of the department.* *
+Before adding a rack to fill, you need to create objects to place them. In turn, the rack page displays the units added to it. System prototype also provides the possibility of generating **QR codes** for devices and racks, as well as uploading reports in csv format. * *In order to use the system, you need to add a user to a group with the name of the department.* *
  
 
 | ![device-4](https://user-images.githubusercontent.com/96002587/156164984-deeee30d-f64e-4958-8609-df86cb2b22ef.png) |
