@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block page %}
 {% load staticfiles %}
-<div style="float: right"><a class="btn-link second" href="{% url 'search'  %}">&#10004; Sarch</a> <a class="btn-link second" href="{% url 'export_devices'  %}">&#10004; Export devices.csv</a> <a class="btn-link second" href="{% url 'export_racks'  %}">&#10004; Export racks.csv</a></div>
+<div style="float: right"><a class="btn-link second" href="{% url 'search'  %}">&#10004; Search</a> <a class="btn-link second" href="{% url 'export_devices'  %}">&#10004; Export devices.csv</a> <a class="btn-link second" href="{% url 'export_racks'  %}">&#10004; Export racks.csv</a></div>
 <ul id="racks"> 
 {% for region in regions %}
     <li><span class="caret"><b><a class="main-text">{{ region.region_name }}</a></b></span>

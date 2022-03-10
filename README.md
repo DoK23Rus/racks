@@ -1,7 +1,7 @@
 # Racks
 **Racks** is a prototype of a space accounting system for telecommunication cabinets and racks.
 
-| ![racks-4](https://user-images.githubusercontent.com/96002587/156164937-ebe530d6-f57c-4824-b9a8-89506e428266.png) |
+| ![racks-5](https://user-images.githubusercontent.com/96002587/157595963-1b22b343-cb10-4eeb-a049-180c0b8be5e7.png) |
 |:--:| 
 | *Racks map* |
 
