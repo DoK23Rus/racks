@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {% block page %}
-    <b style="font-size: 140%">Rack №{{ rack.id }}&#8287;&#8287;</b><a class="btn-link second" href="{% url 'rack_qr' pk=rack.pk %}">&#9113; Rack QR code</a>
-    <a class="btn-link third" href="{% url 'rack_upd' pk=rack.pk room_id=rack.room_id_id %}">&#9998; Edit</a>
-    <a class="btn-link third" href="{% url 'rack_del' pk=rack.pk %}">&#10006; Delete</a>
+    <div style="float: right">
+        <a class="btn-link second" href="{% url 'rack_qr' pk=rack.pk %}">&#9113; Rack QR code</a>
+        <a class="btn-link second" href="{% url 'front_units_print' pk=rack.pk %}" target="_blank"> &#9113; Front side draft</a>
+        <a class="btn-link second" href="{% url 'back_units_print' pk=rack.pk %}" target="_blank"> &#9113; Back side draft</a>
+        <a class="btn-link third" href="{% url 'rack_upd' pk=rack.pk %}">&#9998; Edit</a>
+        <a class="btn-link third" href="{% url 'rack_del' pk=rack.pk %}">&#10006; Delete</a>
+    </div>
+    <b style="font-size: 140%">Rack №{{ rack.id }}&#8287;</b>
     <br>
     <br>
     Rack name: {{ rack.rack_name }}
@@ -21,7 +26,11 @@
     <br>
     Fixed asset: {{ rack.fixed_asset }}
     <br>
-    Link to docs: <a href="{{ rack.link }}">{{ rack.link }}</a>
+    {% if rack.link %}
+        Link to docs: <a href="{{ rack.link }}">&#9094; {{ rack.link }}</a>
+    {% else %}
+        Link to docs:
+    {% endif %}
     <br>
     <br>
     Vendor: {{ rack.rack_vendor }}

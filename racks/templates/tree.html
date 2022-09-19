@@ -1,62 +1,64 @@
 {% extends 'base.html' %}
 {% block page %}
 {% load staticfiles %}
-<div style="float: right"><a class="btn-link second" href="{% url 'search'  %}">&#10004; Search</a> <a class="btn-link second" href="{% url 'export_devices'  %}">&#10004; Export devices.csv</a> <a class="btn-link second" href="{% url 'export_racks'  %}">&#10004; Export racks.csv</a></div>
-<ul id="racks"> 
-{% for region in regions %}
-    <li><span class="caret"><b><a class="main-text">{{ region.region_name }}</a></b></span>
-        <ul class="nested">
-        {% for department in departments %}
-            {% if region.id == department.region_id_id %}
-                <li><span class="caret"><i><a class="other-text">{{ department.department_name }}</a></i></span>
-                    <a class="btn-link" href="{% url 'site_add' pk=department.pk %}">&#10010; Add new site</a>
-                    <ul class="nested">
-                    {% for site in sites %}
-                        {% if department.id == site.department_id_id %}
-                            <li><span class="caret"><a class="other-text">{{ site.site_name|truncatechars:40 }}</a></span>
-                                <a class="btn-link" href="{% url 'building_add' pk=site.pk %}">&#10010; Add new building</a>
-                                <a class="btn-link third" href="{% url 'site_upd' pk=site.pk %}">&#9998; Edit</a>
-                                <a class="btn-link third" href="{% url 'site_del' pk=site.pk %}">&#10006; Delete</a>
-                                <ul class="nested">
-                                {% for building in buildings %}
-                                    {% if site.id == building.site_id_id %}
-                                        <li><span class="caret"><a class="other-text">{{ building.building_name|truncatechars:40 }}</a></span>
-                                            <a class="btn-link" href="{% url 'room_add' pk=building.pk %}">&#10010; Add new room</a>
-                                            <a class="btn-link third" href="{% url 'building_upd' pk=building.pk site_id=building.site_id_id %}">&#9998; Edit</a>
-                                            <a class="btn-link third" href="{% url 'building_del' pk=building.pk %}">&#10006; Delete</a>
-                                            <ul class="nested">
-                                            {% for room in rooms %}
-                                                {% if building.id == room.building_id_id %}
-                                                    <li><span class="caret"><a class="other-text">{{ room.room_name|truncatechars:40 }}</a></span>
-                                                        <a class="btn-link" href="{% url 'rack_add' pk=room.pk %}">&#10010; Add new room</a>
-                                                        <a class="btn-link third" href="{% url 'room_upd' pk=room.pk building_id=room.building_id_id %}">&#9998; Edit</a>
-                                                        <a class="btn-link third" href="{% url 'room_del' pk=room.pk %}">&#10006; Delete</a>
-                                                        <ul class="nested">
-                                                        {% for rack in racks %}
-                                                            {% if room.id == rack.room_id_id %}
-                                                                <li><a class="other-text" href="{% url 'units' pk=rack.pk %}" target="_blank">&#9619;&nbsp;&nbsp;{{ rack.rack_name|truncatechars:40 }}</a>
-                                                                </li>
-                                                            {% endif %}
-                                                        {% endfor %}    
-                                                        </ul>
-                                                    </li>
-                                                {% endif %} 
-                                            {% endfor %}
-                                            </ul>       
-                                        </li>           
-                                    {% endif %}
-                                {% endfor %}
-                                </ul>   
-                            </li>           
-                        {% endif %}
-                    {% endfor %}
-                    </ul>       
-                </li>   
-            {% endif %}
-        {% endfor %}
-        </ul>
-    </li>
-{% endfor %}
-</ul>
+    <div style="float: right">
+        <a class="btn-link second" href="{% url 'goto'  %}">&#10004; Go to</a> <a class="btn-link second" href="{% url 'export_devices'  %}">&#10004; Export devices.csv</a> <a class="btn-link second" href="{% url 'export_racks'  %}">&#10004; Export racks.csv</a>
+    </div>
+    <ul id="racks">
+    {% for region in regions %}
+        <li><span class="caret"><b><a class="main-text">{{ region.region_name }}</a></b></span>
+            <ul class="nested">
+            {% for department in departments %}
+                {% if region.id == department.region_id_id %}
+                    <li><span class="caret"><a class="other-text">{{ department.department_name }}</a></span>
+                        <a class="btn-link" href="{% url 'site_add' pk=department.pk %}">&#10010; Add new site</a>
+                        <ul class="nested">
+                        {% for site in sites %}
+                            {% if department.id == site.department_id_id %}
+                                <li><span class="caret"><a class="other-text">{{ site.site_name|truncatechars:40 }}</a></span>
+                                    <a class="btn-link" href="{% url 'building_add' pk=site.pk %}">&#10010; Add new building</a>
+                                    <a class="btn-link third" href="{% url 'site_upd' pk=site.pk %}">&#9998; Edit</a>
+                                    <a class="btn-link third" href="{% url 'site_del' pk=site.pk %}">&#10006; Delete</a>
+                                    <ul class="nested">
+                                    {% for building in buildings %}
+                                        {% if site.id == building.site_id_id %}
+                                            <li><span class="caret"><a class="other-text">{{ building.building_name|truncatechars:40 }}</a></span>
+                                                <a class="btn-link" href="{% url 'room_add' pk=building.pk %}">&#10010; Add new room</a>
+                                                <a class="btn-link third" href="{% url 'building_upd' pk=building.pk %}">&#9998; Edit</a>
+                                                <a class="btn-link third" href="{% url 'building_del' pk=building.pk %}">&#10006; Delete</a>
+                                                <ul class="nested">
+                                                {% for room in rooms %}
+                                                    {% if building.id == room.building_id_id %}
+                                                        <li><span class="caret"><a class="other-text">{{ room.room_name|truncatechars:40 }}</a></span>
+                                                            <a class="btn-link" href="{% url 'rack_add' pk=room.pk %}">&#10010; Add new rack</a>
+                                                            <a class="btn-link third" href="{% url 'room_upd' pk=room.pk %}">&#9998; Edit</a>
+                                                            <a class="btn-link third" href="{% url 'room_del' pk=room.pk %}">&#10006; Delete</a>
+                                                            <ul class="nested">
+                                                            {% for rack in racks %}
+                                                                {% if room.id == rack.room_id_id %}
+                                                                    <li><a class="other-text" href="{% url 'units' pk=rack.pk %}" target="_blank">&#9094; {{ rack.rack_name|truncatechars:40 }}</a>
+                                                                    </li>
+                                                                {% endif %}
+                                                            {% endfor %}    
+                                                            </ul>
+                                                        </li>
+                                                    {% endif %} 
+                                                {% endfor %}
+                                                </ul>       
+                                            </li>           
+                                        {% endif %}
+                                    {% endfor %}
+                                    </ul>   
+                                </li>           
+                            {% endif %}
+                        {% endfor %}
+                        </ul>       
+                    </li>   
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
 <script src="{% static '/js/tree.js' %}"></script>
 {% endblock %}

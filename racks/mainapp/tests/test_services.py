@@ -2,6 +2,7 @@ import unittest
 import datetime
 from django.test import TestCase
 from django.db import connection
+from mainapp.data import ReportHeaders
 from mainapp.models import (
     Region, 
     Department, 
@@ -12,418 +13,460 @@ from mainapp.models import (
     Device,
 )
 from mainapp.services import ( 
-    _regions,
-    _departments,
-    _sites,
-    _buildings,
-    _rooms,
-    _racks,
-    _devices,
-    _device,
-    _rack,
-    _direction,
-    _rack_id,
-    _start_list,
-    _first_units,
-    _spans,
-    _old_units,
-    _new_units,
-    _all_units,
-    _group_check,
-    _unit_exist_check,
-    _unit_busy_check,
-    _unique_list,
-    _header,
-    _side_name,
-    _font_size,
-    _rack_name,
-    _device_stack,
-    _frontside_location,
-    _numbering,
-    _external_ups,
-    _cooler,
-    _date,
-    _devices_list,
-    _devices_all,
-    _device_vendors,
-    _device_models,
-    _rack_vendors,
-    _rack_models,
+    RackLayoutService,
+    UserCheckService,
+    UniqueCheckService,
+    DeviceCheckService,
+    QrService,
+    DraftService,
+    ReportService
 )
 
 
-class ServicesTestCase(TestCase):
+def base_setup():
+    Region.objects.get_or_create(region_name='Test_region1')
+    Region.objects.get_or_create(region_name='Test_region2')    
+    region1_id = Region.objects.get(region_name='Test_region1')
+    Department.objects.get_or_create(department_name='Test_department1',
+                              region_id=region1_id)
+    region2_id = Region.objects.get(region_name='Test_region2')
+    Department.objects.get_or_create(department_name='Test_department2',
+                              region_id=region2_id)    
+    department1_id = Department.objects.get(department_name='Test_department1') 
+    Site.objects.get_or_create(site_name='Test_site1',
+                        department_id=department1_id)
+    department2_id = Department.objects.get(department_name='Test_department2') 
+    Site.objects.get_or_create(site_name='Test_site2',
+                        department_id=department2_id)    
+    site1_id = Site.objects.get(site_name='Test_site1')
+    Building.objects.get_or_create(building_name='Test_building1',
+                            site_id=site1_id)
+    site2_id = Site.objects.get(site_name='Test_site2')
+    Building.objects.get_or_create(building_name='Test_building2',
+                            site_id=site2_id)    
+    building1_id = Building.objects.get(building_name='Test_building1')
+    Room.objects.get_or_create(room_name='Test_room1',
+                        building_id=building1_id)
+    building2_id = Building.objects.get(building_name='Test_building2')
+    Room.objects.get_or_create(room_name='Test_room2',
+                        building_id=building2_id)    
+    room1_id = Room.objects.get(room_name='Test_room1')
+    Rack.objects.get_or_create(rack_name='Test_rack1',
+                        rack_amount=40,
+                        rack_model='Test_model1',
+                        rack_vendor='Test_vendor1', 
+                        room_id=room1_id)
+    room2_id = Room.objects.get(room_name='Test_room2')
+    Rack.objects.get_or_create(rack_name='Test_rack2',
+                        rack_amount=40,
+                        rack_model='Test_model2',
+                        rack_vendor='Test_vendor2',  
+                        numbering_from_bottom_to_top=False,
+                        room_id=room2_id)    
+    rack1_id = Rack.objects.get(rack_name='Test_rack1')
+    Device.objects.get_or_create(first_unit=2,
+                          last_unit=1,
+                          device_vendor='Test_vendor1',
+                          device_model='Test_model1',
+                          rack_id=rack1_id)
+    Device.objects.get_or_create(first_unit=5,
+                          last_unit=5,
+                          device_vendor='Test_vendor2',
+                          device_model='Test_model2',
+                          rack_id=rack1_id)
+    Device.objects.get_or_create(first_unit=4,
+                          last_unit=3,
+                          frontside_location=False,
+                          device_vendor='Test_vendor3',
+                          device_model='Test_model3',
+                          rack_id=rack1_id)
+    Device.objects.get_or_create(first_unit=7,
+                          last_unit=7,
+                          frontside_location=False,
+                          device_vendor='Test_vendor4',
+                          device_model='Test_model4',
+                          rack_id=rack1_id)
+    rack2_id = Rack.objects.get(rack_name='Test_rack2')
+    Device.objects.get_or_create(first_unit=11,
+                          last_unit=12,
+                          device_vendor='Test_vendor5',
+                          device_model='Test_model5',
+                          rack_id=rack2_id)
+    Device.objects.get_or_create(first_unit=15,
+                          last_unit=15,
+                          device_vendor='Test_vendor6',
+                          device_model='Test_model6',
+                          rack_id=rack2_id)
+    Device.objects.get_or_create(first_unit=14,
+                          last_unit=13,
+                          frontside_location=False,
+                          device_vendor='Test_vendor7',
+                          device_model='Test_model7',
+                          rack_id=rack2_id)
+    Device.objects.get_or_create(first_unit=18,
+                          last_unit=18,
+                          frontside_location=False,
+                          device_vendor='Test_vendor8',
+                          device_model='Test_model8',
+                          rack_id=rack2_id)
+
+
+class TestRackLayoutService(TestCase):
 
     @classmethod
-    def setUpClass(self):
-        Region.objects.create(region_name='Test_region1')
-        Region.objects.create(region_name='Test_region2')
-        Department.objects.create(department_name='Test_department1',
-                                  region_id=Region.objects \
-                                  .get(region_name='Test_region1'))
-        Department.objects.create(department_name='Test_department2',
-                                  region_id=Region.objects \
-                                  .get(region_name='Test_region2'))
-        Site.objects.create(site_name='Test_site1',
-                            department_id=Department.objects \
-                            .get(department_name='Test_department1'))
-        Site.objects.create(site_name='Test_site2',
-                            department_id=Department.objects \
-                            .get(department_name='Test_department2'))
-        Building.objects.create(building_name='Test_building1',
-                                site_id=Site.objects \
-                                .get(site_name='Test_site1'))
-        Building.objects.create(building_name='Test_building2',
-                                site_id=Site.objects \
-                                .get(site_name='Test_site2'))
-        Room.objects.create(room_name='Test_room1',
-                            building_id=Building.objects \
-                            .get(building_name='Test_building1'))
-        Room.objects.create(room_name='Test_room2',
-                            building_id=Building.objects \
-                            .get(building_name='Test_building2'))
-        Rack.objects.create(rack_name='Test_rack1',
-                            rack_amount=40, 
-                            room_id=Room.objects \
-                            .get(room_name='Test_room1'))
-        Rack.objects.create(rack_name='Test_rack2',
-                            rack_amount=40, 
-                            numbering_from_bottom_to_top=False,
-                            room_id=Room.objects \
-                            .get(room_name='Test_room2'))
-        Device.objects.create(first_unit=2,
-                              last_unit=1,
-                              device_vendor='Test_vendor1',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack1'))
-        Device.objects.create(first_unit=5,
-                              last_unit=5,
-                              device_vendor='Test_vendor2',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack1'))
-        Device.objects.create(first_unit=4,
-                              last_unit=3,
-                              frontside_location=False,
-                              device_vendor='Test_vendor3',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack1'))
-        Device.objects.create(first_unit=7,
-                              last_unit=7,
-                              frontside_location=False,
-                              device_vendor='Test_vendor4',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack1'))
-        Device.objects.create(first_unit=11,
-                              last_unit=12,
-                              device_vendor='Test_vendor5',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack2'))
-        Device.objects.create(first_unit=15,
-                              last_unit=15,
-                              device_vendor='Test_vendor6',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack2'))
-        Device.objects.create(first_unit=14,
-                              last_unit=13,
-                              frontside_location=False,
-                              device_vendor='Test_vendor7',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack2'))
-        Device.objects.create(first_unit=18,
-                              last_unit=18,
-                              frontside_location=False,
-                              device_vendor='Test_vendor8',
-                              rack_id=Rack.objects \
-                              .get(rack_name='Test_rack2'))
-    
-    @classmethod
-    def tearDownClass(self):
-        pass
-    
-    def test_regions(self):
-        self.assertEqual(set(_regions() \
-                         .values_list('region_name', flat=True)), 
-                         {'Test_region1', 'Test_region2'})
-
-    def test_departments(self):
-        self.assertEqual(set(_departments() \
-                         .values_list('department_name', flat=True)), 
-                         {'Test_department1', 'Test_department2'})
-
-    def test_sites(self):
-        self.assertEqual(set(_sites() \
-                         .values_list('site_name', flat=True)), 
-                         {'Test_site1', 'Test_site2'})
-
-    def test_buildings(self):
-        self.assertEqual(set(_buildings() \
-                         .values_list('building_name', flat=True)), 
-                         {'Test_building1', 'Test_building2'})
-
-    def test_rooms(self):
-        self.assertEqual(set(_rooms() \
-                         .values_list('room_name', flat=True)), 
-                         {'Test_room1', 'Test_room2'})
-
-    def test_racks(self):
-        self.assertEqual(set(_racks() \
-                         .values_list('rack_name', flat=True)), 
-                         {'Test_rack1', 'Test_rack2'})
-
-    def test_device(self):
-        self.assertEqual(_device(Device.objects \
-            .get(device_vendor='Test_vendor1').id).first_unit, 2)
-
-    def test_rack(self):
-        self.assertEqual(_rack(Rack.objects \
-            .get(rack_name='Test_rack1').id).rack_name, 'Test_rack1')
-
-    def test_direction(self):
-        self.assertFalse(_direction(Rack.objects \
-            .get(rack_name='Test_rack2').id))
-
-    def test_devices(self):
-        self.assertEqual(set(_devices(Rack.objects
-                         .get(rack_name='Test_rack1'), True) \
-                         .values_list('device_vendor', flat=True)), 
-                         {'Test_vendor1', 'Test_vendor2'})
-        self.assertEqual(set(_devices(Rack.objects
-                         .get(rack_name='Test_rack1'), False) \
-                         .values_list('device_vendor', flat=True)), 
-                         {'Test_vendor3', 'Test_vendor4'})
-
-    def test_rack_id(self):
-        self.assertEqual(_rack_id(Device.objects \
-            .get(device_vendor='Test_vendor1').id), 
-            Rack.objects.get(rack_name='Test_rack1').id)
-
-    def test_rack_name(self):
-        self.assertEqual(_rack_name(Rack.objects
-                         .get(rack_name='Test_rack1').id), 'Test_rack1')
-
-    def test_start_list(self):
+    def setUpClass(cls):
+        base_setup()
+        
+    def test_get_start_list(self):
         pk = Rack.objects.get(rack_name='Test_rack1').id
         direction = Rack.objects.get(id=pk).numbering_from_bottom_to_top
-        self.assertEqual(_start_list(pk, direction), list(range(1,41))[::-1])
+        result = RackLayoutService.get_start_list(pk, direction)
+        self.assertEqual(result, list(range(1,41))[::-1])       
         pk = Rack.objects.get(rack_name='Test_rack2').id
         direction = Rack.objects.get(id=pk).numbering_from_bottom_to_top
-        self.assertEqual(_start_list(pk, direction), list(range(1,41)))
-
-    def test_first_units(self):
+        result = RackLayoutService.get_start_list(pk, direction)
+        self.assertEqual(result, list(range(1,41)))
+    
+    def test_get_first_units(self):
         pk = Rack.objects.get(rack_name='Test_rack1').id
         direction = Rack.objects.get(id=pk).numbering_from_bottom_to_top
         device1_id = Device.objects.get(device_vendor='Test_vendor1').id
         device2_id = Device.objects.get(device_vendor='Test_vendor2').id 
-        self.assertEqual(_first_units(pk, direction, True), 
-                         {device2_id: 5, device1_id: 2})
+        result = RackLayoutService.get_first_units(pk, direction, True)
+        self.assertEqual(result, {device2_id: 5, device1_id: 2})        
         pk = Rack.objects.get(rack_name='Test_rack1').id
         direction = Rack.objects.get(id=pk).numbering_from_bottom_to_top
         device1_id = Device.objects.get(device_vendor='Test_vendor3').id
         device2_id = Device.objects.get(device_vendor='Test_vendor4').id
-        self.assertEqual(_first_units(pk, direction, False), 
-                         {device2_id: 7, device1_id: 4})
+        result = RackLayoutService.get_first_units(pk, direction, False) 
+        self.assertEqual(result, {device2_id: 7, device1_id: 4})       
         pk = Rack.objects.get(rack_name='Test_rack2').id
         direction = Rack.objects.get(id=pk).numbering_from_bottom_to_top
         device1_id = Device.objects.get(device_vendor='Test_vendor5').id
         device2_id = Device.objects.get(device_vendor='Test_vendor6').id
-        self.assertEqual(_first_units(pk, direction, True), 
-                         {device1_id: 11, device2_id: 15})
+        result = RackLayoutService.get_first_units(pk, direction, True) 
+        self.assertEqual(result, {device1_id: 11, device2_id: 15})       
         pk = Rack.objects.get(rack_name='Test_rack2').id
         direction = Rack.objects.get(id=pk).numbering_from_bottom_to_top
         device1_id = Device.objects.get(device_vendor='Test_vendor7').id
         device2_id = Device.objects.get(device_vendor='Test_vendor8').id
-        self.assertEqual(_first_units(pk, direction, False), 
-                         {device1_id: 13, device2_id: 18})
+        result = RackLayoutService.get_first_units(pk, direction, False)
+        self.assertEqual(result, {device1_id: 13, device2_id: 18})
 
-    def test_spans(self):
+    def test_get_rowspans(self):
         pk = Rack.objects.get(rack_name='Test_rack1').id
         device1_id = Device.objects.get(device_vendor='Test_vendor1').id
         device2_id = Device.objects.get(device_vendor='Test_vendor2').id
-        self.assertEqual(_spans(pk, True), {device2_id: 1, device1_id: 2})
+        result = RackLayoutService.get_rowspans(pk, True)
+        self.assertEqual(result, {device2_id: 1, device1_id: 2})     
         pk = Rack.objects.get(rack_name='Test_rack1').id
         device1_id = Device.objects.get(device_vendor='Test_vendor3').id
         device2_id = Device.objects.get(device_vendor='Test_vendor4').id
-        self.assertEqual(_spans(pk, False), {device2_id: 1, device1_id: 2})
+        result = RackLayoutService.get_rowspans(pk, False)
+        self.assertEqual(result, {device2_id: 1, device1_id: 2})
 
-    def test_group_check(self):
-        self.assertTrue(_group_check(['Test_department1'], Department.objects \
-            .get(department_name='Test_department1').id, Department))
-        self.assertTrue(_group_check(['Test_department1'], Site.objects \
-            .get(site_name='Test_site1').id, Site))
-        self.assertTrue(_group_check(['Test_department1'], Building.objects \
-            .get(building_name='Test_building1').id, Building))
-        self.assertTrue(_group_check(['Test_department1'], Room.objects \
-            .get(room_name='Test_room1').id, Room))
-        self.assertTrue(_group_check(['Test_department1'], Rack.objects \
-            .get(rack_name='Test_rack1').id, Rack))
-        self.assertTrue(_group_check(['Test_department1'], Device.objects \
-            .get(device_vendor='Test_vendor1').id, Device))
-        self.assertFalse(_group_check(['Test_department2'], Department.objects \
-            .get(department_name='Test_department1').id, Department))
-        self.assertFalse(_group_check(['Test_department2'], Site.objects \
-            .get(site_name='Test_site1').id, Site))
-        self.assertFalse(_group_check(['Test_department2'], Building.objects \
-            .get(building_name='Test_building1').id, Building))
-        self.assertFalse(_group_check(['Test_department2'], Room.objects \
-            .get(room_name='Test_room1').id, Room))
-        self.assertFalse(_group_check(['Test_department2'], Rack.objects \
-            .get(rack_name='Test_rack1').id, Rack))
-        self.assertFalse(_group_check(['Test_department2'], Device.objects \
-            .get(device_vendor='Test_vendor1').id, Device))
+    @classmethod
+    def tearDownClass(cls):
+        pass
 
-    def test_old_units(self):
-        self.assertEqual(_old_units(Device.objects \
-                         .get(device_vendor='Test_vendor1').id), 
-                         {'old_first_unit': 1, 'old_last_unit': 2})
+class TestUserCheckService(TestCase):
 
-    def test_new_units(self):
-        self.assertEqual(_new_units(7, 5), 
-                         {'new_first_unit': 5, 'new_last_unit': 7})
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
 
-    def test_all_units(self):
-        self.assertEqual(_all_units(Rack.objects \
-            .get(rack_name='Test_rack1').id), {'all_units': 40})
+    def test_check_for_groups(self):
+        department1_id = Department.objects \
+            .get(department_name='Test_department1').id
+        result = UserCheckService \
+            .check_for_groups(['Test_department1'], department1_id, Department)
+        self.assertTrue(result)
+        site1_id = Site.objects.get(site_name='Test_site1').id
+        result = UserCheckService \
+            .check_for_groups(['Test_department1'], site1_id, Site)
+        self.assertTrue(result)
+        building1_id = Building.objects.get(building_name='Test_building1').id
+        result = UserCheckService \
+            .check_for_groups(['Test_department1'], building1_id, Building)
+        self.assertTrue(result)
+        room1_id = Room.objects.get(room_name='Test_room1').id
+        result = UserCheckService \
+            .check_for_groups(['Test_department1'], room1_id, Room)
+        self.assertTrue(result)
+        rack1_id = Rack.objects.get(rack_name='Test_rack1').id
+        result = UserCheckService \
+            .check_for_groups(['Test_department1'], rack1_id, Rack)
+        self.assertTrue(result)
+        device2_id = Device.objects.get(device_vendor='Test_vendor2').id
+        result = UserCheckService \
+            .check_for_groups(['Test_department1'], device2_id, Device)
+        self.assertTrue(result)
+        result = UserCheckService \
+            .check_for_groups(['Test_department2'], department1_id, Department)
+        self.assertFalse(result)
+        result = UserCheckService \
+            .check_for_groups(['Test_department2'], site1_id, Site)
+        self.assertFalse(result)
+        result = UserCheckService \
+            .check_for_groups(['Test_department2'], building1_id, Building)
+        self.assertFalse(result)
+        result = UserCheckService \
+            .check_for_groups(['Test_department2'], room1_id, Room)
+        self.assertFalse(result)
+        result = UserCheckService \
+            .check_for_groups(['Test_department2'], rack1_id, Rack)
+        self.assertFalse(result)
+        result = UserCheckService \
+            .check_for_groups(['Test_department2'], device2_id, Device)
+        self.assertFalse(result)
+        with self.assertRaises(ValueError):
+            UserCheckService \
+                .check_for_groups(['Test_department2'], rack1_id, 'model')
 
-    def test_unit_exist_check(self):
-        self.assertTrue(_unit_exist_check({
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestUniqueCheckService(TestCase): 
+
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
+        room1_id = Room.objects.get(room_name='Test_room1')
+        Rack.objects.get_or_create(rack_name='Test_rack1',
+                                   rack_amount=40,
+                                   rack_model='Test_model1',
+                                   rack_vendor='Test_vendor1', 
+                                   room_id=room1_id)
+        rack1_id = Rack.objects.get(rack_name='Test_rack1')
+        Device.objects.get_or_create(first_unit=30,
+                                     last_unit=31,
+                                     device_vendor='Test_vendor1',
+                                     device_model='Test_model1',
+                                     rack_id=rack1_id)
+
+    def test_get_unique_object_names_list(self):
+        site1_id = Site.objects.get(site_name='Test_site1').id
+        result = UniqueCheckService \
+            .get_unique_object_names_list(site1_id, Site)
+        self.assertEqual(result, {'Test_building1'})
+        
+        building1_id = Building.objects \
+            .get(building_name='Test_building1').id
+        result = UniqueCheckService \
+            .get_unique_object_names_list(building1_id, Building)
+        self.assertEqual(result, {'Test_room1'})
+        
+        room1_id = Room.objects.get(room_name='Test_room1').id
+        result = UniqueCheckService \
+            .get_unique_object_names_list(room1_id, Room)
+        self.assertEqual(result, {'Test_rack1'})
+        with self.assertRaises(ValueError):
+            UniqueCheckService \
+                .get_unique_object_names_list(None, Building)
+        with self.assertRaises(ValueError):
+            UniqueCheckService \
+                .get_unique_object_names_list(building1_id, 'model')
+
+    def test_get_unique_device_vendors(self):
+        result = UniqueCheckService.get_unique_device_vendors()
+        self.assertEqual(result, [
+            'Test_vendor1',
+            'Test_vendor2',
+            'Test_vendor3',
+            'Test_vendor4',
+            'Test_vendor5',
+            'Test_vendor6',
+            'Test_vendor7',
+            'Test_vendor8',
+        ])
+
+    def test_get_unique_device_models(self):
+        result = UniqueCheckService.get_unique_device_models()
+        self.assertEqual(result, [
+            'Test_model1',
+            'Test_model2',
+            'Test_model3',
+            'Test_model4',
+            'Test_model5',
+            'Test_model6',
+            'Test_model7',
+            'Test_model8',
+        ])
+
+    def test_get_unique_rack_vendors(self):
+        result = UniqueCheckService.get_unique_rack_vendors()
+        self.assertEqual(result, [
+            'Test_vendor1',
+            'Test_vendor2',
+        ])
+
+    def test_get_unique_rack_models(self):
+        result = UniqueCheckService.get_unique_rack_models()
+        self.assertEqual(result, [
+            'Test_model1',
+            'Test_model2',
+        ])
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestDeviceCheckService(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
+
+    def test_get_old_units(self):
+        device1_id = Device.objects.get(device_vendor='Test_vendor1').id
+        result = DeviceCheckService.get_old_units(device1_id)
+        self.assertEqual(result, {'old_first_unit': 1, 'old_last_unit': 2})
+
+    def test_get_new_units(self):
+        result = DeviceCheckService.get_new_units(7, 5)
+        self.assertEqual(result, {'new_first_unit': 5, 'new_last_unit': 7})
+
+    def test_get_all_units(self):
+        rack1_id = Rack.objects.get(rack_name='Test_rack1').id
+        result = DeviceCheckService.get_all_units(rack1_id)
+        self.assertEqual(result, {'all_units': 40})
+
+    def test_check_unit_exist(self):
+        result = DeviceCheckService.check_unit_exist({
             'new_first_unit': 39, 
             'new_last_unit': 42, 
             'all_units': 40,
-        }))
-        self.assertFalse(_unit_exist_check({
+        })
+        self.assertTrue(result)
+        result = DeviceCheckService.check_unit_exist({
             'new_first_unit': 21, 
             'new_last_unit': 22, 
             'all_units': 40,
-        }))
+        })
+        self.assertFalse(result)
 
-    def test_unit_busy_check(self):
+    def test_check_unit_busy(self):
         pk = Rack.objects.get(rack_name='Test_rack1').id
         units = {'new_first_unit': 5, 'new_last_unit': 6}
-        self.assertTrue(_unit_busy_check(True, units, pk, False))
+        result = DeviceCheckService.check_unit_busy(True, units, pk, False)
+        self.assertTrue(result)
         units = {'new_first_unit': 7, 'new_last_unit': 9}
-        self.assertFalse(_unit_busy_check(True, units, pk, False))
+        result = DeviceCheckService.check_unit_busy(True, units, pk, False)
+        self.assertFalse(result)
         units = {'new_first_unit': 2, 'new_last_unit': 3}
-        self.assertTrue(_unit_busy_check(False, units, pk, False))
+        result = DeviceCheckService.check_unit_busy(False, units, pk, False)
+        self.assertTrue(result)
         units = {'new_first_unit': 10, 'new_last_unit': 12}
-        self.assertFalse(_unit_busy_check(False, units, pk, False))
+        result = DeviceCheckService.check_unit_busy(False, units, pk, False)
+        self.assertFalse(result)
         units = {
             'new_first_unit': 4, 
             'new_last_unit': 5,
             'old_first_unit': 1,
             'old_last_unit': 2,
         }
-        self.assertTrue(_unit_busy_check(True, units, pk, True))
+        result = DeviceCheckService.check_unit_busy(True, units, pk, True)
+        self.assertTrue(result)
         units = {
             'new_first_unit': 2, 
             'new_last_unit': 3,
             'old_first_unit': 1,
             'old_last_unit': 2,
         }
-        self.assertFalse(_unit_busy_check(True, units, pk, True))
+        result = DeviceCheckService.check_unit_busy(True, units, pk, True)
+        self.assertFalse(result)
         units = {
             'new_first_unit': 7, 
             'new_last_unit': 8,
             'old_first_unit': 3,
             'old_last_unit': 4,
         }
-        self.assertTrue(_unit_busy_check(False, units, pk, True))
+        result = DeviceCheckService.check_unit_busy(False, units, pk, True)
+        self.assertTrue(result)
         units = {
             'new_first_unit': 10, 
             'new_last_unit': 11,
             'old_first_unit': 3,
             'old_last_unit': 4,
         }
-        self.assertFalse(_unit_busy_check(False, units, pk, True))
+        result = DeviceCheckService.check_unit_busy(False, units, pk, True)
+        self.assertFalse(result)
 
-    def test_unique_list(self):
-        self.assertEqual(_unique_list(Site.objects \
-            .get(site_name='Test_site1').id, Site), ['Test_building1'])
-        self.assertEqual(_unique_list(Building.objects \
-            .get(building_name='Test_building1').id, Building), ['Test_room1'])
-        self.assertEqual(_unique_list(Room.objects \
-            .get(room_name='Test_room1').id, Room), ['Test_rack1'])
+    @classmethod
+    def tearDownClass(cls):
+        pass
 
-    def test_device_stack(self):
-        device_link = 'http://127.0.0.1:80001/device_detail/'
-        self.assertEqual(_device_stack(device_link, 3457), 
-                         'http://127.0.0.1:80001/device_detail/3457')
-        self.assertEqual(_device_stack(device_link, None), None)
+class TestQrService(TestCase):
+    
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
 
-    def test_frontside_location(self):
-        self.assertEqual(_frontside_location(True), 'Yes')
-        self.assertEqual(_frontside_location(False), 'No')
+    def test_get_img_name(self):
+        device1_id = Device.objects.get(device_vendor='Test_vendor1').id
+        result = QrService.get_img_name(device1_id, True)
+        self.assertEqual(result, '/device_qr/d-' + str(device1_id) + '.png')
+        rack1_id = Rack.objects.get(rack_vendor='Test_vendor1').id
+        result = QrService.get_img_name(rack1_id, False)
+        self.assertEqual(result, '/rack_qr/r-' + str(rack1_id) + '.png')
 
-    def test_numbering(self):
-        self.assertEqual(_numbering(True), 'Yes')
-        self.assertEqual(_numbering(False), 'No')
+    def test_get_qr_data(self):
+        url = 'http://127.0.0.1:8000/'
+        device1_id = Device.objects.get(device_vendor='Test_vendor1').id
+        result = QrService.get_qr_data(device1_id, True, url)
+        self.assertEqual(result, url + 'device_detail/' + str(device1_id))
+        rack1_id = Rack.objects.get(rack_vendor='Test_vendor1').id
+        result = QrService.get_qr_data(rack1_id, False, url)
+        self.assertEqual(result, url + 'rack_detail/' + str(device1_id))
 
-    def test_external_ups(self):
-        self.assertEqual(_external_ups(True), 'Yes')
-        self.assertEqual(_external_ups(False), 'No')
+    @classmethod
+    def tearDownClass(cls):
+        pass
 
-    def test_cooler(self):
-        self.assertEqual(_cooler(True), 'Yes')
-        self.assertEqual(_cooler(False), 'No')
 
-    def test_header(self):
-        pk = Rack.objects.get(rack_name='Test_rack1').id
-        with connection.cursor() as cursor:
-            cursor.execute(_header(pk).query.__str__())
-            row = cursor.fetchone()
-            self.assertEqual(row, (
-                Rack.objects.get(rack_name='Test_rack1').id, 
-                'Test_rack1', 
-                'Test_room1', 
-                'Test_building1', 
-                'Test_site1', 
-                'Test_department1', 
-                'Test_region1'
-            ))
+class TestDraftService(TestCase):
 
-    def test_side_name(self):
-        self.assertEqual(_side_name('True'), 'Front side of the rack')
-        self.assertEqual(_side_name('False'), 'Back side of the rack')
+    def test_get_side_name(self):
+        result = DraftService.get_side_name(True)
+        self.assertEqual(result, 'FRONT SIDE')
+        result = DraftService.get_side_name(False)
+        self.assertEqual(result, 'BACK SIDE')
 
-    def test_font_size(self):
-        self.assertEqual(_font_size(20), '100')
-        self.assertEqual(_font_size(40), '75')
-        self.assertEqual(_font_size(60), '50')
+    def test_get_font_size(self):
+        result = DraftService.get_font_size(20)
+        self.assertEqual(result, '100')
+        result = DraftService.get_font_size(40)
+        self.assertEqual(result, '75')
+        result = DraftService.get_font_size(60)
+        self.assertEqual(result, '50')
 
-    def test_date(self):
-        self.assertEqual(_date(), 
-            datetime.datetime.today().strftime("%Y-%m-%d"))
 
-    def test_devices_list(self):
-        pk = Rack.objects.get(rack_name='Test_rack1').id 
-        self.assertEqual(set(_devices_list(pk)), set(Device.objects. \
-            filter(rack_id_id=pk).values_list('id', flat=True)))
+class TestReportService(TestCase):
 
-    def test_devices_all(self):
-        pk = Rack.objects.get(rack_name='Test_rack1').id 
-        self.assertEqual(set(_devices_all(pk).values_list('id', flat=True)), 
-            set(Device.objects. \
-            filter(rack_id_id=pk).values_list('id', flat=True)))
+    def test_get_header_list(self):
+        result = ReportService.get_header_list('rack')
+        self.assertEqual(result, ReportHeaders.racks_header_list)
+        result = ReportService.get_header_list('device')
+        self.assertEqual(result, ReportHeaders.devices_header_list)
+        with self.assertRaises(ValueError):
+            ReportService.get_header_list('room')
 
-    def test_device_vendors(self):
-        vendors = list(Device.objects. \
-            values_list('device_vendor', flat=True).distinct())
-        vendors.sort()
-        self.assertEqual(_device_vendors(), vendors)
+    def test_get_devices_data(self):
+        result = ReportService.get_devices_data('address')
+        self.assertEqual(type(result), list)
 
-    def test_device_models(self):
-        models = list(Device.objects. \
-            values_list('device_model', flat=True).distinct())
-        models.sort()
-        self.assertEqual(_device_models(), models)
+    def test_get_racks_data(self):
+        result = ReportService.get_racks_data('address')
+        self.assertEqual(type(result), list)
 
-    def test_rack_vendors(self):
-        vendors = list(Rack.objects. \
-            values_list('rack_vendor', flat=True).distinct())
-        vendors.sort()
-        self.assertEqual(_rack_vendors(), vendors)
-
-    def test_rack_models(self):
-        models = list(Rack.objects. \
-            values_list('rack_model', flat=True).distinct())
-        models.sort()
-        self.assertEqual(_rack_models(), models)
+    def test_get_device_stack(self):
+        device_link = 'device_link'
+        device_stack = 10
+        result = ReportService.get_device_stack(device_link, device_stack)
+        self.assertEqual(result, device_link + str(device_stack))
+        device_stack = None
+        result = ReportService.get_device_stack(device_link, device_stack)
+        self.assertEqual(result, None)

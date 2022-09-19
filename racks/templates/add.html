@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 {% block page %}
 {% load staticfiles %}
+{% load custom_tags %}
+{% get_rack_vendors as rack_vendors %}
+{% get_rack_models as rack_models %}
+{% get_device_vendors as device_vendors %}
+{% get_device_models as device_models %}
+{% if message %}
+        <h2><b>{{ message }}</b></h2>
+        <br>
+{% endif %}
 <b>Fill out the form and click "Submit"</b>
-<br>
-<p class="small-size">fields marked with * will be added to the QR code</p>
 <br>
 <form action = "" method = "post">
     {% csrf_token %}
@@ -30,12 +37,12 @@
         <br>
             Device vendor: {{ form.device_vendor }}
             <label for="id_device_vendor">First check if the name is in the list below</label>
-        <br>     
+        <br>  
             <ul id="racks"> 
                 <li><span class="caret choice-header">
                     <i>choose from the list:</i>
                     <ul class="nested choice-button">
-                        {% for choice_vendor in choices_vendor %}
+                        {% for choice_vendor in device_vendors %}
                         <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="copyOnClick('id_device_vendor', '{{ choice_vendor }}')">{{ choice_vendor }}</button></span>
                         {% endfor %}
                     </ul>
@@ -50,7 +57,7 @@
                 <span class="caret choice-header">
                     <i>choose from the list:</i>
                     <ul class="nested choice-button">
-                        {% for choice_model in choices_model %}
+                        {% for choice_model in device_models %}
                         <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="copyOnClick('id_device_model', '{{ choice_model }}')">{{ choice_model }}</button></span>
                         {% endfor %}
                     </ul>
@@ -101,16 +108,16 @@
             Ownership: {{ form.ownership }}
         <br>
         <br>
-            Responsible*: {{ form.responsible }}
+            Responsible: {{ form.responsible }}
         <br>
         <br>
-            Financially responsible*: {{ form.financially_responsible_person }}
+            Financially responsible: {{ form.financially_responsible_person }}
         <br>
         <br>
-            Inventory number*: {{ form.device_inventory_number }}
+            Inventory number: {{ form.device_inventory_number }}
         <br>
         <br>
-            Fixed asset*: {{ form.fixed_asset }}
+            Fixed asset: {{ form.fixed_asset }}
         <br>
         <br>
             Link to docs: {{ form.link }}
@@ -134,7 +141,7 @@
                 <li><span class="caret choice-header">
                     <i>choose from the list:</i>
                     <ul class="nested choice-button">
-                        {% for choice_vendor in choices_vendor %}
+                        {% for choice_vendor in rack_vendors %}
                         <button type="button" class="btn-link second" id ="{{ choice_vendor }}" onclick="copyOnClick('id_rack_vendor', '{{ choice_vendor }}')">{{ choice_vendor }}</button></span>
                         {% endfor %}
                     </ul>
@@ -149,7 +156,7 @@
                 <span class="caret choice-header">
                     <i>choose from the list:</i>
                     <ul class="nested choice-button">
-                        {% for choice_model in choices_model %}
+                        {% for choice_model in rack_models %}
                         <button type="button" class="btn-link second" id ="{{ choice_model }}" onclick="copyOnClick('id_rack_model', '{{ choice_model }}')">{{ choice_model }}</button></span>
                         {% endfor %}
                     </ul>
@@ -165,16 +172,16 @@
             Numbering from bottom to top: {{ form.numbering_from_bottom_to_top }}
         <br>
         <br>
-            Responsible*: {{ form.responsible }}
+            Responsible: {{ form.responsible }}
         <br>
         <br>
-            Financially responsible*: {{ form.rack_financially_responsible_person }}
+            Financially responsible: {{ form.rack_financially_responsible_person }}
         <br>
         <br>
-            Inventory number*: {{ form.rack_inventory_number }}
+            Inventory number: {{ form.rack_inventory_number }}
         <br>
         <br>
-            Fixed asset*: {{ form.fixed_asset }}
+            Fixed asset: {{ form.fixed_asset }}
         <br>
         <br>
             Link to docs: {{ form.link }}
@@ -246,7 +253,8 @@
             <div style="display:none">{{ form.updated_by }}</div>
     {% endif %}
 <br>
-<input type="submit" value="Submit">
+<input type="submit" value="Submit"></input>
+</form>
 <script src="{% static '/js/copy.js' %}"></script>
 <script src="{% static '/js/tree.js' %}"></script>
 {% endblock %}

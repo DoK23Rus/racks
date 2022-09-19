@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 {% block page %}
     <form method='POST'>
+    <h2><b>
     {% csrf_token %}
     {% if object == 'device' %}
-        <b>Do you really want to delete "Device №{{ device.id }} - {{ device.device_vendor }} {{ device.device_model }}"?</b>
+        Do you really want to delete "Device №{{ device.id }} - {{ device.device_vendor }} {{ device.device_model }}"?
     {% elif object == 'rack' %}
-        <b>Are you sure you want to delete "{{ rack.rack_name }}" and all related items?</b>
+        Are you sure you want to delete "{{ rack.rack_name }}" and all related items?
     {% elif object == 'room' %}
-        <b>Are you sure you want to delete "{{ room.room_name }}" and all related items?</b>
+        Are you sure you want to delete "{{ room.room_name }}" and all related items?
     {% elif object == 'building' %}
-        <b>Are you sure you want to delete "{{ building.building_name }}" and all related items?</b>
+        Are you sure you want to delete "{{ building.building_name }}" and all related items?
     {% elif object == 'site' %}
-        <b>Are you sure you want to delete "{{ site.site_name }}" and all related items?</b>
+        Are you sure you want to delete "{{ site.site_name }}" and all related items?
     {% endif %}
-    <br>
+    </b></h2>
     <br>
     <input type="submit" value="Delete">
 {% endblock %}

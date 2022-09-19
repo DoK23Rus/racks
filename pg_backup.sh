@@ -10,7 +10,7 @@ fi
 
 
 pg_user="racks"
-pg_pass="PASSWORD"
+pg_pass="us33843"
 filename="rack_db_dump-$(date +'%Y_%m_%d_%I_%M_%S').pgsql"
 max_files=7
 files=$(ls -1q $dir | wc -l)

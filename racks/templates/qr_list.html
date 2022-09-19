@@ -17,8 +17,9 @@ Rack QR code:
 <br>
 Device QR codes:
 <br>
-{% for image in images %}
-    {% for device_num in devices_list %}
+{% for image in device_images %}
+    {{ devices_list }}
+    {% for device_num in devices_id_list %}
         {% if image|slice:"13:" == device_num|stringformat:"s"|add:'.png' %}
             {% for device in devices_all %}
                 {% if device_num == device.id %}

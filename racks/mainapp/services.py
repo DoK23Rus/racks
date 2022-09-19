@@ -1,509 +1,473 @@
-import datetime
-from django.db import models
+from typing import List, Dict, Set, Union, Optional
+from django.db.models.base import ModelBase
+from django.db.models.query import RawQuerySet
+from django.http.response import HttpResponse
 from .models import (
-    Region, 
-    Department, 
-    Site, 
-    Building, 
-    Room, 
-    Rack, 
+    Department,
+    Site,
+    Building,
+    Room,
+    Rack,
     Device,
 )
+import qrcode
+import os
+from django.conf import settings
+import csv
+from .data import ReportHeaders
+import datetime
 
 
-def _regions():
-    """
-    All regions
-    """
-    return Region.objects.all()
-
-
-def _departments():
-    """
-    All departments
-    """
-    return Department.objects.all()
-
-
-def _sites():
-    """
-    All sites
-    """
-    return Site.objects.all()
-
-
-def _buildings():
-    """
-    All buildings
-    """
-    return Building.objects.all()
-
-
-def _rooms():
-    """
-    All rooms
-    """
-    return Room.objects.all()
-
-
-def _racks():
-    """
-    All racks
-    """
-    return Rack.objects.all()
-
-
-def _device(pk):
-    """
-    One device
-    """
-    return Device.objects.get(id=pk)
-
-
-def _rack(pk):
-    """
-    One rack
-    """
-    return Rack.objects.get(id=pk)
-
-
-def _direction(pk):
-    """
-    Rack numbering direction
-    """
-    return Rack.objects.get(id=pk).numbering_from_bottom_to_top
-
-
-def _devices(pk, side):
-    """
-    Devices in a rack for a specified side
-    """
-    return Device.objects.filter(rack_id_id=pk) \
-                                 .filter(frontside_location=side)
-
-
-def _rack_id(pk):
-    """
-    Rack ID
-    """
-    return Device.objects.get(id=pk).rack_id_id
-
-
-def _rack_name(pk):
-    """
-    Rack name
-    """
-    return Rack.objects.get(id=pk).rack_name       
-
-
-def _start_list(pk, direction):
-    """
-    Units list
-    """
-    if direction == False:
-        return list(range(1, (int(Rack.objects.get(id=pk) \
-                .rack_amount) + 1)))
-    else:
-        return list(range(1, (int(Rack.objects.get(id=pk) \
-                .rack_amount) + 1)))[::-1]
-
-
-def _first_units(pk, direction, side):
-    """
-    First units for each device
-    """
-    first_units = {}
-    queryset_spans = Device.objects.filter(rack_id_id=pk) \
-                                   .filter(frontside_location=side)
-    for span in queryset_spans:
-        last_unit = span.last_unit
-        first_unit = span.first_unit
-        if direction == True:
-            if last_unit > first_unit:
-                first_unit = span.last_unit
-            first_units[span.id] = first_unit
-        else:
-            if last_unit < first_unit:
-                first_unit = span.last_unit
-            first_units[span.id] = first_unit
-    return first_units
-
-
-def _spans(pk, side):
-    """
-    Rowspans for each device
-    """
-    spans = {}
-    queryset_spans = Device.objects.filter(rack_id_id=pk) \
-                                   .filter(frontside_location=side)
-    for span in queryset_spans:
-        last_unit = span.last_unit
-        first_unit = span.first_unit
-        if last_unit < first_unit:
-            first_unit = span.last_unit
-            last_unit = span.first_unit
-        spans[span.id] = last_unit - first_unit + 1
-    return spans
-
-
-def _group_check(user_groups, pk, model):
-    """
-    Checking if there is a group named department 
-    in the list of user groups that matches 
-    the model object belonging to the area 
-    of responsibility of the department (by primary keys)
-                                                             __
-                                                 ======      \/
-    _____________  _____________  _____________  | [] |=========
-    \  crutches  / \  crutches  / \  crutches  / |              )
-     ===========    ===========    ===========   ================
-     O-O     O-O    O-O     O-O    O-O     O-O   O-O-O   O-O-O \\
-
-    Does not allow you to change the data assigned to another department
-    """
-    if model == Department:
-        department_raw_query = Department.objects.raw("""select department.id as id,
-                                                      department.department_name 
-                                                      from department 
-                                                      where 
-                                                      department.id = %s ;""",  
-                                                      [str(pk)])
-    elif model == Site:
-        department_raw_query = Department.objects.raw("""select department.id as id, 
-                                                      department.department_name 
-                                                      from site 
-                                                      join department on 
-                                                      department.id = 
-                                                      site.department_id_id 
-                                                      where 
-                                                      site.id = %s ;""",  
-                                                      [str(pk)])
-    elif model == Building:
-        department_raw_query = Department.objects.raw("""select department.id as id, 
-                                                      department.department_name 
-                                                      from building 
-                                                      join site on 
-                                                      site.id = building.site_id_id 
-                                                      join department on 
-                                                      department.id = 
-                                                      site.department_id_id 
-                                                      where 
-                                                      building.id = %s ;""",  
-                                                      [str(pk)])
-    elif model == Room:
-        department_raw_query = Department.objects.raw("""select department.id as id, 
-                                                      department.department_name 
-                                                      from room
-                                                      join building on 
-                                                      building.id = 
-                                                      room.building_id_id  
-                                                      join site on 
-                                                      site.id = 
-                                                      building.site_id_id
-                                                      join department on 
-                                                      department.id = 
-                                                      site.department_id_id 
-                                                      where 
-                                                      room.id = %s ;""",  
-                                                      [str(pk)])
-    elif model == Rack:
-        department_raw_query = Department.objects.raw("""select department.id as id, 
-                                                      department.department_name 
-                                                      from rack
-                                                      join room on 
-                                                      room.id = 
-                                                      rack.room_id_id 
-                                                      join building on 
-                                                      building.id = 
-                                                      room.building_id_id  
-                                                      join site on 
-                                                      site.id = 
-                                                      building.site_id_id
-                                                      join department on 
-                                                      department.id = 
-                                                      site.department_id_id 
-                                                      where 
-                                                      rack.id = %s ;""",  
-                                                      [str(pk)])
-    elif model == Device:
-        department_raw_query = Department.objects.raw("""select department.id as id, 
-                                                      department.department_name 
-                                                      from device
-                                                      join rack on 
-                                                      rack.id = 
-                                                      device.rack_id_id
-                                                      join room on 
-                                                      room.id = 
-                                                      rack.room_id_id 
-                                                      join building on 
-                                                      building.id = 
-                                                      room.building_id_id  
-                                                      join site on 
-                                                      site.id = 
-                                                      building.site_id_id
-                                                      join department on 
-                                                      department.id = 
-                                                      site.department_id_id 
-                                                      where 
-                                                      device.id = %s ;""",  
-                                                      [str(pk)])
-    department_name = str([department_name for department_name in department_raw_query][0])
-    if department_name in user_groups:
-        return True
-    else:
-        return False
-
-
-def _old_units(pk):
-    """
-    Already filled units
-    """
-    units = {}
-    first_unit = Device.objects.get(id=pk).first_unit
-    last_unit = Device.objects.get(id=pk).last_unit
-    units['old_first_unit'] = first_unit
-    units['old_last_unit'] = last_unit
-    if units['old_first_unit'] > units['old_last_unit']:
-        units['old_last_unit'] = first_unit
-        units['old_first_unit'] = last_unit
-    return units
-
-
-def _new_units(first_unit, last_unit):
-    """
-    Units for newly added device
-    """
-    units= {}
-    units['new_first_unit'] = first_unit
-    units['new_last_unit'] = last_unit
-    if units['new_first_unit'] > units['new_last_unit']:
-        units['new_last_unit'] = first_unit
-        units['new_first_unit'] = last_unit  
-    return units
-
-
-def _all_units(pk):
-    """
-    Total units per rack
-    """
-    units = {}
-    units['all_units'] = Rack.objects.get(id=pk).rack_amount
-    return units
-    
-
-def _unit_exist_check(units):
-    """
-    Are there any such units?
-    """
-    if not set(range(units['new_first_unit'], units['new_last_unit'] + 1)) \
-        .issubset(range(1, units['all_units'] + 1)):
-        return True
-    else:
-        return False
-
-        
-def _unit_busy_check(location, units, pk, update):
-    """
-    Are units busy? (adding, updating)
-    """
-    filled_list = []
-    queryset_devices = Device.objects.filter(rack_id_id=pk) \
-                .filter(frontside_location=location)
-    if len(list(queryset_devices)) > 0:
-        for device in queryset_devices:
-            first_unit = device.first_unit
-            last_unit = device.last_unit
-            if first_unit > last_unit:
-                first_unit = device.last_unit
-                last_unit = device.first_unit
-            one_device_list = list(range(first_unit, last_unit + 1))
-            filled_list.extend(one_device_list)
-    if update == True:
-        filled_list = set(filled_list) - set(range(units['old_first_unit'], 
-                                                   units['old_last_unit'] + 1))
-    if any(unit in set(range(units['new_first_unit'], 
-           units['new_last_unit'] + 1)) for unit in filled_list):
-        return True
-    else:
-        return False
-
-
-def _unique_list(pk, model):
-    """
-    Names of building, rooms and racks can be repeated 
-    within the area of responsibility of one department
-    """
-    if model == Site:
-        return [building.building_name for building 
-                in Building.objects.filter(site_id_id=pk)]
-    elif model == Building:
-        return [room.room_name for room 
-                in Room.objects.filter(building_id_id=pk)]
-    elif model == Room:
-        return [rack.rack_name for rack 
-                in Rack.objects.filter(room_id_id=pk)]
-
-
-def _device_stack(device_link, device_stack):
-    """
-    Link to backup device (for csv)
-    """
-    if device_stack != None:
-        return device_link + str(device_stack)
-    else:
-        return None
-
-
-def _frontside_location(frontside_location):
-    """
-    Location (for csv)
-    """
-    if frontside_location == True:
-        return 'Yes'
-    else:
-        return 'No'
-
-
-def _numbering(numbering):
-    """
-    Numbering (for csv)
-    """
-    if numbering == True:
-        return 'Yes'
-    else:
-        return 'No'
-
-
-def _external_ups(external_ups):
-    """
-    UPS availability (for csv)
-    """
-    if external_ups == True:
-        return 'Yes'
-    else:
-        return 'No'
-
-
-def _cooler(cooler):
-    """
-    Venting availability (for csv)
-    """
-    if cooler == True:
-        return 'Yes'
-    else:
-        return 'No'
-
-
-def _header(pk):
-    """
-    Header data set (location)
-    """
-    return Rack.objects.raw("""select rack.id as id, 
-                            rack.rack_name,
-                            room.room_name, 
-                            building.building_name, 
-                            site.site_name, 
-                            department.department_name, 
-                            region.region_name 
-                            from rack 
-                            join room on 
-                            room.id = 
-                            rack.room_id_id 
-                            join building on 
-                            building.id = 
-                            room.building_id_id 
-                            join site on 
-                            site.id = 
-                            building.site_id_id 
-                            join department on 
-                            department.id = 
-                            site.department_id_id 
-                            join region on 
-                            region.id = 
-                            department.region_id_id 
-                            where 
-                            rack.id = %s ;""",  
-                            [str(pk)])
-
-
-def _side_name(side):
-    """
-    Rack side (for a draft)
-    """
-    if side == 'True':
-        return 'Front side of the rack'
-    else:
-        return 'Back side of the rack'
-
-
-def _font_size(rack_size):
-    """
-    Font size (for a draft)
-    """
-    if rack_size <= 32: 
-        return '100'
-    elif rack_size > 32 and rack_size <= 42:
-        return '75'
-    else:  
-        return '50'
-
-
-def _date():
-    """
-    Date
-    """
+def date():
     return datetime.datetime.today().strftime("%Y-%m-%d")
 
 
-def _devices_list(pk):
-    """
-    List of device IDs for rack
-    """
-    return Device.objects.filter(rack_id_id=pk).values_list('id', flat=True)
+class RackLayoutService:
+
+    @staticmethod
+    def get_start_list(pk: int, direction: bool) -> List[int]:
+        """
+        Units list
+        """
+        rack_amount = Rack.objects.get_rack(pk).rack_amount
+        if not direction:
+            return list(range(1, int(rack_amount) + 1))
+        else:
+            return list(range(1, int(rack_amount) + 1))[::-1]
+
+    @staticmethod
+    def get_first_units(pk: int,
+                        direction: bool,
+                        side: bool
+                        ) -> Dict[int, int]:
+        """
+        First units for each device
+        """
+        first_units: Dict = {}
+        devices = Device.objects.get_devices_for_side(pk, side)
+        for device in devices:
+            last_unit = device.last_unit
+            first_unit = device.first_unit
+            if direction:
+                if last_unit > first_unit:
+                    first_unit = device.last_unit
+                first_units[device.id] = first_unit
+            else:
+                if last_unit < first_unit:
+                    first_unit = device.last_unit
+                first_units[device.id] = first_unit
+        return first_units
+
+    @staticmethod
+    def get_rowspans(pk: int, side: bool) -> Dict[int, int]:
+        """
+        Rowspans for each device
+        """
+        rowspans: Dict = {}
+        devices = Device.objects.get_devices_for_side(pk, side)
+        for device in devices:
+            last_unit = device.last_unit
+            first_unit = device.first_unit
+            if last_unit < first_unit:
+                first_unit = device.last_unit
+                last_unit = device.first_unit
+            rowspans[device.id] = last_unit - first_unit + 1
+        return rowspans
 
 
-def _devices_all(pk):
-    """
-    All devices in rack
-    """
-    return Device.objects.filter(rack_id_id=pk)
+class UserCheckService:
+
+    @staticmethod
+    def _get_department_raw_query(pk: int,
+                                  model: ModelBase
+                                  ) -> RawQuerySet:
+        if model == Department:
+            department_raw_query = Department.objects \
+                .get_department_name_for_department(pk)
+        elif model == Site:
+            department_raw_query = Department.objects \
+                .get_department_name_for_site(pk)
+        elif model == Building:
+            department_raw_query = Department.objects \
+                .get_department_name_for_building(pk)
+        elif model == Room:
+            department_raw_query = Department.objects \
+                .get_department_name_for_room(pk)
+        elif model == Rack:
+            department_raw_query = Department.objects \
+                .get_department_name_for_rack(pk)
+        elif model == Device:
+            department_raw_query = Department.objects \
+                .get_department_name_for_device(pk)
+        else:
+            raise ValueError('model: ModelBase must be'
+                             'Department|Site|Building|Room|Rack|Device')
+        return department_raw_query
+
+    @staticmethod
+    def check_for_groups(user_groups: List[str],
+                         pk: int,
+                         model: ModelBase
+                         ) -> bool:
+        department_raw_query = UserCheckService \
+            ._get_department_raw_query(pk, model)
+        department_name = str([department_name
+                              for department_name
+                              in department_raw_query][0])
+        if department_name in user_groups:
+            return True
+        return False
 
 
-def _device_vendors():
-    """
-    Vendors list (for devices)
-    """
-    vendors = list(Device.objects. \
-        values_list('device_vendor', flat=True).distinct())
-    vendors.sort()
-    return vendors
+class UniqueCheckService:
+
+    @staticmethod
+    def get_unique_object_names_list(key: Optional[int],
+                                     model: ModelBase
+                                     ) -> Set[str]:
+        """
+        Names of building, rooms and racks can be repeated
+        within the area of responsibility of one department
+        """
+        if key:
+            if model == Site:
+                names_list = {building.building_name for building
+                              in Building.objects.get_buildings_for_site(key)}
+            elif model == Building:
+                names_list = {room.room_name for room
+                              in Room.objects.get_rooms_for_building(key)}
+            elif model == Room:
+                names_list = {rack.rack_name for rack
+                              in Rack.objects.get_racks_for_rooms(key)}
+            else:
+                raise ValueError("model: ModelBase must be Site|Building|Room")
+            return names_list
+        else:
+            raise ValueError("key must be not None")
+
+    @staticmethod
+    def get_unique_device_vendors() -> List[str]:
+        """
+        Vendors list (for devices)
+        """
+        vendors = list(Device.objects.get_device_vendors().distinct())
+        vendors.sort()
+        return vendors
+
+    @staticmethod
+    def get_unique_device_models() -> List[str]:
+        """
+        Models list (for devices)
+        """
+        models = list(Device.objects.get_device_models().distinct())
+        models.sort()
+        return models
+
+    @staticmethod
+    def get_unique_rack_vendors() -> List[str]:
+        """
+        Vendors list (for racks)
+        """
+        vendors = list(Rack.objects.get_rack_vendors().distinct())
+        vendors.sort()
+        return vendors
+
+    @staticmethod
+    def get_unique_rack_models() -> List[str]:
+        """
+        Models list (for racks)
+        """
+        models = list(Rack.objects.get_rack_models().distinct())
+        models.sort()
+        return models
 
 
-def _device_models():
-    """
-    Models list (for devices)
-    """
-    models = list(Device.objects. \
-        values_list('device_model', flat=True).distinct())
-    models.sort()
-    return models
+class DeviceCheckService:
+
+    @staticmethod
+    def get_old_units(pk: int) -> Dict[str, int]:
+        """
+        Already filled units
+        """
+        units: Dict = {}
+        first_unit = Device.objects.get_device(pk).first_unit
+        last_unit = Device.objects.get_device(pk).last_unit
+        units['old_first_unit'] = first_unit
+        units['old_last_unit'] = last_unit
+        if units['old_first_unit'] > units['old_last_unit']:
+            units['old_last_unit'] = first_unit
+            units['old_first_unit'] = last_unit
+        return units
+
+    @staticmethod
+    def get_new_units(first_unit: int, last_unit: int) -> Dict[str, int]:
+        """
+        Units for newly added device
+        """
+        units: Dict = {}
+        units['new_first_unit'] = first_unit
+        units['new_last_unit'] = last_unit
+        if units['new_first_unit'] > units['new_last_unit']:
+            units['new_last_unit'] = first_unit
+            units['new_first_unit'] = last_unit
+        return units
+
+    @staticmethod
+    def get_all_units(pk: int) -> Dict[str, int]:
+        """
+        Total units per rack
+        """
+
+        units: Dict = {}
+        units['all_units'] = int(Rack.objects.get_rack(pk).rack_amount)
+        return units
+
+    @staticmethod
+    def check_unit_exist(units: Dict[str, int]) -> bool:
+        """
+        Are there any such units?
+        """
+        new_device_range = range(units['new_first_unit'],
+                                 units['new_last_unit'] + 1)
+        all_units_ramge = range(1, units['all_units'] + 1)
+        if not set(new_device_range).issubset(all_units_ramge):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def check_unit_busy(side: bool,
+                        units: Dict[str, int],
+                        pk: int,
+                        update: bool
+                        ) -> bool:
+        """
+        Are units busy? (adding, updating)
+        """
+        filled_list: List = []
+        queryset_devices = Device.objects.get_devices_for_side(pk, side)
+        if len(list(queryset_devices)) > 0:
+            for device in queryset_devices:
+                first_unit = device.first_unit
+                last_unit = device.last_unit
+                if first_unit > last_unit:
+                    first_unit = device.last_unit
+                    last_unit = device.first_unit
+                one_device_list = list(range(first_unit, last_unit + 1))
+                filled_list.extend(one_device_list)
+        if update:
+            device_old_range = range(units['old_first_unit'],
+                                     units['old_last_unit'] + 1)
+            filled_list = list(set(filled_list) - set(device_old_range))
+        device_new_range = range(units['new_first_unit'],
+                                 units['new_last_unit'] + 1)
+        if any(unit in set(device_new_range) for unit in filled_list):
+            return True
+        else:
+            return False
 
 
-def _rack_vendors():
-    """
-    Vendors list (for racks)
-    """
-    vendors = list(Rack.objects. \
-        values_list('rack_vendor', flat=True).distinct())
-    vendors.sort()
-    return vendors
+class QrService:
+
+    @staticmethod
+    def get_img_name(pk: int, is_device: bool) -> str:
+        """
+        File name
+        """
+        if is_device:
+            img_name = f'/device_qr/d-{str(pk)}.png'
+        else:
+            img_name = f'/rack_qr/r-{str(pk)}.png'
+        return img_name
+
+    @staticmethod
+    def create_qr(data: str, pk: int, is_device: bool) -> None:
+        """
+        Generate QR
+        """
+        qr = qrcode.QRCode(version=1,
+                           box_size=2,
+                           error_correction=qrcode.constants.ERROR_CORRECT_M,
+                           border=1)
+        qr.add_data(data)
+        qr.make(fit=True)
+        img = qr.make_image(fill='black', back_color='white')
+        img.save(f'{settings.BASE_DIR}'
+                 f'/mainapp/static{QrService.get_img_name(pk, is_device)}')
+
+    @staticmethod
+    def remove_qr(pk: int, is_device: bool) -> None:
+        """
+        Delete QR
+        """
+        img_name = (f'{settings.BASE_DIR}'
+                    f'/mainapp/static{QrService.get_img_name(pk, is_device)}')
+        if os.path.isfile(img_name):
+            os.remove(img_name)
+
+    @staticmethod
+    def show_qr(data: str, pk: int, is_device: bool) -> str:
+        """
+        Show (create/update) QR
+        """
+        QrService.create_qr(data, pk, is_device)
+        return QrService.get_img_name(pk, is_device)
+
+    @staticmethod
+    def get_qr_data(pk: int, is_device: bool, url: str) -> str:
+        """
+        QR data
+        """
+        if is_device:
+            return f'{url}device_detail/{str(pk)}'
+        else:
+            return f'{url}rack_detail/{str(pk)}'
 
 
-def _rack_models():
-    """
-    Models list (for racks)
-    """
-    models = list(Rack.objects. \
-        values_list('rack_model', flat=True).distinct())
-    models.sort()
-    return models
+class DraftService:
+
+    @staticmethod
+    def get_side_name(front_side: bool) -> str:
+        """
+        Rack side (for a draft)
+        """
+        return 'FRONT SIDE' if front_side else 'BACK SIDE'
+
+    @staticmethod
+    def get_font_size(rack_size: int) -> str:
+        """
+        Font size (for a draft)
+        """
+        if rack_size <= 32:
+            return '100'
+        elif rack_size > 32 and rack_size <= 42:
+            return '75'
+        else:
+            return '50'
+
+
+class ReportService:
+
+    @staticmethod
+    def get_header_list(instance_name: str) -> List[str]:
+        if instance_name == 'device':
+            return ReportHeaders.devices_header_list
+        elif instance_name == 'rack':
+            return ReportHeaders.racks_header_list
+        else:
+            raise ValueError('instance_name: str must be device|rack')
+
+    @staticmethod
+    def get_devices_data(address: str) -> List[List[str]]:
+        raw_device_report = Device.objects.get_all_devices_report()
+        devices_data: List = []
+        for device in raw_device_report:
+            devices_data.append([
+                device.id,
+                device.status,
+                device.device_vendor,
+                device.device_model,
+                device.device_serial_number,
+                device.device_description,
+                device.project,
+                device.ownership,
+                device.financially_responsible_person,
+                device.device_inventory_number,
+                device.responsible,
+                device.fixed_asset,
+                device.link,
+                device.first_unit,
+                device.last_unit,
+                'Yes' if device.frontside_location else 'No',
+                device.device_type,
+                device.device_hostname,
+                device.ip,
+                ReportService.get_device_stack(f'{settings.START_PAGE_URL}'
+                                               f'{address}',
+                                               device.device_stack),
+                device.ports_amout,
+                device.version,
+                device.power_type,
+                device.power_w,
+                device.power_v,
+                device.power_ac_dc,
+                device.updated_by,
+                device.updated_at,
+                device.rack_name,
+                device.room_name,
+                device.building_name,
+                device.site_name,
+                device.department_name,
+                device.region_name,
+                settings.START_PAGE_URL + address + str(device.id),
+            ])
+        return devices_data
+
+    @staticmethod
+    def get_racks_data(address: str) -> List[List[str]]:
+        raw_rack_report = Rack.objects.get_all_racks_report()
+        racks_data: List = []
+        for rack in raw_rack_report:
+            racks_data.append([
+                rack.id,
+                rack.rack_name,
+                rack.rack_amount,
+                rack.rack_vendor,
+                rack.rack_model,
+                rack.rack_description,
+                'Yes' if rack.numbering_from_bottom_to_top else 'No',
+                rack.responsible,
+                rack.rack_financially_responsible_person,
+                rack.rack_inventory_number,
+                rack.fixed_asset,
+                rack.link,
+                rack.row,
+                rack.place,
+                rack.rack_height,
+                rack.rack_width,
+                rack.rack_depth,
+                rack.rack_unit_width,
+                rack.rack_unit_depth,
+                rack.rack_type,
+                rack.rack_frame,
+                rack.rack_palce_type,
+                rack.max_load,
+                rack.power_sockets,
+                rack.power_sockets_ups,
+                'Yes' if rack.external_ups else 'No',
+                'Yes' if rack.cooler else 'No',
+                rack.updated_by,
+                rack.updated_at,
+                rack.room_name,
+                rack.building_name,
+                rack.site_name,
+                rack.department_name,
+                rack.region_name,
+                f'{settings.START_PAGE_URL}{address}{str(rack.id)}',
+            ])
+        return racks_data
+
+    @staticmethod
+    def get_device_stack(device_link: str,
+                         device_stack: int
+                         ) -> Union[str, None]:
+        """
+        Link to backup device (for csv)
+        """
+        if device_stack is not None:
+            return f'{device_link}{str(device_stack)}'
+        return None
+
+    @staticmethod
+    def get_responce(header_list: List[str],
+                     report_data: List[List[str]],
+                     file_name: str
+                     ) -> HttpResponse:
+        response = HttpResponse(content_type='text/csv')
+        response.write(u'\ufeff'.encode('utf8'))
+        writer = csv.writer(response, delimiter=';', dialect='excel')
+        writer.writerow(header_list)
+        for row in report_data:
+            writer.writerow(row)
+        response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+        return response

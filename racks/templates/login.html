@@ -5,11 +5,6 @@
     <meta charset="utf-8">
     <title>Login</title>
     <link rel="stylesheet" href="{% static '/css/main.css' %}">
-    <style>
-    form {
-        text-align: center;
-    }
-    </style>    
 </head>
 <body>
     <br>
@@ -17,10 +12,15 @@
     <br>
     <br>
     <h3 align="center"><b>Authorization</b></h3>
-        <form method="POST">
+        <center><form action = "" method = "post">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form.errors }}
+                Username: {{ form.username }}
+            <br>
+                Password: {{ form.password }}
+            <br>
+            <br>
             <button type="submit">Login</button>
-        </form>
+        </form></center>
 </body>
 </html>
