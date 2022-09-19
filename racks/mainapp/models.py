@@ -6,15 +6,24 @@ from django.db.models.base import ModelBase
 class RegionManager(models.Manager):
 
     def get_all_regions(self) -> QuerySet:
+        """
+        All regions
+        """
         return Region.objects.all()
 
 
 class DepartmentManager(models.Manager):
 
     def get_all_departments(self) -> QuerySet:
+        """
+        All departments
+        """
         return Department.objects.all()
 
     def get_department_name_for_department(self, pk: int) -> RawQuerySet:
+        """
+        Department name from department id
+        """
         return Department.objects.raw("""SELECT department.id as id,
                                       department.department_name
                                       FROM department
@@ -23,6 +32,9 @@ class DepartmentManager(models.Manager):
                                       [str(pk)])
 
     def get_department_name_for_site(self, pk: int) -> RawQuerySet:
+        """
+        Department name from site id
+        """
         return Department.objects.raw("""SELECT department.id as id,
                                       department.department_name
                                       FROM site
@@ -34,6 +46,9 @@ class DepartmentManager(models.Manager):
                                       [str(pk)])
 
     def get_department_name_for_building(self, pk: int) -> RawQuerySet:
+        """
+        Department name from building id
+        """
         return Department.objects.raw("""SELECT department.id as id,
                                       department.department_name
                                       FROM building
@@ -47,6 +62,9 @@ class DepartmentManager(models.Manager):
                                       [str(pk)])
 
     def get_department_name_for_room(self, pk: int) -> RawQuerySet:
+        """
+        Department name from room id
+        """
         return Department.objects.raw("""SELECT department.id as id,
                                       department.department_name
                                       FROM room
@@ -64,6 +82,9 @@ class DepartmentManager(models.Manager):
                                       [str(pk)])
 
     def get_department_name_for_rack(self, pk: int) -> RawQuerySet:
+        """
+        Department name from rack id
+        """
         return Department.objects.raw("""SELECT department.id as id,
                                       department.department_name
                                       FROM rack
@@ -84,6 +105,9 @@ class DepartmentManager(models.Manager):
                                       [str(pk)])
 
     def get_department_name_for_device(self, pk: int) -> RawQuerySet:
+        """
+        Department name from device id
+        """
         return Department.objects.raw("""SELECT department.id as id,
                                       department.department_name
                                       FROM device
@@ -110,51 +134,90 @@ class DepartmentManager(models.Manager):
 class SiteManager(models.Manager):
 
     def get_site(self, pk: int) -> ModelBase:
+        """
+        One site
+        """
         return Site.objects.get(id=pk)
 
     def get_all_sites(self) -> QuerySet:
+        """
+        All sites
+        """
         return Site.objects.all()
 
 
 class BuildingManager(models.Manager):
 
     def get_all_buildings(self) -> QuerySet:
+        """
+        All buildings
+        """
         return Building.objects.all()
 
     def get_buildings_for_site(self, pk: int) -> QuerySet:
+        """
+        Buildings for one site
+        """
         return Building.objects.filter(site_id_id=pk)
 
     def get_building(self, pk: int) -> ModelBase:
+        """
+        One building
+        """
         return Building.objects.get(id=pk)
 
 
 class RoomManager(models.Manager):
 
     def get_all_rooms(self) -> QuerySet:
+        """
+        All rooms
+        """
         return Room.objects.all()
 
     def get_rooms_for_building(self, pk: int) -> QuerySet:
+        """
+        Rooms for one building
+        """
         return Room.objects.filter(building_id_id=pk)
 
     def get_room(self, pk: int) -> ModelBase:
+        """
+        One room
+        """
         return Room.objects.get(id=pk)
 
 
 class RackManager(models.Manager):
 
     def get_all_racks(self) -> QuerySet:
+        """
+        All racks
+        """
         return Rack.objects.all()
 
     def get_rack(self, pk: int) -> ModelBase:
+        """
+        One rack
+        """
         return Rack.objects.get(id=pk)
 
     def get_racks_for_rooms(self, pk: int) -> QuerySet:
+        """
+        Racks for one room
+        """
         return Rack.objects.filter(room_id_id=pk)
 
     def get_rack_vendors(self) -> QuerySet:
+        """
+        Rack vendors
+        """
         return Rack.objects.values_list('rack_vendor', flat=True)
 
     def get_rack_models(self) -> QuerySet:
+        """
+        Rack models
+        """
         return Rack.objects.values_list('rack_model', flat=True)
 
     def get_fk_sequence(self, pk: int) -> RawQuerySet:
@@ -189,6 +252,9 @@ class RackManager(models.Manager):
                                 [str(pk)])
 
     def get_all_racks_report(self) -> RawQuerySet:
+        """
+        Racks report data
+        """
         return Rack.objects.raw("""SELECT rack.id as id,
                                 rack.*,
                                 room.room_name,
@@ -217,13 +283,21 @@ class RackManager(models.Manager):
 class DeviceManager(models.Manager):
 
     def get_device(self, pk: int) -> ModelBase:
+        """
+        One device
+        """
         return Device.objects.get(id=pk)
 
     def get_device_vendors(self) -> QuerySet:
-
+        """
+        Device vendors
+        """
         return Device.objects.values_list('device_vendor', flat=True)
 
     def get_device_models(self) -> QuerySet:
+        """
+        Device models
+        """
         return Device.objects.values_list('device_model', flat=True)
 
     def get_devices_for_side(self, pk: int, side: bool) -> QuerySet:
@@ -234,16 +308,28 @@ class DeviceManager(models.Manager):
             .filter(frontside_location=side)
 
     def get_devices_id_list(self, pk: int) -> QuerySet:
+        """
+        Device ids for one rack
+        """
         return Device.objects.filter(rack_id_id=pk) \
             .values_list('id', flat=True)
 
     def get_all_devices(self) -> QuerySet:
+        """
+        All devices
+        """
         return Device.objects.all()
 
     def get_devices_for_rack(self, pk: int) -> QuerySet:
+        """
+        Devices for one rack
+        """
         return Device.objects.filter(rack_id_id=pk)
 
     def get_all_devices_report(self) -> RawQuerySet:
+        """
+        Devices report data
+        """
         return Device.objects.raw("""SELECT device.id as id,
                                   device.*,
                                   rack.rack_name,

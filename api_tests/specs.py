@@ -1,3 +1,6 @@
+"""
+Specifications
+"""
 class Specs:
     base_url = 'http://127.0.0.1:8000/api/'
     all_racks_url = 'racks/'

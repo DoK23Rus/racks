@@ -8,18 +8,22 @@ from poms.racks_page import RacksPage
 from poms.units_page import UnitsPage
 from poms.device_page import DevicePage
 from poms.form_page import FormPage
-from locators import Locators
 from params import Params
 import HtmlTestRunner
 
 
 class E2ETestCase(unittest.TestCase):
+    """
+    Selenium tests
+    """
 
     def setUp(self):
+        """
+        Setup and login
+        """
         options = Options()
         options.headless = True
-        #options.headless = False
-        self.driver = webdriver.Firefox(options=options, 
+        self.driver = webdriver.Firefox(options=options,
                                         executable_path=Params.gecodriver_path)
         self.driver.implicitly_wait(10)
         self.driver.delete_all_cookies()
@@ -32,7 +36,7 @@ class E2ETestCase(unittest.TestCase):
     def tearDown(self):
         self.driver.close()
         self.driver.quit()
-    
+
     def test_1_move_device_outside(self):
         """
         Trying to move the device off the rack
@@ -86,10 +90,10 @@ class E2ETestCase(unittest.TestCase):
         last_unit.send_keys(Params.first_device_last_unit_busy)
         device_form.click_change()
         self.assertTrue(device_form.get_unit_busy_loc())
-  
+
     def test_3_permitions(self):
         """
-        Trying to add a new object 
+        Trying to add a new object
         in the area of responsibility of another department
         """
         racks = RacksPage(self.driver)
@@ -100,7 +104,7 @@ class E2ETestCase(unittest.TestCase):
         site_form.enter_site_name(Params.site_name)
         site_form.click_submit()
         self.assertTrue(site_form.get_violation_loc())
-   
+
     def test_4_add_device_outside(self):
         """
         Trying to add a new device outside the rack
@@ -174,7 +178,7 @@ class E2ETestCase(unittest.TestCase):
         room_form.click_submit()
         time.sleep(1)
         self.assertTrue(room_form.get_room_name_busy_loc())
-   
+
     def test_8_add_same_name_rack(self):
         """
         Trying to add a rack with a duplicate name
@@ -191,5 +195,5 @@ class E2ETestCase(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main(testRunner=HtmlTestRunner \
-        .HTMLTestRunner(output=Params.test_results_path))
+    unittest.main(testRunner=HtmlTestRunner
+                  .HTMLTestRunner(output=Params.test_results_path))

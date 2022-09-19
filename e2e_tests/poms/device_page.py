@@ -2,6 +2,9 @@ from locators import Locators
 
 
 class DevicePage():
+    """
+    POM for device page
+    """
 
     def __init__(self, driver):
         self.driver = driver
@@ -9,5 +12,8 @@ class DevicePage():
             device_edit_button_xpath
 
     def edit_device(self):
-        self.driver.find_element_by_xpath(self. \
-            device_edit_button_xpath).click()
+        """
+        Edit device
+        """
+        self.driver \
+            .find_element_by_xpath(self.device_edit_button_xpath).click()
