@@ -1,5 +1,5 @@
 from django import forms
-from .models import (
+from mainapp.models import (
     Site,
     Building,
     Room,

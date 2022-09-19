@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Rack, Device
+from mainapp.models import Rack, Device
 
 
 class RackSerializer(serializers.ModelSerializer):

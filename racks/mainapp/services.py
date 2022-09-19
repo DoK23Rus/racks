@@ -1,8 +1,11 @@
+"""
+Business logic classes
+"""
 from typing import List, Dict, Set, Union, Optional
 from django.db.models.base import ModelBase
 from django.db.models.query import RawQuerySet
 from django.http.response import HttpResponse
-from .models import (
+from mainapp.models import (
     Department,
     Site,
     Building,
@@ -14,15 +17,21 @@ import qrcode
 import os
 from django.conf import settings
 import csv
-from .data import ReportHeaders
+from mainapp.data import ReportHeaders
 import datetime
 
 
 def date():
+    """
+    Current date
+    """
     return datetime.datetime.today().strftime("%Y-%m-%d")
 
 
 class RackLayoutService:
+    """
+    Services for rendering a single rack
+    """
 
     @staticmethod
     def get_start_list(pk: int, direction: bool) -> List[int]:
@@ -76,11 +85,19 @@ class RackLayoutService:
 
 
 class UserCheckService:
+    """
+    Services for checking user permission
+    For add|update|delete user must be in group with the same name
+    as object department affiliation
+    """
 
     @staticmethod
-    def _get_department_raw_query(pk: int,
-                                  model: ModelBase
-                                  ) -> RawQuerySet:
+    def get_department_raw_query(pk: int,
+                                 model: ModelBase
+                                 ) -> RawQuerySet:
+        """
+        Department raw query (get department name from join)
+        """
         if model == Department:
             department_raw_query = Department.objects \
                 .get_department_name_for_department(pk)
@@ -109,8 +126,11 @@ class UserCheckService:
                          pk: int,
                          model: ModelBase
                          ) -> bool:
+        """
+        Check user permission
+        """
         department_raw_query = UserCheckService \
-            ._get_department_raw_query(pk, model)
+            .get_department_raw_query(pk, model)
         department_name = str([department_name
                               for department_name
                               in department_raw_query][0])
@@ -120,6 +140,9 @@ class UserCheckService:
 
 
 class UniqueCheckService:
+    """
+    Services for unique names checking (in the same area)
+    """
 
     @staticmethod
     def get_unique_object_names_list(key: Optional[int],
@@ -183,6 +206,9 @@ class UniqueCheckService:
 
 
 class DeviceCheckService:
+    """
+    Services for checking capabilities to add or update devices
+    """
 
     @staticmethod
     def get_old_units(pk: int) -> Dict[str, int]:
@@ -268,6 +294,9 @@ class DeviceCheckService:
 
 
 class QrService:
+    """
+    Services for generate|delete|show QRs
+    """
 
     @staticmethod
     def get_img_name(pk: int, is_device: bool) -> str:
@@ -325,18 +354,21 @@ class QrService:
 
 
 class DraftService:
+    """
+    Services for rack drafts (for print)
+    """
 
     @staticmethod
     def get_side_name(front_side: bool) -> str:
         """
-        Rack side (for a draft)
+        Rack side
         """
         return 'FRONT SIDE' if front_side else 'BACK SIDE'
 
     @staticmethod
     def get_font_size(rack_size: int) -> str:
         """
-        Font size (for a draft)
+        Font size
         """
         if rack_size <= 32:
             return '100'
@@ -347,9 +379,15 @@ class DraftService:
 
 
 class ReportService:
+    """
+    Services for generating csv reports
+    """
 
     @staticmethod
     def get_header_list(instance_name: str) -> List[str]:
+        """
+        Header for csv table
+        """
         if instance_name == 'device':
             return ReportHeaders.devices_header_list
         elif instance_name == 'rack':
@@ -359,6 +397,9 @@ class ReportService:
 
     @staticmethod
     def get_devices_data(address: str) -> List[List[str]]:
+        """
+        Data for devices
+        """
         raw_device_report = Device.objects.get_all_devices_report()
         devices_data: List = []
         for device in raw_device_report:
@@ -405,6 +446,9 @@ class ReportService:
 
     @staticmethod
     def get_racks_data(address: str) -> List[List[str]]:
+        """
+        Data for racks
+        """
         raw_rack_report = Rack.objects.get_all_racks_report()
         racks_data: List = []
         for rack in raw_rack_report:
@@ -452,7 +496,7 @@ class ReportService:
                          device_stack: int
                          ) -> Union[str, None]:
         """
-        Link to backup device (for csv)
+        Link to backup device
         """
         if device_stack is not None:
             return f'{device_link}{str(device_stack)}'
@@ -463,6 +507,9 @@ class ReportService:
                      report_data: List[List[str]],
                      file_name: str
                      ) -> HttpResponse:
+        """
+        Get response
+        """
         response = HttpResponse(content_type='text/csv')
         response.write(u'\ufeff'.encode('utf8'))
         writer = csv.writer(response, delimiter=';', dialect='excel')

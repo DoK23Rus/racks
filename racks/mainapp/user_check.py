@@ -1,3 +1,6 @@
+"""
+Checking and setuping users for E2E and API testing
+"""
 from django.contrib.auth.models import User, Group
 from typing import List, Dict
 globals().update(locals())
@@ -21,12 +24,18 @@ users: Dict = [
 
 
 def get_group_id(group_name: str) -> int:
+    """
+    Get group id by name (create if not exist)
+    """
     Group.objects.get_or_create(name=group_name)
     group_id = Group.objects.filter(name=group_name).first().id
     return group_id
 
 
 class CheckUser:
+    """
+    Checking users (creating and adding groups)
+    """
 
     def __init__(self, group_name: str, group_id: int, user: Dict):
         self.group_name = group_name
@@ -42,6 +51,9 @@ class CheckUser:
                 f'{self.group_name!r}, {self.group_id!r}), {self.user!r})')
 
     def get_user(self) -> User:
+        """
+        Get or create user
+        """
         try:
             some_user = User.objects.get(username=self.username)
             some_user.first_name = self.first_name
@@ -55,6 +67,9 @@ class CheckUser:
         return some_user
 
     def add_group(self) -> None:
+        """
+        Add group
+        """
         some_user = self.get_user()
         if not some_user.groups.filter(name=self.group_name).exists():
             some_user.groups.add(self.group_id)
@@ -64,6 +79,9 @@ globals().update(locals())
 
 
 def check_users(users: List[Dict]) -> None:
+    """
+    Final user check
+    """
     group_id = get_group_id(group_name)
     for user in users:
         some_user = CheckUser(group_name, group_id, user)

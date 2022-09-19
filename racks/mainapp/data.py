@@ -1,7 +1,13 @@
+"""
+Some data for business logic
+"""
 from typing import List
 
 
 class ReportHeaders:
+    """
+    Headers for report tables
+    """
 
     devices_header_list: List[str] = [
         'Device number',

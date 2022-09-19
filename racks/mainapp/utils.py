@@ -1,3 +1,6 @@
+"""
+Mixins and classes for business logic calls
+"""
 from abc import ABC, abstractmethod
 from django.contrib.auth.mixins import LoginRequiredMixin
 from typing import List, Optional
@@ -7,10 +10,10 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
 from django.forms import Form
-from .serializers import RackSerializer, DeviceSerializer
+from mainapp.serializers import RackSerializer, DeviceSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from .services import (
+from mainapp.services import (
     RackLayoutService,
     UserCheckService,
     UniqueCheckService,

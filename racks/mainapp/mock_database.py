@@ -1,3 +1,6 @@
+"""
+Mock database setup for E2E and API testing
+"""
 from mainapp.models import (
     Region,
     Department,

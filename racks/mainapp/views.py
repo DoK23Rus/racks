@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, View
-from .utils import (
+from mainapp.utils import (
     AuthMixin,
     TreeDataMixin,
     UnitsDataMixin,
@@ -16,7 +16,7 @@ from .utils import (
     RackListApiViewMixin,
     DeviceListApiViewMixin,
 )
-from .forms import (
+from mainapp.forms import (
     SiteForm,
     BuildingForm,
     RoomForm,
@@ -24,7 +24,7 @@ from .forms import (
     DeviceForm,
 )
 from rest_framework.views import APIView
-from .models import (
+from mainapp.models import (
     Department,
     Site,
     Building,
@@ -34,7 +34,7 @@ from .models import (
 )
 from rest_framework import permissions
 from rest_framework.generics import ListAPIView
-from .serializers import RackSerializer, DeviceSerializer
+from mainapp.serializers import RackSerializer, DeviceSerializer
 from rest_framework.permissions import BasePermissionMetaclass
 from rest_framework.serializers import SerializerMetaclass
 from django.db.models.base import ModelBase
