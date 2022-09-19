@@ -71,6 +71,7 @@ Device.objects.get_or_create(first_unit=35,
                              device_type='Switch',
                              device_vendor='Cisco',
                              device_model='2911',
+                             power_w=200,
                              updated_by='tester',
                              rack_id=rack1_id)
 Device.objects.get_or_create(first_unit=5,

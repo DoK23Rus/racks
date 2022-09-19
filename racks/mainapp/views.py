@@ -1,4 +1,5 @@
 from django.views.generic import DetailView, View
+from rest_framework.views import APIView
 from mainapp.utils import (
     AuthMixin,
     TreeDataMixin,
@@ -23,7 +24,6 @@ from mainapp.forms import (
     RackForm,
     DeviceForm,
 )
-from rest_framework.views import APIView
 from mainapp.models import (
     Department,
     Site,
@@ -32,13 +32,14 @@ from mainapp.models import (
     Rack,
     Device,
 )
+from mainapp.services import DataProcessingService
 from rest_framework import permissions
 from rest_framework.generics import ListAPIView
 from mainapp.serializers import RackSerializer, DeviceSerializer
 from rest_framework.permissions import BasePermissionMetaclass
 from rest_framework.serializers import SerializerMetaclass
 from django.db.models.base import ModelBase
-from typing import List
+from typing import List, Dict
 from django.forms import Form
 
 
@@ -63,6 +64,14 @@ class RackView(AuthMixin, DetailView):
     model: ModelBase = Rack
     template_name: str = 'rack_detail.html'
     pk_url_kwarg: str = 'pk'
+
+    # Can't avoid it due to cross import
+    def get_context_data(self, **kwargs: Dict) -> Dict:
+        context = super(RackView, self).get_context_data(**kwargs)
+        # Add some processing
+        context['total_w'] = DataProcessingService \
+            .get_devices_power_w_sum(self.kwargs['pk'])
+        return context
 
 
 class DeviceView(AuthMixin, DetailView):

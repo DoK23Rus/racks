@@ -74,6 +74,7 @@ class ReportHeaders:
         'Free UPS power sockets',
         'External power backup supply system',
         'Active ventilation',
+        'TOTAL power consumption',
         'Updated by',
         'Updated at',
         'Room',

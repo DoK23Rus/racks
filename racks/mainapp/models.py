@@ -326,6 +326,13 @@ class DeviceManager(models.Manager):
         """
         return Device.objects.filter(rack_id_id=pk)
 
+    def get_devices_power_w(self, pk: int) -> QuerySet:
+        """
+        Devices W for one rack
+        """
+        return Device.objects.filter(rack_id_id=pk) \
+            .values_list('power_w', flat=True)
+
     def get_all_devices_report(self) -> RawQuerySet:
         """
         Devices report data

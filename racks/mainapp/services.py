@@ -480,6 +480,7 @@ class ReportService:
                 rack.power_sockets_ups,
                 'Yes' if rack.external_ups else 'No',
                 'Yes' if rack.cooler else 'No',
+                DataProcessingService.get_devices_power_w_sum(int(rack.id)),
                 rack.updated_by,
                 rack.updated_at,
                 rack.room_name,
@@ -518,3 +519,14 @@ class ReportService:
             writer.writerow(row)
         response['Content-Disposition'] = f'attachment; filename="{file_name}"'
         return response
+
+
+class DataProcessingService:
+    """
+    Services for operations with data
+    """
+
+    @staticmethod
+    def get_devices_power_w_sum(pk: int) -> int:
+        power_w_list = Device.objects.get_devices_power_w(pk)
+        return sum(power_w for power_w in power_w_list if power_w is not None)

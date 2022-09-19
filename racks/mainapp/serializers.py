@@ -1,11 +1,21 @@
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
 from mainapp.models import Rack, Device
+from mainapp.services import DataProcessingService
+from django.db.models.base import ModelBase
+from typing import List
 
 
 class RackSerializer(serializers.ModelSerializer):
+    total_power_w: SerializerMethodField = serializers \
+        .SerializerMethodField('get_total_power_w')
+
+    def get_total_power_w(self, obj: Rack) -> int:
+        return DataProcessingService.get_devices_power_w_sum(obj.id)
+
     class Meta:
-        model = Rack
-        fields = [
+        model: ModelBase = Rack
+        fields: List = [
             'id',
             'rack_name',
             'rack_amount',
@@ -33,6 +43,7 @@ class RackSerializer(serializers.ModelSerializer):
             'power_sockets_ups',
             'external_ups',
             'cooler',
+            'total_power_w',
             'updated_by',
             'updated_at',
             'room_id'
@@ -40,9 +51,10 @@ class RackSerializer(serializers.ModelSerializer):
 
 
 class DeviceSerializer(serializers.ModelSerializer):
+
     class Meta:
-        model = Device
-        fields = [
+        model: ModelBase = Device
+        fields: List = [
             'id',
             'first_unit',
             'last_unit',

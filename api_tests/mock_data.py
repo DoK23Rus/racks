@@ -30,6 +30,7 @@ class MockData:
             'power_sockets_ups': 2,
             'external_ups': True,
             'cooler': True,
+            'total_power_w': 650,
         },
         {
             'rack_name': 'Test rack №2',
@@ -58,6 +59,7 @@ class MockData:
             'power_sockets_ups': None,
             'external_ups': True,
             'cooler': False,
+            'total_power_w': 0,
         }
     ]
     devices = [
@@ -100,7 +102,7 @@ class MockData:
             'ports_amout': None,
             'version': '',
             'power_type': 'IEC C14 socket',
-            'power_w': None,
+            'power_w': 200,
             'power_v': 220,
             'power_ac_dc': 'AC',
             'device_serial_number': '',

@@ -19,7 +19,8 @@ from mainapp.services import (
     DeviceCheckService,
     QrService,
     DraftService,
-    ReportService
+    ReportService,
+    DataProcessingService,
 )
 
 
@@ -71,17 +72,20 @@ def base_setup():
                                  last_unit=1,
                                  device_vendor='Test_vendor1',
                                  device_model='Test_model1',
+                                 power_w=100,
                                  rack_id=rack1_id)
     Device.objects.get_or_create(first_unit=5,
                                  last_unit=5,
                                  device_vendor='Test_vendor2',
                                  device_model='Test_model2',
+                                 power_w=200,
                                  rack_id=rack1_id)
     Device.objects.get_or_create(first_unit=4,
                                  last_unit=3,
                                  frontside_location=False,
                                  device_vendor='Test_vendor3',
                                  device_model='Test_model3',
+                                 power_w=50,
                                  rack_id=rack1_id)
     Device.objects.get_or_create(first_unit=7,
                                  last_unit=7,
@@ -612,3 +616,28 @@ class TestReportService(TestCase):
         device_stack = None
         result = ReportService.get_device_stack(device_link, device_stack)
         self.assertEqual(result, None)
+
+
+class TestDataProcessingService(TestCase):
+    """
+    Testing data processing services
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
+
+    def test_get_devices_power_w_sum(self):
+        # Rack - Test_rack1
+        rack1_id = Rack.objects.get(rack_name='Test_rack1').id
+        result = DataProcessingService.get_devices_power_w_sum(rack1_id)
+        self.assertEqual(result, 350)
+
+        # Rack - Test_rack2
+        rack2_id = Rack.objects.get(rack_name='Test_rack2').id
+        result = DataProcessingService.get_devices_power_w_sum(rack2_id)
+        self.assertEqual(result, 0)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
