@@ -210,7 +210,7 @@ class RackAddView(AuthMixin, BaseAddMixin, View):
     template_name: str = 'add.html'
     log_info: str = 'ADD RACK:'
     success_message: str = 'Rack added'
-    error_messagev: str = 'A rack with the same name already exists'
+    error_message: str = 'A rack with the same name already exists'
     pk_name: str = 'room_id'
     checks_list: List[str] = ['check_user', 'check_unique']
 

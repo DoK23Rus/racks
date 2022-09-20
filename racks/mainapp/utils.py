@@ -451,8 +451,9 @@ class ChecksMixin(AbstractMixin):
             if fk is None:
                 names_list = UniqueCheckService \
                     .get_unique_object_names_list(pk, model)
-            names_list = UniqueCheckService \
-                .get_unique_object_names_list(fk, fk_model)
+            else:
+                names_list = UniqueCheckService \
+                    .get_unique_object_names_list(fk, fk_model)
             if form_instance_name in names_list:
                 check_result = Result(False, self.error_message)
                 return check_result
