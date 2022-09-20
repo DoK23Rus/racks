@@ -1,3 +1,9 @@
+"""
+Run
+./manage.py shell < user_check.py
+./manage.py shell < mock_database.py
+before testing
+"""
 import requests
 import unittest
 from requests.auth import HTTPBasicAuth

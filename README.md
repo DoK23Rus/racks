@@ -24,7 +24,3 @@ Before adding a rack to fill, you need to create objects to place them. In turn,
 |:--:| 
 | *Device card* |
 
-
-# Selenium tests
-Functional tests are written for an existing setup. Preliminary tests 1_1 - 1_7 are provided to check the accordance of the setup. The setup includes a `selenium` test user with rights to modify objects in the area of responsibility of one of the departments.
-

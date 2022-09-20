@@ -1,3 +1,9 @@
+"""
+Run
+./manage.py shell < user_check.py
+./manage.py shell < mock_database.py
+before testing
+"""
 import unittest
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
