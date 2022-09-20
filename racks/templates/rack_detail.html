@@ -10,21 +10,21 @@
     <b style="font-size: 140%">Rack №{{ rack.id }}&#8287;</b>
     <br>
     <br>
-    Rack name: {{ rack.rack_name }}
+    Rack name: <text class="info">{{ rack.rack_name }}</text>
     <br>
-    Responsible: {{ rack.responsible }}
+    Responsible: <text class="info">{{ rack.responsible }}</text>
     <br>
-    Row: {{ rack.row }}
+    Row: <text class="info">{{ rack.row }}</text>
     <br>
-    Place: {{ rack.place }}
+    Place: <text class="info">{{ rack.place }}</text>
     <br>
-    Description: {{ rack.rack_description }}
+    Description: <text class="info">{{ rack.rack_description }}</text>
     <br>
-    Inventory number: {{ rack.rack_inventory_number }}
+    Inventory number: <text class="info">{{ rack.rack_inventory_number }}</text>
     <br>
-    Financially responsible: {{ rack.rack_financially_responsible_person }}
+    Financially responsible: <text class="info">{{ rack.rack_financially_responsible_person }}</text>
     <br>
-    Fixed asset: {{ rack.fixed_asset }}
+    Fixed asset: <text class="info">{{ rack.fixed_asset }}</text>
     <br>
     {% if rack.link %}
         Link to docs: <a href="{{ rack.link }}">&#9094; {{ rack.link }}</a>
@@ -33,85 +33,85 @@
     {% endif %}
     <br>
     <br>
-    Vendor: {{ rack.rack_vendor }}
+    Vendor: <text class="info">{{ rack.rack_vendor }}</text>
     <br>
-    Model: {{ rack.rack_model }}
+    Model: <text class="info">{{ rack.rack_model }}</text>
     <br>
-    Rack amount (units): {{ rack.rack_amount }}
+    Rack amount (units): <text class="info">{{ rack.rack_amount }}</text>
     <br>
     {% if rack.numbering_from_bottom_to_top == True %}
-        Numbering from bottom to top
+        Numbering: <text class="info">from bottom to top</text>
     {% else %}
-        Numbering from top to bottom
+        Numbering: <text class="info">from top to bottom</text>
     {% endif %}
     <br>
     {% if rack.rack_height != None %}
-        Rack height (mm): {{ rack.rack_height }}
+        Rack height (mm): <text class="info">{{ rack.rack_height }}</text>
     {% else %}
         Rack height (mm):
     {% endif %}
     <br>
     {% if rack.rack_width != None %}
-        Rack width (mm): {{ rack.rack_width }}
+        Rack width (mm): <text class="info">{{ rack.rack_width }}</text>
     {% else %}
         Rack width (mm):
     {% endif %}
     <br>
     {% if rack.rack_depth != None %}
-        Rack depth (mm): {{ rack.rack_depth }}
+        Rack depth (mm): <text class="info">{{ rack.rack_depth }}</text>
     {% else %}
         Rack depth (mm):
     {% endif %}
     <br>
     {% if rack.rack_unit_width != None %}
-        Useful rack width (inches): {{ rack.rack_unit_width }}
+        Useful rack width (inches): <text class="info">{{ rack.rack_unit_width }}</text>
     {% else %}
         Useful rack width (inches):
     {% endif %}
     <br>
     {% if rack.rack_unit_depth != None %}
-        Useful rack depth (mm): {{ rack.rack_unit_depth }}
+        Useful rack depth (mm): <text class="info">{{ rack.rack_unit_depth }}</text>
     {% else %}
         Useful rack depth (mm):
     {% endif %}
     <br>
-    Execution variant: {{ rack.rack_type }}
+    Execution variant: <text class="info">{{ rack.rack_type }}</text>
     <br>
-    Construction: {{ rack.rack_frame }}
+    Construction: <text class="info">{{ rack.rack_frame }}</text>
     <br>
-    Location type: {{ rack.rack_palce_type }}
+    Location type: <text class="info">{{ rack.rack_palce_type }}</text>
     <br>
     {% if rack.max_load != None %}
-        Max load (kilo): {{ rack.max_load }}
+        Max load (kilo): <text class="info">{{ rack.max_load }}</text>
     {% else %}
         Max load (kilo):
     {% endif %}
     <br>
     {% if rack.power_sockets != None %}
-        Free power sockets: {{ rack.power_sockets }}
+        Free power sockets: <text class="info">{{ rack.power_sockets }}</text>
     {% else %}
         Free power sockets:
     {% endif %}
     <br>
     {% if rack.power_sockets_ups != None %}
-        Free UPS power sockets: {{ rack.power_sockets_ups }}
+        Free UPS power sockets: <text class="info">{{ rack.power_sockets_ups }}</text>
     {% else %}
         Free UPS power sockets:
     {% endif %}
     <br>
     {% if rack.cooler == True %}
-        Active ventilation: Yes
+        Active ventilation: <text class="info">Yes</text>
     {% else %}
-        Active ventilation: No
+        Active ventilation: <text class="info">No</text>
     {% endif %}
     <br>
     {% if rack.external_ups == True %}
-        External power backup supply system: Yes
+        External power backup supply system: <text class="info">Yes</text>
     {% else %}
-        External power backup supply system: No
+        External power backup supply system: <text class="info">No</text>
     {% endif %}
     <br>
-    TOTAL power consumption: {{ total_w }}
+    TOTAL power consumption: <text class="info">{{ total_w }}</text>
     <br>
     <br>
     <div class="small-size">Updated by: {{ rack.updated_by}}</div>

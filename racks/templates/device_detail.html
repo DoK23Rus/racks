@@ -8,33 +8,33 @@
     <b style="font-size: 140%">Device №{{ device.id }}&#8287;</b>
     <br>
     <br>
-    Status: {{ device.status }}
+    Status: <text class="info">{{ device.status }}</text>
     <br>
-    Description: {{ device.device_description }}
+    Description: <text class="info">{{ device.device_description }}</text>
     <br>
     {% if device.frontside_location == True %}
-        Located on the front of the rack: Yes
+        Located on the front of the rack: <text class="info">Yes</text>
     {% else %}
-        Located on the front of the rack: No
+        Located on the front of the rack: <text class="info">No</text>
     {% endif %}
     <br>
     Installed in: <a href="{% url 'units' pk=device.rack_id_id %}" target="_blank">&#9094; Rack №{{ device.rack_id_id }}</a>
     <br>
-    First unit: {{ device.first_unit }}
+    First unit: <text class="info">{{ device.first_unit }}</text>
     <br>
-    Last unit: {{ device.last_unit }}
+    Last unit: <text class="info">{{ device.last_unit }}</text>
     <br>
-    Ownership: {{ device.ownership }}
+    Ownership: <text class="info">{{ device.ownership }}</text>
     <br>
-    Responsible: {{ device.responsible }}
+    Responsible: <text class="info">{{ device.responsible }}</text>
     <br>
-    Project: {{ device.project }}
+    Project: <text class="info">{{ device.project }}</text>
     <br>
-    Inventory number: {{ device.device_inventory_number}}
+    Inventory number: <text class="info">{{ device.device_inventory_number}}</text>
     <br>
-    Financially responsible: {{ device.financially_responsible_person }}
+    Financially responsible: <text class="info">{{ device.financially_responsible_person }}</text>
     <br>
-    Fixed asset: {{ device.fixed_asset }}
+    Fixed asset: <text class="info">{{ device.fixed_asset }}</text>
     <br>
     {% if device.link %}
         Link to docs: <a href="{{ rack.link }}">&#9094; {{ device.link }}</a>
@@ -43,16 +43,16 @@
     {% endif %}
     <br>
     <br>
-    Vendor: {{ device.device_vendor }}
+    Vendor: <text class="info">{{ device.device_vendor }}</text>
     <br>
-    Model: {{ device.device_model }}
+    Model: <text class="info">{{ device.device_model }}</text>
     <br>
-    Device type: {{ device.device_type }}
+    Device type: <text class="info">{{ device.device_type }}</text>
     <br>
-    Hostname: {{ device.device_hostname }}
+    Hostname: <text class="info">{{ device.device_hostname }}</text>
     <br>
     {% if device.ip != None %}
-        IP-address: {{ device.ip }}
+        IP-address: <text class="info">{{ device.ip }}</text>
     {% else %}
         IP-address:
     {% endif %}
@@ -64,30 +64,30 @@
     {% endif %}
     <br>
     {% if device.ports_amout != None %}
-        Port capacity: {{ device.ports_amout }}
+        Port capacity: <text class="info">{{ device.ports_amout }}</text>
     {% else %}
         Port capacity:
     {% endif %}
     <br>
-    Software version: {{ device.version }}
+    Software version: <text class="info">{{ device.version }}</text>
     <br>
-    Serial number: {{ device.device_serial_number }}
+    Serial number: <text class="info">{{ device.device_serial_number }}</text>
     <br>
-    Socket type: {{ device.power_type }}
+    Socket type: <text class="info">{{ device.power_type }}</text>
     <br>
     {% if device.power_w != None %}
-        Power requirement (W): {{ device.power_w }}
+        Power requirement (W): <text class="info">{{ device.power_w }}</text>
     {% else %}
         Power requirement (W):
     {% endif %}
     <br>
     {% if device.power_v != None %}
-        Voltage (V): {{ device.power_v }}
+        Voltage (V): <text class="info">{{ device.power_v }}</text>
     {% else %}
         Voltage (V):
     {% endif %}
     <br>
-    AC/DC: {{ device.power_ac_dc }}
+    AC/DC: <text class="info">{{ device.power_ac_dc }}</text>
     <br>
     <br>
     <div class="small-size">Updated by: {{ device.updated_by }}</div>

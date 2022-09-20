@@ -219,3 +219,7 @@ input:focus + label, textarea:focus + label {
 .message {
   font-size: 20px;
 }
+
+.info {
+  color: #9f9f9f;
+}
