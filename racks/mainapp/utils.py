@@ -3,6 +3,7 @@ Mixins and classes for business logic calls
 """
 from abc import ABC, abstractmethod
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import DetailView
 from typing import List, Dict, Optional
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -696,6 +697,18 @@ class BaseDeleteMixin(AbstractViewMixin,
             # Log this
             self.get_delete_log(request, instance)
             return self.get_info_render(request, self.success_message)
+
+
+class BaseRackView(DetailView):
+    """
+    Add total power to Rack detail view
+    """
+
+    def get_context_data(self, **kwargs: Dict) -> Dict:
+        context = super(BaseRackDetailView, self).get_context_data(**kwargs)
+        context['total_w'] = DataProcessingService \
+            .get_devices_power_w_sum(self.kwargs['pk'])
+        return context
 
 
 class TreeDataMixin:

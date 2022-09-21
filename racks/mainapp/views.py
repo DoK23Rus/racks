@@ -16,6 +16,7 @@ from mainapp.utils import (
     DeviceDetailApiViewMixin,
     RackListApiViewMixin,
     DeviceListApiViewMixin,
+    BaseRackView,
 )
 from mainapp.forms import (
     SiteForm,
@@ -57,21 +58,13 @@ class UnitsView(AuthMixin, UnitsDataMixin, View):
     template_name: str = 'units.html'
 
 
-class RackView(AuthMixin, DetailView):
+class RackView(AuthMixin, BaseRackView):
     """
     Rack detail view
     """
     model: ModelBase = Rack
     template_name: str = 'rack_detail.html'
     pk_url_kwarg: str = 'pk'
-
-    # Can't avoid it due to cross import
-    def get_context_data(self, **kwargs: Dict) -> Dict:
-        context = super(RackView, self).get_context_data(**kwargs)
-        # Add some processing
-        context['total_w'] = DataProcessingService \
-            .get_devices_power_w_sum(self.kwargs['pk'])
-        return context
 
 
 class DeviceView(AuthMixin, DetailView):
