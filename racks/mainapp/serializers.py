@@ -1,17 +1,135 @@
-from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
-from mainapp.models import Rack, Device
-from mainapp.services import DataProcessingService
-from django.db.models.base import ModelBase
 from typing import List
+
+from django.db.models.base import ModelBase
+from rest_framework import serializers
+
+from mainapp.models import (Building,
+                            Department,
+                            Device,
+                            Rack,
+                            Region,
+                            Room,
+                            Site)
+from mainapp.services import DataProcessingService, RepoService
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    """
+    Region serializer
+    """
+    class Meta:
+        model: ModelBase = Region
+        fields: List = [
+            'id',
+            'region_name'
+        ]
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    """
+    Department serializer
+    """
+    class Meta:
+        model: ModelBase = Department
+        fields: List = [
+            'id',
+            'department_name',
+            'region_id'
+        ]
+
+
+class SiteSerializer(serializers.ModelSerializer):
+    """
+    Site serializer
+    """
+    class Meta:
+        model: ModelBase = Site
+        fields: List = [
+            'id',
+            'site_name',
+            'updated_by',
+            'updated_at',
+            'department_id'
+        ]
+
+
+class BuildingSerializer(serializers.ModelSerializer):
+    """
+    Building serializer
+    """
+    class Meta:
+        model: ModelBase = Building
+        fields: List = [
+            'id',
+            'building_name',
+            'updated_by',
+            'updated_at',
+            'site_id'
+        ]
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    """
+    Room serializer
+    """
+    class Meta:
+        model: ModelBase = Room
+        fields: List = [
+            'id',
+            'room_name',
+            'updated_by',
+            'updated_at',
+            'building_id'
+        ]
 
 
 class RackSerializer(serializers.ModelSerializer):
-    total_power_w: SerializerMethodField = serializers \
-        .SerializerMethodField('get_total_power_w')
+    """
+    Rack serializer
+    """
+    rack_amount = serializers.IntegerField(allow_null=False)
+    total_power_w = serializers.SerializerMethodField('get_total_power_w')
+    room_name = serializers.SerializerMethodField('get_room_name')
+    building_name = serializers.SerializerMethodField('get_building_name')
+    site_name = serializers.SerializerMethodField('get_site_name')
+    department_name = serializers.SerializerMethodField('get_department_name')
+    region_name = serializers.SerializerMethodField('get_region_name')
 
     def get_total_power_w(self, obj: Rack) -> int:
+        """
+        Get total power for single rack
+        """
         return DataProcessingService.get_devices_power_w_sum(obj.id)
+
+    def get_room_name(self, obj: Rack) -> str:
+        """
+        Get room name for rack
+        """
+        return RepoService.get_rack_room_name(obj.id)
+
+    def get_site_name(self, obj: Rack) -> str:
+        """
+        Get site name for rack
+        """
+        return RepoService.get_rack_site_name(obj.id)
+
+    def get_building_name(self, obj: Rack) -> str:
+        """
+        Get building name for rack
+        """
+        return RepoService.get_rack_building_name(obj.id)
+
+    def get_department_name(self, obj: Rack) -> str:
+        """
+        Get department name for rack
+        """
+        return RepoService.get_rack_department_name(obj.id)
+
+    def get_region_name(self, obj: Rack) -> str:
+        """
+        Get region name for rack
+        """
+        return RepoService.get_rack_region_name(obj.id)
 
     class Meta:
         model: ModelBase = Rack
@@ -46,11 +164,62 @@ class RackSerializer(serializers.ModelSerializer):
             'total_power_w',
             'updated_by',
             'updated_at',
-            'room_id'
+            'room_id',
+            'room_name',
+            'site_name',
+            'building_name',
+            'department_name',
+            'region_name'
         ]
 
 
 class DeviceSerializer(serializers.ModelSerializer):
+    """
+    Device serializer
+    """
+    frontside_location = serializers.BooleanField(required=True)
+    rack_name = serializers.SerializerMethodField('get_rack_name')
+    room_name = serializers.SerializerMethodField('get_room_name')
+    building_name = serializers.SerializerMethodField('get_building_name')
+    site_name = serializers.SerializerMethodField('get_site_name')
+    department_name = serializers.SerializerMethodField('get_department_name')
+    region_name = serializers.SerializerMethodField('get_region_name')
+
+    def get_rack_name(self, obj: Rack) -> str:
+        """
+        Get rack name for device
+        """
+        return RepoService.get_device_rack_name(obj.id)
+
+    def get_room_name(self, obj: Rack) -> str:
+        """
+        Get room name for device
+        """
+        return RepoService.get_device_room_name(obj.id)
+
+    def get_site_name(self, obj: Rack) -> str:
+        """
+        Get site name for device
+        """
+        return RepoService.get_device_site_name(obj.id)
+
+    def get_building_name(self, obj: Rack) -> str:
+        """
+        Get building name for device
+        """
+        return RepoService.get_device_building_name(obj.id)
+
+    def get_department_name(self, obj: Rack) -> str:
+        """
+        Get department name for device
+        """
+        return RepoService.get_device_department_name(obj.id)
+
+    def get_region_name(self, obj: Rack) -> str:
+        """
+        Get region name for device
+        """
+        return RepoService.get_device_region_name(obj.id)
 
     class Meta:
         model: ModelBase = Device
@@ -83,5 +252,11 @@ class DeviceSerializer(serializers.ModelSerializer):
             'link',
             'updated_by',
             'updated_at',
-            'rack_id'
+            'rack_id',
+            'rack_name',
+            'room_name',
+            'site_name',
+            'building_name',
+            'department_name',
+            'region_name'
         ]

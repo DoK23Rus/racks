@@ -8,7 +8,6 @@ class ReportHeaders:
     """
     Headers for report tables
     """
-
     devices_header_list: List[str] = [
         'Device number',
         'Status',
@@ -82,5 +81,5 @@ class ReportHeaders:
         'Site',
         'Department',
         'Region',
-        'Link to device card',
+        'Link to rack card',
     ]

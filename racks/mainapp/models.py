@@ -1,369 +1,293 @@
 from django.db import models
-from django.db.models.query import QuerySet, RawQuerySet
 from django.db.models.base import ModelBase
+from django.db.models.query import QuerySet
 
 
 class RegionManager(models.Manager):
-
+    """
+    Region manager
+    """
     def get_all_regions(self) -> QuerySet:
         """
-        All regions
+        Get all regions
         """
         return Region.objects.all()
 
 
 class DepartmentManager(models.Manager):
-
+    """
+    Department manager
+    """
     def get_all_departments(self) -> QuerySet:
         """
-        All departments
+        Get all departments
         """
         return Department.objects.all()
 
-    def get_department_name_for_department(self, pk: int) -> RawQuerySet:
-        """
-        Department name from department id
-        """
-        return Department.objects.raw("""SELECT department.id as id,
-                                      department.department_name
-                                      FROM department
-                                      WHERE
-                                      department.id = %s ;""",
-                                      [str(pk)])
-
-    def get_department_name_for_site(self, pk: int) -> RawQuerySet:
-        """
-        Department name from site id
-        """
-        return Department.objects.raw("""SELECT department.id as id,
-                                      department.department_name
-                                      FROM site
-                                      JOIN department ON
-                                      department.id =
-                                      site.department_id_id
-                                      WHERE
-                                      site.id = %s ;""",
-                                      [str(pk)])
-
-    def get_department_name_for_building(self, pk: int) -> RawQuerySet:
-        """
-        Department name from building id
-        """
-        return Department.objects.raw("""SELECT department.id as id,
-                                      department.department_name
-                                      FROM building
-                                      JOIN site ON
-                                      site.id = building.site_id_id
-                                      JOIN department on
-                                      department.id =
-                                      site.department_id_id
-                                      WHERE
-                                      building.id = %s ;""",
-                                      [str(pk)])
-
-    def get_department_name_for_room(self, pk: int) -> RawQuerySet:
-        """
-        Department name from room id
-        """
-        return Department.objects.raw("""SELECT department.id as id,
-                                      department.department_name
-                                      FROM room
-                                      JOIN building ON
-                                      building.id =
-                                      room.building_id_id
-                                      JOIN site ON
-                                      site.id =
-                                      building.site_id_id
-                                      JOIN department ON
-                                      department.id =
-                                      site.department_id_id
-                                      WHERE
-                                      room.id = %s ;""",
-                                      [str(pk)])
-
-    def get_department_name_for_rack(self, pk: int) -> RawQuerySet:
-        """
-        Department name from rack id
-        """
-        return Department.objects.raw("""SELECT department.id as id,
-                                      department.department_name
-                                      FROM rack
-                                      JOIN room ON
-                                      room.id =
-                                      rack.room_id_id
-                                      JOIN building ON
-                                      building.id =
-                                      room.building_id_id
-                                      JOIN site ON
-                                      site.id =
-                                      building.site_id_id
-                                      JOIN department ON
-                                      department.id =
-                                      site.department_id_id
-                                      WHERE
-                                      rack.id = %s ;""",
-                                      [str(pk)])
-
-    def get_department_name_for_device(self, pk: int) -> RawQuerySet:
-        """
-        Department name from device id
-        """
-        return Department.objects.raw("""SELECT department.id as id,
-                                      department.department_name
-                                      FROM device
-                                      JOIN rack ON
-                                      rack.id =
-                                      device.rack_id_id
-                                      JOIN room ON
-                                      room.id =
-                                      rack.room_id_id
-                                      JOIN building ON
-                                      building.id =
-                                      room.building_id_id
-                                      JOIN site ON
-                                      site.id =
-                                      building.site_id_id
-                                      JOIN department ON
-                                      department.id =
-                                      site.department_id_id
-                                      WHERE
-                                      device.id = %s ;""",
-                                      [str(pk)])
-
 
 class SiteManager(models.Manager):
-
-    def get_site(self, pk: int) -> ModelBase:
-        """
-        One site
-        """
-        return Site.objects.get(id=pk)
-
+    """
+    Site manager
+    """
     def get_all_sites(self) -> QuerySet:
         """
-        All sites
+        Get all sites
         """
         return Site.objects.all()
 
+    def get_site_department(self, pk):
+        """
+        Get select related department for site
+        """
+        return Site.objects \
+            .select_related('department_id') \
+            .get(id=pk)
+
 
 class BuildingManager(models.Manager):
+    """
+    Building manager
+    """
 
     def get_all_buildings(self) -> QuerySet:
         """
-        All buildings
+        Get all buildings
         """
         return Building.objects.all()
 
     def get_buildings_for_site(self, pk: int) -> QuerySet:
         """
-        Buildings for one site
+        Get buildings for single site
         """
         return Building.objects.filter(site_id_id=pk)
 
-    def get_building(self, pk: int) -> ModelBase:
+    def get_building_department(self, pk):
         """
-        One building
+        Get select related department for building
         """
-        return Building.objects.get(id=pk)
+        return Building.objects \
+            .select_related('site_id__'
+                            'department_id') \
+            .get(id=pk)
 
 
 class RoomManager(models.Manager):
+    """
+    Room manager
+    """
 
     def get_all_rooms(self) -> QuerySet:
         """
-        All rooms
+        Get all rooms
         """
         return Room.objects.all()
 
     def get_rooms_for_building(self, pk: int) -> QuerySet:
         """
-        Rooms for one building
+        Get rooms for single building
         """
         return Room.objects.filter(building_id_id=pk)
 
-    def get_room(self, pk: int) -> ModelBase:
+    def get_room_department(self, pk):
         """
-        One room
+        Get select related department for room
         """
-        return Room.objects.get(id=pk)
+        return Room.objects \
+            .select_related('building_id__'
+                            'site_id__'
+                            'department_id') \
+            .get(id=pk)
 
 
 class RackManager(models.Manager):
+    """
+    Rack manager
+    """
 
     def get_all_racks(self) -> QuerySet:
         """
-        All racks
+        Get all racks
         """
         return Rack.objects.all()
 
     def get_rack(self, pk: int) -> ModelBase:
         """
-        One rack
+        Get single rack
         """
         return Rack.objects.get(id=pk)
 
     def get_racks_for_rooms(self, pk: int) -> QuerySet:
         """
-        Racks for one room
+        Get racks for single room
         """
         return Rack.objects.filter(room_id_id=pk)
 
     def get_rack_vendors(self) -> QuerySet:
         """
-        Rack vendors
+        Get rack vendors
         """
         return Rack.objects.values_list('rack_vendor', flat=True)
 
     def get_rack_models(self) -> QuerySet:
         """
-        Rack models
+        Get rack models
         """
         return Rack.objects.values_list('rack_model', flat=True)
 
-    def get_fk_sequence(self, pk: int) -> RawQuerySet:
+    def get_rack_room(self, pk):
         """
-        Header data set (location)
+        Get select related room for rack
         """
-        return Rack.objects.raw("""SELECT rack.id as id,
-                                rack.rack_name,
-                                room.room_name,
-                                building.building_name,
-                                site.site_name,
-                                department.department_name,
-                                region.region_name
-                                FROM rack
-                                JOIN room ON
-                                room.id =
-                                rack.room_id_id
-                                JOIN building ON
-                                building.id =
-                                room.building_id_id
-                                JOIN site ON
-                                site.id =
-                                building.site_id_id
-                                JOIN department ON
-                                department.id =
-                                site.department_id_id
-                                JOIN region ON
-                                region.id =
-                                department.region_id_id
-                                WHERE
-                                rack.id = %s ;""",
-                                [str(pk)])
+        return Rack.objects \
+            .select_related('room_id').get(id=pk)
 
-    def get_all_racks_report(self) -> RawQuerySet:
+    def get_rack_building(self, pk):
         """
-        Racks report data
+        Get select related building for rack
         """
-        return Rack.objects.raw("""SELECT rack.id as id,
-                                rack.*,
-                                room.room_name,
-                                building.building_name,
-                                site.site_name,
-                                department.department_name,
-                                region.region_name
-                                FROM rack
-                                JOIN room ON
-                                room.id =
-                                rack.room_id_id
-                                JOIN building ON
-                                building.id =
-                                room.building_id_id
-                                JOIN site ON
-                                site.id =
-                                building.site_id_id
-                                JOIN department ON
-                                department.id =
-                                site.department_id_id
-                                JOIN region ON
-                                region.id =
-                                department.region_id_id;""")
+        return Rack.objects \
+            .select_related('room_id__'
+                            'building_id') \
+            .get(id=pk)
+
+    def get_rack_site(self, pk):
+        """
+        Get select related site for rack
+        """
+        return Rack.objects \
+            .select_related('room_id__'
+                            'building_id__'
+                            'site_id') \
+            .get(id=pk)
+
+    def get_rack_department(self, pk):
+        """
+        Get select related department for rack
+        """
+        return Rack.objects \
+            .select_related('room_id__'
+                            'building_id__'
+                            'site_id__'
+                            'department_id') \
+            .get(id=pk)
+
+    def get_rack_region(self, pk):
+        """
+        Get select related region for rack
+        """
+        return Rack.objects \
+            .select_related('room_id__'
+                            'building_id__'
+                            'site_id__'
+                            'department_id__'
+                            'region_id') \
+            .get(id=pk)
 
 
 class DeviceManager(models.Manager):
+    """
+    Device manager
+    """
 
     def get_device(self, pk: int) -> ModelBase:
         """
-        One device
+        Get single device
         """
         return Device.objects.get(id=pk)
 
-    def get_device_vendors(self) -> QuerySet:
-        """
-        Device vendors
-        """
-        return Device.objects.values_list('device_vendor', flat=True)
-
-    def get_device_models(self) -> QuerySet:
-        """
-        Device models
-        """
-        return Device.objects.values_list('device_model', flat=True)
-
     def get_devices_for_side(self, pk: int, side: bool) -> QuerySet:
         """
-        Devices in a rack for a specified side
+        Get devices for rack on one side
         """
         return Device.objects.filter(rack_id_id=pk) \
             .filter(frontside_location=side)
 
-    def get_devices_id_list(self, pk: int) -> QuerySet:
-        """
-        Device ids for one rack
-        """
-        return Device.objects.filter(rack_id_id=pk) \
-            .values_list('id', flat=True)
-
     def get_all_devices(self) -> QuerySet:
         """
-        All devices
+        Get all devices
         """
         return Device.objects.all()
 
     def get_devices_for_rack(self, pk: int) -> QuerySet:
         """
-        Devices for one rack
+        Get devices for rack
         """
         return Device.objects.filter(rack_id_id=pk)
 
-    def get_devices_power_w(self, pk: int) -> QuerySet:
+    def get_device_rack(self, pk):
         """
-        Devices W for one rack
+        Get select related rack for device
         """
-        return Device.objects.filter(rack_id_id=pk) \
-            .values_list('power_w', flat=True)
+        return Device.objects \
+            .select_related('rack_id') \
+            .get(id=pk)
 
-    def get_all_devices_report(self) -> RawQuerySet:
+    def get_device_room(self, pk):
         """
-        Devices report data
+        Get select related room for device
         """
-        return Device.objects.raw("""SELECT device.id as id,
-                                  device.*,
-                                  rack.rack_name,
-                                  room.room_name,
-                                  building.building_name,
-                                  site.site_name,
-                                  department.department_name,
-                                  region.region_name
-                                  FROM device
-                                  JOIN rack ON
-                                  rack.id =
-                                  device.rack_id_id
-                                  JOIN room ON
-                                  room.id =
-                                  rack.room_id_id
-                                  JOIN building ON
-                                  building.id =
-                                  room.building_id_id
-                                  JOIN site ON
-                                  site.id =
-                                  building.site_id_id
-                                  JOIN department ON
-                                  department.id =
-                                  site.department_id_id
-                                  JOIN region ON
-                                  region.id =
-                                  department.region_id_id;""")
+        return Device.objects \
+            .select_related('rack_id__'
+                            'room_id') \
+            .get(id=pk)
+
+    def get_device_building(self, pk):
+        """
+        Get select related building for device
+        """
+        return Device.objects \
+            .select_related('rack_id__'
+                            'room_id__'
+                            'building_id') \
+            .get(id=pk)
+
+    def get_device_site(self, pk):
+        """
+        Get select related site for device
+        """
+        return Device.objects \
+            .select_related('rack_id__'
+                            'room_id__'
+                            'building_id__'
+                            'site_id') \
+            .get(id=pk)
+
+    def get_device_department(self, pk):
+        """
+        Get select related department for device
+        """
+        return Device.objects \
+            .select_related('rack_id__'
+                            'room_id__'
+                            'building_id__'
+                            'site_id__'
+                            'department_id') \
+            .get(id=pk)
+
+    def get_device_region(self, pk):
+        """
+        Get select related region for device
+        """
+        return Device.objects \
+            .select_related('rack_id__'
+                            'room_id__'
+                            'building_id__'
+                            'site_id__'
+                            'department_id__'
+                            'region_id') \
+            .get(id=pk)
+
+    def get_device_vendors(self) -> QuerySet:
+        """
+        Get device vendors
+        """
+        return Device.objects.values_list('device_vendor', flat=True)
+
+    def get_device_models(self) -> QuerySet:
+        """
+        Get device models
+        """
+        return Device.objects.values_list('device_model', flat=True)
 
 
 class Region(models.Model):
@@ -693,6 +617,7 @@ class Device(models.Model):
     rack_id = models.ForeignKey(Rack,
                                 on_delete=models.CASCADE,
                                 verbose_name='Rack')
+    rack_name = True
     objects = DeviceManager()
 
     class Meta:

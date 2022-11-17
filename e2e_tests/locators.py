@@ -1,33 +1,11 @@
 """
-Locators, XPATHs and IDs
+Locators, and IDs
 """
-class Locators():
-    # XPATHs
-    accept_device_button_xpath = '/html/body/form/input[22]'
-    accept_rack_button_xpath = '/html/body/form/input[24]'
-    accept_button_xpath = '/html/body/form/input[3]'
-    add_site_button_xpath = '/html/body/ul/li[1]/ul/li[2]/a'
-    add_device_button_xpath = '/html/body/div[5]/a[3]'
-    add_building_button_xpath = '/html/body/ul/li[1]/ul/li[1]/ul/li[1]/a[1]'
-    add_room_button_xpath = ('/html/body/ul/li[1]/ul'
-                             '/li[1]/ul/li[1]/ul/li[1]/a[1]')
-    add_rack_button_xpath = ('/html/body/ul/li[1]/ul/li[1]/'
-                             'ul/li[1]/ul/li[1]/ul/li[1]/a[1]')
-    device_edit_button_xpath = '/html/body/div[5]/a[2]'
-    device_first_unit_xpath = '//*[@id="id_first_unit"]'
-    device_last_unit_xpath = '//*[@id="id_last_unit"]'
 
+
+class Locators():
     # locators
-    region_name_loc = "//*[contains(text(), 'Test region')]"
-    department_name_loc = "//*[contains(text(), 'Test department')]"
-    site_name_loc = "//*[contains(text(), 'Test site')]"
-    building_name_loc = "//*[contains(text(), 'Test building')]"
-    room_name_loc = "//*[contains(text(), 'Test room')]"
-    rack_name_loc = "//*[contains(text(), 'Test rack №1')]"
-    auth_loc = ("//*[contains(text(), "
-                "'You are logged in as: Selenium Testing')]")
     first_device_loc = "//*[contains(text(), 'Cisco 2960')]"
-    second_device_loc = "//*[contains(text(), 'Cisco 2911')]"
     unit_outside_loc = ("//*[contains(text(), "
                         "'There are no such units in this rack')]")
     unit_busy_loc = "//*[contains(text(), 'These units are busy')]"
@@ -41,13 +19,27 @@ class Locators():
                           "'A rack with the same name already exists')]")
 
     # IDs
-    first_unit_textbox_id = 'id_first_unit'
-    last_unit_textbox_id = 'id_last_unit'
-    site_name_textbox_id = 'id_site_name'
-    building_name_textbox_id = 'id_building_name'
-    room_name_textbox_id = 'id_room_name'
-    rack_name_textbox_id = 'id_rack_name'
-    rack_amount_textbox_id = 'id_rack_amount'
-    username_textbox_id = 'id_username'
-    password_textbox_id = 'id_password'
-    login_button_id = 'button'
+    region_name_id = "e2e_Test_region"
+    department_name_id = "e2e_Test_department"
+    site_name_id = "e2e_Test_site"
+    building_name_id = "e2e_Test_building"
+    room_name_id = "e2e_Test_room"
+    rack_name_id = "e2e_Test_rack_№1"
+    first_unit_textbox_id = 'e2e_first_unit'
+    last_unit_textbox_id = 'e2e_last_unit'
+    site_name_textbox_id = 'e2e_site_name'
+    building_name_textbox_id = 'e2e_building_name'
+    room_name_textbox_id = 'e2e_room_name'
+    rack_name_textbox_id = 'e2e_rack_name'
+    rack_amount_textbox_id = 'e2e_rack_amount'
+    username_textbox_id = 'e2e_username'
+    password_textbox_id = 'e2e_password'
+    login_button_id = 'e2e_login'
+    racks_map_id = 'e2e_racks_map'
+    device_edit_id = 'e2e_device_edit'
+    submit_button_id = 'e2e_submit_button'
+    add_site_button_id = 'e2e_Some_other_department_add_button'
+    add_device_button_id = 'e2e_add_device'
+    add_building_button_id = 'e2e_Test_site_add_button'
+    add_room_button_id = 'e2e_Test_building_add_button'
+    add_rack_button_id = 'e2e_Test_room_add_button'

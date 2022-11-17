@@ -32,4 +32,4 @@ class LoginPage():
         """
         Click login
         """
-        self.driver.find_element_by_tag_name(self.login_button_id).click()
+        self.driver.find_element_by_id(self.login_button_id).click()

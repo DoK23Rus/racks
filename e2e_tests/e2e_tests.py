@@ -4,18 +4,21 @@ Run
 ./manage.py shell < mock_database.py
 before testing
 """
-import unittest
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.common.keys import Keys
 import time
+import unittest
+
+import HtmlTestRunner
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.options import Options
+
+from params import Params
+from poms.device_page import DevicePage
+from poms.form_page import FormPage
+from poms.home_page import HomePage
 from poms.login_page import LoginPage
 from poms.racks_page import RacksPage
 from poms.units_page import UnitsPage
-from poms.device_page import DevicePage
-from poms.form_page import FormPage
-from params import Params
-import HtmlTestRunner
 
 
 class E2ETestCase(unittest.TestCase):
@@ -28,7 +31,7 @@ class E2ETestCase(unittest.TestCase):
         Setup and login
         """
         options = Options()
-        options.headless = True
+        options.headless = False
         self.driver = webdriver.Firefox(options=options,
                                         executable_path=Params.gecodriver_path)
         self.driver.implicitly_wait(10)
@@ -47,6 +50,8 @@ class E2ETestCase(unittest.TestCase):
         """
         Trying to move the device off the rack
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.open_rack()
         time.sleep(1)
@@ -58,6 +63,7 @@ class E2ETestCase(unittest.TestCase):
         device = DevicePage(self.driver)
         device.edit_device()
         time.sleep(1)
+        self.driver.switch_to.window(self.driver.window_handles[3])
         device_form = FormPage(self.driver)
         first_unit = device_form.use_first_unit_textbox()
         first_unit.send_keys(Keys.CONTROL + "a")
@@ -67,13 +73,15 @@ class E2ETestCase(unittest.TestCase):
         last_unit.send_keys(Keys.CONTROL + "a")
         last_unit.send_keys(Keys.DELETE)
         last_unit.send_keys(Params.first_device_last_unit_outside)
-        device_form.click_change()
+        device_form.click_submit()
         self.assertTrue(device_form.get_unit_outside_loc())
 
     def test_2_move_device_to_busy_place(self):
         """
         Trying to move the device to a busy place
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.open_rack()
         time.sleep(1)
@@ -85,6 +93,7 @@ class E2ETestCase(unittest.TestCase):
         device = DevicePage(self.driver)
         device.edit_device()
         time.sleep(1)
+        self.driver.switch_to.window(self.driver.window_handles[3])
         device_form = FormPage(self.driver)
         first_unit = device_form.use_first_unit_textbox()
         first_unit.send_keys(Keys.CONTROL + "a")
@@ -94,7 +103,7 @@ class E2ETestCase(unittest.TestCase):
         last_unit.send_keys(Keys.CONTROL + "a")
         last_unit.send_keys(Keys.DELETE)
         last_unit.send_keys(Params.first_device_last_unit_busy)
-        device_form.click_change()
+        device_form.click_submit()
         self.assertTrue(device_form.get_unit_busy_loc())
 
     def test_3_permitions(self):
@@ -102,10 +111,13 @@ class E2ETestCase(unittest.TestCase):
         Trying to add a new object
         in the area of responsibility of another department
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.expand_region()
         racks.add_site()
         time.sleep(1)
+        self.driver.switch_to.window(self.driver.window_handles[1])
         site_form = FormPage(self.driver)
         site_form.enter_site_name(Params.site_name)
         site_form.click_submit()
@@ -115,6 +127,8 @@ class E2ETestCase(unittest.TestCase):
         """
         Trying to add a new device outside the rack
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.open_rack()
         time.sleep(1)
@@ -132,13 +146,15 @@ class E2ETestCase(unittest.TestCase):
         last_unit.send_keys(Keys.CONTROL + "a")
         last_unit.send_keys(Keys.DELETE)
         last_unit.send_keys(Params.first_device_last_unit_outside)
-        device_form.click_change()
+        device_form.click_submit()
         self.assertTrue(device_form.get_unit_outside_loc())
 
     def test_5_add_device_to_busy_place(self):
         """
         Trying to add a new device to the busy space
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.open_rack()
         time.sleep(1)
@@ -156,16 +172,19 @@ class E2ETestCase(unittest.TestCase):
         last_unit.send_keys(Keys.CONTROL + "a")
         last_unit.send_keys(Keys.DELETE)
         last_unit.send_keys(Params.first_device_last_unit_busy)
-        device_form.click_change()
+        device_form.click_submit()
         self.assertTrue(device_form.get_unit_busy_loc())
 
     def test_6_add_same_name_building(self):
         """
         Trying to add a building with a duplicate name
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.add_new_building()
         time.sleep(1)
+        self.driver.switch_to.window(self.driver.window_handles[1])
         building_form = FormPage(self.driver)
         building_form.enter_building_name(Params.building_name)
         building_form.click_submit()
@@ -176,9 +195,12 @@ class E2ETestCase(unittest.TestCase):
         """
         Trying to add a room with a duplicate name
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.add_new_room()
         time.sleep(1)
+        self.driver.switch_to.window(self.driver.window_handles[1])
         room_form = FormPage(self.driver)
         room_form.enter_room_name(Params.room_name)
         room_form.click_submit()
@@ -189,13 +211,16 @@ class E2ETestCase(unittest.TestCase):
         """
         Trying to add a rack with a duplicate name
         """
+        home_page = HomePage(self.driver)
+        home_page.go_to_racks_map()
         racks = RacksPage(self.driver)
         racks.add_new_rack()
         time.sleep(1)
+        self.driver.switch_to.window(self.driver.window_handles[1])
         rack_form = FormPage(self.driver)
         rack_form.enter_rack_name(Params.rack_name)
         rack_form.enter_rack_amount(Params.rack_amount)
-        rack_form.click_new_rack_submit()
+        rack_form.click_submit()
         time.sleep(1)
         self.assertTrue(rack_form.get_rack_name_busy_loc())
 

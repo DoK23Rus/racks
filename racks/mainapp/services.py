@@ -1,24 +1,25 @@
 """
 Business logic classes
 """
-from typing import List, Dict, Set, Union, Optional
-from django.db.models.base import ModelBase
-from django.db.models.query import RawQuerySet
-from django.http.response import HttpResponse
-from mainapp.models import (
-    Department,
-    Site,
-    Building,
-    Room,
-    Rack,
-    Device,
-)
-import qrcode
-import os
-from django.conf import settings
-import csv
-from mainapp.data import ReportHeaders
 import datetime
+from typing import List, Optional, Set, NamedTuple
+
+from django.db.models.base import ModelBase
+from django.db.models.query import QuerySet
+
+from mainapp.models import (Building,
+                            Department,
+                            Device,
+                            Rack,
+                            Region,
+                            Room,
+                            Site)
+from mainapp.repository import (BuildingRepository,
+                                DepartmentRepository,
+                                DeviceRepository,
+                                RackRepository,
+                                RoomRepository,
+                                SiteRepository)
 
 
 def date():
@@ -28,60 +29,85 @@ def date():
     return datetime.datetime.today().strftime("%Y-%m-%d")
 
 
-class RackLayoutService:
+class OldUnits(NamedTuple):
+    old_first_unit: int
+    old_last_unit: int
+
+
+class NewUnits(NamedTuple):
+    new_first_unit: int
+    new_last_unit: int
+
+
+class DeviceCheckService:
     """
-    Services for rendering a single rack
+    Services for checking capabilities to add or update devices
     """
 
     @staticmethod
-    def get_start_list(pk: int, direction: bool) -> List[int]:
+    def get_old_units(pk: int) -> OldUnits:
         """
-        Units list
+        Get dict with already filled units
         """
-        rack_amount = Rack.objects.get_rack(pk).rack_amount
-        if not direction:
-            return list(range(1, int(rack_amount) + 1))
+        first_unit = DeviceRepository.get_first_unit(pk)
+        last_unit = DeviceRepository.get_last_unit(pk)
+        if first_unit > last_unit:
+            return OldUnits(last_unit, first_unit)
+        return OldUnits(first_unit, last_unit)
+
+    @staticmethod
+    def get_new_units(first_unit: int, last_unit: int) -> NewUnits:
+        """
+        Get dict with units for newly added device
+        """
+        if first_unit > last_unit:
+            return NewUnits(last_unit, first_unit)
+        return NewUnits(first_unit, last_unit)
+
+    @staticmethod
+    def check_unit_exist(units: NewUnits, rack_id: int) -> bool:
+        """
+        Units exist check
+        Are there any such units?
+        """
+        new_device_range = range(units.new_first_unit, units.new_last_unit + 1)
+        all_units_ramge = range(1, int(RackRepository.get_amount(rack_id)) + 1)
+        if not set(new_device_range).issubset(all_units_ramge):
+            return True
         else:
-            return list(range(1, int(rack_amount) + 1))[::-1]
+            return False
 
     @staticmethod
-    def get_first_units(pk: int,
-                        direction: bool,
-                        side: bool
-                        ) -> Dict[int, int]:
+    def check_unit_busy(side: bool,
+                        pk: int,
+                        new_units: NewUnits,
+                        old_units: Optional[OldUnits]
+                        ) -> bool:
         """
-        First units for each device
+        Units busy check
+        Are units busy? (adding, updating)
         """
-        first_units: Dict = {}
-        devices = Device.objects.get_devices_for_side(pk, side)
-        for device in devices:
-            last_unit = device.last_unit
-            first_unit = device.first_unit
-            if direction:
-                if last_unit > first_unit:
+        filled_list: list = []
+        queryset_devices = Device.objects.get_devices_for_side(pk, side)
+        if len(list(queryset_devices)) > 0:
+            for device in queryset_devices:
+                first_unit = device.first_unit
+                last_unit = device.last_unit
+                if first_unit > last_unit:
                     first_unit = device.last_unit
-                first_units[device.id] = first_unit
-            else:
-                if last_unit < first_unit:
-                    first_unit = device.last_unit
-                first_units[device.id] = first_unit
-        return first_units
-
-    @staticmethod
-    def get_rowspans(pk: int, side: bool) -> Dict[int, int]:
-        """
-        Rowspans for each device
-        """
-        rowspans: Dict = {}
-        devices = Device.objects.get_devices_for_side(pk, side)
-        for device in devices:
-            last_unit = device.last_unit
-            first_unit = device.first_unit
-            if last_unit < first_unit:
-                first_unit = device.last_unit
-                last_unit = device.first_unit
-            rowspans[device.id] = last_unit - first_unit + 1
-        return rowspans
+                    last_unit = device.first_unit
+                one_device_list = list(range(first_unit, last_unit + 1))
+                filled_list.extend(one_device_list)
+        if old_units:
+            device_old_range = range(old_units.old_first_unit,
+                                     old_units.old_last_unit + 1)
+            filled_list = list(set(filled_list) - set(device_old_range))
+        device_new_range = range(new_units.new_first_unit,
+                                 new_units.new_last_unit + 1)
+        if any(unit in set(device_new_range) for unit in filled_list):
+            return True
+        else:
+            return False
 
 
 class UserCheckService:
@@ -92,48 +118,34 @@ class UserCheckService:
     """
 
     @staticmethod
-    def get_department_raw_query(pk: int,
-                                 model: ModelBase
-                                 ) -> RawQuerySet:
-        """
-        Department raw query (get department name from join)
-        """
-        if model == Department:
-            department_raw_query = Department.objects \
-                .get_department_name_for_department(pk)
-        elif model == Site:
-            department_raw_query = Department.objects \
-                .get_department_name_for_site(pk)
-        elif model == Building:
-            department_raw_query = Department.objects \
-                .get_department_name_for_building(pk)
-        elif model == Room:
-            department_raw_query = Department.objects \
-                .get_department_name_for_room(pk)
-        elif model == Rack:
-            department_raw_query = Department.objects \
-                .get_department_name_for_rack(pk)
-        elif model == Device:
-            department_raw_query = Department.objects \
-                .get_department_name_for_device(pk)
-        else:
-            raise ValueError('model: ModelBase must be'
-                             'Department|Site|Building|Room|Rack|Device')
-        return department_raw_query
-
-    @staticmethod
     def check_for_groups(user_groups: List[str],
                          pk: int,
                          model: ModelBase
                          ) -> bool:
         """
-        Check user permission
+        Checks user permission
         """
-        department_raw_query = UserCheckService \
-            .get_department_raw_query(pk, model)
-        department_name = str([department_name
-                              for department_name
-                              in department_raw_query][0])
+        if model == Department:
+            department_name = DepartmentRepository \
+                .get_department_name(pk)
+        elif model == Site:
+            department_name = SiteRepository \
+                .get_department_name(pk)
+        elif model == Building:
+            department_name = BuildingRepository \
+                .get_department_name(pk)
+        elif model == Room:
+            department_name = RoomRepository \
+                .get_department_name(pk)
+        elif model == Rack:
+            department_name = RackRepository \
+                .get_department_name(pk)
+        elif model == Device:
+            department_name = DeviceRepository \
+                .get_department_name(pk)
+        else:
+            raise ValueError('model: ModelBase must be'
+                             'Department|Site|Building|Room|Rack|Device')
         if department_name in user_groups:
             return True
         return False
@@ -149,6 +161,7 @@ class UniqueCheckService:
                                      model: ModelBase
                                      ) -> Set[str]:
         """
+        Get unique objects names list
         Names of building, rooms and racks can be repeated
         within the area of responsibility of one department
         """
@@ -168,358 +181,6 @@ class UniqueCheckService:
         else:
             raise ValueError("key must be not None")
 
-    @staticmethod
-    def get_unique_device_vendors() -> List[str]:
-        """
-        Vendors list (for devices)
-        """
-        vendors = list(Device.objects.get_device_vendors().distinct())
-        vendors.sort()
-        return vendors
-
-    @staticmethod
-    def get_unique_device_models() -> List[str]:
-        """
-        Models list (for devices)
-        """
-        models = list(Device.objects.get_device_models().distinct())
-        models.sort()
-        return models
-
-    @staticmethod
-    def get_unique_rack_vendors() -> List[str]:
-        """
-        Vendors list (for racks)
-        """
-        vendors = list(Rack.objects.get_rack_vendors().distinct())
-        vendors.sort()
-        return vendors
-
-    @staticmethod
-    def get_unique_rack_models() -> List[str]:
-        """
-        Models list (for racks)
-        """
-        models = list(Rack.objects.get_rack_models().distinct())
-        models.sort()
-        return models
-
-
-class DeviceCheckService:
-    """
-    Services for checking capabilities to add or update devices
-    """
-
-    @staticmethod
-    def get_old_units(pk: int) -> Dict[str, int]:
-        """
-        Already filled units
-        """
-        units: Dict = {}
-        first_unit = Device.objects.get_device(pk).first_unit
-        last_unit = Device.objects.get_device(pk).last_unit
-        units['old_first_unit'] = first_unit
-        units['old_last_unit'] = last_unit
-        if units['old_first_unit'] > units['old_last_unit']:
-            units['old_last_unit'] = first_unit
-            units['old_first_unit'] = last_unit
-        return units
-
-    @staticmethod
-    def get_new_units(first_unit: int, last_unit: int) -> Dict[str, int]:
-        """
-        Units for newly added device
-        """
-        units: Dict = {}
-        units['new_first_unit'] = first_unit
-        units['new_last_unit'] = last_unit
-        if units['new_first_unit'] > units['new_last_unit']:
-            units['new_last_unit'] = first_unit
-            units['new_first_unit'] = last_unit
-        return units
-
-    @staticmethod
-    def get_all_units(pk: int) -> Dict[str, int]:
-        """
-        Total units per rack
-        """
-
-        units: Dict = {}
-        units['all_units'] = int(Rack.objects.get_rack(pk).rack_amount)
-        return units
-
-    @staticmethod
-    def check_unit_exist(units: Dict[str, int]) -> bool:
-        """
-        Are there any such units?
-        """
-        new_device_range = range(units['new_first_unit'],
-                                 units['new_last_unit'] + 1)
-        all_units_ramge = range(1, units['all_units'] + 1)
-        if not set(new_device_range).issubset(all_units_ramge):
-            return True
-        else:
-            return False
-
-    @staticmethod
-    def check_unit_busy(side: bool,
-                        units: Dict[str, int],
-                        pk: int,
-                        update: bool
-                        ) -> bool:
-        """
-        Are units busy? (adding, updating)
-        """
-        filled_list: List = []
-        queryset_devices = Device.objects.get_devices_for_side(pk, side)
-        if len(list(queryset_devices)) > 0:
-            for device in queryset_devices:
-                first_unit = device.first_unit
-                last_unit = device.last_unit
-                if first_unit > last_unit:
-                    first_unit = device.last_unit
-                    last_unit = device.first_unit
-                one_device_list = list(range(first_unit, last_unit + 1))
-                filled_list.extend(one_device_list)
-        if update:
-            device_old_range = range(units['old_first_unit'],
-                                     units['old_last_unit'] + 1)
-            filled_list = list(set(filled_list) - set(device_old_range))
-        device_new_range = range(units['new_first_unit'],
-                                 units['new_last_unit'] + 1)
-        if any(unit in set(device_new_range) for unit in filled_list):
-            return True
-        else:
-            return False
-
-
-class QrService:
-    """
-    Services for generate|delete|show QRs
-    """
-
-    @staticmethod
-    def get_img_name(pk: int, is_device: bool) -> str:
-        """
-        File name
-        """
-        if is_device:
-            img_name = f'/device_qr/d-{str(pk)}.png'
-        else:
-            img_name = f'/rack_qr/r-{str(pk)}.png'
-        return img_name
-
-    @staticmethod
-    def create_qr(data: str, pk: int, is_device: bool) -> None:
-        """
-        Generate QR
-        """
-        qr = qrcode.QRCode(version=1,
-                           box_size=2,
-                           error_correction=qrcode.constants.ERROR_CORRECT_M,
-                           border=1)
-        qr.add_data(data)
-        qr.make(fit=True)
-        img = qr.make_image(fill='black', back_color='white')
-        img.save(f'{settings.BASE_DIR}'
-                 f'/mainapp/static{QrService.get_img_name(pk, is_device)}')
-
-    @staticmethod
-    def remove_qr(pk: int, is_device: bool) -> None:
-        """
-        Delete QR
-        """
-        img_name = (f'{settings.BASE_DIR}'
-                    f'/mainapp/static{QrService.get_img_name(pk, is_device)}')
-        if os.path.isfile(img_name):
-            os.remove(img_name)
-
-    @staticmethod
-    def show_qr(data: str, pk: int, is_device: bool) -> str:
-        """
-        Show (create/update) QR
-        """
-        QrService.create_qr(data, pk, is_device)
-        return QrService.get_img_name(pk, is_device)
-
-    @staticmethod
-    def get_qr_data(pk: int, is_device: bool, url: str) -> str:
-        """
-        QR data
-        """
-        if is_device:
-            return f'{url}device_detail/{str(pk)}'
-        else:
-            return f'{url}rack_detail/{str(pk)}'
-
-
-class DraftService:
-    """
-    Services for rack drafts (for print)
-    """
-
-    @staticmethod
-    def get_side_name(front_side: bool) -> str:
-        """
-        Rack side
-        """
-        return 'FRONT SIDE' if front_side else 'BACK SIDE'
-
-    @staticmethod
-    def get_font_size(rack_size: int) -> str:
-        """
-        Font size
-        """
-        if rack_size <= 32:
-            return '100'
-        elif rack_size > 32 and rack_size <= 42:
-            return '75'
-        else:
-            return '50'
-
-
-class ReportService:
-    """
-    Services for generating csv reports
-    """
-
-    @staticmethod
-    def get_header_list(instance_name: str) -> List[str]:
-        """
-        Header for csv table
-        """
-        if instance_name == 'device':
-            return ReportHeaders.devices_header_list
-        elif instance_name == 'rack':
-            return ReportHeaders.racks_header_list
-        else:
-            raise ValueError('instance_name: str must be device|rack')
-
-    @staticmethod
-    def get_devices_data(address: str) -> List[List[str]]:
-        """
-        Data for devices
-        """
-        raw_device_report = Device.objects.get_all_devices_report()
-        devices_data: List = []
-        for device in raw_device_report:
-            devices_data.append([
-                device.id,
-                device.status,
-                device.device_vendor,
-                device.device_model,
-                device.device_serial_number,
-                device.device_description,
-                device.project,
-                device.ownership,
-                device.financially_responsible_person,
-                device.device_inventory_number,
-                device.responsible,
-                device.fixed_asset,
-                device.link,
-                device.first_unit,
-                device.last_unit,
-                'Yes' if device.frontside_location else 'No',
-                device.device_type,
-                device.device_hostname,
-                device.ip,
-                ReportService.get_device_stack(f'{settings.START_PAGE_URL}'
-                                               f'{address}',
-                                               device.device_stack),
-                device.ports_amout,
-                device.version,
-                device.power_type,
-                device.power_w,
-                device.power_v,
-                device.power_ac_dc,
-                device.updated_by,
-                device.updated_at,
-                device.rack_name,
-                device.room_name,
-                device.building_name,
-                device.site_name,
-                device.department_name,
-                device.region_name,
-                settings.START_PAGE_URL + address + str(device.id),
-            ])
-        return devices_data
-
-    @staticmethod
-    def get_racks_data(address: str) -> List[List[str]]:
-        """
-        Data for racks
-        """
-        raw_rack_report = Rack.objects.get_all_racks_report()
-        racks_data: List = []
-        for rack in raw_rack_report:
-            racks_data.append([
-                rack.id,
-                rack.rack_name,
-                rack.rack_amount,
-                rack.rack_vendor,
-                rack.rack_model,
-                rack.rack_description,
-                'Yes' if rack.numbering_from_bottom_to_top else 'No',
-                rack.responsible,
-                rack.rack_financially_responsible_person,
-                rack.rack_inventory_number,
-                rack.fixed_asset,
-                rack.link,
-                rack.row,
-                rack.place,
-                rack.rack_height,
-                rack.rack_width,
-                rack.rack_depth,
-                rack.rack_unit_width,
-                rack.rack_unit_depth,
-                rack.rack_type,
-                rack.rack_frame,
-                rack.rack_palce_type,
-                rack.max_load,
-                rack.power_sockets,
-                rack.power_sockets_ups,
-                'Yes' if rack.external_ups else 'No',
-                'Yes' if rack.cooler else 'No',
-                DataProcessingService.get_devices_power_w_sum(int(rack.id)),
-                rack.updated_by,
-                rack.updated_at,
-                rack.room_name,
-                rack.building_name,
-                rack.site_name,
-                rack.department_name,
-                rack.region_name,
-                f'{settings.START_PAGE_URL}{address}{str(rack.id)}',
-            ])
-        return racks_data
-
-    @staticmethod
-    def get_device_stack(device_link: str,
-                         device_stack: int
-                         ) -> Union[str, None]:
-        """
-        Link to backup device
-        """
-        if device_stack is not None:
-            return f'{device_link}{str(device_stack)}'
-        return None
-
-    @staticmethod
-    def get_responce(header_list: List[str],
-                     report_data: List[List[str]],
-                     file_name: str
-                     ) -> HttpResponse:
-        """
-        Get response
-        """
-        response = HttpResponse(content_type='text/csv')
-        response.write(u'\ufeff'.encode('utf8'))
-        writer = csv.writer(response, delimiter=';', dialect='excel')
-        writer.writerow(header_list)
-        for row in report_data:
-            writer.writerow(row)
-        response['Content-Disposition'] = f'attachment; filename="{file_name}"'
-        return response
-
 
 class DataProcessingService:
     """
@@ -528,5 +189,237 @@ class DataProcessingService:
 
     @staticmethod
     def get_devices_power_w_sum(pk: int) -> int:
-        power_w_list = Device.objects.get_devices_power_w(pk)
+        """
+        Get total power for single rack
+        """
+        power_w_list = DeviceRepository.get_devices_power_w(pk)
         return sum(power_w for power_w in power_w_list if power_w is not None)
+
+    @staticmethod
+    def update_rack_amount(data: dict, pk: int) -> dict:
+        """
+        Update rack_amount (prevent changing)
+        """
+        if data.get('rack_amount'):
+            data['rack_amount'] = RackRepository.get_amount(pk)
+            return data
+        return data
+
+    @staticmethod
+    def get_key_name(data: dict, model_name: str) -> str:
+        """
+        Get key name for different models
+        """
+        key_name = data.get(f"{model_name}_name")
+        if key_name:
+            return key_name
+        key_name = f"device " \
+            f"{str(data.get('device_vendor') or 'unspecified vendor')}, " \
+            f"{str(data.get('device_model') or 'unspecified model')}"
+        return key_name
+
+    @staticmethod
+    def get_instance_name(pk: int, model: ModelBase, model_name: str) -> str:
+        """
+        Get instance name for different models
+        """
+        if model != Device:
+            instance_name = getattr(model.objects.get(id=pk),
+                                    f"{model_name}_name")
+            return instance_name
+        device = Device.objects.get_device(pk)
+        device_vendor = device.device_vendor \
+            if device.device_vendor != '' else 'unspecified vendor'
+        device_model = device.device_model \
+            if device.device_model != '' else 'unspecified model'
+        instance_name = f"device {device_vendor}, {device_model}"
+        return instance_name
+
+
+class RepoService:
+    """
+    Service for repository layer calls and not serialized data(or primitives)
+    """
+
+    @staticmethod
+    def get_instance(model: ModelBase, pk: int) -> ModelBase:
+        """
+        Get model instance
+        """
+        return model.objects.get(id=pk)
+
+    @staticmethod
+    def get_devices_for_rack(pk: int) -> QuerySet:
+        """
+        Get devices for single rack
+        """
+        return Device.objects.get_devices_for_rack(pk)
+
+    @staticmethod
+    def get_all_racks() -> QuerySet:
+        """
+        Get all racks
+        """
+        return Rack.objects.get_all_racks()
+
+    @staticmethod
+    def get_all_devices() -> QuerySet:
+        """
+        Get all devices
+        """
+        return Device.objects.get_all_devices()
+
+    @staticmethod
+    def get_all_rooms() -> QuerySet:
+        """
+        Get all rooms
+        """
+        return Room.objects.get_all_rooms()
+
+    @staticmethod
+    def get_all_buildings() -> QuerySet:
+        """
+        Get all buildings
+        """
+        return Building.objects.get_all_buildings()
+
+    @staticmethod
+    def get_all_sites() -> QuerySet:
+        """
+        Get all sites
+        """
+        return Site.objects.get_all_sites()
+
+    @staticmethod
+    def get_all_departments() -> QuerySet:
+        """
+        Get all departments
+        """
+        return Department.objects.get_all_departments()
+
+    @staticmethod
+    def get_all_regions() -> QuerySet:
+        """
+        Get all regions
+        """
+        return Region.objects.get_all_regions()
+
+    @staticmethod
+    def get_rack_room_name(pk: int) -> str:
+        """
+        Get room name for a particular rack
+        """
+        return RackRepository.get_room_name(pk)
+
+    @staticmethod
+    def get_rack_building_name(pk: int) -> str:
+        """
+        Get building name for a particular rack
+        """
+        return RackRepository.get_building_name(pk)
+
+    @staticmethod
+    def get_rack_site_name(pk: int) -> str:
+        """
+        Get building name for a particular rack
+        """
+        return RackRepository.get_site_name(pk)
+
+    @staticmethod
+    def get_rack_department_name(pk: int) -> str:
+        """
+        Get department name for a particular rack
+        """
+        return RackRepository.get_department_name(pk)
+
+    @staticmethod
+    def get_rack_region_name(pk: int) -> str:
+        """
+        Get region name for a particular rack
+        """
+        return RackRepository.get_region_name(pk)
+
+    @staticmethod
+    def get_device_rack_name(pk: int) -> str:
+        """
+        Get rack name for a particular device
+        """
+        return DeviceRepository.get_rack_name(pk)
+
+    @staticmethod
+    def get_device_room_name(pk: int) -> str:
+        """
+        Get room name for a particular device
+        """
+        return DeviceRepository.get_room_name(pk)
+
+    @staticmethod
+    def get_device_building_name(pk: int) -> str:
+        """
+        Get building name for a particular device
+        """
+        return DeviceRepository.get_building_name(pk)
+
+    @staticmethod
+    def get_device_site_name(pk: int) -> str:
+        """
+        Get site name for a particular device
+        """
+        return DeviceRepository.get_site_name(pk)
+
+    @staticmethod
+    def get_device_department_name(pk: int) -> str:
+        """
+        Get department name for a particular device
+        """
+        return DeviceRepository.get_department_name(pk)
+
+    @staticmethod
+    def get_device_region_name(pk: int) -> str:
+        """
+        Get region name for a particular device
+        """
+        return DeviceRepository.get_region_name(pk)
+
+    @staticmethod
+    def get_device_rack_id(pk: int) -> int:
+        """
+        Get rack id for a particular device
+        """
+        return DeviceRepository.get_rack_id(pk)
+
+    @staticmethod
+    def get_device_vendors() -> List[Optional[str]]:
+        """
+        Get list of unique and sorted device vendors
+        """
+        device_vendors = DeviceRepository.get_device_vendors()
+        device_vendors.sort()
+        return device_vendors
+
+    @staticmethod
+    def get_device_models() -> List[Optional[str]]:
+        """
+        Get list of unique and sorted device models
+        """
+        device_models = DeviceRepository.get_device_models()
+        device_models.sort()
+        return device_models
+
+    @staticmethod
+    def get_rack_vendors() -> List[Optional[str]]:
+        """
+        Get list of unique and sorted rack vendors
+        """
+        rack_vendors = RackRepository.get_unique_rack_vendors()
+        rack_vendors.sort()
+        return rack_vendors
+
+    @staticmethod
+    def get_rack_models() -> List[Optional[str]]:
+        """
+        Get list of unique and sorted rack vendors
+        """
+        rack_models = RackRepository.get_unique_rack_models()
+        rack_models.sort()
+        return rack_models

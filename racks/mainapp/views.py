@@ -1,351 +1,95 @@
-from django.views.generic import DetailView, View
-from rest_framework.views import APIView
-from mainapp.utils import (
-    AuthMixin,
-    TreeDataMixin,
-    UnitsDataMixin,
-    BaseAddMixin,
-    BaseUpdateMixin,
-    BaseDeleteMixin,
-    BaseQrMixin,
-    QrListMixin,
-    UnitsPrintMixin,
-    BaseReportMixin,
-    GotoMixin,
-    RackDetailApiViewMixin,
-    DeviceDetailApiViewMixin,
-    RackListApiViewMixin,
-    DeviceListApiViewMixin,
-    BaseRackView,
-)
-from mainapp.forms import (
-    SiteForm,
-    BuildingForm,
-    RoomForm,
-    RackForm,
-    DeviceForm,
-)
-from mainapp.models import (
-    Department,
-    Site,
-    Building,
-    Room,
-    Rack,
-    Device,
-)
-from mainapp.services import DataProcessingService
+from typing import List
+
+from django.db.models.base import ModelBase
 from rest_framework import permissions
 from rest_framework.generics import ListAPIView
-from mainapp.serializers import RackSerializer, DeviceSerializer
-from rest_framework.permissions import BasePermissionMetaclass
 from rest_framework.serializers import SerializerMetaclass
-from django.db.models.base import ModelBase
-from typing import List, Dict
-from django.forms import Form
+from rest_framework.views import APIView
+
+from mainapp.mixins import (BaseApiAddMixin,
+                            BaseApiDeleteMixin,
+                            BaseApiGetMixin,
+                            BaseApiUpdateMixin,
+                            BuildingListApiMixin,
+                            DepartmentListApiMixin,
+                            DeviceListApiViewMixin,
+                            DeviceModelsApiMixin,
+                            DeviceVendorsApiMixin,
+                            RackDevicesApiMixin,
+                            RackListApiViewMixin,
+                            RackModelsApiMixin,
+                            RackVendorsApiMixin,
+                            RegionListApiMixin,
+                            RoomListApiMixin,
+                            SiteListApiMixin,
+                            UserApiMixin)
+from mainapp.models import (Building,
+                            Department,
+                            Device,
+                            Rack,
+                            Region,
+                            Room,
+                            Site)
+from mainapp.serializers import (BuildingSerializer,
+                                 DepartmentSerializer,
+                                 DeviceSerializer,
+                                 RackSerializer,
+                                 RegionSerializer,
+                                 RoomSerializer,
+                                 SiteSerializer)
 
 
-class TreeView(AuthMixin, TreeDataMixin, View):
+class SiteDetailApiView(BaseApiGetMixin, APIView):
     """
-    Racks map
-    """
-    template_name: str = 'tree.html'
-
-
-class UnitsView(AuthMixin, UnitsDataMixin, View):
-    """
-    Display rack layout with filled units
-    """
-    template_name: str = 'units.html'
-
-
-class RackView(AuthMixin, BaseRackView):
-    """
-    Rack detail view
-    """
-    model: ModelBase = Rack
-    template_name: str = 'rack_detail.html'
-    pk_url_kwarg: str = 'pk'
-
-
-class DeviceView(AuthMixin, DetailView):
-    """
-    Device detail view
-    """
-    model: ModelBase = Device
-    template_name: str = 'device_detail.html'
-    pk_url_kwarg: str = 'pk'
-
-
-class SiteAddView(AuthMixin, BaseAddMixin, View):
-    """
-    Site add view
-    """
-    form_class: Form = SiteForm
-    model: ModelBase = Department
-    template_name: str = 'add.html'
-    log_info: str = 'ADD SITE:'
-    success_message: str = 'Site added'
-    pk_name: str = 'department_id'
-    checks_list: List[str] = ['check_user']
-
-
-class SiteUpdateView(AuthMixin, BaseUpdateMixin, View):
-    """
-    Site update view
-    """
-    form_class: Form = SiteForm
-    model: ModelBase = Site
-    template_name: str = 'update.html'
-    log_info: str = 'UPDATE SITE:'
-    success_message: str = 'Site information changed'
-    checks_list: List[str] = ['check_user']
-    fk_model: ModelBase = Department
-
-
-class SiteDeleteView(AuthMixin, BaseDeleteMixin, View):
-    """
-    Site delete view
+    Site detail API view
     """
     model: ModelBase = Site
-    template_name: str = 'delete.html'
-    log_info: str = 'DELETE SITE:'
-    success_message: str = 'Site deleted'
-    checks_list: List[str] = ['check_user']
-    model_name: str = 'site'
-
-
-class BuildingAddView(AuthMixin, BaseAddMixin, View):
-    """
-    Building add view
-    """
-    form_class: Form = BuildingForm
-    model: ModelBase = Site
-    template_name: str = 'add.html'
-    log_info: str = 'ADD BUILDING:'
-    success_message: str = 'Building added'
-    error_message: str = 'A building with the same name already exists'
-    pk_name: str = 'site_id'
-    checks_list: List[str] = ['check_user', 'check_unique']
-
-
-class BuildingUpdateView(AuthMixin, BaseUpdateMixin, View):
-    """
-    Building update view
-    """
-    form_class: Form = BuildingForm
-    model: ModelBase = Building
-    fk_model: ModelBase = Site
-    template_name: str = 'update.html'
-    log_info: str = 'UPDATE BUILDING:'
-    success_message: str = 'Building information changed'
-    error_message: str = 'A building with the same name already exists'
-    checks_list: List[str] = ['check_user', 'check_unique']
-
-
-class BuildingDeleteView(AuthMixin, BaseDeleteMixin, View):
-    """
-    Building delete view
-    """
-    model: ModelBase = Building
-    template_name: str = 'delete.html'
-    log_info: str = 'DELETE BUILDING:'
-    success_message: str = 'Building deleted'
-    checks_list: List[str] = ['check_user']
-    model_name: str = 'building'
-
-
-class RoomAddView(AuthMixin, BaseAddMixin, View):
-    """
-    Room add view
-    """
-    form_class: Form = RoomForm
-    model: ModelBase = Building
-    template_name: str = 'add.html'
-    log_info: str = 'ADD ROOM:'
-    success_message: str = 'Room added'
-    error_message: str = 'A room with the same name already exists'
-    pk_name: str = 'building_id'
-    checks_list: List[str] = ['check_user', 'check_unique']
-
-
-class RoomUpdateView(AuthMixin, BaseUpdateMixin, View):
-    """
-    Room update view
-    """
-    form_class: Form = RoomForm
-    model: ModelBase = Room
-    fk_model: ModelBase = Building
-    template_name: str = 'update.html'
-    log_info: str = 'UPDATE ROOM:'
-    success_message: str = 'Room information changed'
-    error_message: str = 'A room with the same name already exists'
-    checks_list: List[str] = ['check_user', 'check_unique']
-
-
-class RoomDeleteView(AuthMixin, BaseDeleteMixin, View):
-    """
-    Room delete view
-    """
-    model: ModelBase = Room
-    template_name: str = 'delete.html'
-    log_info: str = 'DELETE ROOM:'
-    success_message: str = 'Room deleted'
-    checks_list: List[str] = ['check_user']
-    model_name: str = 'room'
-
-
-class RackAddView(AuthMixin, BaseAddMixin, View):
-    """
-    Rack add view
-    """
-    form_class: Form = RackForm
-    model: ModelBase = Room
-    template_name: str = 'add.html'
-    log_info: str = 'ADD RACK:'
-    success_message: str = 'Rack added'
-    error_message: str = 'A rack with the same name already exists'
-    pk_name: str = 'room_id'
-    checks_list: List[str] = ['check_user', 'check_unique']
-
-
-class RackUpdateView(AuthMixin, BaseUpdateMixin, View):
-    """
-    Rack update view
-    """
-    form_class: Form = RackForm
-    model: ModelBase = Rack
-    fk_model: ModelBase = Room
-    template_name: str = 'update.html'
-    log_info: str = 'UPDATE RACK:'
-    success_message: str = 'Rack information changed'
-    error_message: str = 'A rack with the same name already exists'
-    checks_list: List[str] = ['check_user', 'check_unique']
-
-
-class RackDeleteView(AuthMixin, BaseDeleteMixin, View):
-    """
-    Rack delete view
-    """
-    model: ModelBase = Rack
-    template_name: str = 'delete.html'
-    log_info: str = 'DELETE RACK:'
-    success_message: str = 'Rack deleted'
-    checks_list: List[str] = ['check_user']
-    model_name: str = 'rack'
-
-
-class DeviceAddView(AuthMixin, BaseAddMixin, View):
-    """
-    Device add view
-    """
-    form_class: Form = DeviceForm
-    model: ModelBase = Rack
-    template_name: str = 'add.html'
-    log_info: str = 'ADD DEVICE:'
-    success_message: str = 'Device added'
-    pk_name: str = 'rack_id'
-    checks_list: List[str] = ['check_user', 'check_device_for_add']
-
-
-class DeviceUpdateView(AuthMixin, BaseUpdateMixin, View):
-    """
-    Device update view
-    """
-    form_class: Form = DeviceForm
-    model: ModelBase = Device
-    fk_model: ModelBase = Rack
-    template_name: str = 'update.html'
-    log_info: str = 'UPDATE DEVICE:'
-    success_message: str = 'Device information changed'
-    checks_list: List[str] = ['check_user', 'check_device_for_update']
-
-
-class DeviceDeleteView(AuthMixin, BaseDeleteMixin, View):
-    """
-    Device delete view
-    """
-    model: ModelBase = Device
-    template_name: str = 'delete.html'
-    log_info: str = 'DELETE DEVICE:'
-    success_message: str = 'Device deleted'
-    checks_list: List[str] = ['check_user']
-    model_name: str = 'device'
-
-
-class DeviceQrView(AuthMixin, BaseQrMixin, View):
-    """
-    Device QR view
-    """
-    template_name: str = 'device_qr.html'
-    model_name: str = 'device'
-
-
-class RackQrView(AuthMixin, BaseQrMixin, View):
-    """
-    Rack QR view
-    """
-    template_name: str = 'rack_qr.html'
-    model_name: str = 'rack'
-
-
-class QrListView(AuthMixin, QrListMixin, View):
-    """
-    QR list view (rack QR + all devices QRs)
-    """
-    template_name: str = 'qr_list.html'
-
-
-class FrontUnitsPrintView(AuthMixin, UnitsPrintMixin, View):
-    """
-    Front side units print view
-    """
-    template_name: str = 'print.html'
-    front_side: bool = True
-
-
-class BackUnitsPrintView(AuthMixin, UnitsPrintMixin, View):
-    """
-    Back side units print view
-    """
-    template_name: str = 'print.html'
-    front_side: bool = False
-
-
-class ExportDevicesView(AuthMixin, BaseReportMixin, View):
-    """
-    Export devices.csv view
-    """
-    model_name: str = 'device'
-
-
-class ExportRacksView(AuthMixin, BaseReportMixin, View):
-    """
-    Export racks.csv view
-    """
-    model_name: str = 'rack'
-
-
-class GotoView(AuthMixin, GotoMixin, View):
-    """
-    Go to view
-    """
-    pass
-
-
-class RackDetailApiView(RackDetailApiViewMixin, APIView):
-    """
-    Rack detail API view
-    """
-    permission_classes: List[BasePermissionMetaclass] = [
+    serializer_class: SerializerMetaclass = SiteSerializer
+    permission_classes = [
         permissions.IsAuthenticated
     ]
 
 
-class DeviceDetailApiView(DeviceDetailApiViewMixin, APIView):
+class BuildingDetailApiView(BaseApiGetMixin, APIView):
+    """
+    Site detail API view
+    """
+    model: ModelBase = Building
+    serializer_class: SerializerMetaclass = BuildingSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RoomDetailApiView(BaseApiGetMixin, APIView):
+    """
+    Site detail API view
+    """
+    model: ModelBase = Room
+    serializer_class: SerializerMetaclass = RoomSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RackDetailApiView(BaseApiGetMixin, APIView):
+    """
+    Rack detail API view
+    """
+    model: ModelBase = Rack
+    serializer_class: SerializerMetaclass = RackSerializer
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class DeviceDetailApiView(BaseApiGetMixin, APIView):
     """
     Device detail API view
     """
-    permission_classes: List[BasePermissionMetaclass] = [
+    model: ModelBase = Device
+    serializer_class: SerializerMetaclass = DeviceSerializer
+    permission_classes = [
         permissions.IsAuthenticated
     ]
 
@@ -364,3 +108,302 @@ class DeviceListApiView(DeviceListApiViewMixin, ListAPIView):
     """
     model: ModelBase = Device
     serializer_class: SerializerMetaclass = DeviceSerializer
+
+
+class SiteAddApiView(BaseApiAddMixin, APIView):
+    """
+    Site add API view
+    """
+    model: ModelBase = Department
+    serializer_class: SerializerMetaclass = SiteSerializer
+    pk_name: str = 'department_id'
+    model_name: str = 'site'
+    checks_list: List[str] = ['check_user']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class SiteUpdateApiView(BaseApiUpdateMixin, APIView):
+    """
+    Site update API view
+    """
+    model: ModelBase = Site
+    fk_model: ModelBase = Department
+    serializer_class: SerializerMetaclass = SiteSerializer
+    fk_name: str = 'department_id'
+    model_name: str = 'site'
+    checks_list: List[str] = ['check_user']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class SiteDeleteApiView(BaseApiDeleteMixin, APIView):
+    """
+    Site delete API view
+    """
+    model: ModelBase = Site
+    model_name: str = 'site'
+    checks_list: List[str] = ['check_user']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class BuildingAddApiView(BaseApiAddMixin, APIView):
+    """
+    Building add API view
+    """
+    model: ModelBase = Site
+    serializer_class: SerializerMetaclass = BuildingSerializer
+    pk_name: str = 'site_id'
+    model_name: str = 'building'
+    checks_list: List[str] = ['check_user', 'check_unique']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class BuildingUpdateApiView(BaseApiUpdateMixin, APIView):
+    """
+    Building update API view
+    """
+    model: ModelBase = Building
+    fk_model: ModelBase = Site
+    serializer_class: SerializerMetaclass = BuildingSerializer
+    fk_name: str = 'site_id'
+    model_name: str = 'building'
+    checks_list: List[str] = ['check_user', 'check_unique']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class BuildingDeleteApiView(BaseApiDeleteMixin, APIView):
+    """
+    Building delete API view
+    """
+    model: ModelBase = Building
+    model_name: str = 'building'
+    checks_list: List[str] = ['check_user']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RoomAddApiView(BaseApiAddMixin, APIView):
+    """
+    Room add API view
+    """
+    model: ModelBase = Building
+    serializer_class: SerializerMetaclass = RoomSerializer
+    pk_name: str = 'building_id'
+    model_name: str = 'room'
+    checks_list: List[str] = ['check_user', 'check_unique']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RoomUpdateApiView(BaseApiUpdateMixin, APIView):
+    """
+    Room update API view
+    """
+    model: ModelBase = Room
+    fk_model: ModelBase = Building
+    serializer_class: SerializerMetaclass = RoomSerializer
+    fk_name: str = 'building_id'
+    model_name: str = 'room'
+    checks_list: List[str] = ['check_user', 'check_unique']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RoomDeleteApiView(BaseApiDeleteMixin, APIView):
+    """
+    Room delete API view
+    """
+    model: ModelBase = Room
+    model_name: str = 'room'
+    checks_list: List[str] = ['check_user']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RackAddApiView(BaseApiAddMixin, APIView):
+    """
+    Rack add API view
+    """
+    model: ModelBase = Room
+    serializer_class: SerializerMetaclass = RackSerializer
+    pk_name: str = 'room_id'
+    model_name: str = 'rack'
+    checks_list: List[str] = ['check_user', 'check_unique']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RackUpdateApiView(BaseApiUpdateMixin, APIView):
+    """
+    Rack update API view
+    """
+    model: ModelBase = Rack
+    fk_model: ModelBase = Room
+    serializer_class: SerializerMetaclass = RackSerializer
+    fk_name: str = 'room_id'
+    model_name: str = 'rack'
+    checks_list: List[str] = ['check_user', 'check_unique']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RackDeleteApiView(BaseApiDeleteMixin, APIView):
+    """
+    Rack delete API view
+    """
+    model: ModelBase = Rack
+    model_name: str = 'rack'
+    checks_list: List[str] = ['check_user']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class DeviceAddApiView(BaseApiAddMixin, APIView):
+    """
+    Device add API view
+    """
+    model: ModelBase = Rack
+    serializer_class: SerializerMetaclass = DeviceSerializer
+    pk_name: str = 'rack_id'
+    model_name: str = 'device'
+    checks_list: List[str] = ['check_user', 'check_device_for_add']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class DeviceUpdateApiView(BaseApiUpdateMixin, APIView):
+    """
+    Device update API view
+    """
+    model: ModelBase = Device
+    fk_model: ModelBase = Rack
+    serializer_class: SerializerMetaclass = DeviceSerializer
+    fk_name: str = 'rack_id'
+    model_name: str = 'device'
+    checks_list: List[str] = ['check_user', 'check_device_for_update']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class DeviceDeleteApiView(BaseApiDeleteMixin, APIView):
+    """
+    Device delete API view
+    """
+    model: ModelBase = Device
+    model_name: str = 'device'
+    checks_list: List[str] = ['check_user']
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RegionListApiView(RegionListApiMixin, ListAPIView):
+    """
+    Regions list API view
+    """
+    model: ModelBase = Region
+    serializer_class: SerializerMetaclass = RegionSerializer
+
+
+class DepartmentListApiView(DepartmentListApiMixin, ListAPIView):
+    """
+    Departments list API view
+    """
+    model: ModelBase = Department
+    serializer_class: SerializerMetaclass = DepartmentSerializer
+
+
+class SiteListApiView(SiteListApiMixin, ListAPIView):
+    """
+    Sites list API view
+    """
+    model: ModelBase = Site
+    serializer_class: SerializerMetaclass = SiteSerializer
+
+
+class BuildingListApiView(BuildingListApiMixin, ListAPIView):
+    """
+    Buildings list API view
+    """
+    model: ModelBase = Building
+    serializer_class: SerializerMetaclass = BuildingSerializer
+
+
+class RoomListApiView(RoomListApiMixin, ListAPIView):
+    """
+    Rooms list API view
+    """
+    model: ModelBase = Room
+    serializer_class: SerializerMetaclass = RoomSerializer
+
+
+class UserApiView(UserApiMixin, APIView):
+    """
+    User API view
+    """
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class DeviceVendorsApiView(DeviceVendorsApiMixin, APIView):
+    """
+    Device vendors API view
+    """
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class DeviceModelsApiView(DeviceModelsApiMixin, APIView):
+    """
+    Device models API view
+    """
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RackVendorsApiView(RackVendorsApiMixin, APIView):
+    """
+    Rack vendors API view
+    """
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RackModelsApiView(RackModelsApiMixin, APIView):
+    """
+    Rack models API view
+    """
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+
+
+class RackDevicesApiView(RackDevicesApiMixin, APIView):
+    """
+    Rack devices API view
+    """
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
