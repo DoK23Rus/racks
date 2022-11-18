@@ -93,9 +93,6 @@ db.sqlite3
 !**/migrations
 !**/migrations/__init__.py
 
-#qrs
-*.png
-
 #vue part
 node_modules
 /dist
