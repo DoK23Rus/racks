@@ -18,6 +18,7 @@ from mainapp.views import *
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, include
+from .yasg import urlpatterns as doc_urls
 
 
 urlpatterns = [
@@ -90,4 +91,5 @@ urlpatterns = [
      path('api/v1/rack_vendors', RackVendorsApiView.as_view()),
      path('api/v1/rack_models', RackModelsApiView.as_view()),
 ]
+urlpatterns += doc_urls
 urlpatterns += staticfiles_urlpatterns()

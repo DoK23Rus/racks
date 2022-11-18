@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'corsheaders',
+    'drf_yasg',
     'mainapp',
 ]
 
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'racks.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -111,7 +112,6 @@ LOGGING = {
     },
 }
 
-
 DATABASES = {
 
     'default': {
@@ -123,7 +123,17 @@ DATABASES = {
         'PORT': '5432',
         'ATOMIC_REQUESTS': True
     }
+}
 
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 # Password validation

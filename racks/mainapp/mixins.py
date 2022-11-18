@@ -254,8 +254,8 @@ class ChecksMixin(AbstractMixin):
         frontside_location = data.get('frontside_location')
         if not frontside_location: 
             return Result(False, "Missing required data - frontside_location")
-        old_units = DeviceCheckService.get_old_units(pk)
         rack_id = RepoService.get_device_rack_id(pk)
+        old_units = DeviceCheckService.get_old_units(pk)
         new_units = DeviceCheckService.get_new_units(first_unit, last_unit)
         # Check units exists
         if DeviceCheckService.check_unit_exist(new_units, rack_id):
