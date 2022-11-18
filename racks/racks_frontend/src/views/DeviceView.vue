@@ -1,4 +1,5 @@
 <template>
+  {{ device.deviceStack }}
   <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
     <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-xl">
       <Message :messageProps="messageProps" />
@@ -81,6 +82,7 @@
       <template v-else>
         Stack/Reserve (reserve ID):
       </template>
+    <br>
       <template v-if="device.portsAmout != null">
         Port capacity: <text class="text-slate-500">{{ device.portsAmout }}</text>
       </template>

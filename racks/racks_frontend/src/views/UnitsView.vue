@@ -251,7 +251,7 @@ export default {
       this.devices = await getObject('devices', '/rack_devices/', this.$route.params.id);
     },
     async setRack() {
-      this.rack = await getObject('rack', '/rack_detail/', this.$route.params.id);
+      this.rack = await getObject('rack', '/rack/', this.$route.params.id);
     },
     firstUnits(devices) {
       // Devices first units
