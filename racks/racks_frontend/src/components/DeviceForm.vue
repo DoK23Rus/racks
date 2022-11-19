@@ -7,7 +7,7 @@
         v-for="error of v$.form.firstUnit.$errors"
         :key="error.$uid"
       >
-      {{ error.$message }}
+      <div class="text-red-500">{{ error.$message }}</div>
       </p>
     <br>
       <label for="lastUnit">Last unit: </label>
@@ -100,9 +100,21 @@
     <br>
       <label for="deviceStack">Stack/Reserve (reserve ID): </label>
       <input class="block w-96" name="deviceStack" type="text" v-model="form.deviceStack"/>
+      <p
+        v-for="error of v$.form.deviceStack.$errors"
+        :key="error.$uid"
+      >
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
+      </p>
     <br>
       <label for="portsAmount">Port capacity: </label>
       <input class="block w-96" placeholder="For switches, patch panels, etc." name="portsAmount" type="text" v-model="form.portsAmout"/>
+      <p
+        v-for="error of v$.form.portsAmout.$errors"
+        :key="error.$uid"
+      >
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
+      </p>
     <br>
       <label for="version">Software version: </label>
       <input class="block w-96" name="version" type="text" v-model="form.version"/>
@@ -122,7 +134,7 @@
         v-for="error of v$.form.powerW.$errors"
         :key="error.$uid"
       >
-      {{ error.$message }}
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="powerV">Voltage (V): </label>
@@ -131,7 +143,7 @@
         v-for="error of v$.form.powerV.$errors"
         :key="error.$uid"
       >
-      {{ error.$message }}
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="powerACDC">AC/DC: </label>
@@ -177,8 +189,9 @@
 
 <script>
 import useVuelidate from '@vuelidate/core';
-import { required, numeric, minValue, ipAddress } from '@vuelidate/validators';
+import { required, numeric, minValue, ipAddress, helpers } from '@vuelidate/validators';
 import { getUnique } from '@/api';
+import { numericGTZOrNull } from '@/validators';
 
 
 export default {
@@ -205,7 +218,7 @@ export default {
         deviceModel: '',
         deviceHostname: '',
         ip: null,
-        deviceStack: null,
+        deviceStack: '',
         portsAmout: null,
         version: '',
         powerType: 'IEC C14 socket',
@@ -221,6 +234,7 @@ export default {
         deviceInventoryNumber: '',
         fixedAsset: ''
       },
+      numericOrNullValidationError: 'Value must be an integer and greater than zero'
     };
   },
   created() {
@@ -260,10 +274,10 @@ export default {
         firstUnit: {required, numeric, minValue: minValue(1)},
         lastUnit: {required, numeric, minValue: minValue(1)},
         ip: {ipAddress},
-        deviceStack: {numeric, minValue: minValue(1)},
-        portsAmout: {numeric, minValue: minValue(1)},
-        powerW: {numeric, minValue: minValue(1)},
-        powerV: {numeric, minValue: minValue(1)}
+        deviceStack: {numericGTZOrNull},
+        portsAmout: {numericGTZOrNull},
+        powerW: {numericGTZOrNull},
+        powerV: {numericGTZOrNull}
       }
     }
   },
@@ -281,10 +295,36 @@ export default {
       // Fill texbox with existing name (from unique list)
       document.getElementById(id).value = document.getElementById(choice).innerText;
     },
+    emptyDeviceStack() {
+      if (this.form.deviceStack === "") {
+        this.form.deviceStack = null;
+      }
+    },
+    emptyPortsAmount() {
+      if (this.form.portsAmout === "") {
+        this.form.portsAmout = null;
+      }
+    },
+    emptyPowerW() {
+      if (this.form.powerW === "") {
+        this.form.powerW = null;
+      }
+    },
+    emptyPowerV() {
+      if (this.form.powerV === "") {
+        this.form.powerV = null;
+      }
+    },
     emitData() {
       if (this.v$.$errors.length == 0) {
+        //Yes, this is a crutch, but quite simple and understandable
+        this.emptyDeviceStack();
+        this.emptyPortsAmount();
+        this.emptyPowerW();
+        this.emptyPowerV();
         this.$emit('on-submit', this.form);
       } else {
+        console.log(this.v$.$errors)
         confirm("Form not valid, please check the fields");
         window.scrollTo({top: 0, behavior: 'smooth'});
         return;

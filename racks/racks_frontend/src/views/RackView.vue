@@ -15,6 +15,11 @@
       @click="deleteRack(rack.id, rack.rackName)">
       Delete
     </button>
+    <br>
+      <div class="text-xs pb-4 text-slate-500">
+        {{ rack.regionName }} &#9002; {{ rack.departmentName }} &#9002; 
+        {{ rack.siteName }} &#9002; {{ rack.buildingName }} &#9002; {{ rack.roomName }}
+      </div>
   <div class="text-base">
       Rack name: <text class="text-slate-500">{{ rack.rackName }}</text>
     <br>
@@ -133,24 +138,11 @@
         External power backup supply system: <text class="text-slate-500">No</text>
       </template>
     <br>
-      TOTAL power consumption: <text class="text-slate-500">{{ rack.totalPowerW }}</text>
-    <br>
-    <br>
-      Room: <text class="text-slate-500">{{ rack.roomName }}</text>
-    <br>
-      Building: <text class="text-slate-500">{{ rack.buildingName }}</text>
-    <br>
-      Site: <text class="text-slate-500">{{ rack.siteName }}</text>
-    <br>
-      Department: <text class="text-slate-500">{{ rack.departmentName }}</text>
-    <br>
-      Region: <text class="text-slate-500">{{ rack.regionName }}</text>
-    <br>
     <br>
     <div class="text-xs">
-        Updated by: {{ rack.updatedBy }}
+        Updated by: <text class="text-slate-500">{{ rack.updatedBy }}</text>
       <br>
-        Updated at: {{ rack.updatedAt }}
+        Updated at: <text class="text-slate-500">{{ rack.updatedAt }}</text>
     </div>
   </div>
   </div>

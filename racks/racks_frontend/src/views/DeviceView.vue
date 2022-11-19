@@ -1,5 +1,4 @@
 <template>
-  {{ device.deviceStack }}
   <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
     <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-xl">
       <Message :messageProps="messageProps" />
@@ -16,6 +15,12 @@
       @click="deleteDevice(device.id, `${device.deviceVendor} ${device.deviceModel}`)">
       Delete
     </button>
+    <br>
+      <div class="text-xs pb-4 text-slate-500">
+        {{ device.regionName }} &#9002; {{ device.departmentName }} &#9002; 
+        {{ device.siteName }} &#9002; {{ device.buildingName }} &#9002; 
+        {{ device.roomName }} &#9002; {{ device.rackName }}
+      </div>
   <div class="text-base">
     Status: <text class="text-slate-500">{{ device.status }}</text>
     <br>
@@ -82,7 +87,6 @@
       <template v-else>
         Stack/Reserve (reserve ID):
       </template>
-    <br>
       <template v-if="device.portsAmout != null">
         Port capacity: <text class="text-slate-500">{{ device.portsAmout }}</text>
       </template>
@@ -109,27 +113,12 @@
       <template v-else>
         Voltage (V):
       </template>
-    <br>
-      AC/DC: <text class="text-slate-500">{{ device.powerACDC }}</text>
-    <br>
-    <br>
-      Rack: <text class="text-slate-500">{{ device.roomName }}</text>
-    <br>
-      Room: <text class="text-slate-500">{{ device.roomName }}</text>
-    <br>
-      Building: <text class="text-slate-500">{{ device.buildingName }}</text>
-    <br>
-      Site: <text class="text-slate-500">{{ device.siteName }}</text>
-    <br>
-      Department: <text class="text-slate-500">{{ device.departmentName }}</text>
-    <br>
-      Region: <text class="text-slate-500">{{ device.regionName }}</text>
   </div>
     <br>
       <div class="text-xs">
-          Updated by: {{ device.updatedBy }}
+          Updated by: <text class="text-slate-500">{{ device.updatedBy }}</text>
         <br>
-          Updated at: {{ device.updatedAt }}
+          Updated at: <text class="text-slate-500">{{ device.updatedAt }}</text>
       </div>
   </div>
 </template>

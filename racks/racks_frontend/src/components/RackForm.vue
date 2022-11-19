@@ -92,7 +92,7 @@
         v-for="error of v$.form.rackHeight.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="rackWidth">Rack width (mm): </label>
@@ -101,7 +101,7 @@
         v-for="error of v$.form.rackWidth.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="rackDepth">Rack depth (mm): </label>
@@ -110,7 +110,7 @@
         v-for="error of v$.form.rackDepth.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="rackUnitWidth">Useful rack width (inches): </label>
@@ -119,7 +119,7 @@
         v-for="error of v$.form.rackUnitWidth.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="rackUnitDepth">Useful rack depth (mm): </label>
@@ -128,7 +128,7 @@
         v-for="error of v$.form.rackUnitDepth.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="rackType">Execution variant: </label>
@@ -155,7 +155,7 @@
         v-for="error of v$.form.maxLoad.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError }}</div>
       </p>
     <br>
       <label for="powerSockets">Free power sockets: </label>
@@ -164,7 +164,7 @@
         v-for="error of v$.form.powerSockets.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError}}</div>
       </p>
     <br>
       <label for="powerSocketsUps">Free UPS power sockets: </label>
@@ -173,7 +173,7 @@
         v-for="error of v$.form.powerSocketsUps.$errors"
         :key="error.$uid"
       >
-      <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">{{ numericOrNullValidationError}}</div>
       </p>
     <br>
       <label for="externalUps">External power backup supply system: </label>
@@ -194,7 +194,7 @@
 import useVuelidate from '@vuelidate/core';
 import { required, numeric, minValue } from '@vuelidate/validators';
 import { getUnique } from '@/api';
-
+import { numericGTZOrNull, numericOrNull } from '@/validators';
 
 export default {
   name: 'RackForm',
@@ -239,7 +239,7 @@ export default {
         cooler: false,
         update: false
       },
-      message: {}
+      numericOrNullValidationError: 'Value must be an integer and greater than zero'
     };
   },
   created() {
@@ -281,14 +281,14 @@ export default {
       form: {
         rackName: {required},
         rackAmount: {required, numeric, minValue: minValue(1)},
-        rackHeight: {numeric, minValue: minValue(1)},
-        rackWidth: {numeric, minValue: minValue(1)},
-        rackDepth: {numeric, minValue: minValue(1)},
-        rackUnitWidth: {numeric, minValue: minValue(1)},
-        rackUnitDepth: {numeric, minValue: minValue(1)},
-        maxLoad: {numeric, minValue: minValue(1)},
-        powerSockets: {numeric, minValue: minValue(0)},
-        powerSocketsUps: {numeric, minValue: minValue(0)}
+        rackHeight: {numericGTZOrNull},
+        rackWidth: {numericGTZOrNull},
+        rackDepth: {numericGTZOrNull},
+        rackUnitWidth: {numericGTZOrNull},
+        rackUnitDepth: {numericGTZOrNull},
+        maxLoad: {numericGTZOrNull},
+        powerSockets: {numericOrNull},
+        powerSocketsUps: {numericOrNull}
       }
     }
   },
@@ -305,8 +305,57 @@ export default {
     copyOnClick(choice, id) {
       document.getElementById(id).value = document.getElementById(choice).innerText;
     },
+    emptyRackHeight() {
+      if (this.form.rackHeight === "") {
+        this.form.rackHeight = null;
+      }
+    },
+    emptyRackWidth() {
+      if (this.form.rackWidth === "") {
+        this.form.rackWidth = null;
+      }
+    },
+    emptyRackDepth() {
+      if (this.form.rackDepth === "") {
+        this.form.rackDepth = null;
+      }
+    },
+    emptyRackUnitWidth() {
+      if (this.form.rackUnitWidth === "") {
+        this.form.rackUnitWidth = null;
+      }
+    },
+    emptyRackUnitDepth() {
+      if (this.form.rackUnitDepth === "") {
+        this.form.rackUnitDepth = null;
+      }
+    },
+    emptyMaxLoad() {
+      if (this.form.maxLoad === "") {
+        this.form.maxLoad = null;
+      }
+    },
+    emptyPowerSockets() {
+      if (this.form.powerSockets === "") {
+        this.form.powerSockets = null;
+      }
+    },
+    emptyPowerSocketsUps() {
+      if (this.form.powerSocketsUps === "") {
+        this.form.powerSocketsUps = null;
+      }
+    },
     emitData() {
       if (this.v$.$errors.length == 0) {
+        // Yes, this is a crutch, but quite simple and understandable
+        this.emptyRackHeight();
+        this.emptyRackWidth();
+        this.emptyRackDepth();
+        this.emptyRackUnitWidth();
+        this.emptyRackUnitDepth();
+        this.emptyMaxLoad();
+        this.emptyPowerSockets();
+        this.emptyPowerSocketsUps();
         this.$emit('on-submit', this.form);
       } else {
         confirm("Form not valid, please check the fields");
