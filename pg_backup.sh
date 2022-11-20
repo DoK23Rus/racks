@@ -1,16 +1,16 @@
 #! /bin/bash
 
-user="slunk"
+user="USER"
 dir="/home/${USER}/pg_backup/"
 
 
 if [ ! -e "${dir}/archive" ]; then
-        mkdir -p "${dir}/archive"
+    mkdir -p "${dir}/archive"
 fi
 
 
-pg_user="racks"
-pg_pass="us33843"
+pg_user="PGUSER"
+pg_pass="PGPASS"
 filename="rack_db_dump-$(date +'%Y_%m_%d_%I_%M_%S').pgsql"
 max_files=7
 files=$(ls -1q $dir | wc -l)
