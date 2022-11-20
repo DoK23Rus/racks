@@ -1,13 +1,12 @@
 # Racks
 **Racks** is a prototype of a space accounting system for telecommunication cabinets and racks.
 
-**Tech stack:**
+**Stack:**
 - Python 3.10
 - Django 2.2
-- Django REST framework 0.1
+- Django REST framework 3.13
 - Vue 3.2
-- Tailwindcss 3.2
-- Gunicorn 19.9
+- TailwindCSS 3.2
 - PostgreSQL 10.18
 
 | ![tree](https://user-images.githubusercontent.com/96002587/202865424-5f57d33c-c63a-408e-9f22-4954feb4a296.png) |
