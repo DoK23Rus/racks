@@ -295,33 +295,23 @@ export default {
       // Fill texbox with existing name (from unique list)
       document.getElementById(id).value = document.getElementById(choice).innerText;
     },
-    emptyDeviceStack() {
-      if (this.form.deviceStack === "") {
-        this.form.deviceStack = null;
-      }
-    },
-    emptyPortsAmount() {
-      if (this.form.portsAmout === "") {
-        this.form.portsAmout = null;
-      }
-    },
-    emptyPowerW() {
-      if (this.form.powerW === "") {
-        this.form.powerW = null;
-      }
-    },
-    emptyPowerV() {
-      if (this.form.powerV === "") {
-        this.form.powerV = null;
-      }
+    emptyStringToNull(arr) {
+      arr.forEach((element) => {
+        if (this.form[element] === "") {
+          this.form[element] = null;
+        }
+      })
     },
     emitData() {
       if (this.v$.$errors.length == 0) {
         //Yes, this is a crutch, but quite simple and understandable
-        this.emptyDeviceStack();
-        this.emptyPortsAmount();
-        this.emptyPowerW();
-        this.emptyPowerV();
+        const fieldNamesArr = [
+          'deviceStack',
+          'portsAmout',
+          'powerW',
+          'powerV'
+        ]
+        this.emptyStringToNull(fieldNamesArr);
         this.$emit('on-submit', this.form);
       } else {
         console.log(this.v$.$errors)

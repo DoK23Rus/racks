@@ -305,57 +305,27 @@ export default {
     copyOnClick(choice, id) {
       document.getElementById(id).value = document.getElementById(choice).innerText;
     },
-    emptyRackHeight() {
-      if (this.form.rackHeight === "") {
-        this.form.rackHeight = null;
-      }
-    },
-    emptyRackWidth() {
-      if (this.form.rackWidth === "") {
-        this.form.rackWidth = null;
-      }
-    },
-    emptyRackDepth() {
-      if (this.form.rackDepth === "") {
-        this.form.rackDepth = null;
-      }
-    },
-    emptyRackUnitWidth() {
-      if (this.form.rackUnitWidth === "") {
-        this.form.rackUnitWidth = null;
-      }
-    },
-    emptyRackUnitDepth() {
-      if (this.form.rackUnitDepth === "") {
-        this.form.rackUnitDepth = null;
-      }
-    },
-    emptyMaxLoad() {
-      if (this.form.maxLoad === "") {
-        this.form.maxLoad = null;
-      }
-    },
-    emptyPowerSockets() {
-      if (this.form.powerSockets === "") {
-        this.form.powerSockets = null;
-      }
-    },
-    emptyPowerSocketsUps() {
-      if (this.form.powerSocketsUps === "") {
-        this.form.powerSocketsUps = null;
-      }
+    emptyStringToNull(arr) {
+      arr.forEach((element) => {
+        if (this.form[element] === "") {
+          this.form[element] = null;
+        }
+      })
     },
     emitData() {
       if (this.v$.$errors.length == 0) {
         // Yes, this is a crutch, but quite simple and understandable
-        this.emptyRackHeight();
-        this.emptyRackWidth();
-        this.emptyRackDepth();
-        this.emptyRackUnitWidth();
-        this.emptyRackUnitDepth();
-        this.emptyMaxLoad();
-        this.emptyPowerSockets();
-        this.emptyPowerSocketsUps();
+        const fieldNamesArr = [
+          'rackHeight',
+          'rackWidth',
+          'rackDepth',
+          'rackUnitWidth',
+          'rackUnitDepth',
+          'maxLoad',
+          'powerSockets',
+          'powerSocketsUps'
+        ]
+        this.emptyStringToNull(fieldNamesArr);
         this.$emit('on-submit', this.form);
       } else {
         confirm("Form not valid, please check the fields");
