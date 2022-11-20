@@ -17,6 +17,6 @@
 |:--:| 
 | *Rack scheme* |
 
-| ![device](https://user-images.githubusercontent.com/96002587/202865431-fbe66f61-e988-4425-97a0-a61498f76271.png) |
+| ![device](https://user-images.githubusercontent.com/96002587/202913588-40c33092-f082-41b4-bda2-e986c5b4e89a.png) |
 |:--:| 
 | *Device card* |

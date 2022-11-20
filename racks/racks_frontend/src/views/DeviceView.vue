@@ -87,6 +87,7 @@
       <template v-else>
         Stack/Reserve (reserve ID):
       </template>
+    <br>
       <template v-if="device.portsAmout != null">
         Port capacity: <text class="text-slate-500">{{ device.portsAmout }}</text>
       </template>
