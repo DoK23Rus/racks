@@ -478,7 +478,7 @@ class TestRepoService(TestCase):
         self.assertEqual(result, instance)
 
         # Rack - Test_rack1
-        rack1_id = Rack.objects.get(rack_name='Test_rack1').id 
+        rack1_id = Rack.objects.get(rack_name='Test_rack1').id
         instance = Rack.objects.get(id=rack1_id)
         result = RepoService.get_instance(Rack, rack1_id)
         self.assertEqual(result, instance)
@@ -491,7 +491,7 @@ class TestRepoService(TestCase):
 
     def test_get_devices_for_rack(self):
         # Rack - Test_rack1
-        rack1_id = Rack.objects.get(rack_name='Test_rack1').id 
+        rack1_id = Rack.objects.get(rack_name='Test_rack1').id
         instance = Device.objects.filter(rack_id_id=rack1_id)
         result = RepoService.get_devices_for_rack(rack1_id)
         self.assertQuerysetEqual(result, instance, ordered=False)
@@ -519,13 +519,13 @@ class TestRepoService(TestCase):
         buildings = Building.objects.get_all_buildings()
         result = RepoService.get_all_buildings()
         self.assertQuerysetEqual(result, buildings, ordered=False)
-    
+
     def test_get_all_sites(self):
         # All sites Queryset
         sites = Site.objects.get_all_sites()
         result = RepoService.get_all_sites()
         self.assertQuerysetEqual(result, sites, ordered=False)
-    
+
     def test_get_all_departments(self):
         # All departments Queryset
         departments = Department.objects.get_all_departments()

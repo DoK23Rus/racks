@@ -7,9 +7,13 @@ class RegionManager(models.Manager):
     """
     Region manager
     """
+
     def get_all_regions(self) -> QuerySet:
         """
         Get all regions
+
+        Returns:
+            all_regions (QuerySet): All regions queryset
         """
         return Region.objects.all()
 
@@ -18,9 +22,13 @@ class DepartmentManager(models.Manager):
     """
     Department manager
     """
+
     def get_all_departments(self) -> QuerySet:
         """
         Get all departments
+
+        Returns:
+            all_departments (QuerySet): All departments queryset
         """
         return Department.objects.all()
 
@@ -29,15 +37,25 @@ class SiteManager(models.Manager):
     """
     Site manager
     """
+
     def get_all_sites(self) -> QuerySet:
         """
         Get all sites
+
+        Returns:
+            all_sites (QuerySet): All sites queryset
         """
         return Site.objects.all()
 
-    def get_site_department(self, pk):
+    def get_site_department(self, pk: int) -> ModelBase:
         """
         Get select related department for site
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            site_department (ModelBase): Select related department for site
         """
         return Site.objects \
             .select_related('department_id') \
@@ -52,18 +70,34 @@ class BuildingManager(models.Manager):
     def get_all_buildings(self) -> QuerySet:
         """
         Get all buildings
+
+        Returns:
+            all_buildings (QuerySet): All buildings queryset
         """
         return Building.objects.all()
 
     def get_buildings_for_site(self, pk: int) -> QuerySet:
         """
         Get buildings for single site
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            buildings_for_site (QuerySet): Buildings for single site queryset
         """
         return Building.objects.filter(site_id_id=pk)
 
-    def get_building_department(self, pk):
+    def get_building_department(self, pk: int) -> ModelBase:
         """
         Get select related department for building
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            building_department (ModelBase): Select related department
+                for building
         """
         return Building.objects \
             .select_related('site_id__'
@@ -79,18 +113,33 @@ class RoomManager(models.Manager):
     def get_all_rooms(self) -> QuerySet:
         """
         Get all rooms
+
+        Returns:
+            all_rooms (QuerySet): All rooms queryset
         """
         return Room.objects.all()
 
     def get_rooms_for_building(self, pk: int) -> QuerySet:
         """
         Get rooms for single building
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            rooms_for_building (QuerySet): Rooms for single building
         """
         return Room.objects.filter(building_id_id=pk)
 
-    def get_room_department(self, pk):
+    def get_room_department(self, pk: int) -> ModelBase:
         """
         Get select related department for room
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            room_department (ModelBase): Select related department for room
         """
         return Room.objects \
             .select_related('building_id__'
@@ -107,52 +156,91 @@ class RackManager(models.Manager):
     def get_all_racks(self) -> QuerySet:
         """
         Get all racks
+
+        Returns:
+            all_racks (QuerySet): All racks queryset
         """
         return Rack.objects.all()
 
     def get_rack(self, pk: int) -> ModelBase:
         """
         Get single rack
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            rack (ModelBase): Single rack
         """
         return Rack.objects.get(id=pk)
 
     def get_racks_for_rooms(self, pk: int) -> QuerySet:
         """
         Get racks for single room
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            racks_for_rooms (QuerySet): Racks for single room
         """
         return Rack.objects.filter(room_id_id=pk)
 
     def get_rack_vendors(self) -> QuerySet:
         """
         Get rack vendors
+
+        Returns:
+            rack_vendors (QuerySet): Rack vendors
         """
         return Rack.objects.values_list('rack_vendor', flat=True)
 
     def get_rack_models(self) -> QuerySet:
         """
         Get rack models
+
+        Returns:
+            rack_models (QuerySet): Rack models
         """
         return Rack.objects.values_list('rack_model', flat=True)
 
-    def get_rack_room(self, pk):
+    def get_rack_room(self, pk: int) -> ModelBase:
         """
         Get select related room for rack
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            rack_room (ModelBase): Select related room for rack
         """
         return Rack.objects \
             .select_related('room_id').get(id=pk)
 
-    def get_rack_building(self, pk):
+    def get_rack_building(self, pk: int) -> ModelBase:
         """
         Get select related building for rack
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            rack_building (ModelBase): Select related building for rack
         """
         return Rack.objects \
             .select_related('room_id__'
                             'building_id') \
             .get(id=pk)
 
-    def get_rack_site(self, pk):
+    def get_rack_site(self, pk: int) -> ModelBase:
         """
         Get select related site for rack
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            rack_building (ModelBase): Select related building for rack
         """
         return Rack.objects \
             .select_related('room_id__'
@@ -160,9 +248,15 @@ class RackManager(models.Manager):
                             'site_id') \
             .get(id=pk)
 
-    def get_rack_department(self, pk):
+    def get_rack_department(self, pk: int) -> ModelBase:
         """
         Get select related department for rack
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            rack_department (ModelBase): Select related department for rack
         """
         return Rack.objects \
             .select_related('room_id__'
@@ -171,9 +265,15 @@ class RackManager(models.Manager):
                             'department_id') \
             .get(id=pk)
 
-    def get_rack_region(self, pk):
+    def get_rack_region(self, pk: int) -> ModelBase:
         """
         Get select related region for rack
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            rack_region (ModelBase): Select related region for rack
         """
         return Rack.objects \
             .select_related('room_id__'
@@ -192,12 +292,25 @@ class DeviceManager(models.Manager):
     def get_device(self, pk: int) -> ModelBase:
         """
         Get single device
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            device (ModelBase): Single device
         """
         return Device.objects.get(id=pk)
 
     def get_devices_for_side(self, pk: int, side: bool) -> QuerySet:
         """
         Get devices for rack on one side
+
+        Args:
+            pk (int): Primary key
+            side (bool): Side location (front - True, back - False)
+
+        Returns:
+            devices_for_side (QuerySet): Devices for rack on one side queryset
         """
         return Device.objects.filter(rack_id_id=pk) \
             .filter(frontside_location=side)
@@ -205,35 +318,62 @@ class DeviceManager(models.Manager):
     def get_all_devices(self) -> QuerySet:
         """
         Get all devices
+
+        Returns:
+            device (QuerySet): All devices queryset
         """
         return Device.objects.all()
 
     def get_devices_for_rack(self, pk: int) -> QuerySet:
         """
         Get devices for rack
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            devices_for_rack (QuerySet): Devices for rack queryset
         """
         return Device.objects.filter(rack_id_id=pk)
 
-    def get_device_rack(self, pk):
+    def get_device_rack(self, pk: int) -> ModelBase:
         """
         Get select related rack for device
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            device_rack (ModelBase): Select related rack for device
         """
         return Device.objects \
             .select_related('rack_id') \
             .get(id=pk)
 
-    def get_device_room(self, pk):
+    def get_device_room(self, pk: int) -> ModelBase:
         """
         Get select related room for device
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            device_room (ModelBase): Select related room for device
         """
         return Device.objects \
             .select_related('rack_id__'
                             'room_id') \
             .get(id=pk)
 
-    def get_device_building(self, pk):
+    def get_device_building(self, pk: int) -> ModelBase:
         """
         Get select related building for device
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            device_building (ModelBase): Select related building for device
         """
         return Device.objects \
             .select_related('rack_id__'
@@ -241,9 +381,15 @@ class DeviceManager(models.Manager):
                             'building_id') \
             .get(id=pk)
 
-    def get_device_site(self, pk):
+    def get_device_site(self, pk: int) -> ModelBase:
         """
         Get select related site for device
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            device_site (ModelBase): Select related site for device
         """
         return Device.objects \
             .select_related('rack_id__'
@@ -252,9 +398,15 @@ class DeviceManager(models.Manager):
                             'site_id') \
             .get(id=pk)
 
-    def get_device_department(self, pk):
+    def get_device_department(self, pk: int) -> ModelBase:
         """
         Get select related department for device
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            device_department (ModelBase): Select related department for device
         """
         return Device.objects \
             .select_related('rack_id__'
@@ -264,9 +416,15 @@ class DeviceManager(models.Manager):
                             'department_id') \
             .get(id=pk)
 
-    def get_device_region(self, pk):
+    def get_device_region(self, pk: int) -> ModelBase:
         """
         Get select related region for device
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            device_region (ModelBase): Select related region for device
         """
         return Device.objects \
             .select_related('rack_id__'
@@ -280,17 +438,26 @@ class DeviceManager(models.Manager):
     def get_device_vendors(self) -> QuerySet:
         """
         Get device vendors
+
+        Returns:
+            device_vendors (QuerySet): Device vendors queryset
         """
         return Device.objects.values_list('device_vendor', flat=True)
 
     def get_device_models(self) -> QuerySet:
         """
         Get device models
+
+        Returns:
+            device_models (QuerySet): Device models queryset
         """
         return Device.objects.values_list('device_model', flat=True)
 
 
 class Region(models.Model):
+    """
+    Region model
+    """
     region_name = models.CharField(max_length=128,
                                    unique=True,
                                    verbose_name='Region')
@@ -306,6 +473,9 @@ class Region(models.Model):
 
 
 class Department(models.Model):
+    """
+    Department model
+    """
     department_name = models.CharField(max_length=128,
                                        unique=True,
                                        verbose_name='Department')
@@ -324,6 +494,9 @@ class Department(models.Model):
 
 
 class Site(models.Model):
+    """
+    Site model
+    """
     site_name = models.CharField(max_length=128,
                                  unique=True,
                                  verbose_name='Site')
@@ -346,6 +519,9 @@ class Site(models.Model):
 
 
 class Building(models.Model):
+    """
+    Building model
+    """
     building_name = models.CharField(max_length=128,
                                      verbose_name='Building')
     updated_by = models.CharField(max_length=128,
@@ -367,6 +543,9 @@ class Building(models.Model):
 
 
 class Room(models.Model):
+    """
+    Room model (technical rooms, server rooms, etc)
+    """
     room_name = models.CharField(max_length=128,
                                  verbose_name='Room')
     updated_by = models.CharField(max_length=128,
@@ -388,6 +567,9 @@ class Room(models.Model):
 
 
 class Rack(models.Model):
+    """
+    Rack model (racks, telecom-cabinets, etc)
+    """
     rack_name = models.CharField(max_length=128,
                                  verbose_name='Rack name')
     rack_amount = models.IntegerField(verbose_name='Rack amount (units)')
@@ -500,6 +682,9 @@ class Rack(models.Model):
 
 
 class Device(models.Model):
+    """
+    Device model (switches, routers, servers, etc)
+    """
     first_unit = models.IntegerField(verbose_name='First unit')
     last_unit = models.IntegerField(verbose_name='Last unit')
     frontside_location = models \

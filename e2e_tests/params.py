@@ -1,6 +1,8 @@
 """
 Some params
 """
+
+
 class Params:
     selenium_username = 'selenium'
     selenium_password = 'sel_testing'

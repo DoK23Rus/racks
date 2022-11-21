@@ -91,6 +91,14 @@ class AbstractViewMixin(AbstractMixin):
             ) -> HttpResponse:
         """
         Abstract GET method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -102,6 +110,14 @@ class AbstractViewMixin(AbstractMixin):
              ) -> HttpResponse:
         """
         Abstract POST method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -113,6 +129,14 @@ class AbstractViewMixin(AbstractMixin):
             ) -> HttpResponse:
         """
         Abstract PUT method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -124,6 +148,14 @@ class AbstractViewMixin(AbstractMixin):
                ) -> HttpResponse:
         """
         Abstract DELETE method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -136,6 +168,10 @@ class LoggingMixin(AbstractMixin):
     def get_create_log(self, request: HttpRequest, data: dict) -> None:
         """
         Logging for add views
+
+        Args:
+            request (HttpRequest): Request
+            data (dict): Log data (add payload)
         """
         return logger.info(f'{date()} '
                            f'{request.user.username} '
@@ -149,6 +185,11 @@ class LoggingMixin(AbstractMixin):
                        ) -> None:
         """
         Logging for update views
+
+        Args:
+            request (HttpRequest): Request
+            old_data (dict): Old data (for checking difference)
+            data (dict): Log data (update payload)
         """
         return logger.info(f'{date()} '
                            f'{request.user.username} '
@@ -159,6 +200,10 @@ class LoggingMixin(AbstractMixin):
     def get_delete_log(self, request: HttpRequest, obj_name: str) -> None:
         """
         Logging for delete views
+
+        Args:
+            request (HttpRequest): Request
+            obj_name (str): Deleting object name
         """
         return logger.info(f'{date()} '
                            f'{request.user.username} '
@@ -182,6 +227,15 @@ class ChecksMixin(AbstractMixin):
         the model object belonging to the area
         of responsibility of the department (by primary keys)
         Does not allow you to change the data assigned to another department
+
+        Args:
+            request (HttpRequest): Request
+            pk (int): Primary key
+
+        Returns:
+            Result.sucsess == False (Result): Action prohibited
+                (read Result.message)
+            Result.sucsess == True (Result): Action allowed
         """
         user_groups = list(request.user.groups.values_list('name', flat=True))
         if not UserCheckService.check_for_groups(user_groups, pk, self.model):
@@ -198,6 +252,19 @@ class ChecksMixin(AbstractMixin):
                       ) -> Result:
         """
         Checks for unique names (only for Site|Building|Room)
+
+        Args:
+            pk (int): Primary key
+            fk (int): Foreign key (optional for update)
+            model (ModelBase): Model
+            fk_model (ModelBase): Foreign key model
+            instance_name (str): Instance name (optional for update and delete)
+            key_name (str): Key name (optional for add and update)
+
+        Returns:
+            Result.sucsess == False (Result): Action prohibited
+                (read Result.message)
+            Result.sucsess == True (Result): Action allowed
         """
         # For rack properties changes (name staing the same)
         if instance_name != key_name:
@@ -217,6 +284,15 @@ class ChecksMixin(AbstractMixin):
     def _check_device_for_add(self, pk: int, data: dict) -> Result:
         """
         Checks is it possible to add a new device
+
+        Args:
+            pk (int): Primary key
+            data (dict): Add payload data
+
+        Returns:
+            Result.sucsess == False (Result): Action prohibited
+                (read Result.message)
+            Result.sucsess == True (Result): Action allowed
         """
         first_unit = data.get('first_unit')
         if not first_unit:
@@ -244,6 +320,15 @@ class ChecksMixin(AbstractMixin):
     def _check_device_for_update(self, pk: int, data: dict) -> Result:
         """
         Checks is it possible to replace an existing device
+
+        Args:
+            pk (int): Primary key
+            data (dict): Add payload data
+
+        Returns:
+            Result.sucsess == False (Result): Action prohibited
+                (read Result.message)
+            Result.sucsess == True (Result): Action allowed
         """
         first_unit = data.get('first_unit')
         if not first_unit:
@@ -252,7 +337,7 @@ class ChecksMixin(AbstractMixin):
         if not last_unit:
             return Result(False, "Missing required data - last_unit")
         frontside_location = data.get('frontside_location')
-        if not frontside_location: 
+        if not frontside_location:
             return Result(False, "Missing required data - frontside_location")
         rack_id = RepoService.get_device_rack_id(pk)
         old_units = DeviceCheckService.get_old_units(pk)
@@ -281,6 +366,26 @@ class ChecksMixin(AbstractMixin):
                    ) -> List[Result]:
         """
         Get a list of check results
+
+        Args:
+            request (HttpRequest): Request
+            pk (int): Primary key
+            data (dict): Add payload data
+            fk (int): Foreign key (optional for update)
+            model (ModelBase): Model
+            fk_model (ModelBase): Foreign key model
+            instance_name (str): Instance name (optional for update and delete)
+            key_name (str): Key name (optional for add and update)
+
+        Raises:
+            ValueError ('check: str must be'
+                        'check_user|check_unique|'
+                        'check_device_for_add|'
+                        'check_device_for_update,'
+                        'other checks dont implemented'):
+                Check value is not in a list of implemented check names
+        Returns:
+            check_results_list (list): List of Result objects
         """
         check_results_list: List[Result] = []
         for check in self.checks_list:
@@ -314,6 +419,14 @@ class ChecksMixin(AbstractMixin):
     def get_checks_result(self, results_list: List[Result]) -> Result:
         """
         Get the final result of the checks
+
+        Args:
+            results_list (list): List of Result objects
+
+        Returns:
+            Result.sucsess == False (Result): Action prohibited (final)
+                (read Result.message)
+            Result.sucsess == True (Result): Action allowed (final)
         """
         for result in results_list:
             if not result.success:
@@ -340,24 +453,56 @@ class BaseApiMixin(AbstractViewMixin):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Get method plug
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): This method not provided
         """
         return Response({"invalid": "Get method not provided"}, status=400)
 
     def put(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Put method plug
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): This method not provided
         """
         return Response({"invalid": "Put method not provided"}, status=400)
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Post method plug
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): This method not provided
         """
         return Response({"invalid": "Post method not provided"}, status=400)
 
     def delete(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Delete method plug
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): This method not provided
         """
         return Response({"invalid": "Delete method not provided"}, status=400)
 
@@ -366,6 +511,16 @@ class BaseApiGetMixin(BaseApiMixin):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Base get method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with data
+            Response (HttpResponse): Object with this ID
+                does not exist (exception)
         """
         try:
             instance = RepoService.get_instance(self.model, kwargs['pk'])
@@ -386,6 +541,19 @@ class BaseApiAddMixin(BaseApiMixin,
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Base post method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Need fk for post method (exception)
+            Response (HttpResponse): Object with this ID
+                does not exist (exception)
+            Response (HttpResponse): Add not allowed (read result.message)
+            Response (HttpResponse): Sucsessfully added
+            Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
         # Some data validation
@@ -430,6 +598,19 @@ class BaseApiUpdateMixin(BaseApiMixin,
     def put(self, request: HttpResponse, *args, **kwargs) -> HttpResponse:
         """
         Base put method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Need id for post method (exception)
+            Response (HttpResponse): Object with this ID
+                does not exist (exception)
+            Response (HttpResponse): Update not allowed (read result.message)
+            Response (HttpResponse): Sucsessfully updated
+            Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
         # Some data validation
@@ -490,6 +671,19 @@ class BaseApiDeleteMixin(BaseApiMixin,
     def delete(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Base delete method
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Need id for post method (exception)
+            Response (HttpResponse): Object with this ID
+                does not exist (exception)
+            Response (HttpResponse): Delete not allowed (read result.message)
+            Response (HttpResponse): Sucsessfully dleted
+            Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
         # Some data validation
@@ -522,7 +716,15 @@ class RackDevicesApiMixin(BaseApiMixin):
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
-        Get devices for single rack
+        Get devices for a single rack
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with devices for a single rack
         """
         devices = RepoService.get_devices_for_rack(kwargs['pk'])
         serializaed_data = DeviceSerializer(devices, many=True).data
@@ -537,6 +739,14 @@ class DeviceVendorsApiMixin(BaseApiMixin):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Get device vendors list
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with list of device vendors
         """
         device_vendors = RepoService.get_device_vendors()
         return Response({"device_vendors": device_vendors})
@@ -550,6 +760,14 @@ class DeviceModelsApiMixin(BaseApiMixin):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Get device models list
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with list of device models
         """
         device_models = RepoService.get_device_models()
         return Response({"device_models": device_models})
@@ -563,6 +781,14 @@ class RackVendorsApiMixin(BaseApiMixin):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Get rack vendors list
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with list of device vendors
         """
         rack_vendors = RepoService.get_rack_vendors()
         return Response({"rack_vendors": rack_vendors})
@@ -576,6 +802,14 @@ class RackModelsApiMixin(BaseApiMixin):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Get rack models list
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with list of rack models
         """
         rack_models = RepoService.get_rack_models()
         return Response({"rack_models": rack_models})
@@ -629,5 +863,13 @@ class UserApiMixin(BaseApiMixin):
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Get username
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with username
         """
         return Response({"user": request.user.username})
