@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from decouple import config
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,9 +25,12 @@ SECRET_KEY = 'phh(-1t&3xe*0+asx(81wi(+o^*=42b1ajbc+p38_7ka6u%v&x'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = [os.environ.get('LOCALHOST')]
 
-CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:8080', 'http://127.0.0.1:8000']
+CORS_ALLOWED_ORIGINS = [
+    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('VUE_PORT')}",
+    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('DJANGO_PORT')}"
+]
 
 # Application definition
 
@@ -116,12 +119,12 @@ LOGGING = {
 DATABASES = {
 
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'racks_db',
-        'USER': config('PGUSER'),
-        'PASSWORD': config('PGPASS'),
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.environ.get('SQL_ENGINE'),
+        'NAME': os.environ.get('SQL_DATABASE'),
+        'USER': os.environ.get('SQL_USER'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD'),
+        'HOST': os.environ.get('SQL_HOST'),
+        'PORT': os.environ.get('SQL_PORT'),
         'ATOMIC_REQUESTS': True
     }
 }
@@ -175,4 +178,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-START_PAGE_URL = 'http://127.0.0.1:8000/'
+START_PAGE_URL = f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('DJANGO_PORT')}/"

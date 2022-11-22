@@ -3,7 +3,7 @@
 
 **Stack:**
 - Python 3.10
-- Django 2.2
+- Django 4.1
 - Django REST framework 3.13
 - Vue 3.2
 - TailwindCSS 3.2
