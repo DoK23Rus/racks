@@ -1,5 +1,5 @@
 """
-Checking and setuping users for E2E and API testing
+Checking and setuping users for E2E testing
 """
 from django.contrib.auth.models import User, Group
 from typing import List, Dict
@@ -54,6 +54,9 @@ class CheckUser:
     def get_user(self) -> User:
         """
         Get or create user
+
+        Returns:
+            some_user (User): User 
         """
         try:
             some_user = User.objects.get(username=self.username)
@@ -69,7 +72,7 @@ class CheckUser:
 
     def add_group(self) -> None:
         """
-        Add group
+        Add group and create token
         """
         some_user = self.get_user()
         if not some_user.groups.filter(name=self.group_name).exists():

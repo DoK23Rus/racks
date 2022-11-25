@@ -1,8 +1,5 @@
 """
-Run
-./manage.py shell < user_check.py
-./manage.py shell < mock_database.py
-before testing
+Smoke test
 """
 import time
 import unittest

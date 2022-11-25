@@ -1,5 +1,5 @@
 """
-Mock database setup for E2E and API testing
+Mock database setup for E2E testing
 """
 from mainapp.models import (
     Region,
