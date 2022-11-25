@@ -1,6 +1,6 @@
 # racks_frontend
 
-- Vue 3.2 
+- Vue.js 3.2 
 - Vuelidate 2.0
 - TailwindCSS 3.2
 
