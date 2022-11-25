@@ -13,11 +13,15 @@ LOG_FILE="/home/app/web/logs/racks_log.log"
 touch $LOG_FILE &&
 chmod 777 $LOG_FILE &&
 echo "\n--------$(date)-COMPOSE-RELOAD--------\n" >> $LOG_FILE &&
+flake8 ./mainapp &&
+mypy ./mainapp &&
 python manage.py test &&
 python manage.py flush --no-input &&
 python manage.py migrate &&
+# Create user for e2e testing
 python manage.py shell < user_check.py &&
 echo "--------USERS-CREATED--------"
+# Create mock data for e2e testing
 python manage.py shell < mock_database.py &&
 echo "--------MOCK-DATA-ADDED--------"
 
