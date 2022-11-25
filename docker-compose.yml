@@ -10,17 +10,19 @@ services:
       - 8000:8000
     volumes:
       - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/media
+      - log_volume:/home/app/web/logs
     env_file:
       - ./.env
     depends_on:
       - db
+
   db:
     image: postgres:12.0-alpine
     volumes:
-      - dmp_postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.db
+
   vue:
     build:
       context: ./racks_frontend
@@ -31,22 +33,21 @@ services:
       - 8080:8080
     depends_on:
       - web
+      
   nginx:
     build: ./nginx
     ports:
       - 80:80
     volumes:
       - static_volume:/home/app/web/static
-      - media_volume:/home/app/web/media
       - vue_dist:/app/dist
     depends_on:
       - web
       - vue
 
 
-
 volumes:
-  dmp_postgres_data:
+  postgres_data:
   static_volume:
-  media_volume:
+  log_volume:
   vue_dist:

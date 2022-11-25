@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import axios from 'axios'
 import HomeView from '@/views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import DeviceView from '@/views/DeviceView.vue';
@@ -107,14 +108,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
-    // If logged in, or going to the Login page.
     if (token || to.name === 'LoginView') {
-      // Continue to page.
       next()
     } else {
-      // Not logged in, redirect to login.
       next({name: 'LoginView'})
     }
-});
+  }
+);
+
 
 export default router

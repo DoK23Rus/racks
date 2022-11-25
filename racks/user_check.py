@@ -3,6 +3,7 @@ Checking and setuping users for E2E and API testing
 """
 from django.contrib.auth.models import User, Group
 from typing import List, Dict
+from rest_framework.authtoken.models import Token
 globals().update(locals())
 
 
@@ -73,6 +74,7 @@ class CheckUser:
         some_user = self.get_user()
         if not some_user.groups.filter(name=self.group_name).exists():
             some_user.groups.add(self.group_id)
+            Token.objects.get_or_create(user=some_user)
 
 
 globals().update(locals())

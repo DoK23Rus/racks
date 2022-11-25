@@ -105,7 +105,7 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'formatter': 'file',
-            'filename': BASE_DIR + '/log.log',
+            'filename': BASE_DIR + '/logs/racks_log.log',
         },
     },
     'loggers': {
