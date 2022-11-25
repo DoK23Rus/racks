@@ -11,7 +11,7 @@ fi
 
 LOG_FILE="/home/app/web/logs/racks_log.log"
 touch $LOG_FILE &&
-chmod 777 $LOG_FILE &&
+chmod 666 $LOG_FILE &&
 echo "\n--------$(date)-COMPOSE-RELOAD--------\n" >> $LOG_FILE &&
 flake8 ./mainapp &&
 mypy ./mainapp &&
