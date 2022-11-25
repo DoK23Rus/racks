@@ -7,7 +7,7 @@
 - Django REST framework 3.13
 - Vue 3.2
 - TailwindCSS 3.2
-- PostgreSQL 10.18
+- PostgreSQL 12.0
 
 | ![tree](https://user-images.githubusercontent.com/96002587/202865424-5f57d33c-c63a-408e-9f22-4954feb4a296.png) |
 |:--:| 
