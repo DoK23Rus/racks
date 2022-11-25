@@ -5,7 +5,7 @@
 - Python 3.10
 - Django 4.1
 - Django REST framework 3.13
-- Vue 3.2
+- Vue.js 3.2
 - TailwindCSS 3.2
 - PostgreSQL 12.0
 
