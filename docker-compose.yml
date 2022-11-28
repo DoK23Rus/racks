@@ -7,6 +7,12 @@ services:
       context: ./
       dockerfile: Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
+    healthcheck:
+      test: curl -f http://0.0.0.0:8000/api/v1 || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
     ports:
       - 8000:8000
     volumes:
@@ -26,9 +32,12 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - message-broker
-      - backend
-      - worker
+      backend:
+        condition: service_healthy
+      message-broker:
+        condition: service_started
+      worker:
+        condition: service_started
 
   worker:
     container_name: celery-worker
@@ -39,8 +48,10 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - message-broker
-      - backend
+      backend:
+        condition: service_healthy
+      message-broker:
+        condition: service_started
   
   message-broker:
     container_name: redis
