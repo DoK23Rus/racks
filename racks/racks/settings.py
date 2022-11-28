@@ -20,7 +20,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'phh(-1t&3xe*0+asx(81wi(+o^*=42b1ajbc+p38_7ka6u%v&x'
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -48,6 +47,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'django_extensions',
+    'django_celery_beat',
+    'django_celery_results',
     'mainapp',
 ]
 
@@ -180,3 +181,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 START_PAGE_URL = f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('DJANGO_PORT')}/"
+
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER')
+CELERY_RESULT_BACKEND = 'django-db'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1'
+    }
+}
+
+CELERY_CACHE_BACKEND = 'default'

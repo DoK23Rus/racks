@@ -1,7 +1,8 @@
-version: '1'
+version: '3.8'
 
 services:
-  web:
+  backend:
+    container_name: django
     build:
       context: ./
       dockerfile: Dockerfile
@@ -14,16 +15,47 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - db
+      - database
+  
+  cron:
+    container_name: celery-beat
+    build: .
+    entrypoint: celery -A racks beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - backups_volume:/home/app/web/backup
+    env_file:
+      - ./.env
+    depends_on:
+      - message-brocker
+      - backend
+      - worker
 
-  db:
+  worker:
+    container_name: celery-worker
+    build: .
+    entrypoint: celery -A racks worker -l INFO
+    volumes:
+      - backups_volume:/home/app/web/backup
+    env_file:
+      - ./.env
+    depends_on:
+      - message-brocker
+      - backend
+  
+  message-brocker:
+    container_name: redis
+    image: redis:6.2.7-alpine
+
+  database:
+    container_name: postgres
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.db
 
-  vue:
+  frontend:
+    container_name: vue
     build:
       context: ./racks_frontend
       dockerfile: Dockerfile
@@ -32,9 +64,10 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - web
+      - backend
       
-  nginx:
+  web-server:
+    container_name: nginx
     build: ./nginx
     ports:
       - 80:80
@@ -42,12 +75,13 @@ services:
       - static_volume:/home/app/web/static
       - vue_dist:/app/dist
     depends_on:
-      - web
-      - vue
+      - backend
+      - frontend
 
 
 volumes:
   postgres_data:
   static_volume:
   log_volume:
+  backups_volume:
   vue_dist:

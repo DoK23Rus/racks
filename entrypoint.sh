@@ -13,9 +13,9 @@ LOG_FILE="/home/app/web/logs/racks_log.log"
 touch $LOG_FILE &&
 chmod 666 $LOG_FILE &&
 echo "\n--------$(date)-COMPOSE-RELOAD--------\n" >> $LOG_FILE &&
+python manage.py test &&
 flake8 ./mainapp &&
 mypy ./mainapp &&
-python manage.py test &&
 python manage.py flush --no-input &&
 python manage.py migrate &&
 # Create user for e2e testing
