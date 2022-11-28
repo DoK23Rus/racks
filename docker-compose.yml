@@ -26,7 +26,7 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - message-brocker
+      - message-broker
       - backend
       - worker
 
@@ -39,10 +39,10 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - message-brocker
+      - message-broker
       - backend
   
-  message-brocker:
+  message-broker:
     container_name: redis
     image: redis:6.2.7-alpine
 
