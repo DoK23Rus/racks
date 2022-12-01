@@ -6,7 +6,7 @@ import axios from 'axios'
 import './assets/tailwind.css'
 
 
-axios.defaults.baseURL = 'http://backend:8000';
+axios.defaults.baseURL = process.env.VUE_APP_AXIOS_URL;
 
 //Catch expired token
 axios.interceptors.response.use((response) => {

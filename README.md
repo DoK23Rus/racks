@@ -11,9 +11,10 @@
 - PostgreSQL 12.0
 - Redis 6.2.7 
 
+
 ### Docker-compose profiles
 
-For only dev environment run:
+For dev environment run:
 ```
 docker-compose --profile dev up
 ```

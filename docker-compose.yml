@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+# Dev containers
   backend:
     container_name: django
     domainname: backend
@@ -20,6 +21,7 @@ services:
       - log_volume:/home/app/web/logs
     env_file:
       - ./.env
+      - ./e2e_tests/.env_test
     profiles: ['dev', 'test']
     depends_on:
       - database
@@ -67,12 +69,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - ./.env_db
     profiles: ['dev', 'test']
 
   frontend:
     container_name: vue
     domainname: frontend
+    command: npm run serve
     build:
       context: ./racks_frontend
       dockerfile: Dockerfile
@@ -103,20 +106,21 @@ services:
       - backend
       - frontend
 
+# E2E testing containers
   selenium:
     container_name: chrome
     image: selenium/standalone-chrome
     extra_hosts:
       - host.docker.internal:host-gateway
     env_file:
-      - ./.env
+      - ./e2e_tests/.env_test
     volumes:
       - /dev/shm:/dev/shm
     ports:
       - 4444:4444
     profiles: ['test']
     depends_on:
-      - frontend
+      - frontend-testing
       - backend
   
   test-runner:
@@ -126,17 +130,38 @@ services:
       dockerfile: Dockerfile
     command: python e2e_tests.py
     env_file:
-      - ./.env
+      - ./e2e_tests/.env_test
     volumes:
       - test_results:/home/app/test/test_results
     profiles: ['test']
     depends_on:
       backend:
         condition: service_healthy
-      frontend:
+      frontend-testing:
         condition: service_healthy
       selenium:
         condition: service_started
+  
+  frontend-testing:
+    container_name: vue-testing
+    domainname: frontend-testing
+    command: npm run serve -- --port 8081
+    build:
+      context: ./racks_frontend
+      dockerfile: Dockerfile_test
+    healthcheck:
+      test: curl -f http://0.0.0.0:8081 || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
+    volumes:
+      - vue_dist:/app/dist
+    ports:
+      - 8081:8081
+    profiles: ['test']
+    depends_on:
+      - backend
 
 
 volumes:
