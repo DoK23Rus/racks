@@ -86,8 +86,6 @@ target/
 __pycache__/
 local_settings.py
 
-.env
-.env.db
 db.sqlite3
 
 #migrations
@@ -117,3 +115,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# test
+TestResults___main__*

@@ -29,7 +29,9 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 CORS_ALLOWED_ORIGINS = [
     f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('VUE_PORT')}",
-    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('DJANGO_PORT')}"
+    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('DJANGO_PORT')}",
+    f"http://{os.environ.get('FRONTEND')}:{os.environ.get('VUE_PORT')}",
+    f"http://{os.environ.get('BACKEND')}:{os.environ.get('DJANGO_PORT')}"
 ]
 
 # Application definition

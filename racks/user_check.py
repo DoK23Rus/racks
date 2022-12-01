@@ -4,24 +4,8 @@ Checking and setuping users for E2E testing
 from django.contrib.auth.models import User, Group
 from typing import List, Dict
 from rest_framework.authtoken.models import Token
+from users_data import users, group_name
 globals().update(locals())
-
-
-group_name: str = 'Test department'
-users: Dict = [
-    {
-        'username': 'selenium',
-        'password': 'sel_testing',
-        'first_name': 'Selenium',
-        'last_name': 'Tester'
-    },
-    {
-        'username': 'api',
-        'password': 'api_testing',
-        'first_name': 'Api',
-        'last_name': 'Tester'
-    },
-]
 
 
 def get_group_id(group_name: str) -> int:
@@ -56,7 +40,7 @@ class CheckUser:
         Get or create user
 
         Returns:
-            some_user (User): User 
+            some_user (User): User
         """
         try:
             some_user = User.objects.get(username=self.username)

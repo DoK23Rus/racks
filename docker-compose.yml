@@ -3,10 +3,10 @@ version: '3.8'
 services:
   backend:
     container_name: django
+    domainname: backend
     build:
       context: ./
       dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
     healthcheck:
       test: curl -f http://0.0.0.0:8000/api/v1 || exit 1
       interval: 5s
@@ -20,6 +20,7 @@ services:
       - log_volume:/home/app/web/logs
     env_file:
       - ./.env
+    profiles: ['dev', 'test']
     depends_on:
       - database
   
@@ -31,6 +32,7 @@ services:
       - backups_volume:/home/app/web/backup
     env_file:
       - ./.env
+    profiles: ['dev', 'test']
     depends_on:
       backend:
         condition: service_healthy
@@ -47,6 +49,7 @@ services:
       - backups_volume:/home/app/web/backup
     env_file:
       - ./.env
+    profiles: ['dev', 'test']
     depends_on:
       backend:
         condition: service_healthy
@@ -56,6 +59,7 @@ services:
   message-broker:
     container_name: redis
     image: redis:6.2.7-alpine
+    profiles: ['dev', 'test']
 
   database:
     container_name: postgres
@@ -63,17 +67,26 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.db
+      - ./.env
+    profiles: ['dev', 'test']
 
   frontend:
     container_name: vue
+    domainname: frontend
     build:
       context: ./racks_frontend
       dockerfile: Dockerfile
+    healthcheck:
+      test: curl -f http://0.0.0.0:8080 || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
     volumes:
       - vue_dist:/app/dist
     ports:
       - 8080:8080
+    profiles: ['dev', 'test']
     depends_on:
       - backend
       
@@ -85,9 +98,45 @@ services:
     volumes:
       - static_volume:/home/app/web/static
       - vue_dist:/app/dist
+    profiles: ['dev', 'test']
     depends_on:
       - backend
       - frontend
+
+  selenium:
+    container_name: chrome
+    image: selenium/standalone-chrome
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    env_file:
+      - ./.env
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - 4444:4444
+    profiles: ['test']
+    depends_on:
+      - frontend
+      - backend
+  
+  test-runner:
+    container_name: e2e_tests
+    build:
+      context: ./e2e_tests
+      dockerfile: Dockerfile
+    command: python e2e_tests.py
+    env_file:
+      - ./.env
+    volumes:
+      - test_results:/home/app/test/test_results
+    profiles: ['test']
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+      selenium:
+        condition: service_started
 
 
 volumes:
@@ -95,4 +144,5 @@ volumes:
   static_volume:
   log_volume:
   backups_volume:
+  test_results:
   vue_dist:

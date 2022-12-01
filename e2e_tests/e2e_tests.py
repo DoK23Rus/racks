@@ -1,13 +1,13 @@
 """
 Smoke test
 """
+import os
 import time
 import unittest
 
 import HtmlTestRunner
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.firefox.options import Options
 
 from params import Params
 from poms.device_page import DevicePage
@@ -16,6 +16,7 @@ from poms.home_page import HomePage
 from poms.login_page import LoginPage
 from poms.racks_page import RacksPage
 from poms.units_page import UnitsPage
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class E2ETestCase(unittest.TestCase):
@@ -27,16 +28,20 @@ class E2ETestCase(unittest.TestCase):
         """
         Setup and login
         """
-        options = Options()
-        options.headless = False
-        self.driver = webdriver.Firefox(options=options,
-                                        executable_path=Params.gecodriver_path)
+        options = webdriver.ChromeOptions()
+        options.add_argument('--ignore-ssl-errors=yes')
+        options.add_argument('--ignore-certificate-errors')
+        self.driver = webdriver.Remote(
+            command_executor='http://selenium:4444/wd/hub',
+            options=options,
+            desired_capabilities=DesiredCapabilities.CHROME,
+        )
         self.driver.implicitly_wait(10)
         self.driver.delete_all_cookies()
-        self.driver.get(Params.login_address)
+        self.driver.get(os.environ.get('LOGIN_ADDRESS'))
         login = LoginPage(self.driver)
-        login.enter_username(Params.selenium_username)
-        login.enter_password(Params.selenium_password)
+        login.enter_username(os.environ.get('SELENIUM_USER'))
+        login.enter_password(os.environ.get('SELENIUM_PASS'))
         login.click_login()
 
     def tearDown(self):
@@ -224,4 +229,4 @@ class E2ETestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(testRunner=HtmlTestRunner
-                  .HTMLTestRunner(output=Params.test_results_path))
+                  .HTMLTestRunner(output=os.environ.get('RESULTS_PATH')))

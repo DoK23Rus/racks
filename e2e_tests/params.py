@@ -4,16 +4,11 @@ Some params
 
 
 class Params:
-    selenium_username = 'selenium'
-    selenium_password = 'sel_testing'
     value_attr = 'value'
     building_name = 'Test building'
     room_name = 'Test room'
     rack_name = 'Test rack №1'
     site_name = 'Test_site_name'
-    gecodriver_path = '/home/slunk/selenium/geckodriver'
-    test_results_path = '/home/slunk/code/racks/e2e_tests/test_results'
-    login_address = 'http://127.0.0.1:8080/login'
 
     # Values
     first_device_first_unit_ok = '39'
