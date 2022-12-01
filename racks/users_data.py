@@ -8,7 +8,5 @@ users: Dict = [
     {
         'username': os.environ.get('SELENIUM_USER'),
         'password': os.environ.get('SELENIUM_PASS'),
-        'first_name': 'Selenium',
-        'last_name': 'Tester'
     },
 ]

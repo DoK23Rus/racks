@@ -28,8 +28,6 @@ class CheckUser:
         self.user = user
         self.username = user['username']
         self.password = user['password']
-        self.first_name = user['first_name']
-        self.last_name = user['last_name']
 
     def __repr__(self) -> str:
         return (f'{self.__class__.__name__}('
@@ -44,14 +42,10 @@ class CheckUser:
         """
         try:
             some_user = User.objects.get(username=self.username)
-            some_user.first_name = self.first_name
-            some_user.last_name = self.last_name
             some_user.save()
         except User.DoesNotExist:
             some_user = User.objects.create_user(username=self.username,
-                                                 password=self.password,
-                                                 first_name=self.first_name,
-                                                 last_name=self.last_name)
+                                                 password=self.password)
         return some_user
 
     def add_group(self) -> None:
