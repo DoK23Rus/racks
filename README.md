@@ -13,12 +13,12 @@
 
 **Docker-compose profiles**
 
-### For only dev environment run:
+##### For only dev environment run:
 ```
 docker-compose --profile dev up
 ```
 
-### For dev environment plus E2E tests run:
+##### For dev environment plus E2E tests run:
 ```
 docker-compose --profile test up
 ```
