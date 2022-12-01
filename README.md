@@ -1,7 +1,7 @@
 # Racks
 **Racks** is a prototype of a space accounting system for telecommunication cabinets and racks.
 
-**Stack:**
+### Stack:
 - Python 3.10
 - Django 4.1
 - Django REST framework 3.13
@@ -11,14 +11,13 @@
 - PostgreSQL 12.0
 - Redis 6.2.7 
 
-**Docker-compose profiles**
+### Docker-compose profiles
 
-##### For only dev environment run:
+For only dev environment run:
 ```
 docker-compose --profile dev up
 ```
-
-##### For dev environment plus E2E tests run:
+For dev environment plus E2E tests run:
 ```
 docker-compose --profile test up
 ```
