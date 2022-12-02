@@ -2,7 +2,7 @@ import os
 
 from typing import Dict
 
-group_name: str = 'Test department'
+group_name: str = os.environ.get('SELENIUM_GROUP')
 
 users: Dict = [
     {
