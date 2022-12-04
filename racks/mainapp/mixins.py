@@ -294,14 +294,11 @@ class ChecksMixin(AbstractMixin):
                 (read Result.message)
             Result.sucsess == True (Result): Action allowed
         """
-        first_unit = data.get('first_unit')
-        if first_unit is None:
+        if (first_unit := data.get('first_unit')) is None:
             return Result(False, "Missing required data - first_unit")
-        last_unit = data.get('last_unit')
-        if last_unit is None:
+        if (last_unit := data.get('last_unit')) is None:
             return Result(False, "Missing required data - last_unit")
-        frontside_location = data.get('frontside_location')
-        if frontside_location is None:
+        if (frontside_location := data.get('frontside_location')) is None:
             return Result(False, "Missing required data - frontside_location")
         new_units = DeviceCheckService \
             .get_new_units(first_unit, last_unit)
@@ -330,14 +327,11 @@ class ChecksMixin(AbstractMixin):
                 (read Result.message)
             Result.sucsess == True (Result): Action allowed
         """
-        first_unit = data.get('first_unit')
-        if first_unit is None:
+        if (first_unit := data.get('first_unit')) is None:
             return Result(False, "Missing required data - first_unit")
-        last_unit = data.get('last_unit')
-        if last_unit is None:
+        if (last_unit := data.get('last_unit')) is None:
             return Result(False, "Missing required data - last_unit")
-        frontside_location = data.get('frontside_location')
-        if frontside_location is None:
+        if (frontside_location := data.get('frontside_location')) is None:
             return Result(False, "Missing required data - frontside_location")
         rack_id = RepoService.get_device_rack_id(pk)
         old_units = DeviceCheckService.get_old_units(pk)
