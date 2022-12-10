@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'mongolog',
     'corsheaders',
     'drf_yasg',
     'django_extensions',
@@ -100,25 +101,23 @@ WSGI_APPLICATION = 'racks.wsgi.application'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'file': {
-            'format': '{levelname} {asctime} {message}',
-            'style': '{',
-        },
-    },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'formatter': 'file',
-            'filename': BASE_DIR + '/logs/racks_log.log',
+        'mongolog': {
+            'level': 'DEBUG',
+            'class': 'mongolog.SimpleMongoLogHandler',
+            'connection': f"{os.environ.get('MONGODB')}://"
+                          f"{os.environ.get('MONGO_USER')}:"
+                          f"{os.environ.get('MONGO_PASSWORD')}@"
+                          f"{os.environ.get('MONGODB')}:"
+                          f"{os.environ.get('MONGO_PORT')}",
+            'collection': 'mongolog'
         },
     },
     'loggers': {
         'mainapp': {
-            'level': 'INFO',
-            'handlers': ['file'],
-            'propagate': True,
+            'handlers': ['mongolog'],
+            'level': 'DEBUG',
+            'propagate': True
         },
     },
 }

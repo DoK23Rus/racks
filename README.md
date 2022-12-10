@@ -9,7 +9,8 @@
 - Vue.js 3.2
 - TailwindCSS 3.2
 - PostgreSQL 12.0
-- Redis 6.2.7 
+- Redis 6.2.7
+- MongoDB 4.0.4 
 
 ### Docker-compose profiles:
 

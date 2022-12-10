@@ -16,6 +16,9 @@ services:
       timeout: 10s
     ports:
       - 8000:8000
+    logging:
+      options:
+        max-size: 100m
     volumes:
       - static_volume:/home/app/web/static
       - log_volume:/home/app/web/logs
@@ -25,8 +28,10 @@ services:
     profiles: ['dev', 'test']
     depends_on:
       - database
+      - logging-db
   
   cron:
+    # Celery cron for data backups
     container_name: celery-beat
     build: .
     entrypoint: celery -A racks beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
@@ -34,6 +39,9 @@ services:
       - backups_volume:/home/app/web/backup
     env_file:
       - ./.env
+    logging:
+      options:
+        max-size: 50m
     profiles: ['dev', 'test']
     depends_on:
       backend:
@@ -51,6 +59,9 @@ services:
       - backups_volume:/home/app/web/backup
     env_file:
       - ./.env
+    logging:
+      options:
+        max-size: 50m
     profiles: ['dev', 'test']
     depends_on:
       backend:
@@ -61,6 +72,9 @@ services:
   message-broker:
     container_name: redis
     image: redis:6.2.7-alpine
+    logging:
+      options:
+        max-size: 50m
     profiles: ['dev', 'test']
 
   database:
@@ -70,6 +84,9 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env_db
+    logging:
+      options:
+        max-size: 100m
     profiles: ['dev', 'test']
 
   frontend:
@@ -87,6 +104,9 @@ services:
       timeout: 10s
     volumes:
       - vue_dist:/app/dist
+    logging:
+      options:
+        max-size: 100m
     ports:
       - 8080:8080
     profiles: ['dev', 'test']
@@ -98,6 +118,9 @@ services:
     build: ./nginx
     ports:
       - 80:80
+    logging:
+      options:
+        max-size: 50m
     volumes:
       - static_volume:/home/app/web/static
       - vue_dist:/app/dist
@@ -105,6 +128,21 @@ services:
     depends_on:
       - backend
       - frontend
+
+  logging-db:
+    # Database for mainapp logging
+    container_name: mongodb
+    image: mongo:4.0.4
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+    env_file:
+      - ./.env_mongo
+    logging:
+      options:
+        max-size: 50m
+    profiles: ['dev', 'test']
 
 # E2E testing containers
   selenium:
@@ -118,12 +156,16 @@ services:
       - /dev/shm:/dev/shm
     ports:
       - 4444:4444
+    logging:
+      options:
+        max-size: 50m
     profiles: ['test']
     depends_on:
       - frontend-testing
       - backend
   
   test-runner:
+    # E2E tests
     container_name: e2e_tests
     build:
       context: ./e2e_tests
@@ -131,6 +173,9 @@ services:
     command: python e2e_tests.py
     env_file:
       - ./e2e_tests/.env_test
+    logging:
+      options:
+        max-size: 100m
     volumes:
       - test_results:/home/app/test/test_results
     profiles: ['test']
@@ -143,6 +188,7 @@ services:
         condition: service_started
   
   frontend-testing:
+    # Frontend for seleium grid
     container_name: vue-testing
     domainname: frontend-testing
     command: npm run serve -- --port 8081
@@ -159,6 +205,9 @@ services:
       - vue_dist:/app/dist
     ports:
       - 8081:8081
+    logging:
+      options:
+        max-size: 100m
     profiles: ['test']
     depends_on:
       - backend
@@ -171,3 +220,4 @@ volumes:
   backups_volume:
   test_results:
   vue_dist:
+  mongodb:

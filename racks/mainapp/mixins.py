@@ -3,6 +3,7 @@ Mixins for business logic calls
 """
 import logging
 from abc import ABC, abstractmethod
+from datetime import datetime
 from typing import List, Optional
 
 from django.db.models.base import ModelBase
@@ -16,8 +17,7 @@ from mainapp.services import (DataProcessingService,
                               DeviceCheckService,
                               RepoService,
                               UniqueCheckService,
-                              UserCheckService,
-                              date)
+                              UserCheckService)
 from mainapp.utils import Result
 
 logger = logging.getLogger(__name__)
@@ -165,7 +165,7 @@ class LoggingMixin(AbstractMixin):
     Logging mixin
     """
 
-    def get_create_log(self, request: HttpRequest, data: dict) -> None:
+    def create_log(self, request: HttpRequest, data: dict) -> None:
         """
         Logging for add views
 
@@ -173,16 +173,19 @@ class LoggingMixin(AbstractMixin):
             request (HttpRequest): Request
             data (dict): Log data (add payload)
         """
-        return logger.info(f'{date()} '
-                           f'{request.user.username} '
-                           f'ADD {self.model_name.upper()}: '
-                           f'{str(data)}')
+        logger.info({
+            'time': datetime.now(),
+            'user': request.user.username,
+            'action': 'add',
+            'model_name': self.model_name,
+            'new_data': data
+        })
 
-    def get_update_log(self,
-                       request: HttpRequest,
-                       old_data: dict,
-                       data: dict
-                       ) -> None:
+    def update_log(self,
+                   request: HttpRequest,
+                   old_data: dict,
+                   data: dict
+                   ) -> None:
         """
         Logging for update views
 
@@ -191,13 +194,16 @@ class LoggingMixin(AbstractMixin):
             old_data (dict): Old data (for checking difference)
             data (dict): Log data (update payload)
         """
-        return logger.info(f'{date()} '
-                           f'{request.user.username} '
-                           f'UPDATE {self.model_name.upper()}: '
-                           f'OLD_FORM: {str(old_data)} '
-                           f'NEW_FORM: {str(data)}')
+        logger.info({
+            'time': datetime.now(),
+            'user': request.user.username,
+            'action': 'update',
+            'model_name': self.model_name,
+            'new_data': data,
+            'old_data': old_data
+        })
 
-    def get_delete_log(self, request: HttpRequest, obj_name: str) -> None:
+    def delete_log(self, request: HttpRequest, obj_name: str) -> None:
         """
         Logging for delete views
 
@@ -205,10 +211,13 @@ class LoggingMixin(AbstractMixin):
             request (HttpRequest): Request
             obj_name (str): Deleting object name
         """
-        return logger.info(f'{date()} '
-                           f'{request.user.username} '
-                           f'DEL {self.model_name.upper()}: '
-                           f'{str(obj_name)}')
+        logger.info({
+            'time': datetime.now(),
+            'user': request.user.username,
+            'action': 'delete',
+            'model_name': self.model_name,
+            'object_name': obj_name
+        })
 
 
 class ChecksMixin(AbstractMixin):
@@ -577,7 +586,7 @@ class BaseApiAddMixin(BaseApiMixin,
                 return Response({"invalid": result.message}, status=400)
             serializer.save()
             # Log this
-            self.get_create_log(request, data)
+            self.create_log(request, data)
             return Response({"sucsess": f"{key_name} sucsessfully added"})
         return Response({"invalid": "Not good data"}, status=400)
 
@@ -650,7 +659,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
                 setattr(instance, key, value)
             instance.save()
             # Log this
-            self.get_update_log(request, instance.__dict__, data)
+            self.update_log(request, instance.__dict__, data)
             return Response({"sucsess": f"{key_name} sucsessfully updated"})
         return Response({"invalid": "Not good data"}, status=400)
 
@@ -699,7 +708,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
             return Response({"invalid": result.message}, status=400)
         instance.delete()
         # Log this
-        self.get_delete_log(request, instance_name)
+        self.delete_log(request, instance_name)
         return Response({"sucsess": f"{instance_name} sucsessfully deleted"})
 
 

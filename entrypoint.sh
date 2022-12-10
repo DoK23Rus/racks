@@ -9,13 +9,16 @@ then
     echo "PostgreSQL started"
 fi
 
-LOG_FILE="/home/app/web/logs/racks_log.log"
-touch $LOG_FILE &&
-chmod 666 $LOG_FILE &&
-echo "\n--------$(date)-COMPOSE-RELOAD--------\n" >> $LOG_FILE &&
-python manage.py test &&
-flake8 ./mainapp &&
-mypy ./mainapp &&
+LOGS_DIR="/home/app/web/logs/"
+MYPY_LOG="${LOGS_DIR}mypy_log.log"
+FLAKE8_LOG="${LOGS_DIR}flake8_log.log"
+UNITTESTS_LOG="${LOGS_DIR}unittests_log.log"
+touch $MYPY_LOG $FLAKE8_LOG $UNITTESTS_LOG &&
+chmod 666 $FLAKE8_LOG $MYPY_LOG $MYPY_LOG &&
+echo "\n--------$(date)-COMPOSE-RELOAD--------\n" | tee -a $MYPY_LOG $FLAKE8_LOG $UNITTESTS_LOG &&
+python manage.py test >> $UNITTESTS_LOG 2>&1 &&
+flake8 ./mainapp >> $FLAKE8_LOG 2>&1 &&
+mypy ./mainapp >> $MYPY_LOG 2>&1 &&
 python manage.py flush --no-input &&
 python manage.py migrate &&
 # Create user for e2e testing
