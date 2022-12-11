@@ -1,15 +1,5 @@
 #!/bin/sh
 
-if [ "$DATABASE" = "postgres" ]
-then
-    echo "Waiting for postgres..."
-    while ! nc -z $SQL_HOST $SQL_PORT; do
-        sleep 0.5
-    done
-    echo "PostgreSQL started"
-fi
-
-LOGS_DIR="/home/app/web/logs/"
 MYPY_LOG="${LOGS_DIR}mypy_log.log"
 FLAKE8_LOG="${LOGS_DIR}flake8_log.log"
 UNITTESTS_LOG="${LOGS_DIR}unittests_log.log"

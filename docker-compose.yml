@@ -27,8 +27,10 @@ services:
       - ./e2e_tests/.env_test
     profiles: ['dev', 'test']
     depends_on:
-      - database
-      - logging-db
+      database:
+        condition: service_healthy
+      logging-db:
+        condition: service_healthy
   
   cron:
     # Celery cron for data backups
@@ -84,6 +86,11 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env_db
+    healthcheck:
+      test: pg_isready -U ${SQL_USER} -d ${SQL_DATABASE}
+      interval: 1s
+      retries: 30
+      timeout: 1s
     logging:
       options:
         max-size: 100m
@@ -136,9 +143,15 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - mongodb:/data/db
+      - mongodb_data:/data/db
     env_file:
-      - ./.env_mongo
+      - ./.env_log
+    healthcheck:
+      test: mongo --eval 'db.runCommand("ping").ok' localhost:27017 --quiet
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
     logging:
       options:
         max-size: 50m
@@ -215,9 +228,10 @@ services:
 
 volumes:
   postgres_data:
+  mongodb_data:
   static_volume:
-  log_volume:
+  log_volume: # log files for mypy, flake8, unittest
   backups_volume:
   test_results:
   vue_dist:
-  mongodb:
+  
