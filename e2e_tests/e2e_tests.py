@@ -229,4 +229,4 @@ class E2ETestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(testRunner=HtmlTestRunner
-                  .HTMLTestRunner(output=os.environ.get('RESULTS_PATH')))
+                  .HTMLTestRunner(output=os.environ.get('TEST_RESULTS_PATH')))

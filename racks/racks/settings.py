@@ -28,13 +28,13 @@ DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 CORS_ALLOWED_ORIGINS = [
-    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('VUE_PORT')}",
-    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('DJANGO_PORT')}",
-    f"http://{os.environ.get('FRONTEND')}:{os.environ.get('VUE_PORT')}",
-    f"http://{os.environ.get('BACKEND')}:{os.environ.get('DJANGO_PORT')}",
-    f"http://{os.environ.get('FRONTEND')}:{os.environ.get('VUE_TEST_PORT')}",
-    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('VUE_TEST_PORT')}",
-    f"http://{os.environ.get('FRONTEND_TESTING')}:{os.environ.get('VUE_TEST_PORT')}",
+    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_PORT')}",
+    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('BACKEND_PORT')}",
+    f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_PORT')}",
+    f"http://{os.environ.get('BACKEND_HOST')}:{os.environ.get('BACKEND_PORT')}",
+    f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
+    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
+    f"http://{os.environ.get('FRONTEND_TESTING_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
 ]
 
 # Application definition
@@ -105,11 +105,11 @@ LOGGING = {
         'mongolog': {
             'level': 'DEBUG',
             'class': 'mongolog.SimpleMongoLogHandler',
-            'connection': f"{os.environ.get('MONGODB')}://"
-                          f"{os.environ.get('MONGO_USER')}:"
-                          f"{os.environ.get('MONGO_PASSWORD')}@"
-                          f"{os.environ.get('MONGODB')}:"
-                          f"{os.environ.get('MONGO_PORT')}",
+            'connection': f"{os.environ.get('LOGGING_DB_HOST')}://"
+                          f"{os.environ.get('MONGO_INITDB_ROOT_USERNAME')}:"
+                          f"{os.environ.get('MONGO_INITDB_ROOT_PASSWORD')}@"
+                          f"{os.environ.get('LOGGING_DB_HOST')}:"
+                          f"{os.environ.get('LOGGING_DB_PORT')}",
             'collection': 'mongolog'
         },
     },
@@ -126,11 +126,11 @@ DATABASES = {
 
     'default': {
         'ENGINE': os.environ.get('SQL_ENGINE'),
-        'NAME': os.environ.get('SQL_DATABASE'),
-        'USER': os.environ.get('SQL_USER'),
-        'PASSWORD': os.environ.get('SQL_PASSWORD'),
-        'HOST': os.environ.get('SQL_HOST'),
-        'PORT': os.environ.get('SQL_PORT'),
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT'),
         'ATOMIC_REQUESTS': True
     }
 }
@@ -184,7 +184,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-START_PAGE_URL = f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('DJANGO_PORT')}/"
+START_PAGE_URL = f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('BACKEND_PORT')}/"
 
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER')
 CELERY_RESULT_BACKEND = 'django-db'
@@ -192,7 +192,7 @@ CELERY_RESULT_BACKEND = 'django-db'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1'
+        'LOCATION': f"redis://{os.environ.get('LOCALHOST')}:{os.environ.get('MESSAGE_BROKER_PORT')}/1"
     }
 }
 

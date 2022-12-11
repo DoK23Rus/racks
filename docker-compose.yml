@@ -9,22 +9,25 @@ services:
       context: ./
       dockerfile: Dockerfile
     healthcheck:
-      test: curl -f http://0.0.0.0:8000/api/v1 || exit 1
+      test: curl -f http://0.0.0.0:${BACKEND_PORT}/api/v1 || exit 1
       interval: 5s
       retries: 10
       start_period: 15s
       timeout: 10s
     ports:
-      - 8000:8000
+      - ${BACKEND_PORT}:${BACKEND_PORT}
     logging:
       options:
         max-size: 100m
     volumes:
-      - static_volume:/home/app/web/static
-      - log_volume:/home/app/web/logs
+      - static_volume:${STATIC_DIR}
+      - log_volume:${LOGS_DIR}
     env_file:
       - ./.env
-      - ./e2e_tests/.env_test
+      - ./.backend.env
+      - ./.database.env
+      - ./.logging-db.env
+      - ./e2e_tests/.test-runner.env
     profiles: ['dev', 'test']
     depends_on:
       database:
@@ -36,11 +39,14 @@ services:
     # Celery cron for data backups
     container_name: celery-beat
     build: .
-    entrypoint: celery -A racks beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    entrypoint: celery -A ${APP_NAME} beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
-      - backups_volume:/home/app/web/backup
+      - backups_volume:${BACKUP_DIR}
     env_file:
       - ./.env
+      - ./.backend.env
+      - ./.database.env
+      - ./.logging-db.env
     logging:
       options:
         max-size: 50m
@@ -56,11 +62,14 @@ services:
   worker:
     container_name: celery-worker
     build: .
-    entrypoint: celery -A racks worker -l INFO
+    entrypoint: celery -A ${APP_NAME} worker -l INFO
     volumes:
-      - backups_volume:/home/app/web/backup
+      - backups_volume:${BACKUP_DIR}
     env_file:
       - ./.env
+      - ./.backend.env
+      - ./.database.env
+      - ./.logging-db.env
     logging:
       options:
         max-size: 50m
@@ -74,6 +83,8 @@ services:
   message-broker:
     container_name: redis
     image: redis:6.2.7-alpine
+    ports:
+      - ${MESSAGE_BROKER_PORT}:${MESSAGE_BROKER_PORT}
     logging:
       options:
         max-size: 50m
@@ -83,9 +94,11 @@ services:
     container_name: postgres
     image: postgres:12.0-alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:${POSTGRES_DATA_DIR}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
     env_file:
-      - ./.env_db
+      - ./.database.env
     healthcheck:
       test: pg_isready -U ${SQL_USER} -d ${SQL_DATABASE}
       interval: 1s
@@ -104,18 +117,18 @@ services:
       context: ./racks_frontend
       dockerfile: Dockerfile
     healthcheck:
-      test: curl -f http://0.0.0.0:8080 || exit 1
+      test: curl -f http://0.0.0.0:${FRONTEND_PORT} || exit 1
       interval: 5s
       retries: 10
       start_period: 15s
       timeout: 10s
     volumes:
-      - vue_dist:/app/dist
+      - vue_dist:${VUE_DIST_DIR}
     logging:
       options:
         max-size: 100m
     ports:
-      - 8080:8080
+      - ${FRONTEND_PORT}:${FRONTEND_PORT}
     profiles: ['dev', 'test']
     depends_on:
       - backend
@@ -124,13 +137,13 @@ services:
     container_name: nginx
     build: ./nginx
     ports:
-      - 80:80
+      - ${WEB_SERVER_PORT}:${WEB_SERVER_PORT}
     logging:
       options:
         max-size: 50m
     volumes:
-      - static_volume:/home/app/web/static
-      - vue_dist:/app/dist
+      - static_volume:${STATIC_DIR}
+      - vue_dist:${VUE_DIST_DIR}
     profiles: ['dev', 'test']
     depends_on:
       - backend
@@ -141,13 +154,13 @@ services:
     container_name: mongodb
     image: mongo:4.0.4
     ports:
-      - 27017:27017
+      - ${LOGGING_DB_PORT}:${LOGGING_DB_PORT}
     volumes:
-      - mongodb_data:/data/db
+      - mongodb_data:${MONGODB_DATA_DIR}
     env_file:
-      - ./.env_log
+      - ./.logging-db.env
     healthcheck:
-      test: mongo --eval 'db.runCommand("ping").ok' localhost:27017 --quiet
+      test: mongo --eval 'db.runCommand("ping").ok' localhost:${LOGGING_DB_PORT} --quiet
       interval: 5s
       retries: 10
       start_period: 15s
@@ -164,11 +177,11 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     env_file:
-      - ./e2e_tests/.env_test
+      - ./e2e_tests/.selenium.env
     volumes:
       - /dev/shm:/dev/shm
     ports:
-      - 4444:4444
+      - ${SELENIUM_PORT}:${SELENIUM_PORT}
     logging:
       options:
         max-size: 50m
@@ -185,12 +198,13 @@ services:
       dockerfile: Dockerfile
     command: python e2e_tests.py
     env_file:
-      - ./e2e_tests/.env_test
+      - ./.env
+      - ./e2e_tests/.test-runner.env
     logging:
       options:
         max-size: 100m
     volumes:
-      - test_results:/home/app/test/test_results
+      - test_results:${TEST_RESULTS_PATH}
     profiles: ['test']
     depends_on:
       backend:
@@ -204,20 +218,20 @@ services:
     # Frontend for seleium grid
     container_name: vue-testing
     domainname: frontend-testing
-    command: npm run serve -- --port 8081
+    command: npm run serve -- --port ${FRONTEND_TESTING_PORT}
     build:
       context: ./racks_frontend
       dockerfile: Dockerfile_test
     healthcheck:
-      test: curl -f http://0.0.0.0:8081 || exit 1
+      test: curl -f http://0.0.0.0:${FRONTEND_TESTING_PORT} || exit 1
       interval: 5s
       retries: 10
       start_period: 15s
       timeout: 10s
     volumes:
-      - vue_dist:/app/dist
+      - vue_dist:${VUE_DIST_DIR}
     ports:
-      - 8081:8081
+      - ${FRONTEND_TESTING_PORT}:${FRONTEND_TESTING_PORT}
     logging:
       options:
         max-size: 100m

@@ -10,4 +10,4 @@ RUN npm install
 
 COPY . /app
 
-RUN mv .env_front_dev .env
+RUN mv .frontend.env .env
