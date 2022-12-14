@@ -465,7 +465,7 @@ class BaseApiMixin(AbstractViewMixin):
         Returns:
             Response (HttpResponse): This method not provided
         """
-        return Response({"invalid": "Get method not provided"}, status=400)
+        return Response({"invalid": "GET not allowed"}, status=405)
 
     def put(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
@@ -479,7 +479,7 @@ class BaseApiMixin(AbstractViewMixin):
         Returns:
             Response (HttpResponse): This method not provided
         """
-        return Response({"invalid": "Put method not provided"}, status=400)
+        return Response({"invalid": "PUT not allowed"}, status=405)
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
@@ -493,7 +493,7 @@ class BaseApiMixin(AbstractViewMixin):
         Returns:
             Response (HttpResponse): This method not provided
         """
-        return Response({"invalid": "Post method not provided"}, status=400)
+        return Response({"invalid": "POST not allowed"}, status=405)
 
     def delete(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
@@ -507,7 +507,7 @@ class BaseApiMixin(AbstractViewMixin):
         Returns:
             Response (HttpResponse): This method not provided
         """
-        return Response({"invalid": "Delete method not provided"}, status=400)
+        return Response({"invalid": "DELETE not allowed"}, status=405)
 
 
 class BaseApiGetMixin(BaseApiMixin):
