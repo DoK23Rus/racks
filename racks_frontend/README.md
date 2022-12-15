@@ -1,8 +1,6 @@
 # racks_frontend
 
-- Vue.js 3.2 
-- Vuelidate 2.0
-- TailwindCSS 3.2
+![](https://img.shields.io/badge/node.js-6.13.4-brightgreen) ![](https://img.shields.io/badge/vue.js-3.2-brightgreen) ![](https://img.shields.io/badge/tailwindCSS-3.2-blue) ![](https://img.shields.io/badge/vuelidate-2.0-brightgreen)
 
 ## Project setup
 ```
