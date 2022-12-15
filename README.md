@@ -4,7 +4,7 @@
 ### Stack:
 ![](https://img.shields.io/badge/python-3.10-blue) ![](https://img.shields.io/badge/django-4.1-%231d915c) ![](https://img.shields.io/badge/django%20REST%20framework-3.13-%23A30000) ![](https://img.shields.io/badge/celery-5.2.7-%23b7df64)  
 ![](https://img.shields.io/badge/postgreSQL-12.0-%23336791) ![](https://img.shields.io/badge/redis-6.2.7-%23c6302b) ![](https://img.shields.io/badge/mongoDB-4.0.4-%23116149)  
-![](https://img.shields.io/badge/node.js-6.13.4-%2343853d) ![](https://img.shields.io/badge/vue.js-3.2-%2342b883) ![](https://img.shields.io/badge/tailwindCSS-3.2-%230ea5e9)
+![](https://img.shields.io/badge/node.js-v12.16.1-%2343853d) ![](https://img.shields.io/badge/vue.js-3.2-%2342b883) ![](https://img.shields.io/badge/tailwindCSS-3.2-%230ea5e9)
 
 ### Tools and more:
 ![](https://img.shields.io/badge/docker-20.10.21-%230073ec) ![](https://img.shields.io/badge/docker%20compose-v2.12.2-%230073ec) ![](https://img.shields.io/badge/docker--compose--viz-1.1.0-%230073ec)  
