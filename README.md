@@ -12,7 +12,7 @@
 ![](https://img.shields.io/badge/unittest-3.10-blue) ![](https://img.shields.io/badge/selenium-3.141.0-blue) ![](https://img.shields.io/badge/selenium%20grid-4-%23625c98) ![](https://img.shields.io/badge/html--testRunner-1.2.1-blue)  
 ![](https://img.shields.io/badge/sphinx-2.2.11-%230A507A) ![](https://img.shields.io/badge/drf--yasg-1.21.4-%23A30000)  
 ![](https://img.shields.io/badge/django--mongolog-0.9.4-%231d915c) ![](https://img.shields.io/badge/django--extensions-3.2.1-%231d915c) ![](https://img.shields.io/badge/django--celery--beat-2.4.0-%231d915c) ![](https://img.shields.io/badge/djoser-2.1.0-%231d915c)  
-![](https://img.shields.io/badge/vuelidate-2.0-%2342b883)
+![](https://img.shields.io/badge/vuelidate-2.0-%2342b883) ![](https://img.shields.io/badge/axios-1.1.3-%2342b883) ![](https://img.shields.io/badge/vuex-4.0.0-%2342b883) ![](https://img.shields.io/badge/vue--svg--loader-0.16.0-%2342b883)
 
 
 ### Docker-compose profiles:
