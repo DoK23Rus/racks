@@ -11,7 +11,7 @@
 ![](https://img.shields.io/badge/flake8-5.0.4-orange) ![](https://img.shields.io/badge/mypy-0.982-red)  
 ![](https://img.shields.io/badge/unittest-3.10-yellow) ![](https://img.shields.io/badge/selenium-3.141.0-brightgreen) ![](https://img.shields.io/badge/selenium%20grid-4-yellowgreen) ![](https://img.shields.io/badge/html--testRunner-1.2.1-orange)  
 ![](https://img.shields.io/badge/sphinx-2.2.11-blue) ![](https://img.shields.io/badge/drf--yasg-1.21.4-orange)  
-![](https://img.shields.io/badge/djoser-2.1.0-blue) ![](https://img.shields.io/badge/django--mongolog-0.9.4-green) ![](https://img.shields.io/badge/django--celery--beat-2.4.0-brightgreen)  
+![](https://img.shields.io/badge/django--mongolog-0.9.4-green) ![](https://img.shields.io/badge/django--extensions-3.2.1-blue) ![](https://img.shields.io/badge/django--celery--beat-2.4.0-brightgreen) ![](https://img.shields.io/badge/djoser-2.1.0-blue)  
 ![](https://img.shields.io/badge/vuelidate-2.0-brightgreen)
 
 
