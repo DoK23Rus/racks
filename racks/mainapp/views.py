@@ -1,7 +1,6 @@
 from typing import List
 
 from django.db.models.base import ModelBase
-from rest_framework import permissions
 from rest_framework.generics import ListAPIView
 from rest_framework.serializers import SerializerMetaclass
 from rest_framework.views import APIView
@@ -15,6 +14,7 @@ from mainapp.mixins import (BaseApiAddMixin,
                             DeviceListApiViewMixin,
                             DeviceModelsApiMixin,
                             DeviceVendorsApiMixin,
+                            PermissionsMixin,
                             RackDevicesApiMixin,
                             RackListApiViewMixin,
                             RackModelsApiMixin,
@@ -39,62 +39,47 @@ from mainapp.serializers import (BuildingSerializer,
                                  SiteSerializer)
 
 
-class SiteDetailApiView(BaseApiGetMixin, APIView):
+class SiteDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     """
     Site detail API view
     """
     model: ModelBase = Site
     serializer_class: SerializerMetaclass = SiteSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class BuildingDetailApiView(BaseApiGetMixin, APIView):
+class BuildingDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     """
     Site detail API view
     """
     model: ModelBase = Building
     serializer_class: SerializerMetaclass = BuildingSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RoomDetailApiView(BaseApiGetMixin, APIView):
+class RoomDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     """
     Site detail API view
     """
     model: ModelBase = Room
     serializer_class: SerializerMetaclass = RoomSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RackDetailApiView(BaseApiGetMixin, APIView):
+class RackDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     """
     Rack detail API view
     """
     model: ModelBase = Rack
     serializer_class: SerializerMetaclass = RackSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class DeviceDetailApiView(BaseApiGetMixin, APIView):
+class DeviceDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     """
     Device detail API view
     """
     model: ModelBase = Device
     serializer_class: SerializerMetaclass = DeviceSerializer
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RackListApiView(RackListApiViewMixin, ListAPIView):
+class RackListApiView(RackListApiViewMixin, PermissionsMixin, ListAPIView):
     """
     Rack list API view
     """
@@ -102,7 +87,7 @@ class RackListApiView(RackListApiViewMixin, ListAPIView):
     serializer_class: SerializerMetaclass = RackSerializer
 
 
-class DeviceListApiView(DeviceListApiViewMixin, ListAPIView):
+class DeviceListApiView(DeviceListApiViewMixin, PermissionsMixin, ListAPIView):
     """
     Device list API view
     """
@@ -110,7 +95,7 @@ class DeviceListApiView(DeviceListApiViewMixin, ListAPIView):
     serializer_class: SerializerMetaclass = DeviceSerializer
 
 
-class SiteAddApiView(BaseApiAddMixin, APIView):
+class SiteAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     """
     Site add API view
     """
@@ -119,12 +104,9 @@ class SiteAddApiView(BaseApiAddMixin, APIView):
     pk_name: str = 'department_id'
     model_name: str = 'site'
     checks_list: List[str] = ['check_user']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class SiteUpdateApiView(BaseApiUpdateMixin, APIView):
+class SiteUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     """
     Site update API view
     """
@@ -134,24 +116,18 @@ class SiteUpdateApiView(BaseApiUpdateMixin, APIView):
     fk_name: str = 'department_id'
     model_name: str = 'site'
     checks_list: List[str] = ['check_user']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class SiteDeleteApiView(BaseApiDeleteMixin, APIView):
+class SiteDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     """
     Site delete API view
     """
     model: ModelBase = Site
     model_name: str = 'site'
     checks_list: List[str] = ['check_user']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class BuildingAddApiView(BaseApiAddMixin, APIView):
+class BuildingAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     """
     Building add API view
     """
@@ -160,12 +136,9 @@ class BuildingAddApiView(BaseApiAddMixin, APIView):
     pk_name: str = 'site_id'
     model_name: str = 'building'
     checks_list: List[str] = ['check_user', 'check_unique']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class BuildingUpdateApiView(BaseApiUpdateMixin, APIView):
+class BuildingUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     """
     Building update API view
     """
@@ -175,24 +148,18 @@ class BuildingUpdateApiView(BaseApiUpdateMixin, APIView):
     fk_name: str = 'site_id'
     model_name: str = 'building'
     checks_list: List[str] = ['check_user', 'check_unique']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class BuildingDeleteApiView(BaseApiDeleteMixin, APIView):
+class BuildingDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     """
     Building delete API view
     """
     model: ModelBase = Building
     model_name: str = 'building'
     checks_list: List[str] = ['check_user']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RoomAddApiView(BaseApiAddMixin, APIView):
+class RoomAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     """
     Room add API view
     """
@@ -201,12 +168,9 @@ class RoomAddApiView(BaseApiAddMixin, APIView):
     pk_name: str = 'building_id'
     model_name: str = 'room'
     checks_list: List[str] = ['check_user', 'check_unique']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RoomUpdateApiView(BaseApiUpdateMixin, APIView):
+class RoomUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     """
     Room update API view
     """
@@ -216,24 +180,18 @@ class RoomUpdateApiView(BaseApiUpdateMixin, APIView):
     fk_name: str = 'building_id'
     model_name: str = 'room'
     checks_list: List[str] = ['check_user', 'check_unique']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RoomDeleteApiView(BaseApiDeleteMixin, APIView):
+class RoomDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     """
     Room delete API view
     """
     model: ModelBase = Room
     model_name: str = 'room'
     checks_list: List[str] = ['check_user']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RackAddApiView(BaseApiAddMixin, APIView):
+class RackAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     """
     Rack add API view
     """
@@ -242,12 +200,9 @@ class RackAddApiView(BaseApiAddMixin, APIView):
     pk_name: str = 'room_id'
     model_name: str = 'rack'
     checks_list: List[str] = ['check_user', 'check_unique']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RackUpdateApiView(BaseApiUpdateMixin, APIView):
+class RackUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     """
     Rack update API view
     """
@@ -257,24 +212,18 @@ class RackUpdateApiView(BaseApiUpdateMixin, APIView):
     fk_name: str = 'room_id'
     model_name: str = 'rack'
     checks_list: List[str] = ['check_user', 'check_unique']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RackDeleteApiView(BaseApiDeleteMixin, APIView):
+class RackDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     """
     Rack delete API view
     """
     model: ModelBase = Rack
     model_name: str = 'rack'
     checks_list: List[str] = ['check_user']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class DeviceAddApiView(BaseApiAddMixin, APIView):
+class DeviceAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     """
     Device add API view
     """
@@ -283,12 +232,9 @@ class DeviceAddApiView(BaseApiAddMixin, APIView):
     pk_name: str = 'rack_id'
     model_name: str = 'device'
     checks_list: List[str] = ['check_user', 'check_device_for_add']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class DeviceUpdateApiView(BaseApiUpdateMixin, APIView):
+class DeviceUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     """
     Device update API view
     """
@@ -298,24 +244,18 @@ class DeviceUpdateApiView(BaseApiUpdateMixin, APIView):
     fk_name: str = 'rack_id'
     model_name: str = 'device'
     checks_list: List[str] = ['check_user', 'check_device_for_update']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class DeviceDeleteApiView(BaseApiDeleteMixin, APIView):
+class DeviceDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     """
     Device delete API view
     """
     model: ModelBase = Device
     model_name: str = 'device'
     checks_list: List[str] = ['check_user']
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
 
 
-class RegionListApiView(RegionListApiMixin, ListAPIView):
+class RegionListApiView(RegionListApiMixin, PermissionsMixin, ListAPIView):
     """
     Regions list API view
     """
@@ -323,7 +263,9 @@ class RegionListApiView(RegionListApiMixin, ListAPIView):
     serializer_class: SerializerMetaclass = RegionSerializer
 
 
-class DepartmentListApiView(DepartmentListApiMixin, ListAPIView):
+class DepartmentListApiView(DepartmentListApiMixin,
+                            PermissionsMixin,
+                            ListAPIView):
     """
     Departments list API view
     """
@@ -331,7 +273,7 @@ class DepartmentListApiView(DepartmentListApiMixin, ListAPIView):
     serializer_class: SerializerMetaclass = DepartmentSerializer
 
 
-class SiteListApiView(SiteListApiMixin, ListAPIView):
+class SiteListApiView(SiteListApiMixin, PermissionsMixin, ListAPIView):
     """
     Sites list API view
     """
@@ -339,7 +281,7 @@ class SiteListApiView(SiteListApiMixin, ListAPIView):
     serializer_class: SerializerMetaclass = SiteSerializer
 
 
-class BuildingListApiView(BuildingListApiMixin, ListAPIView):
+class BuildingListApiView(BuildingListApiMixin, PermissionsMixin, ListAPIView):
     """
     Buildings list API view
     """
@@ -347,7 +289,7 @@ class BuildingListApiView(BuildingListApiMixin, ListAPIView):
     serializer_class: SerializerMetaclass = BuildingSerializer
 
 
-class RoomListApiView(RoomListApiMixin, ListAPIView):
+class RoomListApiView(RoomListApiMixin, PermissionsMixin, ListAPIView):
     """
     Rooms list API view
     """
@@ -355,55 +297,43 @@ class RoomListApiView(RoomListApiMixin, ListAPIView):
     serializer_class: SerializerMetaclass = RoomSerializer
 
 
-class UserApiView(UserApiMixin, APIView):
+class UserApiView(UserApiMixin, PermissionsMixin, APIView):
     """
     User API view
     """
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    pass
 
 
-class DeviceVendorsApiView(DeviceVendorsApiMixin, APIView):
+class DeviceVendorsApiView(DeviceVendorsApiMixin, PermissionsMixin, APIView):
     """
     Device vendors API view
     """
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    pass
 
 
-class DeviceModelsApiView(DeviceModelsApiMixin, APIView):
+class DeviceModelsApiView(DeviceModelsApiMixin, PermissionsMixin, APIView):
     """
     Device models API view
     """
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    pass
 
 
-class RackVendorsApiView(RackVendorsApiMixin, APIView):
+class RackVendorsApiView(RackVendorsApiMixin, PermissionsMixin, APIView):
     """
     Rack vendors API view
     """
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    pass
 
 
-class RackModelsApiView(RackModelsApiMixin, APIView):
+class RackModelsApiView(RackModelsApiMixin, PermissionsMixin, APIView):
     """
     Rack models API view
     """
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    pass
 
 
-class RackDevicesApiView(RackDevicesApiMixin, APIView):
+class RackDevicesApiView(RackDevicesApiMixin, PermissionsMixin, APIView):
     """
     Rack devices API view
     """
-    permission_classes = [
-        permissions.IsAuthenticated
-    ]
+    pass

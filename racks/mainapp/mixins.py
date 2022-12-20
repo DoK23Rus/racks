@@ -9,6 +9,8 @@ from typing import List, Optional
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
+from rest_framework import permissions
+from rest_framework.permissions import BasePermissionMetaclass
 from rest_framework.response import Response
 from rest_framework.serializers import SerializerMetaclass
 
@@ -856,6 +858,13 @@ class RoomListApiMixin:
     """
 
     queryset: QuerySet = RepoService.get_all_rooms()
+
+
+class PermissionsMixin:
+    """
+    Permissions mixin
+    """
+    permission_classes: BasePermissionMetaclass = [permissions.IsAuthenticated]
 
 
 class UserApiMixin(BaseApiMixin):
