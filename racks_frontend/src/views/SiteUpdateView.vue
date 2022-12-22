@@ -42,7 +42,7 @@ export default {
         id: this.$route.params.id,
         site_name: form.siteName
       };
-      this.messageProps.message = await putObject('site', '/site_upd', formData)
+      this.messageProps.message = await putObject('site', `/site/${this.$route.params.id}/update`, formData)
       if (this.messageProps.message.site_name == "Site with this Site already exists.") {
         this.messageProps.message = {invalid: "Site with this name already exists."};
       }

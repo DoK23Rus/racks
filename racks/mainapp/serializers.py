@@ -17,6 +17,7 @@ class RegionSerializer(serializers.ModelSerializer):
     """
     Region serializer
     """
+
     class Meta:
         model: ModelBase = Region
         fields: List = [
@@ -29,6 +30,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
     """
     Department serializer
     """
+
     class Meta:
         model: ModelBase = Department
         fields: List = [
@@ -42,6 +44,7 @@ class SiteSerializer(serializers.ModelSerializer):
     """
     Site serializer
     """
+
     class Meta:
         model: ModelBase = Site
         fields: List = [
@@ -57,6 +60,7 @@ class BuildingSerializer(serializers.ModelSerializer):
     """
     Building serializer
     """
+
     class Meta:
         model: ModelBase = Building
         fields: List = [
@@ -72,6 +76,7 @@ class RoomSerializer(serializers.ModelSerializer):
     """
     Room serializer
     """
+
     class Meta:
         model: ModelBase = Room
         fields: List = [

@@ -79,9 +79,9 @@ export default {
         financially_responsible_person: form.financiallyResponsiblePerson,
         device_inventory_number: form.deviceInventoryNumber,
         fixed_asset: form.fixedAsset,
-        rack_id: parseInt(this.$route.params.id)
+        rack_id: parseInt(this.$route.params.rack_id)
       };
-      this.messageProps.message = await postObject('device', '/device_add', formData);
+      this.messageProps.message = await postObject('device', '/device/create', formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }

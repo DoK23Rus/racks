@@ -87,7 +87,7 @@ export default {
         fixed_asset: form.fixedAsset,
         rack_id: this.rack_id
       };
-      this.messageProps.message = await putObject('device', '/device_upd', formData);
+      this.messageProps.message = await putObject('device', `/device/${this.$route.params.id}/update`, formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
     async getOldData() {

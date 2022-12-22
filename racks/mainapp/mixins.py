@@ -561,7 +561,6 @@ class BaseApiAddMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        # Some data validation
         try:
             pk = data[self.pk_name]
         except KeyError:
@@ -610,7 +609,6 @@ class BaseApiUpdateMixin(BaseApiMixin,
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Need id for post method (exception)
             Response (HttpResponse): Object with this ID
                 does not exist (exception)
             Response (HttpResponse): Update not allowed (read result.message)
@@ -618,11 +616,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        # Some data validation
-        try:
-            pk = data['id']
-        except KeyError:
-            return Response({"invalid": "Need id for put method"})
+        pk = kwargs['pk']
         try:
             instance = RepoService.get_instance(self.model, pk)
         except self.model.DoesNotExist:
@@ -683,7 +677,6 @@ class BaseApiDeleteMixin(BaseApiMixin,
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Need id for post method (exception)
             Response (HttpResponse): Object with this ID
                 does not exist (exception)
             Response (HttpResponse): Delete not allowed (read result.message)
@@ -691,11 +684,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        # Some data validation
-        try:
-            pk = data['id']
-        except KeyError:
-            return Response({"invalid": "Need id for delete method"})
+        pk = kwargs['pk']
         try:
             instance = RepoService.get_instance(self.model, pk)
         except self.model.DoesNotExist:

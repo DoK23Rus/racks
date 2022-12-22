@@ -84,9 +84,9 @@ export default {
         power_sockets_ups: form.powerSocketsUps,
         external_ups: form.externalUps,
         cooler: form.cooler,
-        room_id: parseInt(this.$route.params.id)
+        room_id: parseInt(this.$route.params.room_id)
       };
-      this.messageProps.message = await postObject('rack', '/rack_add', formData);
+      this.messageProps.message = await postObject('rack', '/rack/create', formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }

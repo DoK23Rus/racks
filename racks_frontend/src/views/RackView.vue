@@ -4,7 +4,7 @@
       <Message :messageProps="messageProps" />
     </div>
     Rack №{{ rack.id }}
-    <router-link :to="{path: '/rack_upd/' + rack.id}" target="_blank">
+    <router-link :to="{path: '/rack/' + rack.id + '/update'}" target="_blank">
       <button class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
         Edit
@@ -247,7 +247,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete rack ${rackName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('rack', '/rack_del', payload);
+        this.messageProps.message = await deleteObject('rack', `/rack/${this.$route.params.id}/delete`, payload);
         if (this.messageProps.message.sucsess) {
           alert(this.messageProps.message.sucsess);
           this.$router.push('/tree');

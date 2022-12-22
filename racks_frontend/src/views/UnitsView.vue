@@ -2,7 +2,7 @@
   <div class="min-h-screen">
     <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
       Rack №{{ rack.id }}
-      <router-link :to="{path: '/device_add/' + this.$route.params.id}" target="_blank">
+      <router-link :to="{path: '/device/create/' + this.$route.params.id}" target="_blank">
         <button id="e2e_add_device" class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
           px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
           Add new device
@@ -248,7 +248,7 @@ export default {
   },
   methods: {
     async setDevices() {
-      this.devices = await getObject('devices', '/rack_devices/', this.$route.params.id);
+      this.devices = await getObject('devices', '/rack/devices/', this.$route.params.id);
     },
     async setRack() {
       this.rack = await getObject('rack', '/rack/', this.$route.params.id);

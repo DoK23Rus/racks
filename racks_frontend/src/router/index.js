@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import axios from 'axios'
 import HomeView from '@/views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import DeviceView from '@/views/DeviceView.vue';
@@ -50,52 +49,52 @@ const routes = [
     component: UnitsView
   },
   {
-    path: '/site_add/:id',
+    path: '/site/create/:department_id',
     name: 'SiteAddView',
     component: SiteAddView
   },
   {
-    path: '/site_upd/:id',
+    path: '/site/:id/update',
     name: 'SiteUpdateView',
     component: SiteUpdateView
   },
   {
-    path: '/building_add/:id',
+    path: '/building/create/:site_id',
     name: 'BuildingAddView',
     component: BuildingAddView
   },
   {
-    path: '/building_upd/:id',
+    path: '/building/:id/update',
     name: 'BuildingUpdateView',
     component: BuildingUpdateView
   },
   {
-    path: '/room_add/:id',
+    path: '/room/create/:building_id',
     name: 'RoomAddView',
     component: RoomAddView
   },
   {
-    path: '/room_upd/:id',
+    path: '/room/:id/update',
     name: 'RoomUpdateView',
     component: RoomUpdateView
   },
   {
-    path: '/rack_add/:id',
+    path: '/rack/create/:room_id',
     name: 'RackAddView',
     component: RackAddView
   },
   {
-    path: '/rack_upd/:id',
+    path: '/rack/:id/update',
     name: 'RackUpdateView',
     component: RackUpdateView
   },
   {
-    path: '/device_add/:id',
+    path: '/device/create/:rack_id',
     name: 'DeviceAddView',
     component: DeviceAddView
   },
   {
-    path: '/device_upd/:id',
+    path: '/device/:id/update',
     name: 'DeviceUpdateView',
     component: DeviceUpdateView
   },

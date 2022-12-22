@@ -4,7 +4,7 @@
       <Message :messageProps="messageProps" />
     </div>
     Device №{{ device.id }}
-    <router-link :to="{path: '/device_upd/' + device.id}" target="_blank">
+    <router-link :to="{path: '/device/' + device.id + '/update'}" target="_blank">
       <button id="e2e_device_edit" class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
         Edit
@@ -226,7 +226,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete device ${deviceName}?`)) {
-        this.messageProps.message = await deleteObject('device', '/device_del', payload);
+        this.messageProps.message = await deleteObject('device', `/device/${this.$route.params.id}/delete`, payload);
         if (this.messageProps.message.sucsess) {
           alert(this.messageProps.message.sucsess);
           this.$router.push('/units/' + this.device.rackId);

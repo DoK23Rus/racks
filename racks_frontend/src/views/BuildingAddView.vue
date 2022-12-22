@@ -35,9 +35,9 @@ export default {
     async submitForm(form) {
       const formData = {
         building_name: form.buildingName,
-        site_id: this.$route.params.id
+        site_id: this.$route.params.site_id
       };
-      this.messageProps.message = await postObject('building', '/building_add', formData);
+      this.messageProps.message = await postObject('building', '/building/create', formData);
     },
   }
 };

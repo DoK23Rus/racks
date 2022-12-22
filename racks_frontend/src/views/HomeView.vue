@@ -59,11 +59,11 @@ export default {
       this.$router.push('/login');
     },
     async getDevices() {
-      const response = await getObject('devices', '/devices');
+      const response = await getObject('devices', '/device/all');
       return response;
     },
     async getRacks() {
-      const response = await getObject('racks', '/racks');
+      const response = await getObject('racks', '/rack/all');
       return response;
     },
     async fetchUser () {

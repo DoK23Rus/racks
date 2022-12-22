@@ -286,10 +286,10 @@ export default {
       this.v$.$touch();
     },
     async getVendors() {
-      this.vendors = await getUnique('device vendors', '/device_vendors');
+      this.vendors = await getUnique('device vendors', '/device/vendors');
     },
     async getModels() {
-      this.models= await getUnique('device models', '/device_models');
+      this.models= await getUnique('device models', '/device/models');
     },
     copyOnClick(choice, id) {
       // Fill texbox with existing name (from unique list)

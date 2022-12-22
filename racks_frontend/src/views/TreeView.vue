@@ -13,7 +13,7 @@
           <template v-if="region.id == department.region_id">
           <span :id="`e2e_${department.department_name.replaceAll(' ', '_')}`" @click="expandTree" class="caret">
               {{ truncate(department.department_name, 50) }}
-            <router-link :to="{path: '/site_add/' + department.id}" target="_blank">
+            <router-link :to="{path: '/site/create/' + department.id}" target="_blank">
               <button :id="`e2e_${department.department_name.replaceAll(' ', '_')}_add_button`"
                 type="button" class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
                 px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
@@ -27,13 +27,13 @@
               <template v-if="department.id == site.department_id">
               <span :id="`e2e_${site.site_name.replaceAll(' ', '_')}`" @click="expandTree" class="caret">
                 {{ truncate(site.site_name, 50) }}
-                <router-link :to="{path: '/building_add/' + site.id}" target="_blank">
+                <router-link :to="{path: '/building/create/' + site.id}" target="_blank">
                   <button :id="`e2e_${site.site_name.replaceAll(' ', '_')}_add_button`" class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
                     px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                     Add building
                   </button>
                 </router-link>
-                <router-link :to="{path: '/site_upd/' + site.id}" target="_blank">
+                <router-link :to="{path: '/site/' + site.id + '/update'}" target="_blank">
                   <button class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
                     px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                     Edit
@@ -51,13 +51,13 @@
                   <template v-if="site.id == building.site_id">
                   <span :id="`e2e_${building.building_name.replaceAll(' ', '_')}`" @click="expandTree" class="caret">
                     {{ truncate(building.building_name, 50) }}
-                    <router-link :to="{path: '/room_add/' + building.id}" target="_blank">
+                    <router-link :to="{path: '/room/create/' + building.id}" target="_blank">
                       <button :id="`e2e_${building.building_name.replaceAll(' ', '_')}_add_button`" class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
                         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                         Add room
                       </button>
                     </router-link>
-                    <router-link :to="{path: '/building_upd/' + building.id}" target="_blank">
+                    <router-link :to="{path: '/building/' + building.id + '/update'}" target="_blank">
                       <button class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
                         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                         Edit
@@ -75,13 +75,13 @@
                       <template v-if="building.id == room.building_id">
                       <span :id="`e2e_${room.room_name.replaceAll(' ', '_')}`" @click="expandTree" class="caret">
                         {{ truncate(room.room_name, 50) }}
-                        <router-link :to="{path: '/rack_add/' + room.id}" target="_blank">
+                        <router-link :to="{path: '/rack/create/' + room.id}" target="_blank">
                           <button :id="`e2e_${room.room_name.replaceAll(' ', '_')}_add_button`" class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
                             px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                             Add rack
                           </button>
                         </router-link>
-                        <router-link :to="{path: '/room_upd/' + room.id}" target="_blank">
+                        <router-link :to="{path: '/room/' + room.id + '/update'}" target="_blank">
                           <button class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
                             px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                             Edit
@@ -167,29 +167,29 @@ export default {
       this.getRacks();
     },
     async getRegions() {
-      this.regions = await getObject('regions', '/regions', null);
+      this.regions = await getObject('regions', '/region/all', null);
     },
     async getDepartments() {
-      this.departments = await getObject('departments', '/departments', null);
+      this.departments = await getObject('departments', '/department/all', null);
     },
     async getSites() {
-      this.sites = await getObject('sites', '/sites', null);
+      this.sites = await getObject('sites', '/site/all', null);
     },
     async getBuildings() {
-      this.buildings = await getObject('buildings', '/buildings', null);
+      this.buildings = await getObject('buildings', '/building/all', null);
     },
     async getRooms() {
-      this.rooms = await getObject('rooms', '/rooms', null);
+      this.rooms = await getObject('rooms', '/room/all', null);
     },
     async getRacks() {
-      this.racks = await getObject('racks', '/racks', null);
+      this.racks = await getObject('racks', '/rack/all', null);
     },
     async deleteSite(id, siteName) {
       const payload = {
         id: id,
       }
       if (confirm(`Do you really want to delete site ${siteName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('site', '/site_del', payload);
+        this.messageProps.message = await deleteObject('site', `/site/${id}/delete`, payload);
         console.log(this.messageProps.message);
         this.getSites();
       }
@@ -199,7 +199,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete building ${buildingName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('building', '/building_del', payload);
+        this.messageProps.message = await deleteObject('building', `/building/${id}/delete`, payload);
         this.getBuildings();
       }
     },
@@ -208,7 +208,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete room ${roomName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('room', '/room_del', payload);
+        this.messageProps.message = await deleteObject('room', `/room/${id}/delete`, payload);
         this.getRooms();
       }
     },

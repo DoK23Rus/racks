@@ -297,10 +297,10 @@ export default {
       this.v$.$touch();
     },
     async getVendors() {
-      this.vendors = await getUnique('rack vendors', '/rack_vendors');
+      this.vendors = await getUnique('rack vendors', '/rack/vendors');
     },
     async getModels() {
-      this.models= await getUnique('rack models', '/rack_models');
+      this.models= await getUnique('rack models', '/rack/models');
     },
     copyOnClick(choice, id) {
       document.getElementById(id).value = document.getElementById(choice).innerText;
