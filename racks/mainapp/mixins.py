@@ -513,6 +513,10 @@ class BaseApiMixin(AbstractViewMixin):
 
 
 class BaseApiGetMixin(BaseApiMixin):
+    """
+    Base api get mixin
+    """
+
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Base get method
@@ -813,7 +817,6 @@ class RegionListApiMixin:
     """
     Regions list mixin
     """
-
     queryset: QuerySet = RepoService.get_all_regions()
 
 
@@ -821,7 +824,6 @@ class DepartmentListApiMixin:
     """
     Departments list mixin
     """
-
     queryset: QuerySet = RepoService.get_all_departments()
 
 
@@ -829,7 +831,6 @@ class SiteListApiMixin:
     """
     Sites list mixin
     """
-
     queryset: QuerySet = RepoService.get_all_sites()
 
 
@@ -837,7 +838,6 @@ class BuildingListApiMixin:
     """
     Buildings list mixin
     """
-
     queryset: QuerySet = RepoService.get_all_buildings()
 
 
@@ -845,7 +845,6 @@ class RoomListApiMixin:
     """
     Rooms list mixin
     """
-
     queryset: QuerySet = RepoService.get_all_rooms()
 
 
