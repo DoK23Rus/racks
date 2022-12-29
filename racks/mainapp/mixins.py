@@ -2,25 +2,31 @@
 Mixins for business logic calls
 """
 import logging
+import os
 from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import List, Optional
 
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
+from celery.result import AsyncResult
 from rest_framework import permissions
 from rest_framework.permissions import BasePermissionMetaclass
 from rest_framework.response import Response
 from rest_framework.serializers import SerializerMetaclass
 
+from mainapp.data import ReportHeaders
 from mainapp.serializers import DeviceSerializer
-from mainapp.services import (DataProcessingService,
+from mainapp.services import (date,
+                              DataProcessingService,
                               DeviceCheckService,
                               RepoService,
                               UniqueCheckService,
-                              UserCheckService)
+                              UserCheckService,
+                              ReportService,)
 from mainapp.utils import Result
+from mainapp.tasks import delete_report_task, generate_report_task
 
 logger = logging.getLogger(__name__)
 
@@ -446,13 +452,6 @@ class RackListApiViewMixin:
     queryset: QuerySet = RepoService.get_all_racks()
 
 
-class DeviceListApiViewMixin:
-    """
-    Devices list API mixin
-    """
-    queryset: QuerySet = RepoService.get_all_devices()
-
-
 class BaseApiMixin(AbstractViewMixin):
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -873,3 +872,68 @@ class UserApiMixin(BaseApiMixin):
             Response (HttpResponse): Response with username
         """
         return Response({"user": request.user.username})
+
+
+class RacksReportMixin(BaseApiMixin):
+    """
+    Racks report API mixin
+    """
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Get racks report
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with racks report data
+        """
+        file_path = f"{os.environ.get('STATIC_DIR')}/racks_report_{date()}.csv"
+        task = generate_report_task.delay(file_path,
+                                          ReportHeaders.racks_header_list,
+                                          ReportService.get_racks_data())
+        result = AsyncResult(task.id)
+        file_path = result.get()
+        response = HttpResponseNotFound()
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(),
+                                    content_type="multipart/form-data")
+            response['Content-Disposition'] = 'inline; filename=report.csv'
+        delete_report_task.delay(file_path)
+        return response
+
+
+class DevicesReportMixin(BaseApiMixin):
+    """
+    Devices report API mixin
+    """
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Get devices report
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with devices report data
+        """
+        file_path = f"{os.environ.get('STATIC_DIR')}/devices_report_"
+        f"{date()}.csv"
+        task = generate_report_task.delay(file_path,
+                                          ReportHeaders.devices_header_list,
+                                          ReportService.get_devices_data())
+        result = AsyncResult(task.id)
+        file_path = result.get()
+        response = HttpResponseNotFound()
+        with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read(),
+                                    content_type="multipart/form-data")
+            response['Content-Disposition'] = 'inline; filename=report.csv'
+        delete_report_task.delay(file_path)
+        return response

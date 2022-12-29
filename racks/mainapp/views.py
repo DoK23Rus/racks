@@ -11,14 +11,15 @@ from mainapp.mixins import (BaseApiAddMixin,
                             BaseApiUpdateMixin,
                             BuildingListApiMixin,
                             DepartmentListApiMixin,
-                            DeviceListApiViewMixin,
                             DeviceModelsApiMixin,
                             DeviceVendorsApiMixin,
+                            DevicesReportMixin,
                             PermissionsMixin,
                             RackDevicesApiMixin,
                             RackListApiViewMixin,
                             RackModelsApiMixin,
                             RackVendorsApiMixin,
+                            RacksReportMixin,
                             RegionListApiMixin,
                             RoomListApiMixin,
                             SiteListApiMixin,
@@ -85,14 +86,6 @@ class RackListApiView(RackListApiViewMixin, PermissionsMixin, ListAPIView):
     """
     model: ModelBase = Rack
     serializer_class: SerializerMetaclass = RackSerializer
-
-
-class DeviceListApiView(DeviceListApiViewMixin, PermissionsMixin, ListAPIView):
-    """
-    Device list API view
-    """
-    model: ModelBase = Device
-    serializer_class: SerializerMetaclass = DeviceSerializer
 
 
 class SiteAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
@@ -335,5 +328,19 @@ class RackModelsApiView(RackModelsApiMixin, PermissionsMixin, APIView):
 class RackDevicesApiView(RackDevicesApiMixin, PermissionsMixin, APIView):
     """
     Rack devices API view
+    """
+    pass
+
+
+class RacksReportApiView(RacksReportMixin, PermissionsMixin, APIView):
+    """
+    Racks report API view
+    """
+    pass
+
+
+class DevicesReportApiView(DevicesReportMixin, PermissionsMixin, APIView):
+    """
+    Devices report API view
     """
     pass

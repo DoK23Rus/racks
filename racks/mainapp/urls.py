@@ -29,13 +29,14 @@ from mainapp.views import (RackDevicesApiView,
                            DeviceUpdateApiView,
                            DeviceDeleteApiView,
                            DeviceDetailApiView,
-                           DeviceListApiView,
                            RackListApiView,
                            UserApiView,
                            DeviceVendorsApiView,
                            DeviceModelsApiView,
                            RackVendorsApiView,
-                           RackModelsApiView)
+                           RackModelsApiView,
+                           RacksReportApiView,
+                           DevicesReportApiView)
 
 
 urlpatterns = [
@@ -65,11 +66,12 @@ urlpatterns = [
     path('rack/devices/<int:pk>', RackDevicesApiView.as_view()),
     path('rack/vendors', RackVendorsApiView.as_view()),
     path('rack/models', RackModelsApiView.as_view()),
-    path('device/all/', DeviceListApiView.as_view()),
     path('device/<int:pk>/', DeviceDetailApiView.as_view()),
     path('device/create', DeviceAddApiView.as_view()),
     path('device/<int:pk>/update', DeviceUpdateApiView.as_view()),
     path('device/<int:pk>/delete', DeviceDeleteApiView.as_view()),
     path('device/vendors', DeviceVendorsApiView.as_view()),
     path('device/models', DeviceModelsApiView.as_view()),
+    path('racks/report', RacksReportApiView.as_view()),
+    path('devices/report', DevicesReportApiView.as_view()),
 ]

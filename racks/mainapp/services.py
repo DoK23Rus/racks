@@ -2,6 +2,7 @@
 Business logic classes
 """
 import datetime
+import os
 from typing import List, Optional, Set, NamedTuple
 
 from django.db.models.base import ModelBase
@@ -14,12 +15,6 @@ from mainapp.models import (Building,
                             Region,
                             Room,
                             Site)
-from mainapp.repository import (BuildingRepository,
-                                DepartmentRepository,
-                                DeviceRepository,
-                                RackRepository,
-                                RoomRepository,
-                                SiteRepository)
 
 
 def date() -> str:
@@ -29,7 +24,7 @@ def date() -> str:
     Returns:
         date (str): Date in y-m-d format
     """
-    return datetime.datetime.today().strftime("%Y-%m-%d")
+    return datetime.datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
 
 
 class OldUnits(NamedTuple):
@@ -64,8 +59,8 @@ class DeviceCheckService:
         Returns:
             OldUnits (tuple): First and last unit in named tuple (ordered)
         """
-        first_unit = DeviceRepository.get_first_unit(pk)
-        last_unit = DeviceRepository.get_last_unit(pk)
+        first_unit = Device.objects.get_device(pk).first_unit
+        last_unit = Device.objects.get_device(pk).last_unit
         if first_unit > last_unit:
             return OldUnits(last_unit, first_unit)
         return OldUnits(first_unit, last_unit)
@@ -101,7 +96,8 @@ class DeviceCheckService:
             False (bool): units pair are outside of the rack
         """
         new_device_range = range(units.new_first_unit, units.new_last_unit + 1)
-        all_units_ramge = range(1, int(RackRepository.get_amount(rack_id)) + 1)
+        all_units_ramge = range(1, int(Rack
+                                .objects.get_rack(rack_id).rack_amount) + 1)
         if not set(new_device_range).issubset(all_units_ramge):
             return True
         else:
@@ -180,23 +176,38 @@ class UserCheckService:
             False (bool): Changes are prohibited
         """
         if model == Department:
-            department_name = DepartmentRepository \
-                .get_department_name(pk)
+            department_name = Department.objects.get(id=pk) \
+                .department_name
         elif model == Site:
-            department_name = SiteRepository \
-                .get_department_name(pk)
+            department_name = Site.objects.get_site_department(pk) \
+                .department_id \
+                .department_name
         elif model == Building:
-            department_name = BuildingRepository \
-                .get_department_name(pk)
+            department_name = Building.objects.get_building_department(pk) \
+                .site_id \
+                .department_id \
+                .department_name
         elif model == Room:
-            department_name = RoomRepository \
-                .get_department_name(pk)
+            department_name = Room.objects.get_room_department(pk) \
+                .building_id \
+                .site_id \
+                .department_id \
+                .department_name
         elif model == Rack:
-            department_name = RackRepository \
-                .get_department_name(pk)
+            department_name = Rack.objects.get_rack_department(pk) \
+                .room_id \
+                .building_id \
+                .site_id \
+                .department_id \
+                .department_name
         elif model == Device:
-            department_name = DeviceRepository \
-                .get_department_name(pk)
+            department_name = Device.objects.get_device_department(pk) \
+                .rack_id \
+                .room_id \
+                .building_id \
+                .site_id \
+                .department_id \
+                .department_name
         else:
             raise ValueError('model: ModelBase must be'
                              'Department|Site|Building|Room|Rack|Device')
@@ -242,7 +253,7 @@ class UniqueCheckService:
                              in Room.objects.get_rooms_for_building(key)}
             elif model == Room:
                 names_set = {rack.rack_name for rack
-                             in Rack.objects.get_racks_for_rooms(key)}
+                             in Rack.objects.get_racks_for_room(key)}
             else:
                 raise ValueError("model: ModelBase must be Site|Building|Room")
             return names_set
@@ -266,7 +277,10 @@ class DataProcessingService:
         Returns:
             devices_power_w_sum (int): Summary power of all rack devices
         """
-        power_w_list = DeviceRepository.get_devices_power_w(pk)
+        power_w_list = list(Device
+                            .objects
+                            .filter(rack_id_id=pk)
+                            .values_list('power_w', flat=True))
         return sum(power_w for power_w in power_w_list if power_w is not None)
 
     @staticmethod
@@ -282,7 +296,7 @@ class DataProcessingService:
             data (dict): Same data set with old rack amount
         """
         if data.get('rack_amount'):
-            data['rack_amount'] = RackRepository.get_amount(pk)
+            data['rack_amount'] = Rack.objects.get_rack(pk).rack_amount
             return data
         return data
 
@@ -336,7 +350,7 @@ class DataProcessingService:
 
 class RepoService:
     """
-    Service for repository layer calls and not serialized data(or primitives)
+    Service for a model layer calls
     """
 
     @staticmethod
@@ -375,16 +389,6 @@ class RepoService:
             all_racks (QuerySet): All racks queryset
         """
         return Rack.objects.get_all_racks()
-
-    @staticmethod
-    def get_all_devices() -> QuerySet:
-        """
-        Get all devices
-
-        Returns:
-            all_devices (QuerySet): All devices queryset
-        """
-        return Device.objects.get_all_devices()
 
     @staticmethod
     def get_all_rooms() -> QuerySet:
@@ -447,7 +451,9 @@ class RepoService:
         Returns:
             rack_room_name (str): Room name for particular rack
         """
-        return RackRepository.get_room_name(pk)
+        return Rack.objects.get_rack_room(pk) \
+            .room_id \
+            .room_name
 
     @staticmethod
     def get_rack_building_name(pk: int) -> str:
@@ -460,7 +466,10 @@ class RepoService:
         Returns:
             rack_building_name (str): Building name for particular rack
         """
-        return RackRepository.get_building_name(pk)
+        return Rack.objects.get_rack_building(pk) \
+            .room_id \
+            .building_id \
+            .building_name
 
     @staticmethod
     def get_rack_site_name(pk: int) -> str:
@@ -473,7 +482,11 @@ class RepoService:
         Returns:
             rack_site_name (str): Site name for particular rack
         """
-        return RackRepository.get_site_name(pk)
+        return Rack.objects.get_rack_site(pk) \
+            .room_id \
+            .building_id \
+            .site_id \
+            .site_name
 
     @staticmethod
     def get_rack_department_name(pk: int) -> str:
@@ -486,7 +499,12 @@ class RepoService:
         Returns:
             rack_department_name (str): Department name for particular rack
         """
-        return RackRepository.get_department_name(pk)
+        return Rack.objects.get_rack_department(pk) \
+            .room_id \
+            .building_id \
+            .site_id \
+            .department_id \
+            .department_name
 
     @staticmethod
     def get_rack_region_name(pk: int) -> str:
@@ -499,7 +517,13 @@ class RepoService:
         Returns:
             rack_region_name (str): Region name for particular rack
         """
-        return RackRepository.get_region_name(pk)
+        return Rack.objects.get_rack_region(pk) \
+            .room_id \
+            .building_id \
+            .site_id \
+            .department_id \
+            .region_id \
+            .region_name
 
     @staticmethod
     def get_device_rack_name(pk: int) -> str:
@@ -512,7 +536,9 @@ class RepoService:
         Returns:
             device_rack_name (str): Rack name for particular device
         """
-        return DeviceRepository.get_rack_name(pk)
+        return Device.objects.get_device_rack(pk) \
+            .rack_id \
+            .rack_name
 
     @staticmethod
     def get_device_room_name(pk: int) -> str:
@@ -525,7 +551,10 @@ class RepoService:
         Returns:
             device_room_name (str): Room name for particular device
         """
-        return DeviceRepository.get_room_name(pk)
+        return Device.objects.get_device_room(pk) \
+            .rack_id \
+            .room_id \
+            .room_name
 
     @staticmethod
     def get_device_building_name(pk: int) -> str:
@@ -538,7 +567,11 @@ class RepoService:
         Returns:
             device_building_name (str): Building name for particular device
         """
-        return DeviceRepository.get_building_name(pk)
+        return Device.objects.get_device_building(pk) \
+            .rack_id \
+            .room_id \
+            .building_id \
+            .building_name
 
     @staticmethod
     def get_device_site_name(pk: int) -> str:
@@ -551,7 +584,12 @@ class RepoService:
         Returns:
             device_site_name (str): Site name for particular device
         """
-        return DeviceRepository.get_site_name(pk)
+        return Device.objects.get_device_site(pk) \
+            .rack_id \
+            .room_id \
+            .building_id \
+            .site_id \
+            .site_name
 
     @staticmethod
     def get_device_department_name(pk: int) -> str:
@@ -564,7 +602,13 @@ class RepoService:
         Returns:
             device_department_name (str): Site name for particular device
         """
-        return DeviceRepository.get_department_name(pk)
+        return Device.objects.get_device_department(pk) \
+            .rack_id \
+            .room_id \
+            .building_id \
+            .site_id \
+            .department_id \
+            .department_name
 
     @staticmethod
     def get_device_region_name(pk: int) -> str:
@@ -577,7 +621,14 @@ class RepoService:
         Returns:
             device_region_name (str): Region name for particular device
         """
-        return DeviceRepository.get_region_name(pk)
+        return Device.objects.get_device_region(pk) \
+            .rack_id \
+            .room_id \
+            .building_id \
+            .site_id \
+            .department_id \
+            .region_id \
+            .region_name
 
     @staticmethod
     def get_device_rack_id(pk: int) -> int:
@@ -590,7 +641,7 @@ class RepoService:
         Returns:
             device_rack_id (int): Rack id for particular device
         """
-        return DeviceRepository.get_rack_id(pk)
+        return Device.objects.get_device(pk).rack_id_id
 
     @staticmethod
     def get_device_vendors() -> List[Optional[str]]:
@@ -600,7 +651,7 @@ class RepoService:
         Returns:
             device_vendors (list): Sorted list of unique device vendors
         """
-        device_vendors = DeviceRepository.get_device_vendors()
+        device_vendors = list(Device.objects.get_device_vendors().distinct())
         device_vendors.sort()
         return device_vendors
 
@@ -612,7 +663,7 @@ class RepoService:
         Returns:
             device_models (list): Sorted list of unique device models
         """
-        device_models = DeviceRepository.get_device_models()
+        device_models = list(Device.objects.get_device_models().distinct())
         device_models.sort()
         return device_models
 
@@ -624,7 +675,7 @@ class RepoService:
         Returns:
             rack_vendors (list): Sorted list of unique rack vendors
         """
-        rack_vendors = RackRepository.get_unique_rack_vendors()
+        rack_vendors = list(Rack.objects.get_rack_vendors().distinct())
         rack_vendors.sort()
         return rack_vendors
 
@@ -636,6 +687,112 @@ class RepoService:
         Returns:
             rack_models (list): Sorted list of unique rack models
         """
-        rack_models = RackRepository.get_unique_rack_models()
+        rack_models = list(Rack.objects.get_rack_models().distinct())
         rack_models.sort()
         return rack_models
+
+
+class ReportService:
+    """
+    Service for generating reports
+    """
+
+    @staticmethod
+    def get_devices_data() -> List[List[str]]:
+        """
+        Get data for devices report (all devices data)
+
+        Returns:
+            devices_data (list): List of lists with devices data
+        """
+        devices_data: List = []
+        for device in Device.objects.get_devices_report():
+            devices_data.append([
+                device.id,
+                device.status,
+                device.device_vendor,
+                device.device_model,
+                device.device_serial_number,
+                device.device_description,
+                device.project,
+                device.ownership,
+                device.financially_responsible_person,
+                device.device_inventory_number,
+                device.responsible,
+                device.fixed_asset,
+                device.link,
+                device.first_unit,
+                device.last_unit,
+                'Yes' if device.frontside_location else 'No',
+                device.device_type,
+                device.device_hostname,
+                device.ip,
+                f"{os.environ.get('DEVICE_REPORT_LINK')}"
+                f"{str(device.device_stack)}" if device.device_stack
+                is not None else None,
+                device.ports_amout,
+                device.version,
+                device.power_type,
+                device.power_w,
+                device.power_v,
+                device.power_ac_dc,
+                device.updated_by,
+                device.updated_at,
+                device.rack_name,
+                device.room_name,
+                device.building_name,
+                device.site_name,
+                device.department_name,
+                device.region_name,
+                f"{os.environ.get('DEVICE_REPORT_LINK')}{str(str(device.id))}",
+            ])
+        return devices_data
+
+    @staticmethod
+    def get_racks_data() -> List[List[str]]:
+        """
+        Get data for racks report (all racks data)
+
+        Returns:
+            racks_data (list): List of lists with racks data
+        """
+        racks_data: List = []
+        for rack in Rack.objects.get_racks_report():
+            racks_data.append([
+                rack.id,
+                rack.rack_name,
+                rack.rack_amount,
+                rack.rack_vendor,
+                rack.rack_model,
+                rack.rack_description,
+                'Yes' if rack.numbering_from_bottom_to_top else 'No',
+                rack.responsible,
+                rack.rack_financially_responsible_person,
+                rack.rack_inventory_number,
+                rack.fixed_asset,
+                rack.link,
+                rack.row,
+                rack.place,
+                rack.rack_height,
+                rack.rack_width,
+                rack.rack_depth,
+                rack.rack_unit_width,
+                rack.rack_unit_depth,
+                rack.rack_type,
+                rack.rack_frame,
+                rack.rack_palce_type,
+                rack.max_load,
+                rack.power_sockets,
+                rack.power_sockets_ups,
+                'Yes' if rack.external_ups else 'No',
+                'Yes' if rack.cooler else 'No',
+                rack.updated_by,
+                rack.updated_at,
+                rack.room_name,
+                rack.building_name,
+                rack.site_name,
+                rack.department_name,
+                rack.region_name,
+                f"{os.environ.get('RACK_REPORT_LINK')}{str(str(rack.id))}",
+            ])
+        return racks_data

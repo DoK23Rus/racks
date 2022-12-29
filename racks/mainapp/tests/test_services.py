@@ -2,24 +2,21 @@
 Testing business logic
 """
 from django.test import TestCase
-from mainapp.models import (
-    Region,
-    Department,
-    Site,
-    Building,
-    Room,
-    Rack,
-    Device,
-)
-from mainapp.services import (
-    UserCheckService,
-    UniqueCheckService,
-    DeviceCheckService,
-    DataProcessingService,
-    RepoService,
-    NewUnits,
-    OldUnits,
-)
+from mainapp.models import (Region,
+                            Department,
+                            Site,
+                            Building,
+                            Room,
+                            Rack,
+                            Device)
+from mainapp.services import (UserCheckService,
+                              UniqueCheckService,
+                              DeviceCheckService,
+                              DataProcessingService,
+                              RepoService,
+                              NewUnits,
+                              OldUnits,
+                              ReportService)
 
 
 def base_setup():
@@ -114,6 +111,64 @@ def base_setup():
                                  device_vendor='Test_vendor8',
                                  device_model='Test_model8',
                                  rack_id=rack2_id)
+
+
+racks_mock_data = [
+    [1, 'Test_rack1', 40, 'Test_vendor1', 'Test_model1', '', 'Yes',
+        '', '', '', '', '', '', '', None, None, None, 19, None, 'Rack',
+        'Double frame', 'Floor standing', None, None, None, 'Yes', 'No',
+        '', '', 'Test_room1', 'Test_building1', 'Test_site1',
+        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/rack/1'],
+    [2, 'Test_rack2', 20, 'Test_vendor2', 'Test_model2', '', 'No',
+        '', '', '', '', '', '', '', None, None, None, 19, None, 'Rack',
+        'Double frame', 'Floor standing', None, None, None, 'Yes', 'No',
+        '', '', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/rack/2']
+]
+
+
+devices_mock_data = [
+    [4, 'Device active', 'Test_vendor4', 'Test_model4', '', '', '',
+        'Our department', '', '', '', '', '', 7, 7, 'No', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
+        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/4'],
+    [3, 'Device active', 'Test_vendor3', 'Test_model3', '', '', '',
+        'Our department', '', '', '', '', '', 4, 3, 'No', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', 50, 220, 'AC', '', '',
+        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
+        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/3'],
+    [2, 'Device active', 'Test_vendor2', 'Test_model2', '', '', '',
+        'Our department', '', '', '', '', '', 5, 5, 'Yes', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', 200, 220, 'AC', '', '',
+        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
+        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/2'],
+    [1, 'Device active', 'Test_vendor1', 'Test_model1', '', '', '',
+        'Our department', '', '', '', '', '', 2, 1, 'Yes', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', 100, 220, 'AC', '', '',
+        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
+        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/1'],
+    [8, 'Device active', 'Test_vendor8', 'Test_model8', '', '', '',
+        'Our department', '', '', '', '', '', 18, 18, 'No', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/8'],
+    [7, 'Device active', 'Test_vendor7', 'Test_model7', '', '', '',
+        'Our department', '', '', '', '', '', 14, 13, 'No', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/7'],
+    [6, 'Device active', 'Test_vendor6', 'Test_model6', '', '', '',
+        'Our department', '', '', '', '', '', 15, 15, 'Yes', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/6'],
+    [5, 'Device active', 'Test_vendor5', 'Test_model5', '', '', '',
+        'Our department', '', '', '', '', '', 11, 12, 'Yes', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/5']
+]
 
 
 class TestUserCheckService(TestCase):
@@ -502,12 +557,6 @@ class TestRepoService(TestCase):
         result = RepoService.get_all_racks()
         self.assertQuerysetEqual(result, racks, ordered=False)
 
-    def test_get_all_devices(self):
-        # All devices Queryset
-        devices = Device.objects.get_all_devices()
-        result = RepoService.get_all_devices()
-        self.assertQuerysetEqual(result, devices, ordered=False)
-
     def test_get_all_rooms(self):
         # All rooms Queryset
         rooms = Room.objects.get_all_rooms()
@@ -759,6 +808,36 @@ class TestRepoService(TestCase):
         models_list.sort()
         result = RepoService.get_rack_models()
         self.assertEqual(result, models_list)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestReportService(TestCase):
+    """
+    Testing report services
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
+
+    def test_get_devices_data(self):
+        # Devices report data
+        data = ReportService.get_devices_data()
+        # Replace datestamp
+        for line in data:
+            line[27] = ''
+        self.assertEqual(data, devices_mock_data)
+
+    def test_get_racks_data(self):
+        # RAcks report data
+        data = ReportService.get_racks_data()
+        # Replace datestamp
+        for line in data:
+            line[28] = ''
+        self.assertEqual(data, racks_mock_data)
 
     @classmethod
     def tearDownClass(cls):

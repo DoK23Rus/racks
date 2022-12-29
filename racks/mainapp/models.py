@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.base import ModelBase
-from django.db.models.query import QuerySet
+from django.db.models.query import QuerySet, RawQuerySet
 
 
 class RegionManager(models.Manager):
@@ -174,7 +174,7 @@ class RackManager(models.Manager):
         """
         return Rack.objects.get(id=pk)
 
-    def get_racks_for_rooms(self, pk: int) -> QuerySet:
+    def get_racks_for_room(self, pk: int) -> QuerySet:
         """
         Get racks for single room
 
@@ -283,6 +283,31 @@ class RackManager(models.Manager):
                             'region_id') \
             .get(id=pk)
 
+    def get_racks_report(self) -> RawQuerySet:
+        return Rack.objects.raw("""SELECT rack.id as id,
+                                rack.*,
+                                room.room_name,
+                                building.building_name,
+                                site.site_name,
+                                department.department_name,
+                                region.region_name
+                                FROM rack
+                                JOIN room ON
+                                room.id =
+                                rack.room_id_id
+                                JOIN building ON
+                                building.id =
+                                room.building_id_id
+                                JOIN site ON
+                                site.id =
+                                building.site_id_id
+                                JOIN department ON
+                                department.id =
+                                site.department_id_id
+                                JOIN region ON
+                                region.id =
+                                department.region_id_id;""")
+
 
 class DeviceManager(models.Manager):
     """
@@ -314,15 +339,6 @@ class DeviceManager(models.Manager):
         """
         return Device.objects.filter(rack_id_id=pk) \
             .filter(frontside_location=side)
-
-    def get_all_devices(self) -> QuerySet:
-        """
-        Get all devices
-
-        Returns:
-            device (QuerySet): All devices queryset
-        """
-        return Device.objects.all()
 
     def get_devices_for_rack(self, pk: int) -> QuerySet:
         """
@@ -452,6 +468,35 @@ class DeviceManager(models.Manager):
             device_models (QuerySet): Device models queryset
         """
         return Device.objects.values_list('device_model', flat=True)
+
+    def get_devices_report(self) -> RawQuerySet:
+        return Device.objects.raw("""SELECT device.id as id,
+                                  device.*,
+                                  rack.rack_name,
+                                  room.room_name,
+                                  building.building_name,
+                                  site.site_name,
+                                  department.department_name,
+                                  region.region_name
+                                  FROM device
+                                  JOIN rack ON
+                                  rack.id =
+                                  device.rack_id_id
+                                  JOIN room ON
+                                  room.id =
+                                  rack.room_id_id
+                                  JOIN building ON
+                                  building.id =
+                                  room.building_id_id
+                                  JOIN site ON
+                                  site.id =
+                                  building.site_id_id
+                                  JOIN department ON
+                                  department.id =
+                                  site.department_id_id
+                                  JOIN region ON
+                                  region.id =
+                                  department.region_id_id;""")
 
 
 class Region(models.Model):
