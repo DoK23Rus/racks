@@ -8,10 +8,11 @@ function logError(error, objName, method) {
   console.error(error.response.data);
 };
 
-export async function getObject(objName, url, id) {
+export async function getObject(objName, url, id, location) {
   const pk = (!id) ? '' : id;
+  const prefix = (!location) ? '' : location;
   try {
-    const response = await axios.get(`${BASE_URL}${url}${pk}`);
+    const response = await axios.get(`${BASE_URL}${url}${pk}${prefix}`);
     return response.data;
   } catch (error) {
     logError(error, objName, 'get');

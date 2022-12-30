@@ -11,12 +11,14 @@ from mainapp.mixins import (BaseApiAddMixin,
                             BaseApiUpdateMixin,
                             BuildingListApiMixin,
                             DepartmentListApiMixin,
+                            DeviceLocationMixin,
                             DeviceModelsApiMixin,
                             DeviceVendorsApiMixin,
                             DevicesReportMixin,
                             PermissionsMixin,
                             RackDevicesApiMixin,
                             RackListApiViewMixin,
+                            RackLocationMixin,
                             RackModelsApiMixin,
                             RackVendorsApiMixin,
                             RacksReportMixin,
@@ -342,5 +344,19 @@ class RacksReportApiView(RacksReportMixin, PermissionsMixin, APIView):
 class DevicesReportApiView(DevicesReportMixin, PermissionsMixin, APIView):
     """
     Devices report API view
+    """
+    pass
+
+
+class DeviceLocationApiView(DeviceLocationMixin, PermissionsMixin, APIView):
+    """
+    Device location API view
+    """
+    pass
+
+
+class RackLocationApiView(RackLocationMixin, PermissionsMixin, APIView):
+    """
+    Rack location API view
     """
     pass

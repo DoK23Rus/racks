@@ -11,7 +11,7 @@ flake8 ./mainapp >> $FLAKE8_LOG 2>&1 &&
 mypy ./mainapp >> $MYPY_LOG 2>&1 &&
 python manage.py flush --no-input &&
 python manage.py migrate &&
-python manage.py collectstatic &&
+python manage.py collectstatic --noinput &&
 # Create user for e2e testing
 python manage.py shell < user_check.py &&
 echo "--------USERS-CREATED--------" &&

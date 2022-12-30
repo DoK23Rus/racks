@@ -17,9 +17,9 @@
     </button>
     <br>
       <div class="text-xs pb-4 text-slate-500">
-        {{ device.regionName }} &#9002; {{ device.departmentName }} &#9002; 
-        {{ device.siteName }} &#9002; {{ device.buildingName }} &#9002; 
-        {{ device.roomName }} &#9002; {{ device.rackName }}
+        {{ deviceLocation.regionName }} &#9002; {{ deviceLocation.departmentName }} &#9002; 
+        {{ deviceLocation.siteName }} &#9002; {{ deviceLocation.buildingName }} &#9002; 
+        {{ deviceLocation.roomName }} &#9002; {{ deviceLocation.rackName }}
       </div>
   <div class="text-base">
     Status: <text class="text-slate-500">{{ device.status }}</text>
@@ -166,6 +166,12 @@ export default {
         updatedBy: '',
         updatedAt: '',
         rackId: '',
+        
+      },
+      messageProps: {
+        message: ''
+      },
+      deviceLocation: {
         rackName: '',
         roomName: '',
         buildingName: '',
@@ -173,13 +179,11 @@ export default {
         departmentName: '',
         regionName: ''
       },
-      messageProps: {
-        message: ''
-      },
     }
   },
   mounted() {
     this.getDevice();
+    this.getDeviceLocation();
   },
   methods: {
     async getDevice() {
@@ -214,12 +218,6 @@ export default {
       this.device.updatedBy = response.updated_by;
       this.device.updatedAt = response.updated_at;
       this.device.rackId = response.rack_id;
-      this.device.rackName = response.rack_name;
-      this.device.roomName = response.room_name;
-      this.device.buildingName = response.building_name;
-      this.device.siteName = response.site_name;
-      this.device.departmentName = response.department_name;
-      this.device.regionName = response.region_name;
     },
     async deleteDevice(id, deviceName) {
       const payload = {
@@ -232,6 +230,16 @@ export default {
           this.$router.push('/units/' + this.device.rackId);
         }
       }
+    },
+    async getDeviceLocation() {
+      // Get racks location
+      const response = await getObject('device', '/device/', this.$route.params.id, '/location');
+      this.deviceLocation.rackName = response.rack_name;
+      this.deviceLocation.roomName = response.room_name;
+      this.deviceLocation.buildingName = response.building_name;
+      this.deviceLocation.siteName = response.site_name;
+      this.deviceLocation.departmentName = response.department_name;
+      this.deviceLocation.regionName = response.region_name;
     },
   }
 }

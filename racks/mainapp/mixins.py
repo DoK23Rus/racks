@@ -874,6 +874,70 @@ class UserApiMixin(BaseApiMixin):
         return Response({"user": request.user.username})
 
 
+class DeviceLocationMixin(BaseApiMixin):
+    """
+    Device location mixin
+    """
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Get device location data
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with device location data
+        """
+        rack_name = RepoService.get_device_rack_name(kwargs['pk'])
+        room_name = RepoService.get_device_room_name(kwargs['pk'])
+        site_name = RepoService.get_device_site_name(kwargs['pk'])
+        building_name = RepoService.get_device_building_name(kwargs['pk'])
+        department_name = RepoService.get_device_department_name(kwargs['pk'])
+        region_name = RepoService.get_device_region_name(kwargs['pk'])
+        return Response({
+            "rack_name": rack_name,
+            "room_name": room_name,
+            "site_name": site_name,
+            "building_name": building_name,
+            "department_name": department_name,
+            "region_name": region_name,
+        })
+
+
+class RackLocationMixin(BaseApiMixin):
+    """
+    Rack location mixin
+    """
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Get rack location data
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            Response (HttpResponse): Response with rack location data
+        """
+        room_name = RepoService.get_rack_room_name(kwargs['pk'])
+        site_name = RepoService.get_rack_site_name(kwargs['pk'])
+        building_name = RepoService.get_rack_building_name(kwargs['pk'])
+        department_name = RepoService.get_rack_department_name(kwargs['pk'])
+        region_name = RepoService.get_rack_region_name(kwargs['pk'])
+        return Response({
+            "room_name": room_name,
+            "site_name": site_name,
+            "building_name": building_name,
+            "department_name": department_name,
+            "region_name": region_name,
+        })
+
+
 class RacksReportMixin(BaseApiMixin):
     """
     Racks report API mixin

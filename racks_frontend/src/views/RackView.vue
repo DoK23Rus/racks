@@ -17,8 +17,8 @@
     </button>
     <br>
       <div class="text-xs pb-4 text-slate-500">
-        {{ rack.regionName }} &#9002; {{ rack.departmentName }} &#9002; 
-        {{ rack.siteName }} &#9002; {{ rack.buildingName }} &#9002; {{ rack.roomName }}
+        {{ rackLocation.regionName }} &#9002; {{ rackLocation.departmentName }} &#9002; 
+        {{ rackLocation.siteName }} &#9002; {{ rackLocation.buildingName }} &#9002; {{ rackLocation.roomName }}
       </div>
   <div class="text-base">
       Rack name: <text class="text-slate-500">{{ rack.rackName }}</text>
@@ -186,20 +186,23 @@ export default {
         cooler: false,
         totalPowerW: null,
         updatedBy: '',
-        updatedAt: '',
+        updatedAt: ''
+      },
+      messageProps: {
+        message: ''
+      },
+      rackLocation: {
         roomName: '',
         buildingName: '',
         siteName: '',
         departmentName: '',
         regionName: ''
-      },
-      messageProps: {
-        message: ''
-      },
+      }
     }
   },
   mounted() {
     this.getRack();
+    this.getRackLocation();
   },
   methods: {
     // Get rack data
@@ -236,11 +239,6 @@ export default {
       this.rack.updatedBy = response.updated_by;
       this.rack.updatedAt = response.updated_at;
       this.rack.roomId = response.room_id;
-      this.rack.roomName = response.room_name;
-      this.rack.buildingName = response.building_name;
-      this.rack.siteName = response.site_name;
-      this.rack.departmentName = response.department_name;
-      this.rack.regionName = response.region_name;
     },
     async deleteRack(id, rackName) {
       const payload = {
@@ -253,6 +251,15 @@ export default {
           this.$router.push('/tree');
         }
       }
+    },
+    async getRackLocation() {
+      // Get rack location
+      const response = await getObject('rack', '/rack/', this.$route.params.id, '/location');
+      this.rackLocation.roomName = response.room_name;
+      this.rackLocation.buildingName = response.building_name;
+      this.rackLocation.siteName = response.site_name;
+      this.rackLocation.departmentName = response.department_name;
+      this.rackLocation.regionName = response.region_name;
     },
   }
 }

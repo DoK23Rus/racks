@@ -10,7 +10,7 @@ from mainapp.models import (Building,
                             Region,
                             Room,
                             Site)
-from mainapp.services import DataProcessingService, RepoService
+from mainapp.services import DataProcessingService
 
 
 class RegionSerializer(serializers.ModelSerializer):
@@ -94,11 +94,6 @@ class RackSerializer(serializers.ModelSerializer):
     """
     rack_amount = serializers.IntegerField(allow_null=False)
     total_power_w = serializers.SerializerMethodField('get_total_power_w')
-    room_name = serializers.SerializerMethodField('get_room_name')
-    building_name = serializers.SerializerMethodField('get_building_name')
-    site_name = serializers.SerializerMethodField('get_site_name')
-    department_name = serializers.SerializerMethodField('get_department_name')
-    region_name = serializers.SerializerMethodField('get_region_name')
 
     def get_total_power_w(self, obj: Rack) -> int:
         """
@@ -111,66 +106,6 @@ class RackSerializer(serializers.ModelSerializer):
             total_power_w (int): Total power for single rack
         """
         return DataProcessingService.get_devices_power_w_sum(obj.id)
-
-    def get_room_name(self, obj: Rack) -> str:
-        """
-        Get room name for rack
-
-        Args:
-            obj (Rack): Object
-
-        Returns:
-            room_name (str): Room name for rack
-        """
-        return RepoService.get_rack_room_name(obj.id)
-
-    def get_site_name(self, obj: Rack) -> str:
-        """
-        Get site name for rack
-
-        Args:
-            obj (Rack): Object
-
-        Returns:
-            site_name (str): Site name for rack
-        """
-        return RepoService.get_rack_site_name(obj.id)
-
-    def get_building_name(self, obj: Rack) -> str:
-        """
-        Get building name for rack
-
-        Args:
-            obj (Rack): Object
-
-        Returns:
-            building_name (str): Building name for rack
-        """
-        return RepoService.get_rack_building_name(obj.id)
-
-    def get_department_name(self, obj: Rack) -> str:
-        """
-        Get department name for rack
-
-        Args:
-            obj (Rack): Object
-
-        Returns:
-            department_name (str): Department name for rack
-        """
-        return RepoService.get_rack_department_name(obj.id)
-
-    def get_region_name(self, obj: Rack) -> str:
-        """
-        Get region name for rack
-
-        Args:
-            obj (Rack): Object
-
-        Returns:
-            region_name (str): Region name for rack
-        """
-        return RepoService.get_rack_region_name(obj.id)
 
     class Meta:
         model: ModelBase = Rack
@@ -206,11 +141,6 @@ class RackSerializer(serializers.ModelSerializer):
             'updated_by',
             'updated_at',
             'room_id',
-            'room_name',
-            'site_name',
-            'building_name',
-            'department_name',
-            'region_name'
         ]
 
 
@@ -219,84 +149,6 @@ class DeviceSerializer(serializers.ModelSerializer):
     Device serializer
     """
     frontside_location = serializers.BooleanField(required=True)
-    rack_name = serializers.SerializerMethodField('get_rack_name')
-    room_name = serializers.SerializerMethodField('get_room_name')
-    building_name = serializers.SerializerMethodField('get_building_name')
-    site_name = serializers.SerializerMethodField('get_site_name')
-    department_name = serializers.SerializerMethodField('get_department_name')
-    region_name = serializers.SerializerMethodField('get_region_name')
-
-    def get_rack_name(self, obj: Device) -> str:
-        """
-        Get rack name for device
-
-        Args:
-            obj (Device): Object
-
-        Returns:
-            rack_name (str): Rack name for device
-        """
-        return RepoService.get_device_rack_name(obj.id)
-
-    def get_room_name(self, obj: Device) -> str:
-        """
-        Get room name for device
-
-        Args:
-            obj (Device): Object
-
-        Returns:
-            room_name (str): Room name for device
-        """
-        return RepoService.get_device_room_name(obj.id)
-
-    def get_site_name(self, obj: Device) -> str:
-        """
-        Get site name for device
-
-        Args:
-            obj (Device): Object
-
-        Returns:
-            site_name (str): Site name for device
-        """
-        return RepoService.get_device_site_name(obj.id)
-
-    def get_building_name(self, obj: Device) -> str:
-        """
-        Get building name for device
-
-        Args:
-            obj (Device): Object
-
-        Returns:
-            building_name (str): Building name for device
-        """
-        return RepoService.get_device_building_name(obj.id)
-
-    def get_department_name(self, obj: Device) -> str:
-        """
-        Get department name for device
-
-        Args:
-            obj (Device): Object
-
-        Returns:
-            department_name (str): Department name for device
-        """
-        return RepoService.get_device_department_name(obj.id)
-
-    def get_region_name(self, obj: Device) -> str:
-        """
-        Get region name for device
-
-        Args:
-            obj (Device): Object
-
-        Returns:
-            region_name (str): Region name for devic
-        """
-        return RepoService.get_device_region_name(obj.id)
 
     class Meta:
         model: ModelBase = Device
@@ -330,10 +182,4 @@ class DeviceSerializer(serializers.ModelSerializer):
             'updated_by',
             'updated_at',
             'rack_id',
-            'rack_name',
-            'room_name',
-            'site_name',
-            'building_name',
-            'department_name',
-            'region_name'
         ]
