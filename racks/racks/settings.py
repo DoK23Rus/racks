@@ -27,15 +27,18 @@ DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
-CORS_ALLOWED_ORIGINS = [
-    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_PORT')}",
-    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('BACKEND_PORT')}",
-    f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_PORT')}",
-    f"http://{os.environ.get('BACKEND_HOST')}:{os.environ.get('BACKEND_PORT')}",
-    f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
-    f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
-    f"http://{os.environ.get('FRONTEND_TESTING_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
-]
+CORS_ALLOWED_ORIGINS = []
+
+if DEBUG:
+    CORS_ALLOWED_ORIGINS += [
+        f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_PORT')}",
+        f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('BACKEND_PORT')}",
+        f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_PORT')}",
+        f"http://{os.environ.get('BACKEND_HOST')}:{os.environ.get('BACKEND_PORT')}",
+        f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
+        f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
+        f"http://{os.environ.get('FRONTEND_TESTING_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
+    ]
 
 # Application definition
 
@@ -125,7 +128,6 @@ LOGGING = {
 }
 
 DATABASES = {
-
     'default': {
         'ENGINE': os.environ.get('SQL_ENGINE'),
         'NAME': os.environ.get('POSTGRES_DB'),
