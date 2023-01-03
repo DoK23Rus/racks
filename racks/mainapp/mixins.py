@@ -236,7 +236,7 @@ class ChecksMixin(AbstractMixin):
     units_exist_message: str = 'There are no such units in this rack'
     units_busy_message: str = 'These units are busy'
 
-    def _check_user(self, request: HttpRequest, pk: int) -> Result:
+    def _check_user(self, request: HttpRequest, pk: Optional[int]) -> Result:
         """
         Checks user permission
         Checking if there is a group named department
@@ -260,7 +260,7 @@ class ChecksMixin(AbstractMixin):
         return Result(True, 'Success')
 
     def _check_unique(self,
-                      pk: int,
+                      pk: Optional[int],
                       fk: Optional[int],
                       model: ModelBase,
                       fk_model: ModelBase,
@@ -298,7 +298,7 @@ class ChecksMixin(AbstractMixin):
             return Result(True, 'Success')
         return Result(True, 'Success')
 
-    def _check_device_for_add(self, pk: int, data: dict) -> Result:
+    def _check_device_for_add(self, pk: Optional[int], data: dict) -> Result:
         """
         Checks is it possible to add a new device
 
@@ -331,7 +331,10 @@ class ChecksMixin(AbstractMixin):
             return Result(False, self.units_busy_message)
         return Result(True, 'Success')
 
-    def _check_device_for_update(self, pk: int, data: dict) -> Result:
+    def _check_device_for_update(self,
+                                 pk: Optional[int],
+                                 data: dict
+                                 ) -> Result:
         """
         Checks is it possible to replace an existing device
 
@@ -367,7 +370,7 @@ class ChecksMixin(AbstractMixin):
 
     def get_checks(self,
                    request: HttpRequest,
-                   pk: int,
+                   pk: Optional[int],
                    data: dict,
                    fk: Optional[int] = None,
                    model: Optional[ModelBase] = None,
@@ -531,7 +534,7 @@ class BaseApiGetMixin(BaseApiMixin):
                 does not exist (exception)
         """
         try:
-            instance = RepoService.get_instance(self.model, kwargs['pk'])
+            instance = RepoService.get_instance(self.model, kwargs.get('pk'))
             serializer = self.serializer_class(instance)
             return Response(serializer.data)
         except self.model.DoesNotExist:
@@ -619,7 +622,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        pk = kwargs['pk']
+        pk = kwargs.get('pk')
         try:
             instance = RepoService.get_instance(self.model, pk)
         except self.model.DoesNotExist:
@@ -687,7 +690,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        pk = kwargs['pk']
+        pk = kwargs.get('pk')
         try:
             instance = RepoService.get_instance(self.model, pk)
         except self.model.DoesNotExist:
@@ -723,7 +726,7 @@ class RackDevicesApiMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with devices for a single rack
         """
-        devices = RepoService.get_devices_for_rack(kwargs['pk'])
+        devices = RepoService.get_devices_for_rack(kwargs.get('pk'))
         serializaed_data = DeviceSerializer(devices, many=True).data
         return Response(serializaed_data)
 
@@ -891,12 +894,13 @@ class DeviceLocationMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with device location data
         """
-        rack_name = RepoService.get_device_rack_name(kwargs['pk'])
-        room_name = RepoService.get_device_room_name(kwargs['pk'])
-        site_name = RepoService.get_device_site_name(kwargs['pk'])
-        building_name = RepoService.get_device_building_name(kwargs['pk'])
-        department_name = RepoService.get_device_department_name(kwargs['pk'])
-        region_name = RepoService.get_device_region_name(kwargs['pk'])
+        pk = kwargs.get('pk')
+        rack_name = RepoService.get_device_rack_name(pk)
+        room_name = RepoService.get_device_room_name(pk)
+        site_name = RepoService.get_device_site_name(pk)
+        building_name = RepoService.get_device_building_name(pk)
+        department_name = RepoService.get_device_department_name(pk)
+        region_name = RepoService.get_device_region_name(pk)
         return Response({
             "rack_name": rack_name,
             "room_name": room_name,
@@ -924,11 +928,12 @@ class RackLocationMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with rack location data
         """
-        room_name = RepoService.get_rack_room_name(kwargs['pk'])
-        site_name = RepoService.get_rack_site_name(kwargs['pk'])
-        building_name = RepoService.get_rack_building_name(kwargs['pk'])
-        department_name = RepoService.get_rack_department_name(kwargs['pk'])
-        region_name = RepoService.get_rack_region_name(kwargs['pk'])
+        pk = kwargs.get('pk')
+        room_name = RepoService.get_rack_room_name(pk)
+        site_name = RepoService.get_rack_site_name(pk)
+        building_name = RepoService.get_rack_building_name(pk)
+        department_name = RepoService.get_rack_department_name(pk)
+        region_name = RepoService.get_rack_region_name(pk)
         return Response({
             "room_name": room_name,
             "site_name": site_name,
@@ -956,9 +961,9 @@ class RacksReportMixin(BaseApiMixin):
             Response (HttpResponse): Response with racks report data
         """
         file_path = f"{os.environ.get('STATIC_DIR')}/racks_report_{date()}.csv"
-        task = generate_report_task.delay(file_path,
-                                          ReportHeaders.racks_header_list,
-                                          ReportService.get_racks_data())
+        headers = ReportHeaders.racks_header_list
+        data = ReportService.get_racks_data()
+        task = generate_report_task.delay(file_path, headers, data)
         result = AsyncResult(task.id)
         file_path = result.get()
         response = HttpResponseNotFound()
@@ -989,9 +994,9 @@ class DevicesReportMixin(BaseApiMixin):
         """
         file_path = f"{os.environ.get('STATIC_DIR')}/devices_report_"
         f"{date()}.csv"
-        task = generate_report_task.delay(file_path,
-                                          ReportHeaders.devices_header_list,
-                                          ReportService.get_devices_data())
+        headers = ReportHeaders.devices_header_list
+        data = ReportService.get_devices_data()
+        task = generate_report_task.delay(file_path, headers, data)
         result = AsyncResult(task.id)
         file_path = result.get()
         response = HttpResponseNotFound()

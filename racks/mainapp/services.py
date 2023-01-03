@@ -49,16 +49,21 @@ class DeviceCheckService:
     """
 
     @staticmethod
-    def get_old_units(pk: int) -> OldUnits:
+    def get_old_units(pk: Optional[int]) -> OldUnits:
         """
         Get tuple with already filled units
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             OldUnits (tuple): First and last unit in named tuple (ordered)
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         first_unit = Device.objects.get_device(pk).first_unit
         last_unit = Device.objects.get_device(pk).last_unit
         if first_unit > last_unit:
@@ -82,7 +87,7 @@ class DeviceCheckService:
         return NewUnits(first_unit, last_unit)
 
     @staticmethod
-    def check_unit_exist(units: NewUnits, rack_id: int) -> bool:
+    def check_unit_exist(units: NewUnits, rack_id: Optional[int]) -> bool:
         """
         Units exist check
         Are there any such units?
@@ -91,10 +96,15 @@ class DeviceCheckService:
             units (tuple): Pair of units in tuple
             rack_id (int): Rack id
 
+        Raises:
+            ValueError ("rack_id cannot be None")
+
         Returns:
             True (bool): units pair are in range of all rack units
             False (bool): units pair are outside of the rack
         """
+        if rack_id is None:
+            raise ValueError("rack_id cannot be None")
         new_device_range = range(units.new_first_unit, units.new_last_unit + 1)
         all_units_ramge = range(1, int(Rack
                                 .objects.get_rack(rack_id).rack_amount) + 1)
@@ -105,7 +115,7 @@ class DeviceCheckService:
 
     @staticmethod
     def check_unit_busy(side: bool,
-                        pk: int,
+                        pk: Optional[int],
                         new_units: NewUnits,
                         old_units: Optional[OldUnits]
                         ) -> bool:
@@ -119,10 +129,15 @@ class DeviceCheckService:
             new_units (tuple): Pair of new units
             old_units (tuple): Pair of old units (update only)
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             True (bool): Units are busy
             False (bool): Units not busy
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         filled_list: list = []
         queryset_devices = Device.objects.get_devices_for_side(pk, side)
         if len(list(queryset_devices)) > 0:
@@ -155,7 +170,7 @@ class UserCheckService:
 
     @staticmethod
     def check_for_groups(user_groups: List[str],
-                         pk: int,
+                         pk: Optional[int],
                          model: ModelBase
                          ) -> bool:
         """
@@ -167,6 +182,7 @@ class UserCheckService:
             model (ModelBase): Current object model
 
         Raises:
+            ValueError ("pk cannot be None")
             ValueError ('model: ModelBase must be'
                         'Department|Site|Building|Room|Rack|Device'):
                 Method only for Department|Site|Building|Room|Rack|Device.
@@ -175,6 +191,8 @@ class UserCheckService:
             True (bool): Changes allowed
             False (bool): Changes are prohibited
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         if model == Department:
             department_name = Department.objects.get(id=pk) \
                 .department_name
@@ -244,21 +262,20 @@ class UniqueCheckService:
             names_list (set): Set of object names
                 for particular foreign key object
         """
-        if key:
-            if model == Site:
-                names_set = {building.building_name for building
-                             in Building.objects.get_buildings_for_site(key)}
-            elif model == Building:
-                names_set = {room.room_name for room
-                             in Room.objects.get_rooms_for_building(key)}
-            elif model == Room:
-                names_set = {rack.rack_name for rack
-                             in Rack.objects.get_racks_for_room(key)}
-            else:
-                raise ValueError("model: ModelBase must be Site|Building|Room")
-            return names_set
-        else:
+        if key is None:
             raise ValueError("key must be not None")
+        if model == Site:
+            names_set = {building.building_name for building
+                         in Building.objects.get_buildings_for_site(key)}
+        elif model == Building:
+            names_set = {room.room_name for room
+                         in Room.objects.get_rooms_for_building(key)}
+        elif model == Room:
+            names_set = {rack.rack_name for rack
+                         in Rack.objects.get_racks_for_room(key)}
+        else:
+            raise ValueError("model: ModelBase must be Site|Building|Room")
+        return names_set
 
 
 class DataProcessingService:
@@ -284,7 +301,7 @@ class DataProcessingService:
         return sum(power_w for power_w in power_w_list if power_w is not None)
 
     @staticmethod
-    def update_rack_amount(data: dict, pk: int) -> dict:
+    def update_rack_amount(data: dict, pk: Optional[int]) -> dict:
         """
         Update rack_amount (prevent changing)
 
@@ -292,9 +309,14 @@ class DataProcessingService:
             data (dict): New data set
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             data (dict): Same data set with old rack amount
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         if data.get('rack_amount'):
             data['rack_amount'] = Rack.objects.get_rack(pk).rack_amount
             return data
@@ -322,7 +344,10 @@ class DataProcessingService:
         return key_name
 
     @staticmethod
-    def get_instance_name(pk: int, model: ModelBase, model_name: str) -> str:
+    def get_instance_name(pk: Optional[int],
+                          model: ModelBase,
+                          model_name: str
+                          ) -> str:
         """
         Get instance name for different models
 
@@ -331,10 +356,15 @@ class DataProcessingService:
             model (ModelBase): Object model
             model_name (str): Object model name
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             instance_name (str): Instance name for an object
                 (only vendor and model for devices)
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         if model != Device:
             instance_name = getattr(model.objects.get(id=pk),
                                     f"{model_name}_name")
@@ -354,7 +384,7 @@ class RepoService:
     """
 
     @staticmethod
-    def get_instance(model: ModelBase, pk: int) -> ModelBase:
+    def get_instance(model: ModelBase, pk: Optional[int]) -> ModelBase:
         """
         Get model instance
 
@@ -362,22 +392,32 @@ class RepoService:
             model (ModelBase): Object model
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             instance (ModelBase): Model instance
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return model.objects.get(id=pk)
 
     @staticmethod
-    def get_devices_for_rack(pk: int) -> QuerySet:
+    def get_devices_for_rack(pk: Optional[int]) -> QuerySet:
         """
         Get devices for single rack
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             devices_for_rack (QuerySet): Devices queryset (for single rack)
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_devices_for_rack(pk)
 
     @staticmethod
@@ -441,47 +481,62 @@ class RepoService:
         return Region.objects.get_all_regions()
 
     @staticmethod
-    def get_rack_room_name(pk: int) -> str:
+    def get_rack_room_name(pk: Optional[int]) -> str:
         """
         Get room name for a particular rack
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             rack_room_name (str): Room name for particular rack
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Rack.objects.get_rack_room(pk) \
             .room_id \
             .room_name
 
     @staticmethod
-    def get_rack_building_name(pk: int) -> str:
+    def get_rack_building_name(pk: Optional[int]) -> str:
         """
         Get building name for a particular rack
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             rack_building_name (str): Building name for particular rack
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Rack.objects.get_rack_building(pk) \
             .room_id \
             .building_id \
             .building_name
 
     @staticmethod
-    def get_rack_site_name(pk: int) -> str:
+    def get_rack_site_name(pk: Optional[int]) -> str:
         """
         Get building name for a particular rack
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             rack_site_name (str): Site name for particular rack
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Rack.objects.get_rack_site(pk) \
             .room_id \
             .building_id \
@@ -489,16 +544,21 @@ class RepoService:
             .site_name
 
     @staticmethod
-    def get_rack_department_name(pk: int) -> str:
+    def get_rack_department_name(pk: Optional[int]) -> str:
         """
         Get department name for a particular rack
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             rack_department_name (str): Department name for particular rack
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Rack.objects.get_rack_department(pk) \
             .room_id \
             .building_id \
@@ -507,16 +567,21 @@ class RepoService:
             .department_name
 
     @staticmethod
-    def get_rack_region_name(pk: int) -> str:
+    def get_rack_region_name(pk: Optional[int]) -> str:
         """
         Get region name for a particular rack
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             rack_region_name (str): Region name for particular rack
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Rack.objects.get_rack_region(pk) \
             .room_id \
             .building_id \
@@ -526,47 +591,62 @@ class RepoService:
             .region_name
 
     @staticmethod
-    def get_device_rack_name(pk: int) -> str:
+    def get_device_rack_name(pk: Optional[int]) -> str:
         """
         Get rack name for a particular device
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             device_rack_name (str): Rack name for particular device
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_device_rack(pk) \
             .rack_id \
             .rack_name
 
     @staticmethod
-    def get_device_room_name(pk: int) -> str:
+    def get_device_room_name(pk: Optional[int]) -> str:
         """
         Get room name for a particular device
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             device_room_name (str): Room name for particular device
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_device_room(pk) \
             .rack_id \
             .room_id \
             .room_name
 
     @staticmethod
-    def get_device_building_name(pk: int) -> str:
+    def get_device_building_name(pk: Optional[int]) -> str:
         """
         Get building name for a particular device
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             device_building_name (str): Building name for particular device
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_device_building(pk) \
             .rack_id \
             .room_id \
@@ -574,16 +654,21 @@ class RepoService:
             .building_name
 
     @staticmethod
-    def get_device_site_name(pk: int) -> str:
+    def get_device_site_name(pk: Optional[int]) -> str:
         """
         Get site name for a particular device
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             device_site_name (str): Site name for particular device
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_device_site(pk) \
             .rack_id \
             .room_id \
@@ -592,16 +677,21 @@ class RepoService:
             .site_name
 
     @staticmethod
-    def get_device_department_name(pk: int) -> str:
+    def get_device_department_name(pk: Optional[int]) -> str:
         """
         Get department name for a particular device
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             device_department_name (str): Site name for particular device
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_device_department(pk) \
             .rack_id \
             .room_id \
@@ -611,16 +701,21 @@ class RepoService:
             .department_name
 
     @staticmethod
-    def get_device_region_name(pk: int) -> str:
+    def get_device_region_name(pk: Optional[int]) -> str:
         """
         Get region name for a particular device
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             device_region_name (str): Region name for particular device
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_device_region(pk) \
             .rack_id \
             .room_id \
@@ -631,16 +726,21 @@ class RepoService:
             .region_name
 
     @staticmethod
-    def get_device_rack_id(pk: int) -> int:
+    def get_device_rack_id(pk: Optional[int]) -> int:
         """
         Get rack id for a particular device
 
         Args:
             pk (int): Primary key
 
+        Raises:
+            ValueError ("pk cannot be None")
+
         Returns:
             device_rack_id (int): Rack id for particular device
         """
+        if pk is None:
+            raise ValueError("pk cannot be None")
         return Device.objects.get_device(pk).rack_id_id
 
     @staticmethod

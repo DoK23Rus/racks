@@ -111,6 +111,20 @@ def base_setup():
                                  device_vendor='Test_vendor8',
                                  device_model='Test_model8',
                                  rack_id=rack2_id)
+    Device.objects.get_or_create(first_unit=17,
+                                 last_unit=17,
+                                 device_vendor='Test_vendor9',
+                                 frontside_location=False,
+                                 rack_id=rack2_id)
+    Device.objects.get_or_create(first_unit=19,
+                                 last_unit=19,
+                                 device_model='Test_model10',
+                                 frontside_location=False,
+                                 rack_id=rack2_id)
+    Device.objects.get_or_create(first_unit=20,
+                                 last_unit=20,
+                                 frontside_location=False,
+                                 rack_id=rack2_id)
 
 
 racks_mock_data = [
@@ -148,6 +162,21 @@ devices_mock_data = [
         None, None, None, '', 'IEC C14 socket', 100, 220, 'AC', '', '',
         'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
         'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/1'],
+    [11, 'Device active', '', '', '', '', '',
+        'Our department', '', '', '', '', '', 20, 20, 'No', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/11'],
+    [10, 'Device active', '', 'Test_model10', '', '', '',
+        'Our department', '', '', '', '', '', 19, 19, 'No', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/10'],
+    [9, 'Device active', 'Test_vendor9', '', '', '', '',
+        'Our department', '', '', '', '', '', 17, 17, 'No', 'Other', '',
+        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
+        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
+        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/9'],
     [8, 'Device active', 'Test_vendor8', 'Test_model8', '', '', '',
         'Our department', '', '', '', '', '', 18, 18, 'No', 'Other', '',
         None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
@@ -278,6 +307,11 @@ class TestUserCheckService(TestCase):
             UserCheckService \
                 .check_for_groups(['Test_department2'], rack1_id, 'model')
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            UserCheckService \
+                .check_for_groups(['Test_department2'], None, Device)
+
     @classmethod
     def tearDownClass(cls):
         pass
@@ -355,6 +389,10 @@ class TestDeviceCheckService(TestCase):
         result = DeviceCheckService.get_old_units(device1_id)
         self.assertEqual(result, OldUnits(1, 2))
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            DeviceCheckService.get_old_units(None)
+
     def test_get_new_units(self):
         result = DeviceCheckService.get_new_units(7, 5)
         self.assertEqual(result, NewUnits(5, 7))
@@ -369,6 +407,10 @@ class TestDeviceCheckService(TestCase):
         result = DeviceCheckService \
             .check_unit_exist(NewUnits(21, 22), rack1_id)
         self.assertFalse(result)
+
+        # rack_id is None
+        with self.assertRaises(ValueError):
+            DeviceCheckService.check_unit_exist(NewUnits(21, 22), None)
 
     def test_check_unit_busy(self):
         # Rack - Test_rack1
@@ -428,6 +470,11 @@ class TestDeviceCheckService(TestCase):
             .check_unit_busy(False, pk, new_units, old_units)
         self.assertFalse(result)
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            DeviceCheckService \
+                .check_unit_busy(True, None, new_units, old_units=None)
+
     @classmethod
     def tearDownClass(cls):
         pass
@@ -466,6 +513,10 @@ class TestDataProcessingService(TestCase):
         result = DataProcessingService.update_rack_amount(data, rack1_id)
         self.assertEqual(result, {'rack_amount': rack_amount})
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            DataProcessingService.update_rack_amount(data, None)
+
     def test_get_key_name(self):
         # Get key name (if model != Device)
         data = {'rack_name': 'Test_rack1'}
@@ -485,6 +536,45 @@ class TestDataProcessingService(TestCase):
         result = DataProcessingService.get_key_name(data, 'device')
         self.assertEqual(result,
                          'device unspecified vendor, unspecified model')
+
+    def test_get_instance_name(self):
+        # Model Rack
+        rack1_id = Rack.objects.get(rack_name='Test_rack1').id
+        result = DataProcessingService \
+            .get_instance_name(rack1_id, Rack, 'rack')
+        self.assertEqual(result, 'Test_rack1')
+
+        # Model Device
+        device1_id = Device.objects.get(device_vendor='Test_vendor1').id
+        result = DataProcessingService \
+            .get_instance_name(device1_id, Device, 'device')
+        self.assertEqual(result, 'device Test_vendor1, Test_model1')
+
+        # Model Device, unspecified model
+        device2_id = Device.objects.get(device_vendor='Test_vendor9').id
+        result = DataProcessingService \
+            .get_instance_name(device2_id, Device, 'device')
+        self.assertEqual(result,
+                         'device Test_vendor9, unspecified model')
+
+        # Model Device, unspecified vendor
+        device3_id = Device.objects.get(device_model='Test_model10').id
+        result = DataProcessingService \
+            .get_instance_name(device3_id, Device, 'device')
+        self.assertEqual(result,
+                         'device unspecified vendor, Test_model10')
+
+        # Model Device, unspecified vendor and model
+        device4_id = Device.objects.get(first_unit=20).id
+        result = DataProcessingService \
+            .get_instance_name(device4_id, Device, 'device')
+        self.assertEqual(result,
+                         'device unspecified vendor, unspecified model')
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            DataProcessingService \
+                .get_instance_name(None, Device, 'device')
 
     @classmethod
     def tearDownClass(cls):
@@ -544,12 +634,20 @@ class TestRepoService(TestCase):
         result = RepoService.get_instance(Device, device1_id)
         self.assertEqual(result, instance)
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_instance(Device, None)
+
     def test_get_devices_for_rack(self):
         # Rack - Test_rack1
         rack1_id = Rack.objects.get(rack_name='Test_rack1').id
         instance = Device.objects.filter(rack_id_id=rack1_id)
         result = RepoService.get_devices_for_rack(rack1_id)
         self.assertQuerysetEqual(result, instance, ordered=False)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_devices_for_rack(None)
 
     def test_get_all_racks(self):
         # All racks Queryset
@@ -598,6 +696,10 @@ class TestRepoService(TestCase):
         result = RepoService.get_rack_room_name(room1_id)
         self.assertEqual(result, room_name)
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_rack_room_name(None)
+
     def test_get_rack_building_name(self):
         # Building - Test_building1
         building1_id = Building.objects.get(building_name='Test_building1').id
@@ -610,6 +712,10 @@ class TestRepoService(TestCase):
             .building_name
         result = RepoService.get_rack_building_name(building1_id)
         self.assertEqual(result, building_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_rack_building_name(None)
 
     def test_get_rack_site_name(self):
         # Site - Test_site1
@@ -625,6 +731,10 @@ class TestRepoService(TestCase):
             .site_name
         result = RepoService.get_rack_site_name(site1_id)
         self.assertEqual(result, site_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_rack_site_name(None)
 
     def test_get_rack_department_name(self):
         # Department - Test_department1
@@ -643,6 +753,10 @@ class TestRepoService(TestCase):
             .department_name
         result = RepoService.get_rack_department_name(department1_id)
         self.assertEqual(result, department_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_rack_department_name(None)
 
     def test_get_rack_region_name(self):
         # Region - Test_region1
@@ -664,6 +778,10 @@ class TestRepoService(TestCase):
         result = RepoService.get_rack_region_name(region1_id)
         self.assertEqual(result, region_name)
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_rack_region_name(None)
+
     def test_get_device_rack_name(self):
         # Rack - Test_rack1
         rack1_id = Rack.objects.get(rack_name='Test_rack1').id
@@ -674,6 +792,10 @@ class TestRepoService(TestCase):
             .rack_name
         result = RepoService.get_device_rack_name(rack1_id)
         self.assertEqual(result, rack_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_device_rack_name(None)
 
     def test_get_device_room_name(self):
         # Room - Test_room1
@@ -687,6 +809,10 @@ class TestRepoService(TestCase):
             .room_name
         result = RepoService.get_device_room_name(room1_id)
         self.assertEqual(result, room_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_device_room_name(None)
 
     def test_get_device_building_name(self):
         # Building - Test_building1
@@ -702,6 +828,10 @@ class TestRepoService(TestCase):
             .building_name
         result = RepoService.get_device_building_name(building1_id)
         self.assertEqual(result, building_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_device_building_name(None)
 
     def test_get_device_site_name(self):
         # Site - Test_site1
@@ -719,6 +849,10 @@ class TestRepoService(TestCase):
             .site_name
         result = RepoService.get_device_site_name(site1_id)
         self.assertEqual(result, site_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_device_site_name(None)
 
     def test_get_device_department_name(self):
         # Department - Test_department1
@@ -739,6 +873,10 @@ class TestRepoService(TestCase):
             .department_name
         result = RepoService.get_device_department_name(department1_id)
         self.assertEqual(result, department_name)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_device_department_name(None)
 
     def test_get_device_region_name(self):
         # Region - Test_region1
@@ -762,12 +900,20 @@ class TestRepoService(TestCase):
         result = RepoService.get_device_region_name(region1_id)
         self.assertEqual(result, region_name)
 
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_device_region_name(None)
+
     def test_get_device_rack_id(self):
         # Device(vendor) - Test_vendor1
         device1_id = Device.objects.get(device_vendor='Test_vendor1').id
         rack_id = Device.objects.get_device(device1_id).rack_id_id
         result = RepoService.get_device_rack_id(device1_id)
         self.assertEqual(result, rack_id)
+
+        # pk is None
+        with self.assertRaises(ValueError):
+            RepoService.get_device_rack_id(None)
 
     def test_get_device_vendors(self):
         # Device vendors list
