@@ -11,8 +11,6 @@ from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
 from celery.result import AsyncResult
-from rest_framework import permissions
-from rest_framework.permissions import BasePermissionMetaclass
 from rest_framework.response import Response
 from rest_framework.serializers import SerializerMetaclass
 
@@ -848,13 +846,6 @@ class RoomListApiMixin:
     Rooms list mixin
     """
     queryset: QuerySet = RepoService.get_all_rooms()
-
-
-class PermissionsMixin:
-    """
-    Permissions mixin
-    """
-    permission_classes: BasePermissionMetaclass = [permissions.IsAuthenticated]
 
 
 class UserApiMixin(BaseApiMixin):

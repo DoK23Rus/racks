@@ -15,7 +15,6 @@ from mainapp.mixins import (BaseApiAddMixin,
                             DeviceModelsApiMixin,
                             DeviceVendorsApiMixin,
                             DevicesReportMixin,
-                            PermissionsMixin,
                             RackDevicesApiMixin,
                             RackListApiViewMixin,
                             RackLocationMixin,
@@ -42,7 +41,7 @@ from mainapp.serializers import (BuildingSerializer,
                                  SiteSerializer)
 
 
-class SiteDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
+class SiteDetailApiView(BaseApiGetMixin, APIView):
     """
     Site detail API view
     """
@@ -50,7 +49,7 @@ class SiteDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     serializer_class: SerializerMetaclass = SiteSerializer
 
 
-class BuildingDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
+class BuildingDetailApiView(BaseApiGetMixin, APIView):
     """
     Site detail API view
     """
@@ -58,7 +57,7 @@ class BuildingDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     serializer_class: SerializerMetaclass = BuildingSerializer
 
 
-class RoomDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
+class RoomDetailApiView(BaseApiGetMixin, APIView):
     """
     Site detail API view
     """
@@ -66,7 +65,7 @@ class RoomDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     serializer_class: SerializerMetaclass = RoomSerializer
 
 
-class RackDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
+class RackDetailApiView(BaseApiGetMixin, APIView):
     """
     Rack detail API view
     """
@@ -74,7 +73,7 @@ class RackDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     serializer_class: SerializerMetaclass = RackSerializer
 
 
-class DeviceDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
+class DeviceDetailApiView(BaseApiGetMixin, APIView):
     """
     Device detail API view
     """
@@ -82,7 +81,7 @@ class DeviceDetailApiView(BaseApiGetMixin, PermissionsMixin, APIView):
     serializer_class: SerializerMetaclass = DeviceSerializer
 
 
-class RackListApiView(RackListApiViewMixin, PermissionsMixin, ListAPIView):
+class RackListApiView(RackListApiViewMixin, ListAPIView):
     """
     Rack list API view
     """
@@ -90,7 +89,7 @@ class RackListApiView(RackListApiViewMixin, PermissionsMixin, ListAPIView):
     serializer_class: SerializerMetaclass = RackSerializer
 
 
-class SiteAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
+class SiteAddApiView(BaseApiAddMixin, APIView):
     """
     Site add API view
     """
@@ -101,7 +100,7 @@ class SiteAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user']
 
 
-class SiteUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
+class SiteUpdateApiView(BaseApiUpdateMixin, APIView):
     """
     Site update API view
     """
@@ -113,7 +112,7 @@ class SiteUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user']
 
 
-class SiteDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
+class SiteDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     Site delete API view
     """
@@ -122,7 +121,7 @@ class SiteDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user']
 
 
-class BuildingAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
+class BuildingAddApiView(BaseApiAddMixin, APIView):
     """
     Building add API view
     """
@@ -133,7 +132,7 @@ class BuildingAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_unique']
 
 
-class BuildingUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
+class BuildingUpdateApiView(BaseApiUpdateMixin, APIView):
     """
     Building update API view
     """
@@ -145,7 +144,7 @@ class BuildingUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_unique']
 
 
-class BuildingDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
+class BuildingDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     Building delete API view
     """
@@ -154,7 +153,7 @@ class BuildingDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user']
 
 
-class RoomAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
+class RoomAddApiView(BaseApiAddMixin, APIView):
     """
     Room add API view
     """
@@ -165,7 +164,7 @@ class RoomAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_unique']
 
 
-class RoomUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
+class RoomUpdateApiView(BaseApiUpdateMixin, APIView):
     """
     Room update API view
     """
@@ -177,7 +176,7 @@ class RoomUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_unique']
 
 
-class RoomDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
+class RoomDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     Room delete API view
     """
@@ -186,7 +185,7 @@ class RoomDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user']
 
 
-class RackAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
+class RackAddApiView(BaseApiAddMixin, APIView):
     """
     Rack add API view
     """
@@ -197,7 +196,7 @@ class RackAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_unique']
 
 
-class RackUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
+class RackUpdateApiView(BaseApiUpdateMixin, APIView):
     """
     Rack update API view
     """
@@ -209,7 +208,7 @@ class RackUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_unique']
 
 
-class RackDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
+class RackDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     Rack delete API view
     """
@@ -218,7 +217,7 @@ class RackDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user']
 
 
-class DeviceAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
+class DeviceAddApiView(BaseApiAddMixin, APIView):
     """
     Device add API view
     """
@@ -229,7 +228,7 @@ class DeviceAddApiView(BaseApiAddMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_device_for_add']
 
 
-class DeviceUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
+class DeviceUpdateApiView(BaseApiUpdateMixin, APIView):
     """
     Device update API view
     """
@@ -241,7 +240,7 @@ class DeviceUpdateApiView(BaseApiUpdateMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user', 'check_device_for_update']
 
 
-class DeviceDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
+class DeviceDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     Device delete API view
     """
@@ -250,7 +249,7 @@ class DeviceDeleteApiView(BaseApiDeleteMixin, PermissionsMixin, APIView):
     checks_list: List[str] = ['check_user']
 
 
-class RegionListApiView(RegionListApiMixin, PermissionsMixin, ListAPIView):
+class RegionListApiView(RegionListApiMixin, ListAPIView):
     """
     Regions list API view
     """
@@ -258,9 +257,7 @@ class RegionListApiView(RegionListApiMixin, PermissionsMixin, ListAPIView):
     serializer_class: SerializerMetaclass = RegionSerializer
 
 
-class DepartmentListApiView(DepartmentListApiMixin,
-                            PermissionsMixin,
-                            ListAPIView):
+class DepartmentListApiView(DepartmentListApiMixin, ListAPIView):
     """
     Departments list API view
     """
@@ -268,7 +265,7 @@ class DepartmentListApiView(DepartmentListApiMixin,
     serializer_class: SerializerMetaclass = DepartmentSerializer
 
 
-class SiteListApiView(SiteListApiMixin, PermissionsMixin, ListAPIView):
+class SiteListApiView(SiteListApiMixin, ListAPIView):
     """
     Sites list API view
     """
@@ -276,7 +273,7 @@ class SiteListApiView(SiteListApiMixin, PermissionsMixin, ListAPIView):
     serializer_class: SerializerMetaclass = SiteSerializer
 
 
-class BuildingListApiView(BuildingListApiMixin, PermissionsMixin, ListAPIView):
+class BuildingListApiView(BuildingListApiMixin, ListAPIView):
     """
     Buildings list API view
     """
@@ -284,7 +281,7 @@ class BuildingListApiView(BuildingListApiMixin, PermissionsMixin, ListAPIView):
     serializer_class: SerializerMetaclass = BuildingSerializer
 
 
-class RoomListApiView(RoomListApiMixin, PermissionsMixin, ListAPIView):
+class RoomListApiView(RoomListApiMixin, ListAPIView):
     """
     Rooms list API view
     """
@@ -292,70 +289,70 @@ class RoomListApiView(RoomListApiMixin, PermissionsMixin, ListAPIView):
     serializer_class: SerializerMetaclass = RoomSerializer
 
 
-class UserApiView(UserApiMixin, PermissionsMixin, APIView):
+class UserApiView(UserApiMixin, APIView):
     """
     User API view
     """
     pass
 
 
-class DeviceVendorsApiView(DeviceVendorsApiMixin, PermissionsMixin, APIView):
+class DeviceVendorsApiView(DeviceVendorsApiMixin, APIView):
     """
     Device vendors API view
     """
     pass
 
 
-class DeviceModelsApiView(DeviceModelsApiMixin, PermissionsMixin, APIView):
+class DeviceModelsApiView(DeviceModelsApiMixin, APIView):
     """
     Device models API view
     """
     pass
 
 
-class RackVendorsApiView(RackVendorsApiMixin, PermissionsMixin, APIView):
+class RackVendorsApiView(RackVendorsApiMixin, APIView):
     """
     Rack vendors API view
     """
     pass
 
 
-class RackModelsApiView(RackModelsApiMixin, PermissionsMixin, APIView):
+class RackModelsApiView(RackModelsApiMixin, APIView):
     """
     Rack models API view
     """
     pass
 
 
-class RackDevicesApiView(RackDevicesApiMixin, PermissionsMixin, APIView):
+class RackDevicesApiView(RackDevicesApiMixin, APIView):
     """
     Rack devices API view
     """
     pass
 
 
-class RacksReportApiView(RacksReportMixin, PermissionsMixin, APIView):
+class RacksReportApiView(RacksReportMixin, APIView):
     """
     Racks report API view
     """
     pass
 
 
-class DevicesReportApiView(DevicesReportMixin, PermissionsMixin, APIView):
+class DevicesReportApiView(DevicesReportMixin, APIView):
     """
     Devices report API view
     """
     pass
 
 
-class DeviceLocationApiView(DeviceLocationMixin, PermissionsMixin, APIView):
+class DeviceLocationApiView(DeviceLocationMixin, APIView):
     """
     Device location API view
     """
     pass
 
 
-class RackLocationApiView(RackLocationMixin, PermissionsMixin, APIView):
+class RackLocationApiView(RackLocationMixin, APIView):
     """
     Rack location API view
     """

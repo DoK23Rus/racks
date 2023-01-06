@@ -15,14 +15,14 @@
         <button class="text-white w-48  bg-blue-400 border-b-4 border-blue-700 hover:border-blue-500
         hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small text-base 
           px-7 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          type="submit" id="button" @click="downloadReport('devices', 'devices_report.csv')">
+          type="submit" id="button" @click="downloadReport('device', 'devices_report.csv')">
           Export devices
         </button>
       <br>
         <button class="text-white w-48 bg-blue-400 border-b-4 border-blue-700 hover:border-blue-500
         hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small text-base 
           px-7 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          type="submit" id="button" @click="downloadReport('racks', 'racks_report.csv')">
+          type="submit" id="button" @click="downloadReport('rack', 'racks_report.csv')">
           Export racks
         </button>
       <br>

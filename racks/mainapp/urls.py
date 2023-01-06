@@ -69,6 +69,7 @@ urlpatterns = [
     path('rack/devices/<int:pk>', RackDevicesApiView.as_view()),
     path('rack/vendors', RackVendorsApiView.as_view()),
     path('rack/models', RackModelsApiView.as_view()),
+    path('rack/report', RacksReportApiView.as_view()),
     path('device/<int:pk>/', DeviceDetailApiView.as_view()),
     path('device/<int:pk>/location', DeviceLocationApiView.as_view()),
     path('device/create', DeviceAddApiView.as_view()),
@@ -76,6 +77,5 @@ urlpatterns = [
     path('device/<int:pk>/delete', DeviceDeleteApiView.as_view()),
     path('device/vendors', DeviceVendorsApiView.as_view()),
     path('device/models', DeviceModelsApiView.as_view()),
-    path('racks/report', RacksReportApiView.as_view()),
-    path('devices/report', DevicesReportApiView.as_view()),
+    path('device/report', DevicesReportApiView.as_view()),
 ]
