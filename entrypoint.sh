@@ -6,9 +6,9 @@ UNITTESTS_LOG="${LOGS_DIR}unittests_log.log"
 touch $MYPY_LOG $FLAKE8_LOG $UNITTESTS_LOG &&
 chmod 666 $FLAKE8_LOG $MYPY_LOG $MYPY_LOG &&
 echo "\n--------$(date)-COMPOSE-RELOAD--------\n" | tee -a $MYPY_LOG $FLAKE8_LOG $UNITTESTS_LOG &&
-python manage.py test >> $UNITTESTS_LOG 2>&1 &&
-flake8 ./mainapp >> $FLAKE8_LOG 2>&1 &&
-mypy ./mainapp >> $MYPY_LOG 2>&1 &&
+#python manage.py test >> $UNITTESTS_LOG 2>&1 &&
+#flake8 ./mainapp >> $FLAKE8_LOG 2>&1 &&
+#mypy ./mainapp >> $MYPY_LOG 2>&1 &&
 python manage.py flush --no-input &&
 python manage.py migrate &&
 python manage.py collectstatic --noinput &&

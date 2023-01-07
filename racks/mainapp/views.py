@@ -81,14 +81,6 @@ class DeviceDetailApiView(BaseApiGetMixin, APIView):
     serializer_class: SerializerMetaclass = DeviceSerializer
 
 
-class RackListApiView(RackListApiViewMixin, ListAPIView):
-    """
-    Rack list API view
-    """
-    model: ModelBase = Rack
-    serializer_class: SerializerMetaclass = RackSerializer
-
-
 class SiteAddApiView(BaseApiAddMixin, APIView):
     """
     Site add API view
@@ -287,6 +279,14 @@ class RoomListApiView(RoomListApiMixin, ListAPIView):
     """
     model: ModelBase = Room
     serializer_class: SerializerMetaclass = RoomSerializer
+
+
+class RackListApiView(RackListApiViewMixin, ListAPIView):
+    """
+    Rack list API view
+    """
+    model: ModelBase = Rack
+    serializer_class: SerializerMetaclass = RackSerializer
 
 
 class UserApiView(UserApiMixin, APIView):

@@ -1,18 +1,18 @@
 import axios from 'axios';
 
 
-const BASE_URL = '/api/v1';
+const BASE_PATH = '/api/v1';
 
 function logError(error, objName, method) {
   console.log(`Something went wrong, cant ${method} ${objName}`);
   console.error(error.response.data);
 };
 
-export async function getObject(objName, url, id, location) {
+export async function getObject(objName, path, id, subPath) {
   const pk = (!id) ? '' : id;
-  const prefix = (!location) ? '' : location;
+  const sPath = (!subPath) ? '' : subPath;
   try {
-    const response = await axios.get(`${BASE_URL}${url}${pk}${prefix}`);
+    const response = await axios.get(`${BASE_PATH}${path}${pk}${sPath}`);
     return response.data;
   } catch (error) {
     logError(error, objName, 'get');
@@ -20,9 +20,9 @@ export async function getObject(objName, url, id, location) {
   }
 };
 
-export async function postObject(objName, url, formData) {
+export async function postObject(objName, path, formData) {
   try {
-    const response = await axios.post(`${BASE_URL}${url}`, formData);
+    const response = await axios.post(`${BASE_PATH}${path}`, formData);
     return response.data;
   } catch (error) {
     logError(error, objName, 'post');
@@ -30,9 +30,9 @@ export async function postObject(objName, url, formData) {
   }
 };
 
-export async function putObject(objName, url, formData) {
+export async function putObject(objName, path, formData) {
   try {
-    const response = await axios.put(`${BASE_URL}${url}`, formData);
+    const response = await axios.put(`${BASE_PATH}${path}`, formData);
     return response.data;
   } catch (error) {
     logError(error, objName, 'put');
@@ -40,9 +40,9 @@ export async function putObject(objName, url, formData) {
   }
 };
 
-export async function deleteObject(objName, url, payload) {
+export async function deleteObject(objName, path, payload) {
   try {
-    const response = await axios.delete(`${BASE_URL}${url}`, { data: payload });
+    const response = await axios.delete(`${BASE_PATH}${path}`, { data: payload });
     return response.data;
   } catch (error) {
     logError(error, objName, 'delete');
@@ -52,7 +52,7 @@ export async function deleteObject(objName, url, payload) {
 
 export async function getUser(objName) {
   try {
-    const response = await axios.get(`${BASE_URL}/user`);
+    const response = await axios.get(`${BASE_PATH}/user`);
     return response.data;
   } catch (error) {
     logError(error, objName, 'get');
@@ -60,10 +60,10 @@ export async function getUser(objName) {
   }
 };
 
-export async function getUnique(objName, url) {
+export async function getUnique(objName, path) {
   // Get unique list (for vendors and models)
   try {
-    const response = await axios.get(`${BASE_URL}${url}`);
+    const response = await axios.get(`${BASE_PATH}${path}`);
     return response.data;
   } catch (error) {
     logError(error, objName, 'get');

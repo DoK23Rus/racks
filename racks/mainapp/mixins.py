@@ -446,13 +446,6 @@ class ChecksMixin(AbstractMixin):
         return Result(True, 'Success')
 
 
-class RackListApiViewMixin:
-    """
-    Racks list API mixin
-    """
-    queryset: QuerySet = RepoService.get_all_racks()
-
-
 class BaseApiMixin(AbstractViewMixin):
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -846,6 +839,13 @@ class RoomListApiMixin:
     Rooms list mixin
     """
     queryset: QuerySet = RepoService.get_all_rooms()
+
+
+class RackListApiViewMixin:
+    """
+    Racks list API mixin
+    """
+    queryset: QuerySet = RepoService.get_all_racks()
 
 
 class UserApiMixin(BaseApiMixin):
