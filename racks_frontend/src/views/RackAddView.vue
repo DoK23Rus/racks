@@ -86,7 +86,7 @@ export default {
         cooler: form.cooler,
         room_id: parseInt(this.$route.params.room_id)
       };
-      this.messageProps.message = await postObject('rack', '/rack/create', formData);
+      this.messageProps.message = await postObject('rack', '/rack/create/', formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }

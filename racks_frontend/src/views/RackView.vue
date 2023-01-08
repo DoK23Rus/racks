@@ -245,7 +245,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete rack ${rackName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('rack', `/rack/${this.$route.params.id}/delete`, payload);
+        this.messageProps.message = await deleteObject('rack', `/rack/${this.$route.params.id}/delete/`, payload);
         if (this.messageProps.message.sucsess) {
           alert(this.messageProps.message.sucsess);
           this.$router.push('/tree');
@@ -254,7 +254,7 @@ export default {
     },
     async getRackLocation() {
       // Get rack location
-      const response = await getObject('rack', '/rack/', this.$route.params.id, '/location');
+      const response = await getObject('rack', '/rack/', this.$route.params.id, '/location/');
       this.rackLocation.roomName = response.room_name;
       this.rackLocation.buildingName = response.building_name;
       this.rackLocation.siteName = response.site_name;

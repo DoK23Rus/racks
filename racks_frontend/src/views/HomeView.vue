@@ -61,7 +61,7 @@ export default {
     async downloadReport(reportName, fileName) {
       alert("Download will start in a few seconds");
       await axios({
-        url: `${process.env.VUE_APP_AXIOS_URL}/api/v1/${reportName}/report`,
+        url: `${process.env.VUE_APP_AXIOS_URL}/api/v1/${reportName}/report/`,
         method: 'GET',
         responseType: 'blob',
       }).then((response) => {

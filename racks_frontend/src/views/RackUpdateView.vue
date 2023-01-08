@@ -93,7 +93,7 @@ export default {
         cooler: form.cooler,
         room_id: this.roomId
       };
-      this.messageProps.message = await putObject('rack', `/rack/${this.$route.params.id}/update`, formData);
+      this.messageProps.message = await putObject('rack', `/rack/${this.$route.params.id}/update/`, formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
     async getOldData() {

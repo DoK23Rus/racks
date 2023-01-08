@@ -37,7 +37,7 @@ export default {
         building_name: form.buildingName,
         site_id: this.$route.params.site_id
       };
-      this.messageProps.message = await postObject('building', '/building/create', formData);
+      this.messageProps.message = await postObject('building', '/building/create/', formData);
     },
   }
 };

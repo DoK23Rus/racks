@@ -81,7 +81,7 @@ export default {
         fixed_asset: form.fixedAsset,
         rack_id: parseInt(this.$route.params.rack_id)
       };
-      this.messageProps.message = await postObject('device', '/device/create', formData);
+      this.messageProps.message = await postObject('device', '/device/create/', formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }

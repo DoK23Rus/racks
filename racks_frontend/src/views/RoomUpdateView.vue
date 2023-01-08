@@ -42,7 +42,7 @@ export default {
         id: this.$route.params.id,
         room_name: form.roomName
       };
-      this.messageProps.message = await putObject('room', `/room/${this.$route.params.id}/update`, formData);
+      this.messageProps.message = await putObject('room', `/room/${this.$route.params.id}/update/`, formData);
     },
     async getOldData() {
       // Get room old data

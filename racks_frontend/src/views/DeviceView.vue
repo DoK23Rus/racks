@@ -224,7 +224,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete device ${deviceName}?`)) {
-        this.messageProps.message = await deleteObject('device', `/device/${this.$route.params.id}/delete`, payload);
+        this.messageProps.message = await deleteObject('device', `/device/${this.$route.params.id}/delete/`, payload);
         if (this.messageProps.message.sucsess) {
           alert(this.messageProps.message.sucsess);
           this.$router.push('/units/' + this.device.rackId);
@@ -233,7 +233,7 @@ export default {
     },
     async getDeviceLocation() {
       // Get racks location
-      const response = await getObject('device', '/device/', this.$route.params.id, '/location');
+      const response = await getObject('device', '/device/', this.$route.params.id, '/location/');
       this.deviceLocation.rackName = response.rack_name;
       this.deviceLocation.roomName = response.room_name;
       this.deviceLocation.buildingName = response.building_name;

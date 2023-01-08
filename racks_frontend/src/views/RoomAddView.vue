@@ -37,7 +37,7 @@ export default {
         room_name: form.roomName,
         building_id: this.$route.params.building_id
       };
-      this.messageProps.message = await postObject('room', '/room/create', formData);
+      this.messageProps.message = await postObject('room', '/room/create/', formData);
     },
   }
 };

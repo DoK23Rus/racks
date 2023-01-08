@@ -248,7 +248,7 @@ export default {
   },
   methods: {
     async setDevices() {
-      this.devices = await getObject('devices', '/rack/devices/', this.$route.params.id);
+      this.devices = await getObject('devices', '/rack/', this.$route.params.id, '/devices');
     },
     async setRack() {
       this.rack = await getObject('rack', '/rack/', this.$route.params.id);

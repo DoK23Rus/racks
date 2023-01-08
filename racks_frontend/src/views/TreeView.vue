@@ -167,29 +167,29 @@ export default {
       this.getRacks();
     },
     async getRegions() {
-      this.regions = await getObject('regions', '/region/all', null);
+      this.regions = await getObject('regions', '/region/all/', null);
     },
     async getDepartments() {
-      this.departments = await getObject('departments', '/department/all', null);
+      this.departments = await getObject('departments', '/department/all/', null);
     },
     async getSites() {
-      this.sites = await getObject('sites', '/site/all', null);
+      this.sites = await getObject('sites', '/site/all/', null);
     },
     async getBuildings() {
-      this.buildings = await getObject('buildings', '/building/all', null);
+      this.buildings = await getObject('buildings', '/building/all/', null);
     },
     async getRooms() {
-      this.rooms = await getObject('rooms', '/room/all', null);
+      this.rooms = await getObject('rooms', '/room/all/', null);
     },
     async getRacks() {
-      this.racks = await getObject('racks', '/rack/all/partial', null);
+      this.racks = await getObject('racks', '/rack/all/partial/', null);
     },
     async deleteSite(id, siteName) {
       const payload = {
         id: id,
       }
       if (confirm(`Do you really want to delete site ${siteName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('site', `/site/${id}/delete`, payload);
+        this.messageProps.message = await deleteObject('site', `/site/${id}/delete/`, payload);
         console.log(this.messageProps.message);
         this.getSites();
       }
@@ -199,7 +199,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete building ${buildingName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('building', `/building/${id}/delete`, payload);
+        this.messageProps.message = await deleteObject('building', `/building/${id}/delete/`, payload);
         this.getBuildings();
       }
     },
@@ -208,7 +208,7 @@ export default {
         id: id,
       }
       if (confirm(`Do you really want to delete room ${roomName} and all releated items?`)) {
-        this.messageProps.message = await deleteObject('room', `/room/${id}/delete`, payload);
+        this.messageProps.message = await deleteObject('room', `/room/${id}/delete/`, payload);
         this.getRooms();
       }
     },
