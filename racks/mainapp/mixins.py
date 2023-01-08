@@ -848,6 +848,13 @@ class RackListApiViewMixin:
     queryset: QuerySet = RepoService.get_all_racks()
 
 
+class RackPartialListApiViewMixin:
+    """
+    Racks partial list API mixin
+    """
+    queryset: QuerySet = RepoService.get_all_racks_partial()
+
+
 class UserApiMixin(BaseApiMixin):
     """
     User mixin

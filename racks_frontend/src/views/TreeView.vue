@@ -182,7 +182,7 @@ export default {
       this.rooms = await getObject('rooms', '/room/all', null);
     },
     async getRacks() {
-      this.racks = await getObject('racks', '/rack/all', null);
+      this.racks = await getObject('racks', '/rack/all/partial', null);
     },
     async deleteSite(id, siteName) {
       const payload = {

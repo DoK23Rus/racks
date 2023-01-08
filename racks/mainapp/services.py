@@ -431,6 +431,16 @@ class RepoService:
         return Rack.objects.get_all_racks()
 
     @staticmethod
+    def get_all_racks_partial() -> QuerySet:
+        """
+        Get all racks partial
+
+        Returns:
+            all_racks (QuerySet): All racks partial queryset
+        """
+        return Rack.objects.get_all_racks_partial()
+
+    @staticmethod
     def get_all_racks_short() -> QuerySet:
         """
         Get all racks

@@ -160,6 +160,19 @@ class RackManager(models.Manager):
         """
         return Rack.objects.all()
 
+    def get_all_racks_partial(self):
+        """
+        Get all racks partial
+
+        Returns:
+            all_racks (QuerySet): All racks partial queryset
+        """
+        return Rack.objects.all().only('id',
+                                       'rack_name',
+                                       'rack_amount',
+                                       'numbering_from_bottom_to_top',
+                                       'room_id')
+
     def get_rack(self, pk):
         """
         Get single rack

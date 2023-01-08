@@ -144,6 +144,21 @@ class RackSerializer(serializers.ModelSerializer):
         ]
 
 
+class RackPartialSerializer(serializers.ModelSerializer):
+    """
+    Rack partial serializer (for tree view)
+    """
+    class Meta:
+        model: ModelBase = Rack
+        fields: List = [
+            'id',
+            'rack_name',
+            'rack_amount',
+            'numbering_from_bottom_to_top',
+            'room_id'
+        ]
+
+
 class DeviceSerializer(serializers.ModelSerializer):
     """
     Device serializer

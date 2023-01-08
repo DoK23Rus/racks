@@ -651,37 +651,47 @@ class TestRepoService(TestCase):
 
     def test_get_all_racks(self):
         # All racks Queryset
-        racks = Rack.objects.get_all_racks()
+        racks = Rack.objects.all()
         result = RepoService.get_all_racks()
+        self.assertQuerysetEqual(result, racks, ordered=False)
+
+    def test_get_all_racks_partial(self):
+        # All racks partial Queryset
+        racks = Rack.objects.all().only('id',
+                                        'rack_name',
+                                        'rack_amount',
+                                        'numbering_from_bottom_to_top',
+                                        'room_id')
+        result = RepoService.get_all_racks_partial()
         self.assertQuerysetEqual(result, racks, ordered=False)
 
     def test_get_all_rooms(self):
         # All rooms Queryset
-        rooms = Room.objects.get_all_rooms()
+        rooms = Room.objects.all()
         result = RepoService.get_all_rooms()
         self.assertQuerysetEqual(result, rooms, ordered=False)
 
     def test_get_all_buildings(self):
         # All buildings Queryset
-        buildings = Building.objects.get_all_buildings()
+        buildings = Building.objects.all()
         result = RepoService.get_all_buildings()
         self.assertQuerysetEqual(result, buildings, ordered=False)
 
     def test_get_all_sites(self):
         # All sites Queryset
-        sites = Site.objects.get_all_sites()
+        sites = Site.objects.all()
         result = RepoService.get_all_sites()
         self.assertQuerysetEqual(result, sites, ordered=False)
 
     def test_get_all_departments(self):
         # All departments Queryset
-        departments = Department.objects.get_all_departments()
+        departments = Department.objects.all()
         result = RepoService.get_all_departments()
         self.assertQuerysetEqual(result, departments, ordered=False)
 
     def test_get_all_regions(self):
         # All regions Queryset
-        regions = Region.objects.get_all_regions()
+        regions = Region.objects.all()
         result = RepoService.get_all_regions()
         self.assertQuerysetEqual(result, regions, ordered=False)
 

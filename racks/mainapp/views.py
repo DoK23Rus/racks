@@ -17,6 +17,7 @@ from mainapp.mixins import (BaseApiAddMixin,
                             DevicesReportMixin,
                             RackDevicesApiMixin,
                             RackListApiViewMixin,
+                            RackPartialListApiViewMixin,
                             RackLocationMixin,
                             RackModelsApiMixin,
                             RackVendorsApiMixin,
@@ -36,6 +37,7 @@ from mainapp.serializers import (BuildingSerializer,
                                  DepartmentSerializer,
                                  DeviceSerializer,
                                  RackSerializer,
+                                 RackPartialSerializer,
                                  RegionSerializer,
                                  RoomSerializer,
                                  SiteSerializer)
@@ -287,6 +289,14 @@ class RackListApiView(RackListApiViewMixin, ListAPIView):
     """
     model: ModelBase = Rack
     serializer_class: SerializerMetaclass = RackSerializer
+
+
+class RackPartialListApiView(RackPartialListApiViewMixin, ListAPIView):
+    """
+    Rack partial list API view
+    """
+    model: ModelBase = Rack
+    serializer_class: SerializerMetaclass = RackPartialSerializer
 
 
 class UserApiView(UserApiMixin, APIView):
