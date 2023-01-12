@@ -1,6 +1,8 @@
 """
 Testing business logic
 """
+import datetime
+
 from django.test import TestCase
 from mainapp.models import (Region,
                             Department,
@@ -16,7 +18,8 @@ from mainapp.services import (UserCheckService,
                               RepoService,
                               NewUnits,
                               OldUnits,
-                              ReportService)
+                              ReportService,
+                              date)
 
 
 def base_setup():
@@ -75,8 +78,8 @@ def base_setup():
                                  device_model='Test_model2',
                                  power_w=200,
                                  rack_id=rack1_id)
-    Device.objects.get_or_create(first_unit=4,
-                                 last_unit=3,
+    Device.objects.get_or_create(first_unit=3,
+                                 last_unit=4,
                                  frontside_location=False,
                                  device_vendor='Test_vendor3',
                                  device_model='Test_model3',
@@ -148,7 +151,7 @@ devices_mock_data = [
         'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
         'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/4'],
     [3, 'Device active', 'Test_vendor3', 'Test_model3', '', '', '',
-        'Our department', '', '', '', '', '', 4, 3, 'No', 'Other', '',
+        'Our department', '', '', '', '', '', 3, 4, 'No', 'Other', '',
         None, None, None, '', 'IEC C14 socket', 50, 220, 'AC', '', '',
         'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
         'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/3'],
@@ -198,6 +201,17 @@ devices_mock_data = [
         'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
         'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/5']
 ]
+
+
+class TestDate(TestCase):
+    """
+    Testing date service
+    """
+
+    def test_date(self):
+        # Date without h-m-s
+        result = datetime.datetime.today().strftime("%Y-%m-%d_%H-%M-%S")[:-9]
+        self.assertEqual(result, date()[:-9])
 
 
 class TestUserCheckService(TestCase):
@@ -389,12 +403,22 @@ class TestDeviceCheckService(TestCase):
         result = DeviceCheckService.get_old_units(device1_id)
         self.assertEqual(result, OldUnits(1, 2))
 
+        # Device with Test_vendor3
+        device1_id = Device.objects.get(device_vendor='Test_vendor3').id
+        result = DeviceCheckService.get_old_units(device1_id)
+        self.assertEqual(result, OldUnits(3, 4))
+
         # pk is None
         with self.assertRaises(ValueError):
             DeviceCheckService.get_old_units(None)
 
     def test_get_new_units(self):
+        # First unit > last unit
         result = DeviceCheckService.get_new_units(7, 5)
+        self.assertEqual(result, NewUnits(5, 7))
+
+        # First unit < last unit
+        result = DeviceCheckService.get_new_units(5, 7)
         self.assertEqual(result, NewUnits(5, 7))
 
     def test_check_unit_exist(self):
