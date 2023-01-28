@@ -7,7 +7,7 @@ Simple CLI tool for log handling
 ```
 Usage of ./racks-log-cli:
   -action string
-    	entry action all/add/update/delete (default "all")
+    	entry action all|add|update|delete (default "all")
   -last uint
     	number of entries, has less priority than -range flag (default 100)
   -range string

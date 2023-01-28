@@ -33,15 +33,17 @@ docker-compose --profile test up
 ```
 Usage of ./racks-log-cli:
   -action string
-    	entry action all/add/update/delete (default "all")
+    	entry action all|add|update|delete (default "all")
   -last uint
     	number of entries, has less priority than -range flag (default 100)
   -range string
     	range of dates in YYYY-MM-DD_YYYY-MM-DD format (default "2023-01-28_2023-01-29")
 ```
 
-![Docker-compose](compose_viz.png)
+### Docker-compose-viz:
+![Docker-compose](compose-viz.png)
 
+### Some screenshots:
 | ![tree](https://user-images.githubusercontent.com/96002587/202865424-5f57d33c-c63a-408e-9f22-4954feb4a296.png) |
 |:--:| 
 | *Racks map* |
