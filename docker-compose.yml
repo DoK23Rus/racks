@@ -172,6 +172,22 @@ services:
         max-size: 50m
     profiles: ['dev', 'test']
 
+  log-cli:
+    # Log cli tool for Mongodb
+    container_name: log-cli
+    tty: true
+    build:
+      context: ./racks_log_cli
+      dockerfile: Dockerfile
+    env_file:
+      - ./racks_log_cli/.log-cli.env
+    logging:
+      options:
+        max-size: 50m
+    depends_on:
+      - logging-db
+    profiles: ['dev', 'test']
+
 # E2E testing containers
   selenium:
     container_name: chrome

@@ -171,7 +171,11 @@ class LoggingMixin(AbstractMixin):
     Logging mixin
     """
 
-    def create_log(self, request: HttpRequest, data: dict) -> None:
+    def create_log(self,
+                   request: HttpRequest,
+                   data: dict,
+                   pk: Optional[str]
+                   ) -> None:
         """
         Logging for add views
 
@@ -184,13 +188,15 @@ class LoggingMixin(AbstractMixin):
             'user': request.user.username,
             'action': 'add',
             'model_name': self.model_name,
-            'new_data': data
+            'new_data': data,
+            'fk': pk,
         })
 
     def update_log(self,
                    request: HttpRequest,
                    old_data: dict,
-                   data: dict
+                   data: dict,
+                   pk: Optional[int],
                    ) -> None:
         """
         Logging for update views
@@ -206,10 +212,15 @@ class LoggingMixin(AbstractMixin):
             'action': 'update',
             'model_name': self.model_name,
             'new_data': data,
-            'old_data': old_data
+            'old_data': old_data,
+            'pk': str(pk),
         })
 
-    def delete_log(self, request: HttpRequest, obj_name: str) -> None:
+    def delete_log(self,
+                   request: HttpRequest,
+                   obj_name: str,
+                   pk: Optional[int]
+                   ) -> None:
         """
         Logging for delete views
 
@@ -222,7 +233,8 @@ class LoggingMixin(AbstractMixin):
             'user': request.user.username,
             'action': 'delete',
             'model_name': self.model_name,
-            'object_name': obj_name
+            'object_name': obj_name,
+            'pk': str(pk),
         })
 
 
@@ -584,7 +596,7 @@ class BaseApiAddMixin(BaseApiMixin,
                 return Response({"invalid": result.message}, status=400)
             serializer.save()
             # Log this
-            self.create_log(request, data)
+            self.create_log(request, data, pk)
             return Response({"sucsess": f"{key_name} sucsessfully added"})
         return Response({"invalid": "Not good data"}, status=400)
 
@@ -652,7 +664,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
                 setattr(instance, key, value)
             instance.save()
             # Log this
-            self.update_log(request, instance.__dict__, data)
+            self.update_log(request, instance.__dict__, data, pk)
             return Response({"sucsess": f"{key_name} sucsessfully updated"})
         return Response({"invalid": "Not good data"}, status=400)
 
@@ -696,7 +708,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
             return Response({"invalid": result.message}, status=400)
         instance.delete()
         # Log this
-        self.delete_log(request, instance_name)
+        self.delete_log(request, instance_name, pk)
         return Response({"sucsess": f"{instance_name} sucsessfully deleted"})
 
 
