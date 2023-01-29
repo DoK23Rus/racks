@@ -27,18 +27,22 @@ var (
 
 
 func main() {
-    // Default date range for rangeFlag
+    // Default date range for range flag
     defaultRange := getDefaultDateRange()
 
     // Get flags
     lastFlag, rangeFlag, actionFlag := getFlags(defaultRange)
 
-    // Check date ramge flag
+    // Check date range flag
     checkRangeLenth(rangeFlag)
+
+    // Regexp check for range flag
     checkRangeRegexp(rangeFlag)
 
-    // Get filter for date range
+    // Get dates for filter
     startDateParse, endDateParse := getDatesForFilter(rangeFlag)
+
+    // Get filter for mongo query
     filter := getFilter(startDateParse, endDateParse)
 
     // Get logs from mongo
@@ -145,7 +149,6 @@ func getDataFromMongo(filter bson.D, lastFlag uint) *[]bson.M {
                     Find().
                     SetSort(bson.D{{"created", -1}}).
                     SetLimit(int64(lastFlag))
-
     cursor, err := mongologCollection.Find(ctx, filter, opts)
     if err != nil {
         log.Fatal(err)
