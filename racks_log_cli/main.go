@@ -166,7 +166,7 @@ func getDataFromMongo(filter bson.D, lastFlag uint) *[]bson.M {
 
 
 // Get msg maps from log entries
-func getMessages(logs *[]bson.M) (*[]bson.M) {
+func getMessages(logs *[]bson.M) *[]bson.M {
     var msg []bson.M
     for _, doc := range *logs {
         for key, value := range doc {
@@ -180,7 +180,7 @@ func getMessages(logs *[]bson.M) (*[]bson.M) {
 }
 
 
-// Sort entries by action
+// Sort entries by action and print them
 func printSortedMessages(messages *[]bson.M, action string) {
     var (
         separator string = strings.Repeat("-", 100)
