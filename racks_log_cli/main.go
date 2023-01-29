@@ -60,7 +60,7 @@ func main() {
 func getDefaultDateRange() string {
     today := time.Now()
     tomorrow := time.Now().AddDate(0, 0, 1)
-    defaultRange:= today.Format("2006-01-02") + 
+    defaultRange := today.Format("2006-01-02") + 
         "_" + tomorrow.Format("2006-01-02")
     return defaultRange
 }

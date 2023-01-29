@@ -118,3 +118,6 @@ pnpm-debug.log*
 
 # test
 TestResults___main__*
+
+#portainer
+portainer-data/

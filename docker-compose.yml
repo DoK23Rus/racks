@@ -188,6 +188,39 @@ services:
       - logging-db
     profiles: ['dev', 'test']
 
+  portainer:
+    # Container management
+    image: portainer/portainer-ce:2.16.2
+    container_name: portainer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./portainer-data:/data
+    ports:
+      - ${PORTAINER_PORT}:${PORTAINER_PORT}
+    profiles: ['dev', 'test']
+
+  flower:
+    # GUI for Celery
+    container_name: flower
+    image: mher/flower:1.2.0
+    command: celery flower --persisten=True
+    ports:
+      - ${FLOWER_PORT}:${FLOWER_PORT}
+    volumes:
+      - flower_data:${FLOWER_DATA_DIR}
+    env_file:
+      - ./.flower.env
+    depends_on:
+      - frontend
+      - message-broker
+      - worker
+      - cron
+    profiles: ['dev', 'test']
+
 # E2E testing containers
   selenium:
     container_name: chrome
@@ -261,6 +294,7 @@ services:
 volumes:
   postgres_data:
   mongodb_data:
+  flower_data:
   static_volume:
   log_volume: # log files for mypy, flake8, unittest
   backups_volume:
