@@ -129,22 +129,17 @@ func getFilter(startDateParse time.Time, endDateParse time.Time) bson.D {
 
 // Monobgodb client connection
 func getDataFromMongo(filter bson.D, lastFlag uint) *[]bson.M {
-    client, err := mongo.
-    NewClient(options.Client().
-                                ApplyURI(mongoURI))
+    client, err := mongo.NewClient(options.Client().ApplyURI(mongoURI))
     if err != nil {
         log.Fatal(err)
     }
-
     ctx := context.Background()
     err = client.Connect(ctx)
     if err != nil {
         log.Fatal(err)
     }
-
     defer client.Disconnect(ctx)
     demoDB := client.Database(databaseName)
-
     mongologCollection := demoDB.Collection(collectionName)
     opts := options.
                     Find().
@@ -155,9 +150,7 @@ func getDataFromMongo(filter bson.D, lastFlag uint) *[]bson.M {
     if err != nil {
         log.Fatal(err)
     }
-
     var logs []bson.M
-
     if err = cursor.All(ctx, &logs); err != nil {
         log.Fatal(err)
     }
