@@ -130,8 +130,9 @@ func getFilter(startDateParse *time.Time, endDateParse *time.Time) *bson.D {
 // Monobgodb client connection
 func getDataFromMongo(filter *bson.D, lastFlag *uint) *[]bson.M {
     client, err := mongo.
-    NewClient(options.Client().
-                                ApplyURI(mongoURI))
+    NewClient(options.
+                      Client().
+                      ApplyURI(mongoURI))
     if err != nil {
         log.Fatal(err)
     }
@@ -166,7 +167,7 @@ func getDataFromMongo(filter *bson.D, lastFlag *uint) *[]bson.M {
 
 
 // Get msg maps from log entries
-func getMessages(logs *[]bson.M) (*[]bson.M) {
+func getMessages(logs *[]bson.M) *[]bson.M {
     var msg []bson.M
     for _, doc := range *logs {
         for key, value := range doc {
