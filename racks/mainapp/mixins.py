@@ -182,6 +182,7 @@ class LoggingMixin(AbstractMixin):
         Args:
             request (HttpRequest): Request
             data (dict): Log data (add payload)
+            pk (str): Primary key (foreign key for that model)
         """
         logger.info({
             'time': datetime.now(),
@@ -205,6 +206,7 @@ class LoggingMixin(AbstractMixin):
             request (HttpRequest): Request
             old_data (dict): Old data (for checking difference)
             data (dict): Log data (update payload)
+            pk (int): Primary key
         """
         logger.info({
             'time': datetime.now(),
@@ -227,6 +229,7 @@ class LoggingMixin(AbstractMixin):
         Args:
             request (HttpRequest): Request
             obj_name (str): Deleting object name
+            pk (int): Primary key
         """
         logger.info({
             'time': datetime.now(),

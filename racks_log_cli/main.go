@@ -19,17 +19,51 @@ import (
 
 
 const layoutISO string = "2006-01-02T15:04:05.000Z"
-var mongoURI string = os.Getenv("MONGODB_URI")
+var (
+    mongoURI string = os.Getenv("MONGODB_URI")
+    databaseName string = os.Getenv("MONGO_DB_NAME")
+    collectionName string = os.Getenv("MONG_COLL_NAME")
+)
 
 
 func main() {
-    // Default date range
+    // Default date range for rangeFlag
+    defaultRange := getDefaultDateRange()
+
+    // Get flags
+    lastFlag, rangeFlag, actionFlag := getFlags(defaultRange)
+
+    // Check date ramge flag
+    checkRangeLenth(rangeFlag)
+    checkRangeRegexp(rangeFlag)
+
+    // Get filter for date range
+    startDateParse, endDateParse := getDatesForFilter(layoutISO, rangeFlag)
+    filter := getFilter(startDateParse, endDateParse)
+
+    // Get logs from mongo
+    logs := getDataFromMongo(filter, lastFlag) 
+
+    // Get msg from entries
+    messages := getMessages(logs)
+
+    // Print sorted entries
+    printSortedMessages(messages, actionFlag)
+}
+
+
+// Default date range
+func getDefaultDateRange() string {
     today := time.Now()
     tomorrow := time.Now().AddDate(0, 0, 1)
     defaultRange:= today.Format("2006-01-02") + 
         "_" + tomorrow.Format("2006-01-02")
+    return defaultRange
+}
 
-    // Get falgs
+
+// Get falgs
+func getFlags(defaultRange string) (uint, string, string) {
     lastFlag := flag.Uint(
         "last", 
         100, 
@@ -41,28 +75,62 @@ func main() {
     actionFlag := flag.String(
         "action", 
         "all", 
-        "entry action - all|add|update|delete")
+        "entry action all|add|update|delete")
     flag.Parse()
+    return *lastFlag, *rangeFlag, *actionFlag
+}
 
-    // Check lenth of range flag
-    if len([]rune(*rangeFlag)) != 21 {
+
+// Check lenth of range flag
+func checkRangeLenth(rangeFlag string) {
+    if len([]rune(rangeFlag)) != 21 {
         fmt.Println("Wrong date range")
         os.Exit(1)
     }
+}
 
-    // Range flag regex check
+
+// Range flag regex check
+func checkRangeRegexp(rangeFlag string) {
     matched, _ := regexp.MatchString(
         `\d{4}-\d{2}-\d{2}_\d{4}-\d{2}-\d{2}`, 
-        *rangeFlag)
+        rangeFlag)
     if matched == false {
         fmt.Println("Wrong date range")
         os.Exit(1)
     }
+}
 
-    // Monobgodb client connection
+
+// Dates for date range
+func getDatesForFilter(layoutISO string, rangeFlag string) (time.Time, time.Time) {
+    dates := strings.Split(rangeFlag, "_")
+    startDate := dates[0] + "T00:00:00.000Z"
+    endDate := dates[1] + "T00:00:00.000Z"
+    startDateParse, _ := time.Parse(layoutISO, startDate) 
+    endDateParse, _ := time.Parse(layoutISO, endDate)
+    return startDateParse, endDateParse
+}
+
+
+// Filter for date range
+func getFilter(startDateParse time.Time, endDateParse time.Time) bson.D {
+    filter := bson.D{
+        {"$and",
+            bson.A{
+                bson.D{{"created", bson.D{{"$gt", startDateParse}}}},
+                bson.D{{"created", bson.D{{"$lt", endDateParse}}}},
+            },
+        },
+    }
+    return filter
+}
+
+
+// Monobgodb client connection
+func getDataFromMongo(filter bson.D, lastFlag uint) []bson.M {
     client, err := mongo.
-                        NewClient(options.Client().
-                        ApplyURI(mongoURI))
+    NewClient(options.Client().ApplyURI(mongoURI))
     if err != nil {
         log.Fatal(err)
     }
@@ -74,47 +142,25 @@ func main() {
     }
 
     defer client.Disconnect(ctx)
-    demoDB := client.Database("mongolog")
-    
-    // Dates for date range
-    dates := strings.Split(*rangeFlag, "_")
-    startDate := dates[0] + "T00:00:00.000Z"
-    endDate := dates[1] + "T00:00:00.000Z"
-    startDateParse, _ := time.Parse(layoutISO, startDate) 
-    endDateParse, _ := time.Parse(layoutISO, endDate)
+    demoDB := client.Database(databaseName)
 
-    // Filter for date range
-    filter := bson.D{
-        {"$and",
-            bson.A{
-                bson.D{{"created", bson.D{{"$gt", startDateParse}}}},
-                bson.D{{"created", bson.D{{"$lt", endDateParse}}}},
-            },
-        },
-    }
-    mongologCollection := demoDB.Collection("mongolog")
+    mongologCollection := demoDB.Collection(collectionName)
     opts := options.
                     Find().
                     SetSort(bson.D{{"created", -1}}).
-                    SetLimit(int64(*lastFlag))
+                    SetLimit(int64(lastFlag))
 
     cursor, err := mongologCollection.Find(ctx, filter, opts)
     if err != nil {
         log.Fatal(err)
     }
-    
+
     var logs []bson.M
 
     if err = cursor.All(ctx, &logs); err != nil {
         log.Fatal(err)
     }
-
-    // Get messages
-    var messages []bson.M
-    messages = getMessages(logs)
-
-    // Filter and print entries
-    sortMessages(messages, actionFlag)
+    return logs
 }
 
 
@@ -134,7 +180,7 @@ func getMessages(logs []bson.M) ([]bson.M) {
 
 
 // Sort entries by action
-func sortMessages(messages []bson.M, action *string) {
+func printSortedMessages(messages []bson.M, action string) {
     var (
         separator string = strings.Repeat("-", 100)
         writer io.Writer = tabwriter.NewWriter(
@@ -142,13 +188,13 @@ func sortMessages(messages []bson.M, action *string) {
     )
     for _, msg := range messages {
         if (msg["action"].(string) == "delete") && 
-            (*action == "all" || *action == "delete") {
+            (action == "all" || action == "delete") {
             printDelete(msg, separator, writer)
         } else if (msg["action"].(string) == "add") && 
-            (*action == "all" || *action == "add") {
+            (action == "all" || action == "add") {
             printAdd(msg, separator, writer)
         } else if (msg["action"].(string) == "update") && 
-            (*action == "all" || *action == "update") {
+            (action == "all" || action == "update") {
             printUpdate(msg, separator, writer)
         } else {
             fmt.Printf("")
