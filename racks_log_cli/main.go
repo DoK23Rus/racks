@@ -53,37 +53,37 @@ func main() {
 
 
 // Default date range
-func getDefaultDateRange() *string {
+func getDefaultDateRange() string {
     today := time.Now()
     tomorrow := time.Now().AddDate(0, 0, 1)
     defaultRange:= today.Format("2006-01-02") + 
         "_" + tomorrow.Format("2006-01-02")
-    return &defaultRange
+    return defaultRange
 }
 
 
 // Get falgs
-func getFlags(defaultRange *string) (*uint, *string, *string) {
+func getFlags(defaultRange string) (uint, string, string) {
     lastFlag := flag.Uint(
         "last", 
         100, 
         "number of entries, has less priority than -range flag")
     rangeFlag := flag.String(
         "range", 
-        *defaultRange, 
+        defaultRange, 
         "range of dates in YYYY-MM-DD_YYYY-MM-DD format")
     actionFlag := flag.String(
         "action", 
         "all", 
         "entry action all|add|update|delete")
     flag.Parse()
-    return lastFlag, rangeFlag, actionFlag
+    return *lastFlag, *rangeFlag, *actionFlag
 }
 
 
 // Check lenth of range flag
-func checkRangeLenth(rangeFlag *string) {
-    if len([]rune(*rangeFlag)) != 21 {
+func checkRangeLenth(rangeFlag string) {
+    if len([]rune(rangeFlag)) != 21 {
         fmt.Println("Wrong date range")
         os.Exit(1)
     }
@@ -91,10 +91,10 @@ func checkRangeLenth(rangeFlag *string) {
 
 
 // Range flag regex check
-func checkRangeRegexp(rangeFlag *string) {
+func checkRangeRegexp(rangeFlag string) {
     matched, _ := regexp.MatchString(
         `\d{4}-\d{2}-\d{2}_\d{4}-\d{2}-\d{2}`, 
-        *rangeFlag)
+        rangeFlag)
     if matched == false {
         fmt.Println("Wrong date range")
         os.Exit(1)
@@ -103,36 +103,35 @@ func checkRangeRegexp(rangeFlag *string) {
 
 
 // Dates for date range
-func getDatesForFilter(rangeFlag *string) (*time.Time, *time.Time) {
-    dates := strings.Split(*rangeFlag, "_")
+func getDatesForFilter(rangeFlag string) (time.Time, time.Time) {
+    dates := strings.Split(rangeFlag, "_")
     startDate := dates[0] + "T00:00:00.000Z"
     endDate := dates[1] + "T00:00:00.000Z"
     startDateParse, _ := time.Parse(layoutISO, startDate) 
     endDateParse, _ := time.Parse(layoutISO, endDate)
-    return &startDateParse, &endDateParse
+    return startDateParse, endDateParse
 }
 
 
 // Filter for date range
-func getFilter(startDateParse *time.Time, endDateParse *time.Time) *bson.D {
+func getFilter(startDateParse time.Time, endDateParse time.Time) bson.D {
     filter := bson.D{
         {"$and",
             bson.A{
-                bson.D{{"created", bson.D{{"$gt", *startDateParse}}}},
-                bson.D{{"created", bson.D{{"$lt", *endDateParse}}}},
+                bson.D{{"created", bson.D{{"$gt", startDateParse}}}},
+                bson.D{{"created", bson.D{{"$lt", endDateParse}}}},
             },
         },
     }
-    return &filter
+    return filter
 }
 
 
 // Monobgodb client connection
-func getDataFromMongo(filter *bson.D, lastFlag *uint) *[]bson.M {
+func getDataFromMongo(filter bson.D, lastFlag uint) *[]bson.M {
     client, err := mongo.
-    NewClient(options.
-                      Client().
-                      ApplyURI(mongoURI))
+    NewClient(options.Client().
+                                ApplyURI(mongoURI))
     if err != nil {
         log.Fatal(err)
     }
@@ -150,9 +149,9 @@ func getDataFromMongo(filter *bson.D, lastFlag *uint) *[]bson.M {
     opts := options.
                     Find().
                     SetSort(bson.D{{"created", -1}}).
-                    SetLimit(int64(*lastFlag))
+                    SetLimit(int64(lastFlag))
 
-    cursor, err := mongologCollection.Find(ctx, *filter, opts)
+    cursor, err := mongologCollection.Find(ctx, filter, opts)
     if err != nil {
         log.Fatal(err)
     }
@@ -167,7 +166,7 @@ func getDataFromMongo(filter *bson.D, lastFlag *uint) *[]bson.M {
 
 
 // Get msg maps from log entries
-func getMessages(logs *[]bson.M) *[]bson.M {
+func getMessages(logs *[]bson.M) (*[]bson.M) {
     var msg []bson.M
     for _, doc := range *logs {
         for key, value := range doc {
@@ -181,8 +180,8 @@ func getMessages(logs *[]bson.M) *[]bson.M {
 }
 
 
-// Sort entries by action and print them
-func printSortedMessages(messages *[]bson.M, action *string) {
+// Sort entries by action
+func printSortedMessages(messages *[]bson.M, action string) {
     var (
         separator string = strings.Repeat("-", 100)
         writer io.Writer = tabwriter.NewWriter(
@@ -190,14 +189,14 @@ func printSortedMessages(messages *[]bson.M, action *string) {
     )
     for _, msg := range *messages {
         if (msg["action"].(string) == "delete") && 
-            (*action == "all" || *action == "delete") {
-            printDelete(&msg, &separator, &writer)
+            (action == "all" || action == "delete") {
+            printDelete(&msg, separator, writer)
         } else if (msg["action"].(string) == "add") && 
-            (*action == "all" || *action == "add") {
-            printAdd(&msg, &separator, &writer)
+            (action == "all" || action == "add") {
+            printAdd(&msg, separator, writer)
         } else if (msg["action"].(string) == "update") && 
-            (*action == "all" || *action == "update") {
-            printUpdate(&msg, &separator, &writer)
+            (action == "all" || action == "update") {
+            printUpdate(&msg, separator, writer)
         } else {
             fmt.Printf("")
         }
@@ -206,7 +205,7 @@ func printSortedMessages(messages *[]bson.M, action *string) {
 
 
 // Print entries with "delete" action
-func printDelete(message *bson.M, separator *string, writer *io.Writer) {
+func printDelete(message *bson.M, separator string, writer io.Writer) {
     var (
         msg bson.M = *message
         time string = msg["time"].(string)
@@ -216,16 +215,16 @@ func printDelete(message *bson.M, separator *string, writer *io.Writer) {
         objectName string = msg["object_name"].(string)
         pk string = msg["pk"].(string)
     )
-    fmt.Fprint(*writer, "DATE\tUSER\tACTION\tMODEL NAME\tOBJECT NAME\tPK\n")
+    fmt.Fprint(writer, "DATE\tUSER\tACTION\tMODEL NAME\tOBJECT NAME\tPK\n")
     fmt.Fprintln(
-        *writer, time, "\t", user, "\t", 
+        writer, time, "\t", user, "\t", 
         action, "\t", modelName, "\t", objectName, "\t", pk, "\n")
-    fmt.Println(*separator)
+    fmt.Println(separator)
 }
 
 
 // Print entries with "add" action
-func printAdd(message *bson.M, separator *string, writer *io.Writer) {
+func printAdd(message *bson.M, separator string, writer io.Writer) {
     var (
         msg bson.M = *message
         time string = msg["time"].(string)
@@ -236,18 +235,18 @@ func printAdd(message *bson.M, separator *string, writer *io.Writer) {
         newData bson.M = msg["new_data"].(bson.M)
     )
     marshalNewData, _ := json.MarshalIndent(newData, "", "    ")
-    fmt.Fprint(*writer, "DATE\tUSER\tACTION\tMODEL NAME\tFK\n")
+    fmt.Fprint(writer, "DATE\tUSER\tACTION\tMODEL NAME\tFK\n")
     fmt.Fprint(
-        *writer, time, "\t", user, "\t", 
+        writer, time, "\t", user, "\t", 
         action, "\t", modelName, "\t", fk, "\n\n")
-    fmt.Fprint(*writer, "*****NEW DATA*****\n")
-    fmt.Fprint(*writer, string(marshalNewData), "\n")
-    fmt.Println(*separator)
+    fmt.Fprint(writer, "*****NEW DATA*****\n")
+    fmt.Fprint(writer, string(marshalNewData), "\n")
+    fmt.Println(separator)
 }
 
 
 // Print entries with "update" action
-func printUpdate(message *bson.M, separator *string, writer *io.Writer) {
+func printUpdate(message *bson.M, separator string, writer io.Writer) {
     var (
         msg bson.M = *message
         time string = msg["time"].(string)
@@ -260,13 +259,13 @@ func printUpdate(message *bson.M, separator *string, writer *io.Writer) {
     )
     marshalOldData, _ := json.MarshalIndent(oldData, "", "    ")
     marshalNewData, _ := json.MarshalIndent(newData, "", "    ")
-    fmt.Fprint(*writer, "DATE\tUSER\tACTION\tMODEL NAME\tPK\n")
+    fmt.Fprint(writer, "DATE\tUSER\tACTION\tMODEL NAME\tPK\n")
     fmt.Fprint(
-        *writer, time, "\t", user, "\t", 
+        writer, time, "\t", user, "\t", 
         action, "\t", modelName, "\t", pk, "\n\n")
-    fmt.Fprint(*writer, "*****OLD DATA*****\n")
-    fmt.Fprint(*writer, string(marshalOldData), "\n\n")
-    fmt.Fprint(*writer, "*****NEW DATA*****\n")
-    fmt.Fprint(*writer, string(marshalNewData), "\n")
-    fmt.Println(*separator)
+    fmt.Fprint(writer, "*****OLD DATA*****\n")
+    fmt.Fprint(writer, string(marshalOldData), "\n\n")
+    fmt.Fprint(writer, "*****NEW DATA*****\n")
+    fmt.Fprint(writer, string(marshalNewData), "\n")
+    fmt.Println(separator)
 }
