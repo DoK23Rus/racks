@@ -27,5 +27,3 @@ RUN pip install -r requirements.txt
 
 COPY ./entrypoint.sh $APP_HOME
 COPY ./racks $APP_HOME
-
-ENTRYPOINT ["/home/app/web/entrypoint.sh"]

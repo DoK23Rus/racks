@@ -5,6 +5,7 @@ services:
   backend:
     container_name: django
     domainname: backend
+    entrypoint: /home/app/web/entrypoint.sh
     build:
       context: ./
       dockerfile: Dockerfile
@@ -173,7 +174,7 @@ services:
     profiles: ['dev', 'test']
 
   log-cli:
-    # Log cli tool for Mongodb
+    # Log CLI tool for Mongodb
     container_name: log-cli
     tty: true
     build:
@@ -204,7 +205,7 @@ services:
     profiles: ['dev', 'test']
 
   flower:
-    # GUI for Celery
+    # Celery monitoring
     container_name: flower
     image: mher/flower:1.2.0
     command: celery flower --persisten=True
