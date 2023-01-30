@@ -17,7 +17,6 @@
 ![](https://img.shields.io/badge/vuelidate-2.0-%2342b883) ![](https://img.shields.io/badge/axios-1.1.3-%2342b883) ![](https://img.shields.io/badge/vuex-4.0.0-%2342b883) ![](https://img.shields.io/badge/vue--svg--loader-0.16.0-%2342b883)  
 ![](https://img.shields.io/badge/mongo--driver-1.11.1-%230ea5e9)
 
-
 ### Docker-compose profiles:
 
 For dev environment run:
@@ -29,7 +28,11 @@ For dev environment plus E2E tests run:
 docker-compose --profile test up
 ```
 
-### Racks-log-cli:
+### build_and_test.sh:
+
+Runs `docker-compose --profile test up` with simple report banner and some additions
+
+### racks-log-cli:
 
 ```
 Usage of ./racks-log-cli:

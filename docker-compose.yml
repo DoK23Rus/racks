@@ -2,10 +2,92 @@ version: '3.8'
 
 services:
 # Dev containers
+  portainer:
+    # Container management
+    image: portainer/portainer-ce:2.16.2
+    container_name: portainer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./portainer-data:/data
+    ports:
+      - ${PORTAINER_PORT}:${PORTAINER_PORT}
+    profiles: ['dev', 'test']
+
+  database:
+    container_name: postgres
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:${POSTGRES_DATA_DIR}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    env_file:
+      - ./.database.env
+    healthcheck:
+      test: pg_isready -U ${SQL_USER} -d ${SQL_DATABASE}
+      interval: 1s
+      retries: 30
+      timeout: 1s
+    logging:
+      options:
+        max-size: 100m
+    profiles: ['dev', 'test']
+
+  logging-db:
+    # Database for mainapp logging
+    container_name: mongodb
+    image: mongo:4.0.4
+    ports:
+      - ${LOGGING_DB_PORT}:${LOGGING_DB_PORT}
+    volumes:
+      - mongodb_data:${MONGODB_DATA_DIR}
+    env_file:
+      - ./.logging-db.env
+    healthcheck:
+      test: mongo --eval 'db.runCommand("ping").ok' localhost:${LOGGING_DB_PORT} --quiet
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
+    logging:
+      options:
+        max-size: 50m
+    profiles: ['dev', 'test']
+
+  message-broker:
+    container_name: redis
+    image: redis:6.2.7-alpine
+    ports:
+      - ${MESSAGE_BROKER_PORT}:${MESSAGE_BROKER_PORT}
+    logging:
+      options:
+        max-size: 50m
+    profiles: ['dev', 'test']
+
+  log-cli:
+    # Log CLI tool for Mongodb
+    container_name: log-cli
+    tty: true
+    build:
+      context: ./racks_log_cli
+      dockerfile: Dockerfile
+    env_file:
+      - ./racks_log_cli/.log-cli.env
+    logging:
+      options:
+        max-size: 50m
+    depends_on:
+      - logging-db
+    profiles: ['dev', 'test']
+
   backend:
+    &django
     container_name: django
     domainname: backend
-    entrypoint: /home/app/web/entrypoint.sh
+    entrypoint: /home/app/web/entrypoint_main.sh
     build:
       context: ./
       dockerfile: Dockerfile
@@ -35,6 +117,50 @@ services:
         condition: service_healthy
       logging-db:
         condition: service_healthy
+
+  # Containers for linter, type check and unit tests
+  django-linter:
+    <<: *django
+    container_name: django-linter
+    entrypoint: /home/app/web/entrypoint_linter.sh
+    ports:
+      - ${BACKEND_PORT_RESERVE}:${BACKEND_PORT_RESERVE}
+
+  django-unit-tests:
+    <<: *django
+    container_name: django-unit-tests
+    entrypoint: /home/app/web/entrypoint_unit.sh
+    ports:
+      - ${BACKEND_PORT_RESERVE2}:${BACKEND_PORT_RESERVE2}
+
+  django-typing:
+    <<: *django
+    container_name: django-typing
+    entrypoint: /home/app/web/entrypoint_typing.sh
+    ports:
+      - ${BACKEND_PORT_RESERVE3}:${BACKEND_PORT_RESERVE3}
+
+  worker:
+    container_name: celery-worker
+    build: .
+    entrypoint: celery -A ${APP_NAME} worker -l INFO
+    volumes:
+      - backups_volume:${BACKUP_DIR}
+      - static_volume:${STATIC_DIR}
+    env_file:
+      - ./.env
+      - ./.backend.env
+      - ./.database.env
+      - ./.logging-db.env
+    logging:
+      options:
+        max-size: 50m
+    profiles: ['dev', 'test']
+    depends_on:
+      backend:
+        condition: service_healthy
+      message-broker:
+        condition: service_started
   
   cron:
     # Celery cron for data backups
@@ -60,57 +186,6 @@ services:
         condition: service_started
       worker:
         condition: service_started
-
-  worker:
-    container_name: celery-worker
-    build: .
-    entrypoint: celery -A ${APP_NAME} worker -l INFO
-    volumes:
-      - backups_volume:${BACKUP_DIR}
-      - static_volume:${STATIC_DIR}
-    env_file:
-      - ./.env
-      - ./.backend.env
-      - ./.database.env
-      - ./.logging-db.env
-    logging:
-      options:
-        max-size: 50m
-    profiles: ['dev', 'test']
-    depends_on:
-      backend:
-        condition: service_healthy
-      message-broker:
-        condition: service_started
-  
-  message-broker:
-    container_name: redis
-    image: redis:6.2.7-alpine
-    ports:
-      - ${MESSAGE_BROKER_PORT}:${MESSAGE_BROKER_PORT}
-    logging:
-      options:
-        max-size: 50m
-    profiles: ['dev', 'test']
-
-  database:
-    container_name: postgres
-    image: postgres:12.0-alpine
-    volumes:
-      - postgres_data:${POSTGRES_DATA_DIR}
-    ports:
-      - ${DATABASE_PORT}:${DATABASE_PORT}
-    env_file:
-      - ./.database.env
-    healthcheck:
-      test: pg_isready -U ${SQL_USER} -d ${SQL_DATABASE}
-      interval: 1s
-      retries: 30
-      timeout: 1s
-    logging:
-      options:
-        max-size: 100m
-    profiles: ['dev', 'test']
 
   frontend:
     container_name: vue
@@ -152,58 +227,6 @@ services:
       - backend
       - frontend
 
-  logging-db:
-    # Database for mainapp logging
-    container_name: mongodb
-    image: mongo:4.0.4
-    ports:
-      - ${LOGGING_DB_PORT}:${LOGGING_DB_PORT}
-    volumes:
-      - mongodb_data:${MONGODB_DATA_DIR}
-    env_file:
-      - ./.logging-db.env
-    healthcheck:
-      test: mongo --eval 'db.runCommand("ping").ok' localhost:${LOGGING_DB_PORT} --quiet
-      interval: 5s
-      retries: 10
-      start_period: 15s
-      timeout: 10s
-    logging:
-      options:
-        max-size: 50m
-    profiles: ['dev', 'test']
-
-  log-cli:
-    # Log CLI tool for Mongodb
-    container_name: log-cli
-    tty: true
-    build:
-      context: ./racks_log_cli
-      dockerfile: Dockerfile
-    env_file:
-      - ./racks_log_cli/.log-cli.env
-    logging:
-      options:
-        max-size: 50m
-    depends_on:
-      - logging-db
-    profiles: ['dev', 'test']
-
-  portainer:
-    # Container management
-    image: portainer/portainer-ce:2.16.2
-    container_name: portainer
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./portainer-data:/data
-    ports:
-      - ${PORTAINER_PORT}:${PORTAINER_PORT}
-    profiles: ['dev', 'test']
-
   flower:
     # Celery monitoring
     container_name: flower
@@ -223,49 +246,6 @@ services:
     profiles: ['dev', 'test']
 
 # E2E testing containers
-  selenium:
-    container_name: chrome
-    image: selenium/standalone-chrome
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    env_file:
-      - ./e2e_tests/.selenium.env
-    volumes:
-      - /dev/shm:/dev/shm
-    ports:
-      - ${SELENIUM_PORT}:${SELENIUM_PORT}
-    logging:
-      options:
-        max-size: 50m
-    profiles: ['test']
-    depends_on:
-      - frontend-testing
-      - backend
-  
-  test-runner:
-    # E2E tests
-    container_name: e2e_tests
-    build:
-      context: ./e2e_tests
-      dockerfile: Dockerfile
-    command: python e2e_tests.py
-    env_file:
-      - ./.env
-      - ./e2e_tests/.test-runner.env
-    logging:
-      options:
-        max-size: 100m
-    volumes:
-      - test_results:${TEST_RESULTS_PATH}
-    profiles: ['test']
-    depends_on:
-      backend:
-        condition: service_healthy
-      frontend-testing:
-        condition: service_healthy
-      selenium:
-        condition: service_started
-  
   frontend-testing:
     # Frontend for seleium grid
     container_name: vue-testing
@@ -290,6 +270,51 @@ services:
     profiles: ['test']
     depends_on:
       - backend
+
+  selenium:
+    container_name: chrome
+    image: selenium/standalone-chrome
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    env_file:
+      - ./e2e_tests/.selenium.env
+    volumes:
+      - /dev/shm:/dev/shm
+    ports:
+      - ${SELENIUM_PORT}:${SELENIUM_PORT}
+    logging:
+      options:
+        max-size: 50m
+    profiles: ['test']
+    depends_on:
+      - frontend-testing
+      - backend
+
+  test-runner:
+    # E2E tests
+    container_name: e2e-tests
+    build:
+      context: ./e2e_tests
+      dockerfile: Dockerfile
+    command: python e2e_tests.py
+    env_file:
+      - ./.env
+      - ./e2e_tests/.test-runner.env
+    ports:
+      - 4445:4445
+    logging:
+      options:
+        max-size: 100m
+    volumes:
+      - test_results:${TEST_RESULTS_PATH}
+    profiles: ['test']
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend-testing:
+        condition: service_healthy
+      selenium:
+        condition: service_started
 
 
 volumes:
