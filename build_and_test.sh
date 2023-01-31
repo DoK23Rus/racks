@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Before running, make sure $USER is a member of the docker group
-docker-compose down
-docker-compose --profile test build &&
-docker-compose --profile test up &
+docker-compose -p racks down
+docker-compose -p racks --profile test build &&
+docker-compose -p racks --profile test up &
 
 # Wait for build
 docker inspect e2e-tests > /dev/null 2>/dev/null
@@ -25,20 +25,24 @@ do
 	sleep 1
 done
 
-# Stop other e2e testing containers
-docker stop chrome
-docker stop vue-testing
-
 LINTER=$(docker inspect django-linter --format='{{.State.ExitCode}}')
 TYPING=$(docker inspect django-typing --format='{{.State.ExitCode}}')
 UNITS=$(docker inspect django-unit-tests --format='{{.State.ExitCode}}') 
 E2E=$(docker inspect e2e-tests --format='{{.State.ExitCode}}')
 
+# Compose down
+docker-compose -p racks down
+docker-compose ls | grep racks > /dev/null 2>/dev/null
+while [ $? -eq 0 ]
+do
+    sleep 1
+    docker-compose ls | grep racks > /dev/null 2>/dev/null
+done
+
 CODE_ARR=($LINTER, $TYPING, $UNITS, $E2E)
 
 if [[ "${CODE_ARR[*]}" =~ "1" ]]
 then
-    docker-compose down
     echo -e "============================================================\n"\
     "-----FAIL-----\n"\
     "============================================================\n"\

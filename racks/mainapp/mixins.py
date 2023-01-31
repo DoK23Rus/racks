@@ -993,7 +993,7 @@ class DevicesReportMixin(BaseApiMixin):
     Devices report API mixin
     """
 
-    def get(self, request: HttpRequest, **kwargs) -> HttpResponse:
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """
         Get devices report
 

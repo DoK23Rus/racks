@@ -104,7 +104,6 @@ services:
         max-size: 100m
     volumes:
       - static_volume:${STATIC_DIR}
-      - log_volume:${LOGS_DIR}
     env_file:
       - ./.env
       - ./.backend.env
@@ -123,6 +122,8 @@ services:
     <<: *django
     container_name: django-linter
     entrypoint: /home/app/web/entrypoint_linter.sh
+    volumes:
+      - log_volume:${LOGS_DIR}
     ports:
       - ${BACKEND_PORT_RESERVE}:${BACKEND_PORT_RESERVE}
 
@@ -130,6 +131,8 @@ services:
     <<: *django
     container_name: django-unit-tests
     entrypoint: /home/app/web/entrypoint_unit.sh
+    volumes:
+      - log_volume:${LOGS_DIR}
     ports:
       - ${BACKEND_PORT_RESERVE2}:${BACKEND_PORT_RESERVE2}
 
@@ -137,6 +140,8 @@ services:
     <<: *django
     container_name: django-typing
     entrypoint: /home/app/web/entrypoint_typing.sh
+    volumes:
+      - log_volume:${LOGS_DIR}
     ports:
       - ${BACKEND_PORT_RESERVE3}:${BACKEND_PORT_RESERVE3}
 
