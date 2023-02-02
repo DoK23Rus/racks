@@ -5,7 +5,6 @@ import os
 import time
 import unittest
 
-import HtmlTestRunner
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -32,7 +31,7 @@ class E2ETestCase(unittest.TestCase):
         options.add_argument('--ignore-ssl-errors=yes')
         options.add_argument('--ignore-certificate-errors')
         self.driver = webdriver.Remote(
-            command_executor='http://selenium:4444/wd/hub',
+            command_executor=os.environ.get('COMMAND_EXECUTOR'),
             options=options,
             desired_capabilities=DesiredCapabilities.CHROME,
         )
@@ -47,6 +46,12 @@ class E2ETestCase(unittest.TestCase):
     def tearDown(self):
         self.driver.close()
         self.driver.quit()
+
+
+class MoveDeviceCase(E2ETestCase):
+    """
+    Move device cases
+    """
 
     def test_1_move_device_outside(self):
         """
@@ -108,7 +113,13 @@ class E2ETestCase(unittest.TestCase):
         device_form.click_submit()
         self.assertTrue(device_form.get_unit_busy_loc())
 
-    def test_3_permitions(self):
+
+class PermissionsCase(E2ETestCase):
+    """
+    Permissions cases
+    """
+
+    def test_3_check_permitions(self):
         """
         Trying to add a new object
         in the area of responsibility of another department
@@ -124,6 +135,12 @@ class E2ETestCase(unittest.TestCase):
         site_form.enter_site_name(Params.site_name)
         site_form.click_submit()
         self.assertTrue(site_form.get_violation_loc())
+
+
+class AddDeviceCase(E2ETestCase):
+    """
+    Add device cases
+    """
 
     def test_4_add_device_outside(self):
         """
@@ -177,6 +194,13 @@ class E2ETestCase(unittest.TestCase):
         device_form.click_submit()
         self.assertTrue(device_form.get_unit_busy_loc())
 
+
+class NameDuplicationCase(E2ETestCase):
+    """
+    Name duplication cases
+    for buildings, rooms and racks
+    """
+
     def test_6_add_same_name_building(self):
         """
         Trying to add a building with a duplicate name
@@ -225,8 +249,3 @@ class E2ETestCase(unittest.TestCase):
         rack_form.click_submit()
         time.sleep(1)
         self.assertTrue(rack_form.get_rack_name_busy_loc())
-
-
-if __name__ == "__main__":
-    unittest.main(testRunner=HtmlTestRunner
-                  .HTMLTestRunner(output=os.environ.get('TEST_RESULTS_PATH')))

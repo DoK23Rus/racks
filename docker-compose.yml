@@ -274,26 +274,48 @@ services:
         max-size: 100m
     profiles: ['test']
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
-  selenium:
-    container_name: chrome
-    image: selenium/standalone-chrome
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    env_file:
-      - ./e2e_tests/.selenium.env
-    volumes:
-      - /dev/shm:/dev/shm
+  hub:
+    container_name: hub
+    image: selenium/hub:4.1.3
     ports:
-      - ${SELENIUM_PORT}:${SELENIUM_PORT}
-    logging:
-      options:
-        max-size: 50m
+      - ${SE_EVENT_BUS_PUBLISH_PORT}:${SE_EVENT_BUS_PUBLISH_PORT}
+      - ${SE_EVENT_BUS_SUBSCRIBE_PORT}:${SE_EVENT_BUS_SUBSCRIBE_PORT}
+      - ${SELENIUM_HUB_PORT}:${SELENIUM_HUB_PORT}
     profiles: ['test']
     depends_on:
-      - frontend-testing
-      - backend
+      frontend-testing: 
+        condition: service_healthy
+
+  selenium:
+    image: selenium/node-chrome:4.1.3
+    shm_size: 1gb
+    # For some reasons cant work properly with env files
+    environment:
+      - SE_EVENT_BUS_HOST=${SE_HUB_CONTAINER_NAME}
+      - SE_EVENT_BUS_PUBLISH_PORT=${SE_EVENT_BUS_PUBLISH_PORT}
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=${SE_EVENT_BUS_SUBSCRIBE_PORT}
+      - NODE_MAX_SESSION=4
+      - NODE_MAX_INSTANCES=4
+      - VNC_NO_PASSWORD=1
+    healthcheck:
+        test: curl -f http://${SE_HUB_CONTAINER_NAME}:${SELENIUM_HUB_PORT}|| exit 1
+        interval: 5s
+        timeout: 10s
+        retries: 15
+        start_period: 10s 
+    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
+    profiles: ['test']
+    deploy:
+      # /e2e_tests/.test-runner.env NUMBER_OF_THREADS
+      replicas: ${SELENIUM_INSTANCES}
+    depends_on:
+      hub:
+        condition: service_started
+      frontend-testing:
+        condition: service_healthy
 
   test-runner:
     # E2E tests
@@ -301,12 +323,10 @@ services:
     build:
       context: ./e2e_tests
       dockerfile: Dockerfile
-    command: python e2e_tests.py
+    command: python run_threads.py
     env_file:
       - ./.env
       - ./e2e_tests/.test-runner.env
-    ports:
-      - 4445:4445
     logging:
       options:
         max-size: 100m
@@ -318,8 +338,10 @@ services:
         condition: service_healthy
       frontend-testing:
         condition: service_healthy
-      selenium:
+      hub:
         condition: service_started
+      selenium:
+        condition: service_healthy
 
 
 volumes:
@@ -331,4 +353,3 @@ volumes:
   backups_volume:
   test_results:
   vue_dist:
-  

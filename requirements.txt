@@ -36,7 +36,6 @@ djoser==2.1.0
 drf-yasg==1.21.4
 flake8==5.0.4
 gunicorn==19.9.0
-html-testRunner==1.2.1
 httpie==2.6.0
 idna==3.3
 importlib-metadata==4.2.0
