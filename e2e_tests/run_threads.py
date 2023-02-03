@@ -63,7 +63,7 @@ class Suite:
                             filemode='a',
                             format=format,
                             datefmt='%H:%M:%S',
-                            level=logging.INFO)
+                            level=logging.DEBUG)
 
     def _get_dir_name(self) -> str:
         """

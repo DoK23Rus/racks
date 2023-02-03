@@ -639,6 +639,9 @@ class BaseApiUpdateMixin(BaseApiMixin,
                      f"{self.fk_name}_id")
         data[self.fk_name] = fk
         data['updated_by'] = request.user.username
+        # For some reason get method become lazy
+        # when you call it from service layer
+        old_data = self.model.objects.get(id=pk).__dict__
         # Prevent rack amount updating
         data = DataProcessingService.update_rack_amount(data, pk)
         key_name = DataProcessingService.get_key_name(data, self.model_name)
@@ -667,7 +670,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
                 setattr(instance, key, value)
             instance.save()
             # Log this
-            self.update_log(request, instance.__dict__, data, pk)
+            self.update_log(request, old_data, data, pk)
             return Response({"sucsess": f"{key_name} sucsessfully updated"})
         return Response({"invalid": "Not good data"}, status=400)
 

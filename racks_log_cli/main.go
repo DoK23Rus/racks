@@ -18,7 +18,12 @@ import (
 )
 
 
-const layoutISO string = "2006-01-02T15:04:05.000Z"
+const (
+    layoutISO string = "2006-01-02T15:04:05.000Z"
+    hiRedString string = "\x1b[91m %s \x1b[0m"
+    hiYellowString string = "\x1b[93m %s \x1b[0m"
+    hiGreenString string = "\x1b[92m %s \x1b[0m"
+)
 var (
     mongoURI string = os.Getenv("MONGODB_URI")
     databaseName string = os.Getenv("MONGO_DB_NAME")
@@ -147,7 +152,7 @@ func getDataFromMongo(filter bson.D, lastFlag uint) *[]bson.M {
     mongologCollection := demoDB.Collection(collectionName)
     opts := options.
                     Find().
-                    SetSort(bson.D{{"created", -1}}).
+                    SetSort(bson.D{{"created", 1}}).
                     SetLimit(int64(lastFlag))
     cursor, err := mongologCollection.Find(ctx, filter, opts)
     if err != nil {
@@ -211,10 +216,12 @@ func printDelete(message *bson.M, separator string, writer io.Writer) {
         objectName string = msg["object_name"].(string)
         pk string = msg["pk"].(string)
     )
-    fmt.Fprint(writer, "DATE\tUSER\tACTION\tMODEL NAME\tOBJECT NAME\tPK\n")
-    fmt.Fprintln(
+    fmt.Fprint(writer, "\nDATE\tUSER\tACTION\tMODEL NAME\tPK\n")
+    fmt.Fprint(
         writer, time, "\t", user, "\t", 
-        action, "\t", modelName, "\t", objectName, "\t", pk, "\n")
+        action, "\t", modelName, "\t", pk, "\n\n")
+    fmt.Fprintf(os.Stdout, hiRedString, "\tOBJECT NAME:")
+    fmt.Fprint(os.Stdout, objectName, "\n\n")
     fmt.Println(separator)
 }
 
@@ -231,12 +238,12 @@ func printAdd(message *bson.M, separator string, writer io.Writer) {
         newData bson.M = msg["new_data"].(bson.M)
     )
     marshalNewData, _ := json.MarshalIndent(newData, "", "    ")
-    fmt.Fprint(writer, "DATE\tUSER\tACTION\tMODEL NAME\tFK\n")
+    fmt.Fprint(writer, "\nDATE\tUSER\tACTION\tMODEL NAME\tFK\n")
     fmt.Fprint(
         writer, time, "\t", user, "\t", 
         action, "\t", modelName, "\t", fk, "\n\n")
-    fmt.Fprint(writer, "*****NEW DATA*****\n")
-    fmt.Fprint(writer, string(marshalNewData), "\n")
+    fmt.Fprintf(os.Stdout, hiGreenString, "\tNEW DATA:\n")
+    fmt.Fprint(writer, string(marshalNewData), "\n\n")
     fmt.Println(separator)
 }
 
@@ -255,13 +262,13 @@ func printUpdate(message *bson.M, separator string, writer io.Writer) {
     )
     marshalOldData, _ := json.MarshalIndent(oldData, "", "    ")
     marshalNewData, _ := json.MarshalIndent(newData, "", "    ")
-    fmt.Fprint(writer, "DATE\tUSER\tACTION\tMODEL NAME\tPK\n")
+    fmt.Fprint(writer, "\nDATE\tUSER\tACTION\tMODEL NAME\tPK\n")
     fmt.Fprint(
         writer, time, "\t", user, "\t", 
         action, "\t", modelName, "\t", pk, "\n\n")
-    fmt.Fprint(writer, "*****OLD DATA*****\n")
+    fmt.Fprintf(os.Stdout, hiYellowString, "\tOLD DATA:\n")
     fmt.Fprint(writer, string(marshalOldData), "\n\n")
-    fmt.Fprint(writer, "*****NEW DATA*****\n")
-    fmt.Fprint(writer, string(marshalNewData), "\n")
+    fmt.Fprintf(os.Stdout, hiGreenString, "\tNEW DATA:\n")
+    fmt.Fprint(writer, string(marshalNewData), "\n\n")
     fmt.Println(separator)
 }
