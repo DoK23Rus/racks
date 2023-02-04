@@ -102,6 +102,8 @@ services:
     logging:
       options:
         max-size: 100m
+    stdin_open: true
+    tty: true
     volumes:
       - static_volume:${STATIC_DIR}
     env_file:
