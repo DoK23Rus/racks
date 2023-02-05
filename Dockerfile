@@ -26,7 +26,12 @@ WORKDIR $APP_HOME
 RUN pip install -r requirements.txt
 
 COPY ./racks $APP_HOME
-COPY ./entrypoint_main.sh $APP_HOME
-COPY ./entrypoint_unit.sh $APP_HOME
-COPY ./entrypoint_linter.sh $APP_HOME
-COPY ./entrypoint_typing.sh $APP_HOME
+
+ENV BACKEND_ENTYPOINTS_DIR=$APP_HOME/entrypoints
+
+RUN mkdir $BACKEND_ENTYPOINTS_DIR
+
+COPY ./entrypoint_main.sh $BACKEND_ENTYPOINTS_DIR
+COPY ./entrypoint_unit.sh $BACKEND_ENTYPOINTS_DIR
+COPY ./entrypoint_linter.sh $BACKEND_ENTYPOINTS_DIR
+COPY ./entrypoint_typing.sh $BACKEND_ENTYPOINTS_DIR

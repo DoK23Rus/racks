@@ -87,12 +87,12 @@ services:
     &django
     container_name: django
     domainname: backend
-    entrypoint: /home/app/web/entrypoint_main.sh
+    entrypoint: ${BASE_APP_DIR}${BACKEND_ENTRYPOINTS_DIR}entrypoint_main.sh
     build:
       context: ./
       dockerfile: Dockerfile
     healthcheck:
-      test: curl -f http://0.0.0.0:${BACKEND_PORT}/api/v1 || exit 1
+      test: curl -f http://${LOCALHOST}:${BACKEND_PORT}/api/v1 || exit 1
       interval: 5s
       retries: 10
       start_period: 15s
@@ -105,7 +105,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - static_volume:${STATIC_DIR}
+      - static_volume:${BASE_APP_DIR}${STATIC_PATH}
     env_file:
       - ./.env
       - ./.backend.env
@@ -123,27 +123,27 @@ services:
   django-linter:
     <<: *django
     container_name: django-linter
-    entrypoint: /home/app/web/entrypoint_linter.sh
+    entrypoint: ${BASE_APP_DIR}${BACKEND_ENTRYPOINTS_DIR}entrypoint_linter.sh
     volumes:
-      - log_volume:${LOGS_DIR}
+      - log_volume:${BASE_APP_DIR}${LOGS_PATH}
     ports:
       - ${BACKEND_PORT_RESERVE}:${BACKEND_PORT_RESERVE}
 
   django-unit-tests:
     <<: *django
     container_name: django-unit-tests
-    entrypoint: /home/app/web/entrypoint_unit.sh
+    entrypoint: ${BASE_APP_DIR}${BACKEND_ENTRYPOINTS_DIR}entrypoint_unit.sh
     volumes:
-      - log_volume:${LOGS_DIR}
+      - log_volume:${BASE_APP_DIR}${LOGS_PATH}
     ports:
       - ${BACKEND_PORT_RESERVE2}:${BACKEND_PORT_RESERVE2}
 
   django-typing:
     <<: *django
     container_name: django-typing
-    entrypoint: /home/app/web/entrypoint_typing.sh
+    entrypoint: ${BASE_APP_DIR}${BACKEND_ENTRYPOINTS_DIR}entrypoint_typing.sh
     volumes:
-      - log_volume:${LOGS_DIR}
+      - log_volume:${BASE_APP_DIR}${LOGS_PATH}
     ports:
       - ${BACKEND_PORT_RESERVE3}:${BACKEND_PORT_RESERVE3}
 
@@ -152,8 +152,8 @@ services:
     build: .
     entrypoint: celery -A ${APP_NAME} worker -l INFO
     volumes:
-      - backups_volume:${BACKUP_DIR}
-      - static_volume:${STATIC_DIR}
+      - backups_volume:${BASE_APP_DIR}${BACKUP_PATH}
+      - static_volume:${BASE_APP_DIR}${STATIC_PATH}
     env_file:
       - ./.env
       - ./.backend.env
@@ -175,8 +175,8 @@ services:
     build: .
     entrypoint: celery -A ${APP_NAME} beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
-      - backups_volume:${BACKUP_DIR}
-      - static_volume:${STATIC_DIR}
+      - backups_volume:${BASE_APP_DIR}${BACKUP_PATH}
+      - static_volume:${BASE_APP_DIR}${STATIC_PATH}
     env_file:
       - ./.env
       - ./.backend.env
@@ -202,7 +202,7 @@ services:
       context: ./racks_frontend
       dockerfile: Dockerfile
     healthcheck:
-      test: curl -f http://0.0.0.0:${FRONTEND_PORT} || exit 1
+      test: curl -f http://${LOCALHOST}:${FRONTEND_PORT} || exit 1
       interval: 5s
       retries: 10
       start_period: 15s
@@ -227,7 +227,7 @@ services:
       options:
         max-size: 50m
     volumes:
-      - static_volume:${STATIC_DIR}
+      - static_volume:${BASE_APP_DIR}${STATIC_PATH}
       - vue_dist:${VUE_DIST_DIR}
     profiles: ['dev', 'test']
     depends_on:
@@ -262,7 +262,7 @@ services:
       context: ./racks_frontend
       dockerfile: Dockerfile_test
     healthcheck:
-      test: curl -f http://0.0.0.0:${FRONTEND_TESTING_PORT} || exit 1
+      test: curl -f http://${LOCALHOST}:${FRONTEND_TESTING_PORT} || exit 1
       interval: 5s
       retries: 10
       start_period: 15s
@@ -333,7 +333,7 @@ services:
       options:
         max-size: 100m
     volumes:
-      - test_results:${TEST_RESULTS_PATH}
+      - test_results:${BASE_APP_DIR}${TEST_RESULTS_PATH}
     profiles: ['test']
     depends_on:
       backend:
