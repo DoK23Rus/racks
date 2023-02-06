@@ -648,6 +648,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
         instance_name = DataProcessingService \
             .get_instance_name(pk, self.model, self.model_name)
         serializer = self.serializer_class(data=data)
+        breakpoint()
         if serializer.is_valid(raise_exception=True):
             # Check for update possibility
             checks = self \
