@@ -46,6 +46,7 @@ class CheckUser:
         except User.DoesNotExist:
             some_user = User.objects.create_user(username=self.username,
                                                  password=self.password)
+            Token.objects.get_or_create(user=some_user)
         return some_user
 
     def add_group(self) -> None:
@@ -55,7 +56,6 @@ class CheckUser:
         some_user = self.get_user()
         if not some_user.groups.filter(name=self.group_name).exists():
             some_user.groups.add(self.group_id)
-            Token.objects.get_or_create(user=some_user)
 
 
 globals().update(locals())

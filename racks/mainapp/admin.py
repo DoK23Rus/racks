@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Region, Department, Site, Building, Room, Rack, Device
+from mainapp.models import (Region,
+                            Department,
+                            Site,
+                            Building,
+                            Room,
+                            Rack,
+                            Device)
 # Register your models here.
 
 
