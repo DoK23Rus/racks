@@ -13,7 +13,7 @@ python manage.py collectstatic --noinput &&
 python manage.py createsuperuser \
     --noinput \
     --username $DJANGO_SUPERUSER_USERNAME \
-    --email $DJANGO_SUPERUSER_EMAIL
+    --email $DJANGO_SUPERUSER_EMAIL &&
 # Create user for e2e testing
 python manage.py shell < create_users.py &&
 echo "--------USERS-CREATED--------" &&
