@@ -15,12 +15,13 @@ from rest_framework.response import Response
 from rest_framework.serializers import SerializerMetaclass
 
 from mainapp.data import ReportHeaders
+from mainapp.repository import RepositoryHelper
 from mainapp.serializers import DeviceSerializer
 from mainapp.services import (date,
                               DataProcessingService,
                               DeviceCheckService,
                               RepoService,
-                              UniqueCheckService,
+                              # UniqueCheckService,
                               UserCheckService,
                               ReportService,)
 from mainapp.utils import Result
@@ -299,17 +300,33 @@ class ChecksMixin(AbstractMixin):
         # For rack properties changes (name staing the same)
         if instance_name != key_name:
             if fk is None:
-                names_list = UniqueCheckService \
-                    .get_unique_object_names_list(pk, model)
+                names_list = RepositoryHelper \
+                    .get_child_model_repository(model) \
+                    .get_unique_object_names_list(pk)
             else:
-                names_list = UniqueCheckService \
-                    .get_unique_object_names_list(fk, fk_model)
+                names_list = RepositoryHelper \
+                    .get_child_model_repository(fk_model) \
+                    .get_unique_object_names_list(fk)
             if key_name in names_list:
                 return Result(False,
                               f"A {self.model_name} "
                               f"with the same name already exists")
             return Result(True, 'Success')
         return Result(True, 'Success')
+
+        # if instance_name != key_name:
+        #     if fk is None:
+        #         names_list = UniqueCheckService \
+        #             .get_unique_object_names_list(pk, model)
+        #     else:
+        #         names_list = UniqueCheckService \
+        #             .get_unique_object_names_list(fk, fk_model)
+        #     if key_name in names_list:
+        #         return Result(False,
+        #                       f"A {self.model_name} "
+        #                       f"with the same name already exists")
+        #     return Result(True, 'Success')
+        # return Result(True, 'Success')
 
     def _check_device_for_add(self, pk: Optional[int], data: dict) -> Result:
         """
