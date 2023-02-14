@@ -102,6 +102,10 @@ class RackRepository:
         return {rack.rack_name for rack
                 in Rack.objects.get_racks_for_room(key)}
 
+    @staticmethod
+    def get_report_data():
+        return Rack.objects.get_racks_report()
+
 
 class DeviceRepository:
 
@@ -137,6 +141,10 @@ class DeviceRepository:
                     .objects
                     .filter(rack_id_id=pk)
                     .values_list('power_w', flat=True))
+
+    @staticmethod
+    def get_report_data():
+        return Device.objects.get_devices_report()
 
 
 class RepositoryHelper:

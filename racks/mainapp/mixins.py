@@ -393,12 +393,14 @@ class ChecksMixin(AbstractMixin):
         if (frontside_location := data.get('frontside_location')) is None:
             return Result(False, "Missing required data - frontside_location")
         rack_id = RepoService.get_device_rack_id(pk)
-        first_unit = DeviceRepository.get_first_unit(pk)
-        last_unit = DeviceRepository.get_last_unit(pk)
-        old_units = DeviceCheckService.get_old_units(first_unit, last_unit)
+        old_first_unit = DeviceRepository.get_first_unit(pk)
+        old_last_unit = DeviceRepository.get_last_unit(pk)
+        old_units = DeviceCheckService \
+            .get_old_units(old_first_unit, old_last_unit)
         new_units = DeviceCheckService.get_new_units(first_unit, last_unit)
         # Check units exists
         rack_amount = RackRepository.get_rack_amount(rack_id)
+        # breakpoint()
         if DeviceCheckService.check_unit_exist(new_units, rack_amount):
             return Result(False, self.units_exist_message)
         # Check units busy
@@ -678,7 +680,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
         # data = DataProcessingService.update_rack_amount(data, pk)
         key_name = DataProcessingService.get_key_name(data, self.model_name)
         instance_name = DataProcessingService \
-            .get_instance_name(pk, self.model, self.model_name)
+            .get_instance_name(instance, self.model, self.model_name)
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for update possibility
@@ -740,7 +742,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
             message = f"{self.model.__name__} with this ID does not exist"
             return Response({"invalid": message}, status=400)
         instance_name = DataProcessingService \
-            .get_instance_name(pk, self.model, self.model_name)
+            .get_instance_name(instance, self.model, self.model_name)
         # Check for delete possibility
         checks = self.get_checks(request, pk, data, model=self.model)
         result = self.get_checks_result(checks)
@@ -1012,7 +1014,8 @@ class RacksReportMixin(BaseApiMixin):
         """
         file_path = f"{os.environ.get('STATIC_DIR')}/racks_report_{date()}.csv"
         headers = ReportHeaders.racks_header_list
-        data = ReportService.get_racks_data()
+        racks_report_qs = RackRepository.get_report_data()
+        data = ReportService.get_racks_data(racks_report_qs)
         task = generate_report_task.delay(file_path, headers, data)
         result = AsyncResult(task.id)
         file_path = result.get()
@@ -1045,7 +1048,8 @@ class DevicesReportMixin(BaseApiMixin):
         file_path = f"{os.environ.get('STATIC_DIR')}/devices_report_"
         f"{date()}.csv"
         headers = ReportHeaders.devices_header_list
-        data = ReportService.get_devices_data()
+        devices_report_qs = DeviceRepository.get_report_data()
+        data = ReportService.get_devices_data(devices_report_qs)
         task = generate_report_task.delay(file_path, headers, data)
         result = AsyncResult(task.id)
         file_path = result.get()

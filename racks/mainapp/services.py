@@ -6,7 +6,7 @@ import os
 from typing import List, Optional, Set, NamedTuple
 
 from django.db.models.base import ModelBase
-from django.db.models.query import QuerySet
+from django.db.models.query import QuerySet, RawQuerySet
 
 from mainapp.models import (Building,
                             Department,
@@ -354,39 +354,52 @@ class DataProcessingService:
             f"{str(data.get('device_model') or 'unspecified model')}"
         return key_name
 
+    # @staticmethod
+    # def get_instance_name(pk: Optional[int],
+    #                       model: ModelBase,
+    #                       model_name: str
+    #                       ) -> str:
+    #     """
+    #     Get instance name for different models
+    #
+    #     Args:
+    #         pk (int): Primary key
+    #         model (ModelBase): Object model
+    #         model_name (str): Object model name
+    #
+    #     Raises:
+    #         ValueError ("pk cannot be None")
+    #
+    #     Returns:
+    #         instance_name (str): Instance name for an object
+    #             (only vendor and model for devices)
+    #     """
+    #     if pk is None:
+    #         raise ValueError("pk cannot be None")
+    #     if model != Device:
+    #         instance_name = getattr(model.objects.get(id=pk),
+    #                                 f"{model_name}_name")
+    #         return instance_name
+    #     device = Device.objects.get_device(pk)
+    #     device_vendor = device.device_vendor \
+    #         if device.device_vendor != '' else 'unspecified vendor'
+    #     device_model = device.device_model \
+    #         if device.device_model != '' else 'unspecified model'
+    #     instance_name = f"device {device_vendor}, {device_model}"
+    #     return instance_name
+
     @staticmethod
-    def get_instance_name(pk: Optional[int],
+    def get_instance_name(instance: ModelBase,
                           model: ModelBase,
                           model_name: str
                           ) -> str:
-        """
-        Get instance name for different models
-
-        Args:
-            pk (int): Primary key
-            model (ModelBase): Object model
-            model_name (str): Object model name
-
-        Raises:
-            ValueError ("pk cannot be None")
-
-        Returns:
-            instance_name (str): Instance name for an object
-                (only vendor and model for devices)
-        """
-        if pk is None:
-            raise ValueError("pk cannot be None")
         if model != Device:
-            instance_name = getattr(model.objects.get(id=pk),
-                                    f"{model_name}_name")
-            return instance_name
-        device = Device.objects.get_device(pk)
-        device_vendor = device.device_vendor \
-            if device.device_vendor != '' else 'unspecified vendor'
-        device_model = device.device_model \
-            if device.device_model != '' else 'unspecified model'
-        instance_name = f"device {device_vendor}, {device_model}"
-        return instance_name
+            return getattr(instance, f"{model_name}_name")
+        device_vendor = instance.device_vendor \
+            if instance.device_vendor != '' else 'unspecified vendor'
+        device_model = instance.device_model \
+            if instance.device_model != '' else 'unspecified model'
+        return f"device {device_vendor}, {device_model}"
 
 
 class RepoService:
@@ -819,7 +832,7 @@ class ReportService:
     """
 
     @staticmethod
-    def get_devices_data() -> List[List[str]]:
+    def get_devices_data(devices_report_qs: RawQuerySet) -> List[List[str]]:
         """
         Get data for devices report (all devices data)
 
@@ -827,7 +840,7 @@ class ReportService:
             devices_data (list): List of lists with devices data
         """
         devices_data: List = []
-        for device in Device.objects.get_devices_report():
+        for device in devices_report_qs:
             devices_data.append([
                 device.id,
                 device.status,
@@ -870,7 +883,7 @@ class ReportService:
         return devices_data
 
     @staticmethod
-    def get_racks_data() -> List[List[str]]:
+    def get_racks_data(racks_report_qs: RawQuerySet) -> List[List[str]]:
         """
         Get data for racks report (all racks data)
 
@@ -878,7 +891,7 @@ class ReportService:
             racks_data (list): List of lists with racks data
         """
         racks_data: List = []
-        for rack in Rack.objects.get_racks_report():
+        for rack in racks_report_qs:
             racks_data.append([
                 rack.id,
                 rack.rack_name,
