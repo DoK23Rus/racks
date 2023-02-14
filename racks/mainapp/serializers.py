@@ -10,6 +10,7 @@ from mainapp.models import (Building,
                             Region,
                             Room,
                             Site)
+from mainapp.repository import DeviceRepository
 from mainapp.services import DataProcessingService
 
 
@@ -105,7 +106,8 @@ class RackSerializer(serializers.ModelSerializer):
         Returns:
             total_power_w (int): Total power for single rack
         """
-        return DataProcessingService.get_devices_power_w_sum(obj.id)
+        power_w_list = DeviceRepository.get_devices_power_list(obj.id)
+        return DataProcessingService.get_devices_power_w_sum(power_w_list)
 
     class Meta:
         model: ModelBase = Rack

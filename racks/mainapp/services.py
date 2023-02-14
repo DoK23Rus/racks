@@ -48,8 +48,30 @@ class DeviceCheckService:
     Services for checking capabilities to add or update devices
     """
 
+    # @staticmethod
+    # def get_old_units(pk: Optional[int]) -> OldUnits:
+    #     """
+    #     Get tuple with already filled units
+    #
+    #     Args:
+    #         pk (int): Primary key
+    #
+    #     Raises:
+    #         ValueError ("pk cannot be None")
+    #
+    #     Returns:
+    #         OldUnits (tuple): First and last unit in named tuple (ordered)
+    #     """
+    #     if pk is None:
+    #         raise ValueError("pk cannot be None")
+    #     first_unit = Device.objects.get_device(pk).first_unit
+    #     last_unit = Device.objects.get_device(pk).last_unit
+    #     if first_unit > last_unit:
+    #         return OldUnits(last_unit, first_unit)
+    #     return OldUnits(first_unit, last_unit)
+
     @staticmethod
-    def get_old_units(pk: Optional[int]) -> OldUnits:
+    def get_old_units(first_unit: int, last_unit: int) -> OldUnits:
         """
         Get tuple with already filled units
 
@@ -62,10 +84,6 @@ class DeviceCheckService:
         Returns:
             OldUnits (tuple): First and last unit in named tuple (ordered)
         """
-        if pk is None:
-            raise ValueError("pk cannot be None")
-        first_unit = Device.objects.get_device(pk).first_unit
-        last_unit = Device.objects.get_device(pk).last_unit
         if first_unit > last_unit:
             return OldUnits(last_unit, first_unit)
         return OldUnits(first_unit, last_unit)
@@ -87,7 +105,7 @@ class DeviceCheckService:
         return NewUnits(first_unit, last_unit)
 
     @staticmethod
-    def check_unit_exist(units: NewUnits, rack_id: Optional[int]) -> bool:
+    def check_unit_exist(units: NewUnits, rack_amount: Optional[int]) -> bool:
         """
         Units exist check
         Are there any such units?
@@ -103,19 +121,17 @@ class DeviceCheckService:
             True (bool): units pair are in range of all rack units
             False (bool): units pair are outside of the rack
         """
-        if rack_id is None:
+        if rack_amount is None:
             raise ValueError("rack_id cannot be None")
         new_device_range = range(units.new_first_unit, units.new_last_unit + 1)
-        all_units_ramge = range(1, int(Rack
-                                .objects.get_rack(rack_id).rack_amount) + 1)
+        all_units_ramge = range(1, rack_amount + 1)
         if not set(new_device_range).issubset(all_units_ramge):
             return True
         else:
             return False
 
     @staticmethod
-    def check_unit_busy(side: bool,
-                        pk: Optional[int],
+    def check_unit_busy(queryset_devices: QuerySet,
                         new_units: NewUnits,
                         old_units: Optional[OldUnits]
                         ) -> bool:
@@ -136,10 +152,9 @@ class DeviceCheckService:
             True (bool): Units are busy
             False (bool): Units not busy
         """
-        if pk is None:
-            raise ValueError("pk cannot be None")
+        # if pk is None:
+        #     raise ValueError("pk cannot be None")
         filled_list: list = []
-        queryset_devices = Device.objects.get_devices_for_side(pk, side)
         if len(list(queryset_devices)) > 0:
             for device in queryset_devices:
                 first_unit = device.first_unit
@@ -161,121 +176,121 @@ class DeviceCheckService:
             return False
 
 
-class UserCheckService:
-    """
-    Services for checking user permission
-    For add|update|delete user must be in group with the same name
-    as object department affiliation
-    """
+# class UserCheckService:
+#     """
+#     Services for checking user permission
+#     For add|update|delete user must be in group with the same name
+#     as object department affiliation
+#     """
+# 
+#     @staticmethod
+#     def check_for_groups(user_groups: List[str],
+#                          pk: Optional[int],
+#                          model: ModelBase
+#                          ) -> bool:
+#         """
+#         Checks user permission
+# 
+#         Args:
+#             user_groups (list): List of current user group names
+#             pk (int): Primary key
+#             model (ModelBase): Current object model
+# 
+#         Raises:
+#             ValueError ("pk cannot be None")
+#             ValueError ('model: ModelBase must be'
+#                         'Department|Site|Building|Room|Rack|Device'):
+#                 Method only for Department|Site|Building|Room|Rack|Device.
+# 
+#         Returns:
+#             True (bool): Changes allowed
+#             False (bool): Changes are prohibited
+#         """
+#         if pk is None:
+#             raise ValueError("pk cannot be None")
+#         if model == Department:
+#             department_name = Department.objects.get(id=pk) \
+#                 .department_name
+#         elif model == Site:
+#             department_name = Site.objects.get_site_department(pk) \
+#                 .department_id \
+#                 .department_name
+#         elif model == Building:
+#             department_name = Building.objects.get_building_department(pk) \
+#                 .site_id \
+#                 .department_id \
+#                 .department_name
+#         elif model == Room:
+#             department_name = Room.objects.get_room_department(pk) \
+#                 .building_id \
+#                 .site_id \
+#                 .department_id \
+#                 .department_name
+#         elif model == Rack:
+#             department_name = Rack.objects.get_rack_department(pk) \
+#                 .room_id \
+#                 .building_id \
+#                 .site_id \
+#                 .department_id \
+#                 .department_name
+#         elif model == Device:
+#             department_name = Device.objects.get_device_department(pk) \
+#                 .rack_id \
+#                 .room_id \
+#                 .building_id \
+#                 .site_id \
+#                 .department_id \
+#                 .department_name
+#         else:
+#             raise ValueError('model: ModelBase must be'
+#                              'Department|Site|Building|Room|Rack|Device')
+#         if department_name in user_groups:
+#             return True
+#         return False
 
-    @staticmethod
-    def check_for_groups(user_groups: List[str],
-                         pk: Optional[int],
-                         model: ModelBase
-                         ) -> bool:
-        """
-        Checks user permission
 
-        Args:
-            user_groups (list): List of current user group names
-            pk (int): Primary key
-            model (ModelBase): Current object model
-
-        Raises:
-            ValueError ("pk cannot be None")
-            ValueError ('model: ModelBase must be'
-                        'Department|Site|Building|Room|Rack|Device'):
-                Method only for Department|Site|Building|Room|Rack|Device.
-
-        Returns:
-            True (bool): Changes allowed
-            False (bool): Changes are prohibited
-        """
-        if pk is None:
-            raise ValueError("pk cannot be None")
-        if model == Department:
-            department_name = Department.objects.get(id=pk) \
-                .department_name
-        elif model == Site:
-            department_name = Site.objects.get_site_department(pk) \
-                .department_id \
-                .department_name
-        elif model == Building:
-            department_name = Building.objects.get_building_department(pk) \
-                .site_id \
-                .department_id \
-                .department_name
-        elif model == Room:
-            department_name = Room.objects.get_room_department(pk) \
-                .building_id \
-                .site_id \
-                .department_id \
-                .department_name
-        elif model == Rack:
-            department_name = Rack.objects.get_rack_department(pk) \
-                .room_id \
-                .building_id \
-                .site_id \
-                .department_id \
-                .department_name
-        elif model == Device:
-            department_name = Device.objects.get_device_department(pk) \
-                .rack_id \
-                .room_id \
-                .building_id \
-                .site_id \
-                .department_id \
-                .department_name
-        else:
-            raise ValueError('model: ModelBase must be'
-                             'Department|Site|Building|Room|Rack|Device')
-        if department_name in user_groups:
-            return True
-        return False
-
-
-class UniqueCheckService:
-    """
-    Services for unique names checking (in the same area)
-    """
-
-    @staticmethod
-    def get_unique_object_names_list(key: Optional[int],
-                                     model: ModelBase
-                                     ) -> Set[str]:
-        """
-        Get unique objects names list
-        Names of building, rooms and racks can be repeated
-        within the area of responsibility of one department
-
-        Args:
-            key (int): Object id
-            model (ModelBase): Foreign key object model
-
-        Raises:
-            ValueError (model: ModelBase must be Site|Building|Room):
-                Method only for Site|Building|Room models.
-                Region|Department|Site objects - unique=True
-            ValueError (key must be not None): Typing plug
-
-        Returns:
-            names_list (set): Set of object names
-                for particular foreign key object
-        """
-        if key is None:
-            raise ValueError("key must be not None")
-        if model == Site:
-            names_set = {building.building_name for building
-                         in Building.objects.get_buildings_for_site(key)}
-        elif model == Building:
-            names_set = {room.room_name for room
-                         in Room.objects.get_rooms_for_building(key)}
-        elif model == Room:
-            names_set = {rack.rack_name for rack
-                         in Rack.objects.get_racks_for_room(key)}
-        else:
-            raise ValueError("model: ModelBase must be Site|Building|Room")
-        return names_set
+# class UniqueCheckService:
+#     """
+#     Services for unique names checking (in the same area)
+#     """
+# 
+#     @staticmethod
+#     def get_unique_object_names_list(key: Optional[int],
+#                                      model: ModelBase
+#                                      ) -> Set[str]:
+#         """
+#         Get unique objects names list
+#         Names of building, rooms and racks can be repeated
+#         within the area of responsibility of one department
+# 
+#         Args:
+#             key (int): Object id
+#             model (ModelBase): Foreign key object model
+# 
+#         Raises:
+#             ValueError (model: ModelBase must be Site|Building|Room):
+#                 Method only for Site|Building|Room models.
+#                 Region|Department|Site objects - unique=True
+#             ValueError (key must be not None): Typing plug
+# 
+#         Returns:
+#             names_list (set): Set of object names
+#                 for particular foreign key object
+#         """
+#         if key is None:
+#             raise ValueError("key must be not None")
+#         if model == Site:
+#             names_set = {building.building_name for building
+#                          in Building.objects.get_buildings_for_site(key)}
+#         elif model == Building:
+#             names_set = {room.room_name for room
+#                          in Room.objects.get_rooms_for_building(key)}
+#         elif model == Room:
+#             names_set = {rack.rack_name for rack
+#                          in Rack.objects.get_racks_for_room(key)}
+#         else:
+#             raise ValueError("model: ModelBase must be Site|Building|Room")
+#         return names_set
 
 
 class DataProcessingService:
@@ -284,7 +299,7 @@ class DataProcessingService:
     """
 
     @staticmethod
-    def get_devices_power_w_sum(pk: int) -> int:
+    def get_devices_power_w_sum(power_w_list: list) -> int:
         """
         Get total power for single rack
 
@@ -294,33 +309,29 @@ class DataProcessingService:
         Returns:
             devices_power_w_sum (int): Summary power of all rack devices
         """
-        power_w_list = list(Device
-                            .objects
-                            .filter(rack_id_id=pk)
-                            .values_list('power_w', flat=True))
         return sum(power_w for power_w in power_w_list if power_w is not None)
 
-    @staticmethod
-    def update_rack_amount(data: dict, pk: Optional[int]) -> dict:
-        """
-        Update rack_amount (prevent changing)
-
-        Args:
-            data (dict): New data set
-            pk (int): Primary key
-
-        Raises:
-            ValueError ("pk cannot be None")
-
-        Returns:
-            data (dict): Same data set with old rack amount
-        """
-        if pk is None:
-            raise ValueError("pk cannot be None")
-        if data.get('rack_amount'):
-            data['rack_amount'] = Rack.objects.get_rack(pk).rack_amount
-            return data
-        return data
+    # @staticmethod
+    # def update_rack_amount(data: dict, rack_amount: Optional[int]) -> dict:
+    #     """
+    #     Update rack_amount (prevent changing)
+    #
+    #     Args:
+    #         data (dict): New data set
+    #         pk (int): Primary key
+    #
+    #     Raises:
+    #         ValueError ("pk cannot be None")
+    #
+    #     Returns:
+    #         data (dict): Same data set with old rack amount
+    #     """
+    #     # if pk is None:
+    #     #     raise ValueError("pk cannot be None")
+    #     if data.get('rack_amount'):
+    #         data['rack_amount'] = rack_amount
+    #         return data
+    #     return data
 
     @staticmethod
     def get_key_name(data: dict, model_name: str) -> str:

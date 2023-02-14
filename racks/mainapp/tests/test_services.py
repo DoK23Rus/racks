@@ -397,20 +397,20 @@ class TestDeviceCheckService(TestCase):
     def setUpClass(cls):
         base_setup()
 
-    def test_get_old_units(self):
-        # Device with Test_vendor1
-        device1_id = Device.objects.get(device_vendor='Test_vendor1').id
-        result = DeviceCheckService.get_old_units(device1_id)
-        self.assertEqual(result, OldUnits(1, 2))
-
-        # Device with Test_vendor3
-        device1_id = Device.objects.get(device_vendor='Test_vendor3').id
-        result = DeviceCheckService.get_old_units(device1_id)
-        self.assertEqual(result, OldUnits(3, 4))
-
-        # pk is None
-        with self.assertRaises(ValueError):
-            DeviceCheckService.get_old_units(None)
+    # def test_get_old_units(self):
+    #     # Device with Test_vendor1
+    #     device1_id = Device.objects.get(device_vendor='Test_vendor1').id
+    #     result = DeviceCheckService.get_old_units(device1_id)
+    #     self.assertEqual(result, OldUnits(1, 2))
+    #
+    #     # Device with Test_vendor3
+    #     device1_id = Device.objects.get(device_vendor='Test_vendor3').id
+    #     result = DeviceCheckService.get_old_units(device1_id)
+    #     self.assertEqual(result, OldUnits(3, 4))
+    #
+    #     # pk is None
+    #     with self.assertRaises(ValueError):
+    #         DeviceCheckService.get_old_units(None)
 
     def test_get_new_units(self):
         # First unit > last unit

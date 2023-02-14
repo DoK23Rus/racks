@@ -15,14 +15,16 @@ from rest_framework.response import Response
 from rest_framework.serializers import SerializerMetaclass
 
 from mainapp.data import ReportHeaders
-from mainapp.repository import RepositoryHelper
+from mainapp.repository import (RepositoryHelper,
+                                DeviceRepository,
+                                RackRepository)
 from mainapp.serializers import DeviceSerializer
 from mainapp.services import (date,
                               DataProcessingService,
                               DeviceCheckService,
                               RepoService,
                               # UniqueCheckService,
-                              UserCheckService,
+                              # UserCheckService,
                               ReportService,)
 from mainapp.utils import Result
 from mainapp.tasks import delete_report_task, generate_report_task
@@ -308,13 +310,12 @@ class ChecksMixin(AbstractMixin):
         # For rack properties changes (name staing the same)
         if instance_name != key_name:
             if fk is None:
-                names_list = RepositoryHelper \
-                    .get_child_model_repository(model) \
-                    .get_unique_object_names_list(pk)
+                repository = RepositoryHelper.get_child_model_repository(model)
+                names_list = repository.get_unique_object_names_list(pk)
             else:
-                names_list = RepositoryHelper \
-                    .get_child_model_repository(fk_model) \
-                    .get_unique_object_names_list(fk)
+                repository = RepositoryHelper \
+                    .get_child_model_repository(fk_model)
+                names_list = repository.get_unique_object_names_list(fk)
             if key_name in names_list:
                 return Result(False,
                               f"A {self.model_name} "
@@ -358,14 +359,14 @@ class ChecksMixin(AbstractMixin):
         new_units = DeviceCheckService \
             .get_new_units(first_unit, last_unit)
         # Check units exists
-        if DeviceCheckService.check_unit_exist(new_units, pk):
+        rack_amount = RackRepository.get_rack_amount(pk)
+        if DeviceCheckService.check_unit_exist(new_units, rack_amount):
             return Result(False, self.units_exist_message)
         # Check units busy
+        devices_for_side = DeviceRepository \
+            .get_devices_for_side(pk, frontside_location)
         if DeviceCheckService \
-            .check_unit_busy(frontside_location,
-                             pk,
-                             new_units,
-                             old_units=None):
+                .check_unit_busy(devices_for_side, new_units, old_units=None):
             return Result(False, self.units_busy_message)
         return Result(True, 'Success')
 
@@ -392,17 +393,19 @@ class ChecksMixin(AbstractMixin):
         if (frontside_location := data.get('frontside_location')) is None:
             return Result(False, "Missing required data - frontside_location")
         rack_id = RepoService.get_device_rack_id(pk)
-        old_units = DeviceCheckService.get_old_units(pk)
+        first_unit = DeviceRepository.get_first_unit(pk)
+        last_unit = DeviceRepository.get_last_unit(pk)
+        old_units = DeviceCheckService.get_old_units(first_unit, last_unit)
         new_units = DeviceCheckService.get_new_units(first_unit, last_unit)
         # Check units exists
-        if DeviceCheckService.check_unit_exist(new_units, rack_id):
+        rack_amount = RackRepository.get_rack_amount(rack_id)
+        if DeviceCheckService.check_unit_exist(new_units, rack_amount):
             return Result(False, self.units_exist_message)
         # Check units busy
+        devices_for_side = DeviceRepository \
+            .get_devices_for_side(rack_id, frontside_location)
         if DeviceCheckService \
-            .check_unit_busy(frontside_location,
-                             rack_id,
-                             new_units,
-                             old_units):
+                .check_unit_busy(devices_for_side, new_units, old_units):
             return Result(False, self.units_busy_message)
         return Result(True, 'Success')
 
@@ -454,12 +457,10 @@ class ChecksMixin(AbstractMixin):
                                                key_name))
             elif check == 'check_device_for_add':
                 check_results_list \
-                    .append(self
-                            ._check_device_for_add(pk, data))
+                    .append(self._check_device_for_add(pk, data))
             elif check == 'check_device_for_update':
                 check_results_list \
-                    .append(self
-                            ._check_device_for_update(pk, data))
+                    .append(self._check_device_for_update(pk, data))
             else:
                 raise ValueError('check: str must be'
                                  'check_user|check_unique|'
@@ -565,7 +566,8 @@ class BaseApiGetMixin(BaseApiMixin):
                 does not exist (exception)
         """
         try:
-            instance = RepoService.get_instance(self.model, kwargs.get('pk'))
+            repository = RepositoryHelper.get_repository(self.model)
+            instance = repository.get_instance(kwargs.get('pk'))
             serializer = self.serializer_class(instance)
             return Response(serializer.data)
         except self.model.DoesNotExist:
@@ -603,7 +605,8 @@ class BaseApiAddMixin(BaseApiMixin,
         except KeyError:
             return Response({"invalid": "Need fk for post method"})
         try:
-            RepoService.get_instance(self.model, pk)
+            repository = RepositoryHelper.get_repository(self.model)
+            repository.get_instance(pk)
         except self.model.DoesNotExist:
             message = f"{self.model.__name__} with this ID does not exist"
             return Response({"invalid": message}, status=400)
@@ -655,12 +658,14 @@ class BaseApiUpdateMixin(BaseApiMixin,
         data = request.data
         pk = kwargs.get('pk')
         try:
-            instance = RepoService.get_instance(self.model, pk)
+            repository = RepositoryHelper.get_repository(self.model)
+            instance = repository.get_instance(pk)
         except self.model.DoesNotExist:
             message = f"{self.model.__name__} with this ID does not exist"
             return Response({"invalid": message}, status=400)
         # Add fk and username to data
-        fk = getattr(RepoService.get_instance(self.model, pk),
+        repository = RepositoryHelper.get_repository(self.model)
+        fk = getattr(repository.get_instance(pk),
                      f"{self.fk_name}_id")
         data[self.fk_name] = fk
         data['updated_by'] = request.user.username
@@ -668,7 +673,9 @@ class BaseApiUpdateMixin(BaseApiMixin,
         # when you call it from service layer
         old_data = self.model.objects.get(id=pk).__dict__
         # Prevent rack amount updating
-        data = DataProcessingService.update_rack_amount(data, pk)
+        if data.get('rack_amount'):
+            data['rack_amount'] = RackRepository.get_rack_amount(pk)
+        # data = DataProcessingService.update_rack_amount(data, pk)
         key_name = DataProcessingService.get_key_name(data, self.model_name)
         instance_name = DataProcessingService \
             .get_instance_name(pk, self.model, self.model_name)
@@ -689,7 +696,8 @@ class BaseApiUpdateMixin(BaseApiMixin,
                 return Response({"invalid": result.message}, status=400)
             # PrimaryKeyRelatedField doesent work for some unnown reason
             id = data.get(self.fk_name)
-            data[self.fk_name] = RepoService.get_instance(self.fk_model, id)
+            repository = RepositoryHelper.get_repository(self.fk_model)
+            data[self.fk_name] = repository.get_instance(id)
             # Update data
             for key, value in data.items():
                 setattr(instance, key, value)
@@ -726,7 +734,8 @@ class BaseApiDeleteMixin(BaseApiMixin,
         data = request.data
         pk = kwargs.get('pk')
         try:
-            instance = RepoService.get_instance(self.model, pk)
+            repository = RepositoryHelper.get_repository(self.model)
+            instance = repository.get_instance(pk)
         except self.model.DoesNotExist:
             message = f"{self.model.__name__} with this ID does not exist"
             return Response({"invalid": message}, status=400)

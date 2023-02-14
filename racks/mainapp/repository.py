@@ -8,10 +8,17 @@ from mainapp.models import (Building,
 
 
 class RegionRepository:
-    pass
+    
+    @staticmethod
+    def get_instance(pk):
+        return Region.objects.get(id=pk)
 
 
 class DepartmentRepository:
+
+    @staticmethod
+    def get_instance(pk):
+        return Department.objects.get(id=pk)
 
     @staticmethod
     def get_department_name(pk):
@@ -20,6 +27,11 @@ class DepartmentRepository:
 
 
 class SiteRepository:
+
+    @staticmethod
+    def get_instance(pk):
+        return Site.objects.get(id=pk)
+
     @staticmethod
     def get_department_name(pk):
         return Site.objects.get_site_department(pk) \
@@ -28,6 +40,10 @@ class SiteRepository:
 
 
 class BuildingRepository:
+
+    @staticmethod
+    def get_instance(pk):
+        return Building.objects.get(id=pk)
 
     @staticmethod
     def get_department_name(pk):
@@ -43,6 +59,10 @@ class BuildingRepository:
 
 
 class RoomRepository:
+
+    @staticmethod
+    def get_instance(pk):
+        return Room.objects.get(id=pk)
 
     @staticmethod
     def get_department_name(pk):
@@ -61,6 +81,10 @@ class RoomRepository:
 class RackRepository:
 
     @staticmethod
+    def get_instance(pk):
+        return Rack.objects.get(id=pk)
+
+    @staticmethod
     def get_department_name(pk):
         return Rack.objects.get_rack_department(pk) \
             .room_id \
@@ -68,6 +92,10 @@ class RackRepository:
             .site_id \
             .department_id \
             .department_name
+
+    @staticmethod
+    def get_rack_amount(rack_id):
+        return int(Rack.objects.get_rack(rack_id).rack_amount)
 
     @staticmethod
     def get_unique_object_names_list(key):
@@ -78,6 +106,22 @@ class RackRepository:
 class DeviceRepository:
 
     @staticmethod
+    def get_instance(pk):
+        return Device.objects.get(id=pk)
+
+    @staticmethod
+    def get_devices_for_side(pk, side):
+        return Device.objects.get_devices_for_side(pk, side)
+
+    @staticmethod
+    def get_first_unit(pk):
+        return Device.objects.get_device(pk).first_unit
+
+    @staticmethod
+    def get_last_unit(pk):
+        return Device.objects.get_device(pk).last_unit
+
+    @staticmethod
     def get_department_name(pk):
         return Device.objects.get_device_department(pk) \
             .rack_id \
@@ -86,6 +130,13 @@ class DeviceRepository:
             .site_id \
             .department_id \
             .department_name
+
+    @staticmethod
+    def get_devices_power_list(pk):
+        return list(Device
+                    .objects
+                    .filter(rack_id_id=pk)
+                    .values_list('power_w', flat=True))
 
 
 class RepositoryHelper:
