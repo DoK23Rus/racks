@@ -12,14 +12,29 @@ class RegionRepository:
 
 
 class DepartmentRepository:
-    pass
+
+    @staticmethod
+    def get_department_name(pk):
+        return Department.objects.get(id=pk) \
+            .department_name
 
 
 class SiteRepository:
-    pass
+    @staticmethod
+    def get_department_name(pk):
+        return Site.objects.get_site_department(pk) \
+            .department_id \
+            .department_name
 
 
 class BuildingRepository:
+
+    @staticmethod
+    def get_department_name(pk):
+        return Building.objects.get_building_department(pk) \
+            .site_id \
+            .department_id \
+            .department_name
 
     @staticmethod
     def get_unique_object_names_list(key):
@@ -30,6 +45,14 @@ class BuildingRepository:
 class RoomRepository:
 
     @staticmethod
+    def get_department_name(pk):
+        return Room.objects.get_room_department(pk) \
+            .building_id \
+            .site_id \
+            .department_id \
+            .department_name
+
+    @staticmethod
     def get_unique_object_names_list(key):
         return {room.room_name for room
                 in Room.objects.get_rooms_for_building(key)}
@@ -38,13 +61,31 @@ class RoomRepository:
 class RackRepository:
 
     @staticmethod
+    def get_department_name(pk):
+        return Rack.objects.get_rack_department(pk) \
+            .room_id \
+            .building_id \
+            .site_id \
+            .department_id \
+            .department_name
+
+    @staticmethod
     def get_unique_object_names_list(key):
         return {rack.rack_name for rack
                 in Rack.objects.get_racks_for_room(key)}
 
 
 class DeviceRepository:
-    pass
+
+    @staticmethod
+    def get_department_name(pk):
+        return Device.objects.get_device_department(pk) \
+            .rack_id \
+            .room_id \
+            .building_id \
+            .site_id \
+            .department_id \
+            .department_name
 
 
 class RepositoryHelper:

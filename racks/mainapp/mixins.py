@@ -269,9 +269,17 @@ class ChecksMixin(AbstractMixin):
             Result.sucsess == True (Result): Action allowed
         """
         user_groups = list(request.user.groups.values_list('name', flat=True))
-        if not UserCheckService.check_for_groups(user_groups, pk, self.model):
+        if not RepositoryHelper \
+            .get_repository(self.model) \
+            .get_department_name(pk) \
+                in user_groups:
             return Result(False, self.permission_alert)
         return Result(True, 'Success')
+
+        # user_groups = list(request.user.groups.values_list('name', flat=True))
+        # if not UserCheckService.check_for_groups(user_groups, pk, self.model):
+        #     return Result(False, self.permission_alert)
+        # return Result(True, 'Success')
 
     def _check_unique(self,
                       pk: Optional[int],
