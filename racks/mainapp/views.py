@@ -41,6 +41,10 @@ from mainapp.serializers import (BuildingSerializer,
                                  RegionSerializer,
                                  RoomSerializer,
                                  SiteSerializer)
+from mainapp.utils import (Check,
+                           CheckUser,
+                           CheckUnique,
+                           CheckDeviceForAddOrUpdate)
 
 
 class SiteDetailApiView(BaseApiGetMixin, APIView):
@@ -91,7 +95,7 @@ class SiteAddApiView(BaseApiAddMixin, APIView):
     serializer_class: SerializerMetaclass = SiteSerializer
     pk_name: str = 'department_id'
     model_name: str = 'site'
-    checks_list: List[str] = ['check_user']
+    checks_list: List[Check] = [CheckUser]
 
 
 class SiteUpdateApiView(BaseApiUpdateMixin, APIView):
@@ -103,7 +107,7 @@ class SiteUpdateApiView(BaseApiUpdateMixin, APIView):
     serializer_class: SerializerMetaclass = SiteSerializer
     fk_name: str = 'department_id'
     model_name: str = 'site'
-    checks_list: List[str] = ['check_user']
+    checks_list: List[Check] = [CheckUser]
 
 
 class SiteDeleteApiView(BaseApiDeleteMixin, APIView):
@@ -112,7 +116,7 @@ class SiteDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     model: ModelBase = Site
     model_name: str = 'site'
-    checks_list: List[str] = ['check_user']
+    checks_list: List[Check] = [CheckUser]
 
 
 class BuildingAddApiView(BaseApiAddMixin, APIView):
@@ -123,7 +127,7 @@ class BuildingAddApiView(BaseApiAddMixin, APIView):
     serializer_class: SerializerMetaclass = BuildingSerializer
     pk_name: str = 'site_id'
     model_name: str = 'building'
-    checks_list: List[str] = ['check_user', 'check_unique']
+    checks_list: List[Check] = [CheckUser, CheckUnique]
 
 
 class BuildingUpdateApiView(BaseApiUpdateMixin, APIView):
@@ -135,7 +139,7 @@ class BuildingUpdateApiView(BaseApiUpdateMixin, APIView):
     serializer_class: SerializerMetaclass = BuildingSerializer
     fk_name: str = 'site_id'
     model_name: str = 'building'
-    checks_list: List[str] = ['check_user', 'check_unique']
+    checks_list: List[Check] = [CheckUser, CheckUnique]
 
 
 class BuildingDeleteApiView(BaseApiDeleteMixin, APIView):
@@ -144,7 +148,7 @@ class BuildingDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     model: ModelBase = Building
     model_name: str = 'building'
-    checks_list: List[str] = ['check_user']
+    checks_list: List[Check] = [CheckUser]
 
 
 class RoomAddApiView(BaseApiAddMixin, APIView):
@@ -155,7 +159,7 @@ class RoomAddApiView(BaseApiAddMixin, APIView):
     serializer_class: SerializerMetaclass = RoomSerializer
     pk_name: str = 'building_id'
     model_name: str = 'room'
-    checks_list: List[str] = ['check_user', 'check_unique']
+    checks_list: List[Check] = [CheckUser, CheckUnique]
 
 
 class RoomUpdateApiView(BaseApiUpdateMixin, APIView):
@@ -167,7 +171,7 @@ class RoomUpdateApiView(BaseApiUpdateMixin, APIView):
     serializer_class: SerializerMetaclass = RoomSerializer
     fk_name: str = 'building_id'
     model_name: str = 'room'
-    checks_list: List[str] = ['check_user', 'check_unique']
+    checks_list: List[Check] = [CheckUser, CheckUnique]
 
 
 class RoomDeleteApiView(BaseApiDeleteMixin, APIView):
@@ -176,7 +180,7 @@ class RoomDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     model: ModelBase = Room
     model_name: str = 'room'
-    checks_list: List[str] = ['check_user']
+    checks_list: List[Check] = [CheckUser]
 
 
 class RackAddApiView(BaseApiAddMixin, APIView):
@@ -187,7 +191,7 @@ class RackAddApiView(BaseApiAddMixin, APIView):
     serializer_class: SerializerMetaclass = RackSerializer
     pk_name: str = 'room_id'
     model_name: str = 'rack'
-    checks_list: List[str] = ['check_user', 'check_unique']
+    checks_list: List[Check] = [CheckUser, CheckUnique]
 
 
 class RackUpdateApiView(BaseApiUpdateMixin, APIView):
@@ -199,7 +203,7 @@ class RackUpdateApiView(BaseApiUpdateMixin, APIView):
     serializer_class: SerializerMetaclass = RackSerializer
     fk_name: str = 'room_id'
     model_name: str = 'rack'
-    checks_list: List[str] = ['check_user', 'check_unique']
+    checks_list: List[Check] = [CheckUser, CheckUnique]
 
 
 class RackDeleteApiView(BaseApiDeleteMixin, APIView):
@@ -208,7 +212,7 @@ class RackDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     model: ModelBase = Rack
     model_name: str = 'rack'
-    checks_list: List[str] = ['check_user']
+    checks_list: List[Check] = [CheckUser]
 
 
 class DeviceAddApiView(BaseApiAddMixin, APIView):
@@ -219,7 +223,7 @@ class DeviceAddApiView(BaseApiAddMixin, APIView):
     serializer_class: SerializerMetaclass = DeviceSerializer
     pk_name: str = 'rack_id'
     model_name: str = 'device'
-    checks_list: List[str] = ['check_user', 'check_device_for_add']
+    checks_list: List[Check] = [CheckUser, CheckDeviceForAddOrUpdate]
 
 
 class DeviceUpdateApiView(BaseApiUpdateMixin, APIView):
@@ -231,7 +235,7 @@ class DeviceUpdateApiView(BaseApiUpdateMixin, APIView):
     serializer_class: SerializerMetaclass = DeviceSerializer
     fk_name: str = 'rack_id'
     model_name: str = 'device'
-    checks_list: List[str] = ['check_user', 'check_device_for_update']
+    checks_list: List[Check] = [CheckUser, CheckDeviceForAddOrUpdate]
 
 
 class DeviceDeleteApiView(BaseApiDeleteMixin, APIView):
@@ -240,7 +244,7 @@ class DeviceDeleteApiView(BaseApiDeleteMixin, APIView):
     """
     model: ModelBase = Device
     model_name: str = 'device'
-    checks_list: List[str] = ['check_user']
+    checks_list: List[Check] = [CheckUser]
 
 
 class RegionListApiView(RegionListApiMixin, ListAPIView):

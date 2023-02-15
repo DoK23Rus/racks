@@ -26,10 +26,6 @@ from mainapp.repository import (RepositoryHelper,
 from mainapp.serializers import DeviceSerializer
 from mainapp.services import (date,
                               DataProcessingService,
-                              DeviceCheckService,
-                              # RepoService,
-                              # UniqueCheckService,
-                              # UserCheckService,
                               ReportService,)
 from mainapp.utils import Result
 from mainapp.tasks import delete_report_task, generate_report_task
@@ -71,7 +67,7 @@ class AbstractMixin(ABC):
         raise NotImplementedError
 
     @property
-    def checks_list(self) -> List[str]:
+    def checks_list(self) -> List[object]:
         """
         List of check names
         """
@@ -257,174 +253,16 @@ class ChecksMixin(AbstractMixin):
     units_exist_message: str = 'There are no such units in this rack'
     units_busy_message: str = 'These units are busy'
 
-    def _check_user(self, request: HttpRequest, pk: Optional[int]) -> Result:
-        """
-        Checks user permission
-        Checking if there is a group named department
-        in the list of user groups that matches
-        the model object belonging to the area
-        of responsibility of the department (by primary keys)
-        Does not allow you to change the data assigned to another department
-
-        Args:
-            request (HttpRequest): Request
-            pk (int): Primary key
-
-        Returns:
-            Result.sucsess == False (Result): Action prohibited
-                (read Result.message)
-            Result.sucsess == True (Result): Action allowed
-        """
-        user_groups = list(request.user.groups.values_list('name', flat=True))
-        if not RepositoryHelper \
-            .get_repository(self.model) \
-            .get_department_name(pk) \
-                in user_groups:
-            return Result(False, self.permission_alert)
-        return Result(True, 'Success')
-
-        # user_groups = list(request.user.groups.values_list('name', flat=True))
-        # if not UserCheckService.check_for_groups(user_groups, pk, self.model):
-        #     return Result(False, self.permission_alert)
-        # return Result(True, 'Success')
-
-    def _check_unique(self,
-                      pk: Optional[int],
-                      fk: Optional[int],
-                      model: ModelBase,
-                      fk_model: ModelBase,
-                      instance_name: Optional[str],
-                      key_name: Optional[str]
-                      ) -> Result:
-        """
-        Checks for unique names (only for Site|Building|Room)
-
-        Args:
-            pk (int): Primary key
-            fk (int): Foreign key (optional for update)
-            model (ModelBase): Model
-            fk_model (ModelBase): Foreign key model
-            instance_name (str): Instance name (optional for update and delete)
-            key_name (str): Key name (optional for add and update)
-
-        Returns:
-            Result.sucsess == False (Result): Action prohibited
-                (read Result.message)
-            Result.sucsess == True (Result): Action allowed
-        """
-        # For rack properties changes (name staing the same)
-        if instance_name != key_name:
-            if fk is None:
-                repository = RepositoryHelper.get_child_model_repository(model)
-                names_list = repository.get_unique_object_names_list(pk)
-            else:
-                repository = RepositoryHelper \
-                    .get_child_model_repository(fk_model)
-                names_list = repository.get_unique_object_names_list(fk)
-            if key_name in names_list:
-                return Result(False,
-                              f"A {self.model_name} "
-                              f"with the same name already exists")
-            return Result(True, 'Success')
-        return Result(True, 'Success')
-
-        # if instance_name != key_name:
-        #     if fk is None:
-        #         names_list = UniqueCheckService \
-        #             .get_unique_object_names_list(pk, model)
-        #     else:
-        #         names_list = UniqueCheckService \
-        #             .get_unique_object_names_list(fk, fk_model)
-        #     if key_name in names_list:
-        #         return Result(False,
-        #                       f"A {self.model_name} "
-        #                       f"with the same name already exists")
-        #     return Result(True, 'Success')
-        # return Result(True, 'Success')
-
-    def _check_device_for_add(self, pk: Optional[int], data: dict) -> Result:
-        """
-        Checks is it possible to add a new device
-
-        Args:
-            pk (int): Primary key
-            data (dict): Add payload data
-
-        Returns:
-            Result.sucsess == False (Result): Action prohibited
-                (read Result.message)
-            Result.sucsess == True (Result): Action allowed
-        """
-        if (first_unit := data.get('first_unit')) is None:
-            return Result(False, "Missing required data - first_unit")
-        if (last_unit := data.get('last_unit')) is None:
-            return Result(False, "Missing required data - last_unit")
-        if (frontside_location := data.get('frontside_location')) is None:
-            return Result(False, "Missing required data - frontside_location")
-        new_units = DeviceCheckService \
-            .get_new_units(first_unit, last_unit)
-        # Check units exists
-        rack_amount = RackRepository.get_rack_amount(pk)
-        if DeviceCheckService.check_unit_exist(new_units, rack_amount):
-            return Result(False, self.units_exist_message)
-        # Check units busy
-        devices_for_side = DeviceRepository \
-            .get_devices_for_side(pk, frontside_location)
-        if DeviceCheckService \
-                .check_unit_busy(devices_for_side, new_units, old_units=None):
-            return Result(False, self.units_busy_message)
-        return Result(True, 'Success')
-
-    def _check_device_for_update(self,
-                                 pk: Optional[int],
-                                 data: dict
-                                 ) -> Result:
-        """
-        Checks is it possible to replace an existing device
-
-        Args:
-            pk (int): Primary key
-            data (dict): Add payload data
-
-        Returns:
-            Result.sucsess == False (Result): Action prohibited
-                (read Result.message)
-            Result.sucsess == True (Result): Action allowed
-        """
-        if (first_unit := data.get('first_unit')) is None:
-            return Result(False, "Missing required data - first_unit")
-        if (last_unit := data.get('last_unit')) is None:
-            return Result(False, "Missing required data - last_unit")
-        if (frontside_location := data.get('frontside_location')) is None:
-            return Result(False, "Missing required data - frontside_location")
-        rack_id = DeviceRepository.get_device_rack_id(pk)
-        old_first_unit = DeviceRepository.get_first_unit(pk)
-        old_last_unit = DeviceRepository.get_last_unit(pk)
-        old_units = DeviceCheckService \
-            .get_old_units(old_first_unit, old_last_unit)
-        new_units = DeviceCheckService.get_new_units(first_unit, last_unit)
-        # Check units exists
-        rack_amount = RackRepository.get_rack_amount(rack_id)
-        # breakpoint()
-        if DeviceCheckService.check_unit_exist(new_units, rack_amount):
-            return Result(False, self.units_exist_message)
-        # Check units busy
-        devices_for_side = DeviceRepository \
-            .get_devices_for_side(rack_id, frontside_location)
-        if DeviceCheckService \
-                .check_unit_busy(devices_for_side, new_units, old_units):
-            return Result(False, self.units_busy_message)
-        return Result(True, 'Success')
-
     def get_checks(self,
                    request: HttpRequest,
                    pk: Optional[int],
                    data: dict,
+                   update: bool,
                    fk: Optional[int] = None,
                    model: Optional[ModelBase] = None,
                    fk_model: Optional[ModelBase] = None,
-                   instance_name: Optional[str] = None,
                    key_name: Optional[str] = None,
+                   instance_name: Optional[str] = None
                    ) -> List[Result]:
         """
         Get a list of check results
@@ -451,29 +289,20 @@ class ChecksMixin(AbstractMixin):
         """
         check_results_list: List[Result] = []
         for check in self.checks_list:
-            if check == 'check_user':
-                check_results_list \
-                    .append(self._check_user(request, pk))
-            elif check == 'check_unique':
-                check_results_list \
-                    .append(self._check_unique(pk,
-                                               fk,
-                                               model,
-                                               fk_model,
-                                               instance_name,
-                                               key_name))
-            elif check == 'check_device_for_add':
-                check_results_list \
-                    .append(self._check_device_for_add(pk, data))
-            elif check == 'check_device_for_update':
-                check_results_list \
-                    .append(self._check_device_for_update(pk, data))
-            else:
-                raise ValueError('check: str must be'
-                                 'check_user|check_unique|'
-                                 'check_device_for_add|'
-                                 'check_device_for_update,'
-                                 'other checks dont implemented')
+            check_result = check(self.permission_alert,
+                                 self.units_exist_message,
+                                 self.units_busy_message,
+                                 self.model_name,
+                                 request,
+                                 pk,
+                                 data,
+                                 update,
+                                 fk,
+                                 model,
+                                 fk_model,
+                                 key_name,
+                                 instance_name)
+            check_results_list.append(check_result.result)
         return check_results_list
 
     def get_checks_result(self, results_list: List[Result]) -> Result:
@@ -626,8 +455,9 @@ class BaseApiAddMixin(BaseApiMixin,
             checks = self \
                 .get_checks(request,
                             pk=pk,
-                            model=self.model,
                             data=data,
+                            update=False,
+                            model=self.model,
                             key_name=key_name)
             result = self.get_checks_result(checks)
             if not result.success:
@@ -692,12 +522,13 @@ class BaseApiUpdateMixin(BaseApiMixin,
             checks = self \
                 .get_checks(request,
                             pk=pk,
+                            data=data,
+                            update=True,
                             fk=fk,
                             model=self.model,
                             fk_model=self.fk_model,
-                            data=data,
-                            instance_name=instance_name,
-                            key_name=key_name)
+                            key_name=key_name,
+                            instance_name=instance_name)
             result = self.get_checks_result(checks)
             if not result.success:
                 return Response({"invalid": result.message}, status=400)
