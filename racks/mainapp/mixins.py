@@ -17,12 +17,17 @@ from rest_framework.serializers import SerializerMetaclass
 from mainapp.data import ReportHeaders
 from mainapp.repository import (RepositoryHelper,
                                 DeviceRepository,
-                                RackRepository)
+                                RackRepository,
+                                RoomRepository,
+                                SiteRepository,
+                                BuildingRepository,
+                                DepartmentRepository,
+                                RegionRepository)
 from mainapp.serializers import DeviceSerializer
 from mainapp.services import (date,
                               DataProcessingService,
                               DeviceCheckService,
-                              RepoService,
+                              # RepoService,
                               # UniqueCheckService,
                               # UserCheckService,
                               ReportService,)
@@ -392,7 +397,7 @@ class ChecksMixin(AbstractMixin):
             return Result(False, "Missing required data - last_unit")
         if (frontside_location := data.get('frontside_location')) is None:
             return Result(False, "Missing required data - frontside_location")
-        rack_id = RepoService.get_device_rack_id(pk)
+        rack_id = DeviceRepository.get_device_rack_id(pk)
         old_first_unit = DeviceRepository.get_first_unit(pk)
         old_last_unit = DeviceRepository.get_last_unit(pk)
         old_units = DeviceCheckService \
@@ -771,7 +776,7 @@ class RackDevicesApiMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with devices for a single rack
         """
-        devices = RepoService.get_devices_for_rack(kwargs.get('pk'))
+        devices = DeviceRepository.get_devices_for_rack(kwargs.get('pk'))
         serializaed_data = DeviceSerializer(devices, many=True).data
         return Response(serializaed_data)
 
@@ -793,7 +798,7 @@ class DeviceVendorsApiMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with list of device vendors
         """
-        device_vendors = RepoService.get_device_vendors()
+        device_vendors = DeviceRepository.get_device_vendors()
         return Response({"device_vendors": device_vendors})
 
 
@@ -814,7 +819,7 @@ class DeviceModelsApiMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with list of device models
         """
-        device_models = RepoService.get_device_models()
+        device_models = DeviceRepository.get_device_models()
         return Response({"device_models": device_models})
 
 
@@ -835,7 +840,7 @@ class RackVendorsApiMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with list of device vendors
         """
-        rack_vendors = RepoService.get_rack_vendors()
+        rack_vendors = RackRepository.get_rack_vendors()
         return Response({"rack_vendors": rack_vendors})
 
 
@@ -856,7 +861,7 @@ class RackModelsApiMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with list of rack models
         """
-        rack_models = RepoService.get_rack_models()
+        rack_models = RackRepository.get_rack_models()
         return Response({"rack_models": rack_models})
 
 
@@ -864,49 +869,49 @@ class RegionListApiMixin:
     """
     Regions list mixin
     """
-    queryset: QuerySet = RepoService.get_all_regions()
+    queryset: QuerySet = RegionRepository.get_all_regions()
 
 
 class DepartmentListApiMixin:
     """
     Departments list mixin
     """
-    queryset: QuerySet = RepoService.get_all_departments()
+    queryset: QuerySet = DepartmentRepository.get_all_departments()
 
 
 class SiteListApiMixin:
     """
     Sites list mixin
     """
-    queryset: QuerySet = RepoService.get_all_sites()
+    queryset: QuerySet = SiteRepository.get_all_sites()
 
 
 class BuildingListApiMixin:
     """
     Buildings list mixin
     """
-    queryset: QuerySet = RepoService.get_all_buildings()
+    queryset: QuerySet = BuildingRepository.get_all_buildings()
 
 
 class RoomListApiMixin:
     """
     Rooms list mixin
     """
-    queryset: QuerySet = RepoService.get_all_rooms()
+    queryset: QuerySet = RoomRepository.get_all_rooms()
 
 
 class RackListApiViewMixin:
     """
     Racks list API mixin
     """
-    queryset: QuerySet = RepoService.get_all_racks()
+    queryset: QuerySet = RackRepository.get_all_racks()
 
 
 class RackPartialListApiViewMixin:
     """
     Racks partial list API mixin
     """
-    queryset: QuerySet = RepoService.get_all_racks_partial()
+    queryset: QuerySet = RackRepository.get_all_racks_partial()
 
 
 class UserApiMixin(BaseApiMixin):
@@ -947,12 +952,12 @@ class DeviceLocationMixin(BaseApiMixin):
             Response (HttpResponse): Response with device location data
         """
         pk = kwargs.get('pk')
-        rack_name = RepoService.get_device_rack_name(pk)
-        room_name = RepoService.get_device_room_name(pk)
-        site_name = RepoService.get_device_site_name(pk)
-        building_name = RepoService.get_device_building_name(pk)
-        department_name = RepoService.get_device_department_name(pk)
-        region_name = RepoService.get_device_region_name(pk)
+        rack_name = DeviceRepository.get_device_rack_name(pk)
+        room_name = DeviceRepository.get_device_room_name(pk)
+        site_name = DeviceRepository.get_device_site_name(pk)
+        building_name = DeviceRepository.get_device_building_name(pk)
+        department_name = DeviceRepository.get_device_department_name(pk)
+        region_name = DeviceRepository.get_device_region_name(pk)
         return Response({
             "rack_name": rack_name,
             "room_name": room_name,
@@ -981,11 +986,11 @@ class RackLocationMixin(BaseApiMixin):
             Response (HttpResponse): Response with rack location data
         """
         pk = kwargs.get('pk')
-        room_name = RepoService.get_rack_room_name(pk)
-        site_name = RepoService.get_rack_site_name(pk)
-        building_name = RepoService.get_rack_building_name(pk)
-        department_name = RepoService.get_rack_department_name(pk)
-        region_name = RepoService.get_rack_region_name(pk)
+        room_name = RackRepository.get_rack_room_name(pk)
+        site_name = RackRepository.get_rack_site_name(pk)
+        building_name = RackRepository.get_rack_building_name(pk)
+        department_name = RackRepository.get_rack_department_name(pk)
+        region_name = RackRepository.get_rack_region_name(pk)
         return Response({
             "room_name": room_name,
             "site_name": site_name,
