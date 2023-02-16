@@ -59,12 +59,12 @@ class AbstractMixin(ABC):
         """
         raise NotImplementedError
 
-    @property
-    def fk_name(self) -> str:
-        """
-        Foreign key model
-        """
-        raise NotImplementedError
+    #@property
+    #def fk_name(self) -> str:
+    #    """
+    #    Foreign key model
+    #    """
+    #    raise NotImplementedError
 
     @property
     def checks_list(self) -> List[object]:
@@ -73,19 +73,19 @@ class AbstractMixin(ABC):
         """
         raise NotImplementedError
 
-    @property
-    def pk_name(self) -> str:
-        """
-        Primary key name
-        """
-        raise NotImplementedError
+    #@property
+    #def pk_name(self) -> str:
+    #    """
+    #    Primary key name
+    #    """
+    #    raise NotImplementedError
 
-    @property
-    def model_name(self) -> str:
-        """
-        Model name
-        """
-        raise NotImplementedError
+    #@property
+    #def model_name(self) -> str:
+    #    """
+    #    Model name
+    #    """
+    #    raise NotImplementedError
 
 
 class AbstractViewMixin(AbstractMixin):
@@ -192,7 +192,7 @@ class LoggingMixin(AbstractMixin):
             'time': datetime.now(),
             'user': request.user.username,
             'action': 'add',
-            'model_name': self.model_name,
+            'model_name': self.model._meta.db_table,
             'new_data': data,
             'fk': pk,
         })
@@ -216,7 +216,7 @@ class LoggingMixin(AbstractMixin):
             'time': datetime.now(),
             'user': request.user.username,
             'action': 'update',
-            'model_name': self.model_name,
+            'model_name': self.model._meta.db_table,
             'new_data': data,
             'old_data': old_data,
             'pk': str(pk),
@@ -239,7 +239,7 @@ class LoggingMixin(AbstractMixin):
             'time': datetime.now(),
             'user': request.user.username,
             'action': 'delete',
-            'model_name': self.model_name,
+            'model_name': self.model._meta.db_table,
             'object_name': obj_name,
             'pk': str(pk),
         })
@@ -249,9 +249,6 @@ class ChecksMixin(AbstractMixin):
     """
     Checks mixin for adding, updating and deleting instances
     """
-    permission_alert: str = 'Permission alert, changes are prohibited'
-    units_exist_message: str = 'There are no such units in this rack'
-    units_busy_message: str = 'These units are busy'
 
     def get_checks(self,
                    request: HttpRequest,
@@ -289,11 +286,7 @@ class ChecksMixin(AbstractMixin):
         """
         check_results_list: List[Result] = []
         for check in self.checks_list:
-            check_result = check(self.permission_alert,
-                                 self.units_exist_message,
-                                 self.units_busy_message,
-                                 self.model_name,
-                                 request,
+            check_result = check(request,
                                  pk,
                                  data,
                                  update,
@@ -402,7 +395,7 @@ class BaseApiGetMixin(BaseApiMixin):
                 does not exist (exception)
         """
         try:
-            repository = RepositoryHelper.get_repository(self.model)
+            repository = RepositoryHelper.get_model_repository(self.model)
             instance = repository.get_instance(kwargs.get('pk'))
             serializer = self.serializer_class(instance)
             return Response(serializer.data)
@@ -437,18 +430,20 @@ class BaseApiAddMixin(BaseApiMixin,
         """
         data = request.data
         try:
-            pk = data[self.pk_name]
+            fk_model_name = self.fk_model._meta.db_table
+            pk = data[f"{fk_model_name}_id"]
         except KeyError:
             return Response({"invalid": "Need fk for post method"})
         try:
-            repository = RepositoryHelper.get_repository(self.model)
+            repository = RepositoryHelper.get_model_repository(self.fk_model)
             repository.get_instance(pk)
         except self.model.DoesNotExist:
-            message = f"{self.model.__name__} with this ID does not exist"
+            message = f"{self.fk_model.__name__} with this ID does not exist"
             return Response({"invalid": message}, status=400)
         # Add username to data
         data['updated_by'] = request.user.username
-        key_name = DataProcessingService.get_key_name(data, self.model_name)
+        key_name = DataProcessingService \
+            .get_key_name(data, self.model._meta.db_table)
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for add possibility
@@ -458,6 +453,7 @@ class BaseApiAddMixin(BaseApiMixin,
                             data=data,
                             update=False,
                             model=self.model,
+                            fk_model=self.fk_model,
                             key_name=key_name)
             result = self.get_checks_result(checks)
             if not result.success:
@@ -495,16 +491,16 @@ class BaseApiUpdateMixin(BaseApiMixin,
         data = request.data
         pk = kwargs.get('pk')
         try:
-            repository = RepositoryHelper.get_repository(self.model)
+            repository = RepositoryHelper.get_model_repository(self.model)
             instance = repository.get_instance(pk)
         except self.model.DoesNotExist:
             message = f"{self.model.__name__} with this ID does not exist"
             return Response({"invalid": message}, status=400)
         # Add fk and username to data
-        repository = RepositoryHelper.get_repository(self.model)
-        fk = getattr(repository.get_instance(pk),
-                     f"{self.fk_name}_id")
-        data[self.fk_name] = fk
+        repository = RepositoryHelper.get_model_repository(self.model)
+        fk_model_name = self.fk_model._meta.db_table
+        fk = getattr(repository.get_instance(pk), f"{fk_model_name}_id_id")
+        data[f"{fk_model_name}_id"] = fk
         data['updated_by'] = request.user.username
         # For some reason get method become lazy
         # when you call it from service layer
@@ -513,9 +509,9 @@ class BaseApiUpdateMixin(BaseApiMixin,
         if data.get('rack_amount'):
             data['rack_amount'] = RackRepository.get_rack_amount(pk)
         # data = DataProcessingService.update_rack_amount(data, pk)
-        key_name = DataProcessingService.get_key_name(data, self.model_name)
+        key_name = DataProcessingService.get_key_name(data, self.model)
         instance_name = DataProcessingService \
-            .get_instance_name(instance, self.model, self.model_name)
+            .get_instance_name(instance, self.model)
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for update possibility
@@ -533,9 +529,10 @@ class BaseApiUpdateMixin(BaseApiMixin,
             if not result.success:
                 return Response({"invalid": result.message}, status=400)
             # PrimaryKeyRelatedField doesent work for some unnown reason
-            id = data.get(self.fk_name)
-            repository = RepositoryHelper.get_repository(self.fk_model)
-            data[self.fk_name] = repository.get_instance(id)
+            id = data.get(f"{fk_model_name}_id")
+            repository = RepositoryHelper.get_model_repository(self.fk_model)
+            data[f"{fk_model_name}_id"] = repository \
+                .get_instance(id)
             # Update data
             for key, value in data.items():
                 setattr(instance, key, value)
@@ -572,13 +569,13 @@ class BaseApiDeleteMixin(BaseApiMixin,
         data = request.data
         pk = kwargs.get('pk')
         try:
-            repository = RepositoryHelper.get_repository(self.model)
+            repository = RepositoryHelper.get_model_repository(self.model)
             instance = repository.get_instance(pk)
         except self.model.DoesNotExist:
             message = f"{self.model.__name__} with this ID does not exist"
             return Response({"invalid": message}, status=400)
         instance_name = DataProcessingService \
-            .get_instance_name(instance, self.model, self.model_name)
+            .get_instance_name(instance, self.model)
         # Check for delete possibility
         checks = self.get_checks(request, pk, data, model=self.model)
         result = self.get_checks_result(checks)

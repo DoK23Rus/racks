@@ -99,7 +99,9 @@ class Suite:
             test_results = self._run_thread_pool(case)
             status_code = self._get_case_status_code(test_results)
             final_status_code += status_code
-        return final_status_code
+        if final_status_code != 0:
+            return 1
+        return 0
 
     def _run_thread_pool(self, case: object) -> dict:
         """

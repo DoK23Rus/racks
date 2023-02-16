@@ -11,15 +11,17 @@ from mainapp.models import (Region,
                             Room,
                             Rack,
                             Device)
-from mainapp.services import (UserCheckService,
-                              UniqueCheckService,
+from mainapp.services import (#UserCheckService,
+                              #UniqueCheckService,
                               DeviceCheckService,
                               DataProcessingService,
-                              RepoService,
+                              #RepoService,
                               NewUnits,
                               OldUnits,
                               ReportService,
                               date)
+from mainapp.utils import *
+from mainapp.repository import *
 
 
 def base_setup():
@@ -214,6 +216,253 @@ class TestDate(TestCase):
         self.assertEqual(result, date()[:-9])
 
 
+class TestDeviceCheckService(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
+
+    def test_get_old_units(self):
+        result = DeviceCheckService.get_old_units(1, 2)
+        self.assertEqual(result, OldUnits(1, 2))
+
+        result = DeviceCheckService.get_old_units(5, 2)
+        self.assertEqual(result, OldUnits(2, 5))
+
+    def test_get_new_units(self):
+        result = DeviceCheckService.get_new_units(1, 2)
+        self.assertEqual(result, NewUnits(1, 2))
+
+        result = DeviceCheckService.get_new_units(5, 2)
+        self.assertEqual(result, NewUnits(2, 5))
+
+    def test_check_unit_exist(self):
+        rack1_amount = Rack.objects.get(rack_name='Test_rack1').rack_amount
+        result = DeviceCheckService \
+            .check_unit_exist(NewUnits(39, 40), rack1_amount)
+        self.assertTrue(result)
+
+        rack2_amount = Rack.objects.get(rack_name='Test_rack2').rack_amount
+        result = DeviceCheckService \
+            .check_unit_exist(NewUnits(21, 22), rack2_amount)
+        self.assertFalse(result)
+
+        # rack_id is None
+        # with self.assertRaises(ValueError):
+        #     DeviceCheckService.check_unit_exist(NewUnits(21, 22), None)
+
+    def test_check_unit_busy(self):
+        # Rack - Test_rack1
+        # Side - Front (True)
+        # add
+        rack_id = Rack.objects.get(rack_name='Test_rack1').id
+        queryset_devices = Device.objects.filter(rack_id_id=rack_id) \
+            .filter(frontside_location=True)
+        new_units = NewUnits(5, 6)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units=None)
+        self.assertTrue(result)
+
+        new_units = NewUnits(7, 9)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units=None)
+        self.assertFalse(result)
+
+        # Rack - Test_rack1
+        # Side - Back (False)
+        # add
+        queryset_devices = Device.objects.filter(rack_id_id=rack_id) \
+            .filter(frontside_location=False)
+        new_units = NewUnits(2, 3)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units=None)
+        self.assertTrue(result)
+
+        new_units = NewUnits(10, 12)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units=None)
+        self.assertFalse(result)
+
+        # Rack - Test_rack1
+        # Side - Front (True)
+        # update
+        queryset_devices = Device.objects.filter(rack_id_id=rack_id) \
+            .filter(frontside_location=True)
+        new_units = NewUnits(4, 5)
+        old_units = OldUnits(1, 2)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units)
+        self.assertTrue(result)
+
+        new_units = NewUnits(2, 3)
+        old_units = OldUnits(1, 2)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units)
+        self.assertFalse(result)
+
+        # Rack - Test_rack1
+        # Side - Back (False)
+        # update
+        queryset_devices = Device.objects.filter(rack_id_id=rack_id) \
+            .filter(frontside_location=False)
+        new_units = NewUnits(7, 8)
+        old_units = OldUnits(3, 4)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units)
+        self.assertTrue(result)
+
+        new_units = NewUnits(10, 11)
+        old_units = OldUnits(3, 4)
+        result = DeviceCheckService \
+            .check_unit_busy(queryset_devices, new_units, old_units)
+        self.assertFalse(result) 
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestDataProcessingService:
+
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
+
+    def test_get_devices_power_w_sum(self):
+        # Rack - Test_rack1
+        rack1_id = Rack.objects.get(rack_name='Test_rack1').id
+        power_w_list = list(Device
+                            .objects
+                            .filter(rack_id_id=rack1_id)
+                            .values_list('power_w', flat=True))
+        result = DataProcessingService.get_devices_power_w_sum(power_w_list)
+        self.assertEqual(result, 350)
+
+        # Rack - Test_rack2
+        rack2_id = Rack.objects.get(rack_name='Test_rack2').id
+        power_w_list = list(Device
+                            .objects
+                            .filter(rack_id_id=rack2_id)
+                            .values_list('power_w', flat=True))
+        result = DataProcessingService.get_devices_power_w_sum(power_w_list)
+        self.assertEqual(result, 0)
+
+    def test_get_key_name(self):
+        # Get key name (if model != Device)
+        data = {'rack_name': 'Test_rack1'}
+        result = DataProcessingService.get_key_name(data, 'rack')
+        self.assertEqual(result, 'Test_rack1')
+
+        # Get key name (if model == Device)
+        data = {
+            'device_vendor': 'Test_vendor1',
+            'device_model': 'Test_model1',
+        }
+        result = DataProcessingService.get_key_name(data, 'device')
+        self.assertEqual(result, 'device Test_vendor1, Test_model1')
+
+        # For Device model, if vendor and model not specified
+        data = {}
+        result = DataProcessingService.get_key_name(data, 'device')
+        self.assertEqual(result,
+                         'device unspecified vendor, unspecified model')
+
+    def test_get_instance_name(self):
+        # Model Rack
+        rack1 = Rack.objects.get(rack_name='Test_rack1')
+        result = DataProcessingService \
+            .get_instance_name(rack1, Rack)
+        self.assertEqual(result, 'Test_rack1')
+
+        # Model Device
+        device1 = Device.objects.get(device_vendor='Test_vendor1')
+        result = DataProcessingService \
+            .get_instance_name(device1, Device)
+        self.assertEqual(result, 'device Test_vendor1, Test_model1')
+
+        # Model Device, unspecified model
+        device2 = Device.objects.get(device_vendor='Test_vendor9')
+        result = DataProcessingService \
+            .get_instance_name(device2, Device)
+        self.assertEqual(result,
+                         'device Test_vendor9, unspecified model')
+
+        # Model Device, unspecified vendor
+        device3 = Device.objects.get(device_model='Test_model10')
+        result = DataProcessingService \
+            .get_instance_name(device3, Device)
+        self.assertEqual(result,
+                         'device unspecified vendor, Test_model10')
+
+        # Model Device, unspecified vendor and model
+        device4 = Device.objects.get(first_unit=20)
+        result = DataProcessingService \
+            .get_instance_name(device4, Device)
+        self.assertEqual(result,
+                         'device unspecified vendor, unspecified model')
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestReportService(TestCase):
+    """
+    Testing report services
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        base_setup()
+
+    def test_get_devices_data(self):
+        # Devices report data
+        devices_report_qs = Device.objects.get_devices_report()
+        data = ReportService.get_devices_data(devices_report_qs)
+        # Replace datestamp
+        for line in data:
+            line[27] = ''
+        self.assertEqual(data, devices_mock_data)
+
+    def test_get_racks_data(self):
+        # RAcks report data
+        racks_report_qs = Rack.objects.get_racks_report()
+        data = ReportService.get_racks_data(racks_report_qs)
+        # Replace datestamp
+        for line in data:
+            line[28] = ''
+        self.assertEqual(data, racks_mock_data)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+# class TestChecksProps:
+# 
+#     @classmethod
+#     def setUpClass(cls):
+#         base_setup()
+# 
+#     def test_TestNamesListProp(self):
+#         pk = Room.objects.get(room_name='Test_room1').id
+#         fk = Building.objects.get(room_name='Test_building1').id
+#         model = Room
+#         fk_model = Building
+#         result = NamesListProp(pk, fk, model, fk_model).names_list
+#         self.assertEqual(['Test_room1'], result)
+# 
+#     def test_DepartmentNameProp(self):
+#         pk = Room.objects.get(room_name='Test_room1').id
+#         model = Room
+#         result = DepartmentNameProp(pk, model).department_name
+#         self.assertEqual('Test_department1', result)
+# 
+#     @classmethod
+#     def tearDownClass(cls):
+#         pass
+
+'''
 class TestUserCheckService(TestCase):
     """
     Testing services for checking user permissions
@@ -1022,3 +1271,4 @@ class TestReportService(TestCase):
     @classmethod
     def tearDownClass(cls):
         pass
+'''

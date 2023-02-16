@@ -93,8 +93,6 @@ class DeviceCheckService:
             True (bool): units pair are in range of all rack units
             False (bool): units pair are outside of the rack
         """
-        if rack_amount is None:
-            raise ValueError("rack_id cannot be None")
         new_device_range = range(units.new_first_unit, units.new_last_unit + 1)
         all_units_ramge = range(1, rack_amount + 1)
         if set(new_device_range).issubset(all_units_ramge):
@@ -188,11 +186,10 @@ class DataProcessingService:
 
     @staticmethod
     def get_instance_name(instance: ModelBase,
-                          model: ModelBase,
-                          model_name: str
+                          model: ModelBase
                           ) -> str:
         if model != Device:
-            return getattr(instance, f"{model_name}_name")
+            return getattr(instance, f"{model._meta.db_table}_name")
         device_vendor = instance.device_vendor \
             if instance.device_vendor != '' else 'unspecified vendor'
         device_model = instance.device_model \

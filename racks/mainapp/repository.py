@@ -6,7 +6,7 @@ from mainapp.models import (Building,
                             Region,
                             Room,
                             Site)
-from typing import List, Optional, Set, NamedTuple
+from typing import List, Optional
 
 
 class RegionRepository:
@@ -525,7 +525,7 @@ class DeviceRepository:
 class RepositoryHelper:
 
     @staticmethod
-    def get_repository(model):
+    def get_model_repository(model):
         repository = {
             Region: RegionRepository,
             Department: DepartmentRepository,

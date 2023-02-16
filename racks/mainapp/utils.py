@@ -20,10 +20,6 @@ class Result:
 class Check:
 
     def __init__(self,
-                 permission_alert,
-                 units_exist_message,
-                 units_busy_message,
-                 model_name,
                  request,
                  pk,
                  data,
@@ -33,16 +29,12 @@ class Check:
                  fk_model,
                  key_name,
                  instance_name):
-        self.permission_alert = permission_alert
-        self.units_exist_message = units_exist_message
-        self.units_busy_message = units_busy_message
         self.request = request
         self.pk = pk
         self.data = data
         self.update = update
         self.fk = fk
         self.model = model
-        self.model_name = model_name
         self.fk_model = fk_model
         self.instance_name = instance_name
         self.key_name = key_name
@@ -50,53 +42,36 @@ class Check:
 
 class NamesListProp:
 
-    def __init__(self, pk, fk, model, fk_model):
+    def __init__(self, pk, model, update):
         self.pk = pk
-        self.fk = fk
         self.model = model
-        self.fk_model = fk_model
-        self.names_list = self._get_names_list()
+        self.update = update
+        self.names_list = self._set_prop()
 
-    def _get_names_list(self):
-        if self.fk is None:
+    def _set_prop(self):
+        if not self.update:
             repository = RepositoryHelper \
-                .get_child_model_repository(self.model)
+                .get_model_repository(self.model)
             return repository.get_unique_object_names_list(self.pk)
         repository = RepositoryHelper \
             .get_child_model_repository(self.fk_model)
         return repository.get_unique_object_names_list(self.fk)
 
 
-class CheckUnique(Check):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.names_list = NamesListProp(self.pk,
-                                        self.fk,
-                                        self.model,
-                                        self.fk_model).names_list
-        self.result = self._get_check_result()
-
-    def _get_check_result(self) -> Result:
-        # For rack properties changes (name staing the same)
-        if self.instance_name == self.key_name:
-            return Result(True, 'Success')
-        if self.key_name in self.names_list:
-            return Result(False,
-                          f"A {self.model_name} "
-                          f"with the same name already exists")
-        return Result(True, 'Success')
-
-
 class DepartmentNameProp:
 
-    def __init__(self, pk, model):
+    def __init__(self, pk, model, fk, fk_model, update):
         self.pk = pk
         self.model = model
-        self.department_name = self._get_department_name()
+        self.fk = fk
+        self.fk_model = fk_model
+        self.update = update
+        self.department_name = self._set_prop()
 
-    def _get_department_name(self):
-        repository = RepositoryHelper.get_repository(self.model)
+    def _set_prop(self) -> str:
+        if not self.update:
+            self.model = self.fk_model
+        repository = RepositoryHelper.get_model_repository(self.model)
         return repository.get_department_name(self.pk)
 
 
@@ -104,25 +79,10 @@ class UserGroupsProp:
 
     def __init__(self, request):
         self.request = request
-        self.user_groups = self._get_user_groups()
+        self.user_groups = self._set_prop()
 
-    def _get_user_groups(self):
+    def _set_prop(self):
         return list(self.request.user.groups.values_list('name', flat=True))
-
-
-class CheckUser(Check):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user_groups = UserGroupsProp(self.request).user_groups
-        self.department_name = DepartmentNameProp(self.pk, self.model) \
-            .department_name
-        self.result = self._get_check_result()
-
-    def _get_check_result(self) -> Result:
-        if self.department_name not in self.user_groups:
-            return Result(False, self.permission_alert)
-        return Result(True, 'Success')
 
 
 class OldUnitsProp:
@@ -131,9 +91,9 @@ class OldUnitsProp:
         self.pk = pk
         self.update = update
         self.old_units = None
-        self._set_old_units()
+        self._set_prop()
 
-    def _set_old_units(self):
+    def _set_prop(self):
         if self.update:
             old_first_unit = DeviceRepository.get_first_unit(self.pk)
             old_last_unit = DeviceRepository.get_last_unit(self.pk)
@@ -145,9 +105,9 @@ class FirstUnitProp:
 
     def __init__(self, data):
         self.data = data
-        self.first_unit = self._get_first_unit()
+        self.first_unit = self._set_prop()
 
-    def _get_first_unit(self):
+    def _set_prop(self):
         return self.data.get('first_unit')
 
 
@@ -155,9 +115,9 @@ class LastUnitProp:
 
     def __init__(self, data):
         self.data = data
-        self.last_unit = self._get_last_unit()
+        self.last_unit = self._set_prop()
 
-    def _get_last_unit(self):
+    def _set_prop(self):
         return self.data.get('last_unit')
 
 
@@ -165,9 +125,9 @@ class FrontsideLocationProp:
 
     def __init__(self, data):
         self.data = data
-        self.frontside_location = self._get_frontside_location()
+        self.frontside_location = self._set_prop()
 
-    def _get_frontside_location(self):
+    def _set_prop(self):
         return self.data.get('frontside_location')
 
 
@@ -175,9 +135,9 @@ class RackAmountProp:
 
     def __init__(self, pk):
         self.pk = pk
-        self.rack_amount = self._get_rack_amount()
+        self.rack_amount = self._set_prop()
 
-    def _get_rack_amount(self):
+    def _set_prop(self):
         return RackRepository.get_rack_amount(self.pk)
 
 
@@ -186,9 +146,9 @@ class NewUnitsProp:
     def __init__(self, first_unit, last_unit):
         self.first_unit = first_unit
         self.last_unit = last_unit
-        self.new_units = self._get_new_units()
+        self.new_units = self._set_prop()
 
-    def _get_new_units(self):
+    def _set_prop(self):
         return DeviceCheckService \
             .get_new_units(self.first_unit, self.last_unit)
 
@@ -198,9 +158,9 @@ class UnitsExistProp:
     def __init__(self, new_units, rack_amount):
         self.new_units = new_units
         self.rack_amount = rack_amount
-        self.units_exist = self._get_units_exist()
+        self.units_exist = self._set_prop()
 
-    def _get_units_exist(self):
+    def _set_prop(self):
         return DeviceCheckService \
             .check_unit_exist(self.new_units, self.rack_amount)
 
@@ -212,9 +172,9 @@ class DevicesForSideProp:
         self.rack_id = rack_id
         self.update = update
         self.frontside_location = frontside_location
-        self.devices_for_side = self._get_devices_for_side()
+        self.devices_for_side = self._set_prop()
 
-    def _get_devices_for_side(self):
+    def _set_prop(self):
         if self.update:
             self.pk = self.rack_id
         return DeviceRepository \
@@ -227,9 +187,9 @@ class UnitsBusyProp:
         self.devices_for_side = devices_for_side
         self.new_units = new_units
         self.old_units = old_units
-        self.unit_busy = self._get_unit_busy()
+        self.unit_busy = self._set_prop()
 
-    def _get_unit_busy(self):
+    def _set_prop(self):
         return DeviceCheckService \
             .check_unit_busy(self.devices_for_side,
                              self.new_units,
@@ -241,12 +201,51 @@ class RackIdProp:
     def __init__(self, pk, update):
         self.pk = pk
         self.update = update
-        self.rack_id = self._get_rack_id()
+        self.rack_id = self._set_prop()
 
-    def _get_rack_id(self):
+    def _set_prop(self):
         if self.update:
             return DeviceRepository.get_device_rack_id(self.pk)
         return self.pk
+
+
+class CheckUser(Check):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user_groups = UserGroupsProp(self.request).user_groups
+        self.department_name = DepartmentNameProp(self.pk,
+                                                  self.model,
+                                                  self.fk,
+                                                  self.fk_model,
+                                                  self.update) \
+            .department_name
+        self.result = self._set_result()
+
+    def _set_result(self) -> Result:
+        if self.department_name not in self.user_groups:
+            return Result(False, 'Permission alert, changes are prohibited')
+        return Result(True, 'Success')
+
+
+class CheckUnique(Check):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.names_list = NamesListProp(self.pk,
+                                        self.model,
+                                        self.update).names_list
+        self.result = self._set_result()
+
+    def _set_result(self) -> Result:
+        # For rack properties changes (name staing the same)
+        if self.instance_name == self.key_name:
+            return Result(True, 'Success')
+        if self.key_name in self.names_list:
+            return Result(False,
+                          f"A {self.model._meta.db_table} "
+                          f"with the same name already exists")
+        return Result(True, 'Success')
 
 
 class CheckDeviceForAddOrUpdate(Check):
@@ -272,24 +271,19 @@ class CheckDeviceForAddOrUpdate(Check):
         self.units_busy = UnitsBusyProp(self.devices_for_side,
                                         self.new_units,
                                         self.old_units).unit_busy
-        self.result = self._get_check_result()
+        self.result = self._set_result()
 
-    def _get_check_result(self) -> Result:
-        if not self._check_data():
-            return Result(False, "Missing required data")
-        # Check units exists
-        if not self.units_exist:
-            return Result(False, self.units_exist_message)
-        # Check units busy
-        if self.units_busy:
-            return Result(False, self.units_busy_message)
-        return Result(True, 'Success')
-
-    def _check_data(self):
+    def _set_result(self) -> Result:
         if None in [
             self.first_unit,
             self.last_unit,
             self.frontside_location,
         ]:
-            return False
-        return True
+            return Result(False, "Missing required data")
+        # Check units exists
+        if not self.units_exist:
+            return Result(False, 'There are no such units in this rack')
+        # Check units busy
+        if self.units_busy:
+            return Result(False, 'These units are busy')
+        return Result(True, 'Success')
