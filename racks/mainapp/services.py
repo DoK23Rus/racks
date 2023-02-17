@@ -101,10 +101,24 @@ class DeviceCheckService:
             return False
 
     @staticmethod
-    def check_unit_busy(queryset_devices: QuerySet,
-                        new_units: NewUnits,
-                        old_units: Optional[OldUnits]
-                        ) -> bool:
+    def get_filled_list(queryset_devices: QuerySet):
+        filled_list: list[int] = []
+        if len(list(queryset_devices)) > 0:
+            for device in queryset_devices:
+                first_unit = device.first_unit
+                last_unit = device.last_unit
+                if first_unit > last_unit:
+                    first_unit = device.last_unit
+                    last_unit = device.first_unit
+                one_device_list = list(range(first_unit, last_unit + 1))
+                filled_list.extend(one_device_list)
+        return filled_list
+
+    @staticmethod
+    def check_unit_busy_for_update(filled_list: List[int],
+                                   new_units: NewUnits,
+                                   old_units: OldUnits
+                                   ) -> bool:
         """
         Units busy check
         Are units busy? (adding, updating)
@@ -122,20 +136,37 @@ class DeviceCheckService:
             True (bool): Units are busy
             False (bool): Units not busy
         """
-        filled_list: list = []
-        if len(list(queryset_devices)) > 0:
-            for device in queryset_devices:
-                first_unit = device.first_unit
-                last_unit = device.last_unit
-                if first_unit > last_unit:
-                    first_unit = device.last_unit
-                    last_unit = device.first_unit
-                one_device_list = list(range(first_unit, last_unit + 1))
-                filled_list.extend(one_device_list)
-        if old_units:
-            device_old_range = range(old_units.old_first_unit,
-                                     old_units.old_last_unit + 1)
-            filled_list = list(set(filled_list) - set(device_old_range))
+        device_old_range = range(old_units.old_first_unit,
+                                 old_units.old_last_unit + 1)
+        filled_list = list(set(filled_list) - set(device_old_range))
+        device_new_range = range(new_units.new_first_unit,
+                                 new_units.new_last_unit + 1)
+        if any(unit in set(device_new_range) for unit in filled_list):
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def check_unit_busy_for_add(filled_list: List[int],
+                                new_units: NewUnits,
+                                ) -> bool:
+        """
+        Units busy check
+        Are units busy? (adding, updating)
+
+        Args:
+            side (bool): Rack side (True - front, False - back)
+            pk (int): Primary key
+            new_units (tuple): Pair of new units
+            old_units (tuple): Pair of old units (update only)
+
+        Raises:
+            ValueError ("pk cannot be None")
+
+        Returns:
+            True (bool): Units are busy
+            False (bool): Units not busy
+        """
         device_new_range = range(new_units.new_first_unit,
                                  new_units.new_last_unit + 1)
         if any(unit in set(device_new_range) for unit in filled_list):
