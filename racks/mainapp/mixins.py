@@ -254,7 +254,7 @@ class ChecksMixin(AbstractMixin):
                    request: HttpRequest,
                    pk: Optional[int],
                    data: dict,
-                   update: bool,
+                   update: Optional[bool] = None,
                    fk: Optional[int] = None,
                    model: Optional[ModelBase] = None,
                    fk_model: Optional[ModelBase] = None,
@@ -577,7 +577,10 @@ class BaseApiDeleteMixin(BaseApiMixin,
         instance_name = DataProcessingService \
             .get_instance_name(instance, self.model)
         # Check for delete possibility
-        checks = self.get_checks(request, pk, data, model=self.model)
+        checks = self.get_checks(request,
+                                 pk=pk,
+                                 data=data,
+                                 model=self.model)
         result = self.get_checks_result(checks)
         if not result.success:
             return Response({"invalid": result.message}, status=400)

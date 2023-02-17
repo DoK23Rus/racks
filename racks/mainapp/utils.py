@@ -49,7 +49,7 @@ class NamesListProp:
         self.names_list = self._set_prop()
 
     def _set_prop(self):
-        if not self.update:
+        if self.update is False:
             repository = RepositoryHelper \
                 .get_model_repository(self.model)
             return repository.get_unique_object_names_list(self.pk)
@@ -60,16 +60,15 @@ class NamesListProp:
 
 class DepartmentNameProp:
 
-    def __init__(self, pk, model, fk, fk_model, update):
+    def __init__(self, pk, model, fk_model, update):
         self.pk = pk
         self.model = model
-        self.fk = fk
         self.fk_model = fk_model
         self.update = update
         self.department_name = self._set_prop()
 
     def _set_prop(self) -> str:
-        if not self.update:
+        if self.update is False:
             self.model = self.fk_model
         repository = RepositoryHelper.get_model_repository(self.model)
         return repository.get_department_name(self.pk)
@@ -94,7 +93,7 @@ class OldUnitsProp:
         self._set_prop()
 
     def _set_prop(self):
-        if self.update:
+        if self.update is True:
             old_first_unit = DeviceRepository.get_first_unit(self.pk)
             old_last_unit = DeviceRepository.get_last_unit(self.pk)
             self.old_units = DeviceCheckService \
@@ -175,7 +174,7 @@ class DevicesForSideProp:
         self.devices_for_side = self._set_prop()
 
     def _set_prop(self):
-        if self.update:
+        if self.update is True:
             self.pk = self.rack_id
         return DeviceRepository \
             .get_devices_for_side(self.pk, self.frontside_location)
@@ -204,7 +203,7 @@ class RackIdProp:
         self.rack_id = self._set_prop()
 
     def _set_prop(self):
-        if self.update:
+        if self.update is True:
             return DeviceRepository.get_device_rack_id(self.pk)
         return self.pk
 
@@ -216,7 +215,6 @@ class CheckUser(Check):
         self.user_groups = UserGroupsProp(self.request).user_groups
         self.department_name = DepartmentNameProp(self.pk,
                                                   self.model,
-                                                  self.fk,
                                                   self.fk_model,
                                                   self.update) \
             .department_name
