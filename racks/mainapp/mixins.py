@@ -27,7 +27,11 @@ from mainapp.serializers import DeviceSerializer
 from mainapp.services import (date,
                               DataProcessingService,
                               ReportService,)
-from mainapp.utils import Result
+from mainapp.utils import (Result,
+                           AddCheckProps,
+                           DeleteCheckProps,
+                           UpdateCheckProps,
+                           Checker)
 from mainapp.tasks import delete_report_task, generate_report_task
 
 logger = logging.getLogger(__name__)
@@ -245,75 +249,75 @@ class LoggingMixin(AbstractMixin):
         })
 
 
-class ChecksMixin(AbstractMixin):
-    """
-    Checks mixin for adding, updating and deleting instances
-    """
+# class ChecksMixin(AbstractMixin):
+#     """
+#     Checks mixin for adding, updating and deleting instances
+#     """
+# 
+#     def get_checks(self,
+#                    request: HttpRequest,
+#                    pk: Optional[int],
+#                    data: dict,
+#                    update: Optional[bool] = None,
+#                    fk: Optional[int] = None,
+#                    model: Optional[ModelBase] = None,
+#                    fk_model: Optional[ModelBase] = None,
+#                    key_name: Optional[str] = None,
+#                    instance_name: Optional[str] = None
+#                    ) -> List[Result]:
+#         """
+#         Get a list of check results
+# 
+#         Args:
+#             request (HttpRequest): Request
+#             pk (int): Primary key
+#             data (dict): Add payload data
+#             fk (int): Foreign key (optional for update)
+#             model (ModelBase): Model
+#             fk_model (ModelBase): Foreign key model
+#             instance_name (str): Instance name (optional for update and delete)
+#             key_name (str): Key name (optional for add and update)
+# 
+#         Raises:
+#             ValueError ('check: str must be'
+#                         'check_user|check_unique|'
+#                         'check_device_for_add|'
+#                         'check_device_for_update,'
+#                         'other checks dont implemented'):
+#                 Check value is not in a list of implemented check names
+#         Returns:
+#             check_results_list (list): List of Result objects
+#         """
+#         check_results_list: List[Result] = []
+#         for check in self.checks_list:
+#             check_result = check(request,
+#                                  pk,
+#                                  data,
+#                                  update,
+#                                  fk,
+#                                  model,
+#                                  fk_model,
+#                                  key_name,
+#                                  instance_name)
+#             check_results_list.append(check_result.result)
+#         return check_results_list
 
-    def get_checks(self,
-                   request: HttpRequest,
-                   pk: Optional[int],
-                   data: dict,
-                   update: Optional[bool] = None,
-                   fk: Optional[int] = None,
-                   model: Optional[ModelBase] = None,
-                   fk_model: Optional[ModelBase] = None,
-                   key_name: Optional[str] = None,
-                   instance_name: Optional[str] = None
-                   ) -> List[Result]:
-        """
-        Get a list of check results
-
-        Args:
-            request (HttpRequest): Request
-            pk (int): Primary key
-            data (dict): Add payload data
-            fk (int): Foreign key (optional for update)
-            model (ModelBase): Model
-            fk_model (ModelBase): Foreign key model
-            instance_name (str): Instance name (optional for update and delete)
-            key_name (str): Key name (optional for add and update)
-
-        Raises:
-            ValueError ('check: str must be'
-                        'check_user|check_unique|'
-                        'check_device_for_add|'
-                        'check_device_for_update,'
-                        'other checks dont implemented'):
-                Check value is not in a list of implemented check names
-        Returns:
-            check_results_list (list): List of Result objects
-        """
-        check_results_list: List[Result] = []
-        for check in self.checks_list:
-            check_result = check(request,
-                                 pk,
-                                 data,
-                                 update,
-                                 fk,
-                                 model,
-                                 fk_model,
-                                 key_name,
-                                 instance_name)
-            check_results_list.append(check_result.result)
-        return check_results_list
-
-    def get_checks_result(self, results_list: List[Result]) -> Result:
-        """
-        Get the final result of the checks
-
-        Args:
-            results_list (list): List of Result objects
-
-        Returns:
-            Result.sucsess == False (Result): Action prohibited (final)
-                (read Result.message)
-            Result.sucsess == True (Result): Action allowed (final)
-        """
-        for result in results_list:
-            if not result.success:
-                return result
-        return Result(True, 'Success')
+#     def get_checks_result(self, results_list: List[Result]) -> Result:
+#         """
+#         Get the final result of the checks
+# 
+#         Args:
+#             results_list (list): List of Result objects
+# 
+#         Returns:
+#             Result.sucsess == False (Result): Action prohibited (final)
+#                 (read Result.message)
+#             Result.sucsess == True (Result): Action allowed (final)
+#         """
+#         for result in results_list:
+#             if not result.success:
+#                 return result
+#         return Result(True, 'Success')
 
 
 class BaseApiMixin(AbstractViewMixin):
@@ -405,7 +409,7 @@ class BaseApiGetMixin(BaseApiMixin):
 
 
 class BaseApiAddMixin(BaseApiMixin,
-                      ChecksMixin,
+                      #ChecksMixin,
                       LoggingMixin):
     """
     Base api add mixin
@@ -447,17 +451,27 @@ class BaseApiAddMixin(BaseApiMixin,
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for add possibility
-            checks = self \
-                .get_checks(request,
-                            pk=pk,
-                            data=data,
-                            update=False,
-                            model=self.model,
-                            fk_model=self.fk_model,
-                            key_name=key_name)
-            result = self.get_checks_result(checks)
+            check_props = AddCheckProps(request,
+                                        pk,
+                                        data,
+                                        False,
+                                        self.model,
+                                        self.fk_model,
+                                        key_name)
+            result = Checker(self.checks_list, check_props).result
             if not result.success:
                 return Response({"invalid": result.message}, status=400)
+            # checks = self \
+            #     .get_checks(request,
+            #                 pk=pk,
+            #                 data=data,
+            #                 update=False,
+            #                 model=self.model,
+            #                 fk_model=self.fk_model,
+            #                 key_name=key_name)
+            # result = self.get_checks_result(checks)
+            # if not result.success:
+            #     return Response({"invalid": result.message}, status=400)
             serializer.save()
             # Log this
             self.create_log(request, data, pk)
@@ -466,7 +480,7 @@ class BaseApiAddMixin(BaseApiMixin,
 
 
 class BaseApiUpdateMixin(BaseApiMixin,
-                         ChecksMixin,
+                         #ChecksMixin,
                          LoggingMixin):
     """
     Base update mixin
@@ -515,19 +529,31 @@ class BaseApiUpdateMixin(BaseApiMixin,
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for update possibility
-            checks = self \
-                .get_checks(request,
-                            pk=pk,
-                            data=data,
-                            update=True,
-                            fk=fk,
-                            model=self.model,
-                            fk_model=self.fk_model,
-                            key_name=key_name,
-                            instance_name=instance_name)
-            result = self.get_checks_result(checks)
+            check_props = UpdateCheckProps(request,
+                                           pk,
+                                           data,
+                                           True,
+                                           fk,
+                                           self.model,
+                                           self.fk_model,
+                                           key_name,
+                                           instance_name)
+            result = Checker(self.checks_list, check_props).result
             if not result.success:
                 return Response({"invalid": result.message}, status=400)
+            # checks = self \
+            #     .get_checks(request,
+            #                 pk=pk,
+            #                 data=data,
+            #                 update=True,
+            #                 fk=fk,
+            #                 model=self.model,
+            #                 fk_model=self.fk_model,
+            #                 key_name=key_name,
+            #                 instance_name=instance_name)
+            # result = self.get_checks_result(checks)
+            # if not result.success:
+            #     return Response({"invalid": result.message}, status=400)
             # PrimaryKeyRelatedField doesent work for some unnown reason
             id = data.get(f"{fk_model_name}_id")
             repository = RepositoryHelper.get_model_repository(self.fk_model)
@@ -544,7 +570,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
 
 
 class BaseApiDeleteMixin(BaseApiMixin,
-                         ChecksMixin,
+                         #ChecksMixin,
                          LoggingMixin):
     """
     Base delete mixin
@@ -577,13 +603,20 @@ class BaseApiDeleteMixin(BaseApiMixin,
         instance_name = DataProcessingService \
             .get_instance_name(instance, self.model)
         # Check for delete possibility
-        checks = self.get_checks(request,
-                                 pk=pk,
-                                 data=data,
-                                 model=self.model)
-        result = self.get_checks_result(checks)
+        check_props = DeleteCheckProps(request,
+                                       pk,
+                                       data,
+                                       self.model)
+        result = Checker(self.checks_list, check_props).result
         if not result.success:
             return Response({"invalid": result.message}, status=400)
+        # checks = self.get_checks(request,
+        #                          pk=pk,
+        #                          data=data,
+        #                          model=self.model)
+        # result = self.get_checks_result(checks)
+        # if not result.success:
+        #     return Response({"invalid": result.message}, status=400)
         instance.delete()
         # Log this
         self.delete_log(request, instance_name, pk)

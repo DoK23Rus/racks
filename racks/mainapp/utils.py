@@ -2,6 +2,8 @@
 Some utils
 """
 from dataclasses import dataclass
+from django.db.models.base import ModelBase
+from django.http import HttpRequest
 from mainapp.repository import (RepositoryHelper,
                                 DeviceRepository,
                                 RackRepository)
@@ -17,27 +19,68 @@ class Result:
     message: str
 
 
+@dataclass
+class AddCheckProps:
+    """
+    Class for check result objects
+    """
+    request: HttpRequest
+    pk: int
+    data: dict
+    update: bool
+    model: ModelBase
+    fk_model: ModelBase
+    key_name: str
+
+
+@dataclass
+class UpdateCheckProps:
+    """
+    Class for check result objects
+    """
+    request: HttpRequest
+    pk: int
+    data: dict
+    update: bool
+    fk: int
+    model: ModelBase
+    fk_model: ModelBase
+    key_name: str
+    instance_name: str
+
+
+@dataclass
+class DeleteCheckProps:
+    """
+    Class for check result objects
+    """
+    request: HttpRequest
+    pk: int
+    data: dict
+    model: ModelBase
+
+
+class Checker:
+
+    def __init__(self, checks_list, props):
+        self.checks_list = checks_list
+        self.props = props
+        self.result = self._set_result()
+
+    def _set_result(self):
+        check_results_list: list[Result] = []
+        for check in self.checks_list:
+            check_results_list.append(check(self.props).result)
+        for result in check_results_list:
+            if not result.success:
+                return result
+        return Result(True, 'Success')
+
+
 class Check:
 
-    def __init__(self,
-                 request,
-                 pk,
-                 data,
-                 update,
-                 fk,
-                 model,
-                 fk_model,
-                 key_name,
-                 instance_name):
-        self.request = request
-        self.pk = pk
-        self.data = data
-        self.update = update
-        self.fk = fk
-        self.model = model
-        self.fk_model = fk_model
-        self.instance_name = instance_name
-        self.key_name = key_name
+    def __init__(self, props):
+        self.props = props
 
 
 class NamesListProp:
@@ -212,11 +255,11 @@ class CheckUser(Check):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.user_groups = UserGroupsProp(self.request).user_groups
-        self.department_name = DepartmentNameProp(self.pk,
-                                                  self.model,
-                                                  self.fk_model,
-                                                  self.update) \
+        self.user_groups = UserGroupsProp(self.props.request).user_groups
+        self.department_name = DepartmentNameProp(self.props.pk,
+                                                  self.props.model,
+                                                  self.props.fk_model,
+                                                  self.props.update) \
             .department_name
         self.result = self._set_result()
 
@@ -230,18 +273,19 @@ class CheckUnique(Check):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.names_list = NamesListProp(self.pk,
-                                        self.model,
-                                        self.update).names_list
+        self.names_list = NamesListProp(self.props.pk,
+                                        self.props.model,
+                                        self.props.update).names_list
         self.result = self._set_result()
 
     def _set_result(self) -> Result:
         # For rack properties changes (name staing the same)
-        if self.instance_name == self.key_name:
-            return Result(True, 'Success')
-        if self.key_name in self.names_list:
+        if self.props.update is True:
+            if self.props.instance_name == self.props.key_name:
+                return Result(True, 'Success')
+        if self.props.key_name in self.names_list:
             return Result(False,
-                          f"A {self.model._meta.db_table} "
+                          f"A {self.props.model._meta.db_table} "
                           f"with the same name already exists")
         return Result(True, 'Success')
 
@@ -250,20 +294,21 @@ class CheckDeviceForAddOrUpdate(Check):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.old_units = OldUnitsProp(self.pk, self.update).old_units
-        self.first_unit = FirstUnitProp(self.data).first_unit
-        self.last_unit = LastUnitProp(self.data).last_unit
-        self.frontside_location = FrontsideLocationProp(self.data) \
+        self.old_units = OldUnitsProp(self.props.pk, self.props.update) \
+            .old_units
+        self.first_unit = FirstUnitProp(self.props.data).first_unit
+        self.last_unit = LastUnitProp(self.props.data).last_unit
+        self.frontside_location = FrontsideLocationProp(self.props.data) \
             .frontside_location
-        self.rack_id = RackIdProp(self.pk, self.update).rack_id
+        self.rack_id = RackIdProp(self.props.pk, self.props.update).rack_id
         self.rack_amount = RackAmountProp(self.rack_id).rack_amount
         self.new_units = NewUnitsProp(self.first_unit, self.last_unit) \
             .new_units
         self.units_exist = UnitsExistProp(self.new_units, self.rack_amount) \
             .units_exist
-        self.devices_for_side = DevicesForSideProp(self.pk,
+        self.devices_for_side = DevicesForSideProp(self.props.pk,
                                                    self.rack_id,
-                                                   self.update,
+                                                   self.props.update,
                                                    self.frontside_location) \
             .devices_for_side
         self.units_busy = UnitsBusyProp(self.devices_for_side,

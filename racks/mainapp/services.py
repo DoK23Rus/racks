@@ -122,7 +122,6 @@ class DeviceCheckService:
             True (bool): Units are busy
             False (bool): Units not busy
         """
-
         filled_list: list = []
         if len(list(queryset_devices)) > 0:
             for device in queryset_devices:
