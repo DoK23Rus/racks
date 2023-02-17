@@ -10,7 +10,7 @@ from typing import List, Union
 from mainapp.repository import (RepositoryHelper,
                                 DeviceRepository,
                                 RackRepository)
-from mainapp.services import DeviceCheckService, NewUnits, OldUnits
+from mainapp.services import DeviceCheckService, NewUnitsTuple, OldUnitsTuple
 
 
 @dataclass
@@ -24,9 +24,7 @@ class Result:
 
 @dataclass
 class AddCheckProps:
-    """
-    Class for check result objects
-    """
+
     request: HttpRequest
     pk: int
     data: dict
@@ -38,9 +36,7 @@ class AddCheckProps:
 
 @dataclass
 class UpdateCheckProps:
-    """
-    Class for check result objects
-    """
+
     request: HttpRequest
     pk: int
     data: dict
@@ -54,9 +50,7 @@ class UpdateCheckProps:
 
 @dataclass
 class DeleteCheckProps:
-    """
-    Class for check result objects
-    """
+
     request: HttpRequest
     pk: int
     data: dict
@@ -74,7 +68,7 @@ class Check:
         self.props = props
 
 
-class NamesListProp:
+class NamesList:
 
     def __init__(self, pk: int, model: ModelBase, update: bool) -> None:
         self.pk = pk
@@ -87,7 +81,7 @@ class NamesListProp:
         return repository.get_unique_object_names_list(self.pk)
 
 
-class DepartmentNameProp:
+class DepartmentName:
 
     def __init__(self,
                  pk: int,
@@ -108,7 +102,7 @@ class DepartmentNameProp:
         return repository.get_department_name(self.pk)
 
 
-class UserGroupsProp:
+class UserGroups:
 
     def __init__(self, request: HttpRequest) -> None:
         self.request = request
@@ -118,13 +112,13 @@ class UserGroupsProp:
         return list(self.request.user.groups.values_list('name', flat=True))
 
 
-class OldUnitsProp:
+class OldUnits:
 
     def __init__(self, pk: int) -> None:
         self.pk = pk
         self.old_units = self._set_prop(DeviceRepository,
                                         DeviceCheckService,
-                                        OldUnits)
+                                        OldUnitsTuple)
 
     def _set_prop(self, repository, service, units) -> None:
         old_first_unit = repository.get_first_unit(self.pk)
@@ -132,7 +126,7 @@ class OldUnitsProp:
         return service.get_units(old_first_unit, old_last_unit, units)
 
 
-class FirstUnitProp:
+class FirstUnit:
 
     def __init__(self, data: dict) -> None:
         self.data = data
@@ -142,7 +136,7 @@ class FirstUnitProp:
         return self.data.get('first_unit')
 
 
-class LastUnitProp:
+class LastUnit:
 
     def __init__(self, data: dict) -> None:
         self.data = data
@@ -152,7 +146,7 @@ class LastUnitProp:
         return self.data.get('last_unit')
 
 
-class FrontsideLocationProp:
+class FrontsideLocation:
 
     def __init__(self, data: dict) -> bool:
         self.data = data
@@ -162,7 +156,7 @@ class FrontsideLocationProp:
         return self.data.get('frontside_location')
 
 
-class RackAmountProp:
+class RackAmount:
 
     def __init__(self, pk: int) -> None:
         self.pk = pk
@@ -172,20 +166,20 @@ class RackAmountProp:
         return repository.get_rack_amount(self.pk)
 
 
-class NewUnitsProp:
+class NewUnits:
 
     def __init__(self, first_unit: int, last_unit: int) -> None:
         self.first_unit = first_unit
         self.last_unit = last_unit
-        self.new_units = self._set_prop(DeviceCheckService, NewUnits)
+        self.new_units = self._set_prop(DeviceCheckService, NewUnitsTuple)
 
-    def _set_prop(self, service, units) -> NewUnits:
+    def _set_prop(self, service, units) -> NewUnitsTuple:
         return service.get_units(self.first_unit, self.last_unit, units)
 
 
-class UnitsExistProp:
+class UnitsExist:
 
-    def __init__(self, new_units: NewUnits, rack_amount: int) -> None:
+    def __init__(self, new_units: NewUnitsTuple, rack_amount: int) -> None:
         self.new_units = new_units
         self.rack_amount = rack_amount
         self.units_exist = self._set_prop(DeviceCheckService)
@@ -194,7 +188,7 @@ class UnitsExistProp:
         return service.check_unit_exist(self.new_units, self.rack_amount)
 
 
-class DevicesForSideProp:
+class DevicesForSide:
 
     def __init__(self,
                  pk: int,
@@ -215,7 +209,7 @@ class DevicesForSideProp:
             .get_devices_for_side(self.pk, self.frontside_location)
 
 
-class FilledListProp:
+class FilledList:
 
     def __init__(self, devices_for_side):
         self.devices_for_side = devices_for_side
@@ -225,12 +219,12 @@ class FilledListProp:
         return service.get_filled_list(self.devices_for_side)
 
 
-class UnitsBusyUpdateProp:
+class UnitsBusyUpdate:
 
     def __init__(self,
                  filled_list: List[int],
-                 new_units: NewUnits,
-                 old_units: OldUnits
+                 new_units: NewUnitsTuple,
+                 old_units: OldUnitsTuple
                  ) -> NotImplemented:
         self.filled_list = filled_list
         self.new_units = new_units
@@ -244,11 +238,11 @@ class UnitsBusyUpdateProp:
                                         self.old_units)
 
 
-class UnitsBusyAddProp:
+class UnitsBusyAdd:
 
     def __init__(self,
                  filled_list: List[int],
-                 new_units: NewUnits,
+                 new_units: NewUnitsTuple,
                  ) -> NotImplemented:
         self.filled_list = filled_list
         self.new_units = new_units
@@ -260,7 +254,7 @@ class UnitsBusyAddProp:
                                      self.new_units)
 
 
-class RackIdProp:
+class RackId:
 
     def __init__(self, pk: int, update: bool) -> None:
         self.pk = pk
@@ -277,11 +271,11 @@ class CheckUser(Check):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.user_groups = UserGroupsProp(self.props.request).user_groups
-        self.department_name = DepartmentNameProp(self.props.pk,
-                                                  self.props.model,
-                                                  self.props.fk_model,
-                                                  self.props.update) \
+        self.user_groups = UserGroups(self.props.request).user_groups
+        self.department_name = DepartmentName(self.props.pk,
+                                              self.props.model,
+                                              self.props.fk_model,
+                                              self.props.update) \
             .department_name
         self.result = self._set_result(Result)
 
@@ -298,9 +292,9 @@ class CheckUnique(Check):
         self._reset_props()
         self.pk = self.props.pk
         self.model = self.props.model
-        self.names_list = NamesListProp(self.pk,
-                                        self.model,
-                                        self.props.update).names_list
+        self.names_list = NamesList(self.pk,
+                                    self.model,
+                                    self.props.update).names_list
         self.result = self._set_result(Result)
 
     def _reset_props(self) -> None:
@@ -324,35 +318,35 @@ class CheckDeviceForAddOrUpdate(Check):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self._set_old_units_prop(OldUnitsProp)
-        self.first_unit = FirstUnitProp(self.props.data).first_unit
-        self.last_unit = LastUnitProp(self.props.data).last_unit
-        self.frontside_location = FrontsideLocationProp(self.props.data) \
+        self._set_old_units(OldUnits)
+        self.first_unit = FirstUnit(self.props.data).first_unit
+        self.last_unit = LastUnit(self.props.data).last_unit
+        self.frontside_location = FrontsideLocation(self.props.data) \
             .frontside_location
-        self.rack_id = RackIdProp(self.props.pk, self.props.update).rack_id
-        self.rack_amount = RackAmountProp(self.rack_id).rack_amount
-        self.new_units = NewUnitsProp(self.first_unit, self.last_unit) \
+        self.rack_id = RackId(self.props.pk, self.props.update).rack_id
+        self.rack_amount = RackAmount(self.rack_id).rack_amount
+        self.new_units = NewUnits(self.first_unit, self.last_unit) \
             .new_units
-        self.units_exist = UnitsExistProp(self.new_units, self.rack_amount) \
+        self.units_exist = UnitsExist(self.new_units, self.rack_amount) \
             .units_exist
-        self.devices_for_side = DevicesForSideProp(self.props.pk,
-                                                   self.rack_id,
-                                                   self.props.update,
-                                                   self.frontside_location) \
+        self.devices_for_side = DevicesForSide(self.props.pk,
+                                               self.rack_id,
+                                               self.props.update,
+                                               self.frontside_location) \
             .devices_for_side
-        self.filled_list = FilledListProp(self.devices_for_side).filled_list
-        self._set_units_busy_prop(UnitsBusyUpdateProp, UnitsBusyAddProp)
+        self.filled_list = FilledList(self.devices_for_side).filled_list
+        self._set_units_busy(UnitsBusyUpdate, UnitsBusyAdd)
         self.result = self._set_result(Result)
 
-    def _set_old_units_prop(self, old_units_prop):
+    def _set_old_units(self, old_units_prop):
         if self.props.update is True:
             self.old_units = old_units_prop(self.props.pk) \
                 .old_units
 
-    def _set_units_busy_prop(self,
-                             units_busy_update_prop,
-                             units_busy_add_prop
-                             ):
+    def _set_units_busy(self,
+                        units_busy_update_prop,
+                        units_busy_add_prop
+                        ):
         if self.props.update is True:
             self.units_busy = units_busy_update_prop(self.filled_list,
                                                      self.new_units,
@@ -380,10 +374,9 @@ class Checker:
 
     def __init__(self,
                  checks_list: List[Check],
-                 props: Union[
-                    AddCheckProps,
-                    UpdateCheckProps,
-                    DeleteCheckProps]
+                 props: Union[AddCheckProps,
+                              UpdateCheckProps,
+                              DeleteCheckProps]
                  ) -> None:
         self.checks_list = checks_list
         self.props = props

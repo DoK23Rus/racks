@@ -21,7 +21,7 @@ def date() -> str:
     return datetime.datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
 
 
-class OldUnits(NamedTuple):
+class OldUnitsTuple(NamedTuple):
     """
     Named tuple for old units pair (for data update)
     """
@@ -29,7 +29,7 @@ class OldUnits(NamedTuple):
     last_unit: int
 
 
-class NewUnits(NamedTuple):
+class NewUnitsTuple(NamedTuple):
     """
     Named tuple for old units pair (for data update)
     """
@@ -44,9 +44,9 @@ class DeviceCheckService:
 
     @staticmethod
     def get_units(first_unit: int,
-                  last_unit: int, 
-                  units_dc: Union[OldUnits, NewUnits]
-                  ) -> Union[OldUnits, NewUnits]:
+                  last_unit: int,
+                  units_dc: Union[OldUnitsTuple, NewUnitsTuple]
+                  ) -> Union[OldUnitsTuple, NewUnitsTuple]:
         """
         Get tuple with already filled units
 
@@ -64,7 +64,9 @@ class DeviceCheckService:
         return units_dc(first_unit, last_unit)
 
     @staticmethod
-    def check_unit_exist(units: NewUnits, rack_amount: Optional[int]) -> bool:
+    def check_unit_exist(units: NewUnitsTuple,
+                         rack_amount: Optional[int]
+                         ) -> bool:
         """
         Units exist check
         Are there any such units?
@@ -103,8 +105,8 @@ class DeviceCheckService:
 
     @staticmethod
     def check_unit_busy_for_update(filled_list: List[int],
-                                   new_units: NewUnits,
-                                   old_units: OldUnits
+                                   new_units: NewUnitsTuple,
+                                   old_units: OldUnitsTuple
                                    ) -> bool:
         """
         Units busy check
@@ -135,7 +137,7 @@ class DeviceCheckService:
 
     @staticmethod
     def check_unit_busy_for_add(filled_list: List[int],
-                                new_units: NewUnits,
+                                new_units: NewUnitsTuple,
                                 ) -> bool:
         """
         Units busy check
