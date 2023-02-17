@@ -3,7 +3,7 @@ Business logic classes
 """
 import datetime
 import os
-from typing import List, Optional, NamedTuple
+from typing import List, Optional, NamedTuple, Union
 
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet, RawQuerySet
@@ -25,16 +25,16 @@ class OldUnits(NamedTuple):
     """
     Named tuple for old units pair (for data update)
     """
-    old_first_unit: int
-    old_last_unit: int
+    first_unit: int
+    last_unit: int
 
 
 class NewUnits(NamedTuple):
     """
     Named tuple for old units pair (for data update)
     """
-    new_first_unit: int
-    new_last_unit: int
+    first_unit: int
+    last_unit: int
 
 
 class DeviceCheckService:
@@ -43,7 +43,10 @@ class DeviceCheckService:
     """
 
     @staticmethod
-    def get_old_units(first_unit: int, last_unit: int) -> OldUnits:
+    def get_units(first_unit: int,
+                  last_unit: int, 
+                  units_dc: Union[OldUnits, NewUnits]
+                  ) -> Union[OldUnits, NewUnits]:
         """
         Get tuple with already filled units
 
@@ -57,24 +60,8 @@ class DeviceCheckService:
             OldUnits (tuple): First and last unit in named tuple (ordered)
         """
         if first_unit > last_unit:
-            return OldUnits(last_unit, first_unit)
-        return OldUnits(first_unit, last_unit)
-
-    @staticmethod
-    def get_new_units(first_unit: int, last_unit: int) -> NewUnits:
-        """
-        Get tuple with units for newly added device
-
-        Args:
-            first_unit (int): First unit number
-            last_unit (int): Last unit number
-
-        Returns:
-            NewUnits (tuple): First and last unit in named tuple (ordered)
-        """
-        if first_unit > last_unit:
-            return NewUnits(last_unit, first_unit)
-        return NewUnits(first_unit, last_unit)
+            return units_dc(last_unit, first_unit)
+        return units_dc(first_unit, last_unit)
 
     @staticmethod
     def check_unit_exist(units: NewUnits, rack_amount: Optional[int]) -> bool:
@@ -93,7 +80,7 @@ class DeviceCheckService:
             True (bool): units pair are in range of all rack units
             False (bool): units pair are outside of the rack
         """
-        new_device_range = range(units.new_first_unit, units.new_last_unit + 1)
+        new_device_range = range(units.first_unit, units.last_unit + 1)
         all_units_ramge = range(1, rack_amount + 1)
         if set(new_device_range).issubset(all_units_ramge):
             return True
@@ -136,11 +123,11 @@ class DeviceCheckService:
             True (bool): Units are busy
             False (bool): Units not busy
         """
-        device_old_range = range(old_units.old_first_unit,
-                                 old_units.old_last_unit + 1)
+        device_old_range = range(old_units.first_unit,
+                                 old_units.last_unit + 1)
         filled_list = list(set(filled_list) - set(device_old_range))
-        device_new_range = range(new_units.new_first_unit,
-                                 new_units.new_last_unit + 1)
+        device_new_range = range(new_units.first_unit,
+                                 new_units.last_unit + 1)
         if any(unit in set(device_new_range) for unit in filled_list):
             return True
         else:
@@ -167,8 +154,8 @@ class DeviceCheckService:
             True (bool): Units are busy
             False (bool): Units not busy
         """
-        device_new_range = range(new_units.new_first_unit,
-                                 new_units.new_last_unit + 1)
+        device_new_range = range(new_units.first_unit,
+                                 new_units.last_unit + 1)
         if any(unit in set(device_new_range) for unit in filled_list):
             return True
         else:
@@ -216,9 +203,10 @@ class DataProcessingService:
 
     @staticmethod
     def get_instance_name(instance: ModelBase,
-                          model: ModelBase
+                          model: ModelBase,
+                          exception: ModelBase = Device,
                           ) -> str:
-        if model != Device:
+        if model != exception:
             return getattr(instance, f"{model._meta.db_table}_name")
         device_vendor = instance.device_vendor \
             if instance.device_vendor != '' else 'unspecified vendor'

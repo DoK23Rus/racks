@@ -122,12 +122,14 @@ class OldUnitsProp:
 
     def __init__(self, pk: int) -> None:
         self.pk = pk
-        self.old_units = self._set_prop(DeviceRepository, DeviceCheckService)
+        self.old_units = self._set_prop(DeviceRepository,
+                                        DeviceCheckService,
+                                        OldUnits)
 
-    def _set_prop(self, repository, service) -> None:
+    def _set_prop(self, repository, service, units) -> None:
         old_first_unit = repository.get_first_unit(self.pk)
         old_last_unit = repository.get_last_unit(self.pk)
-        return service.get_old_units(old_first_unit, old_last_unit)
+        return service.get_units(old_first_unit, old_last_unit, units)
 
 
 class FirstUnitProp:
@@ -175,10 +177,10 @@ class NewUnitsProp:
     def __init__(self, first_unit: int, last_unit: int) -> None:
         self.first_unit = first_unit
         self.last_unit = last_unit
-        self.new_units = self._set_prop(DeviceCheckService)
+        self.new_units = self._set_prop(DeviceCheckService, NewUnits)
 
-    def _set_prop(self, service) -> NewUnits:
-        return service.get_new_units(self.first_unit, self.last_unit)
+    def _set_prop(self, service, units) -> NewUnits:
+        return service.get_units(self.first_unit, self.last_unit, units)
 
 
 class UnitsExistProp:
