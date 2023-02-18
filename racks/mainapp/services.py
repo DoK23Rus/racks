@@ -3,7 +3,7 @@ Business logic classes
 """
 import datetime
 import os
-from typing import List, Optional, NamedTuple, Union
+from typing import List, NamedTuple, Type
 
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet, RawQuerySet
@@ -21,15 +21,7 @@ def date() -> str:
     return datetime.datetime.today().strftime("%Y-%m-%d_%H-%M-%S")
 
 
-class OldUnitsTuple(NamedTuple):
-    """
-    Named tuple for old units pair (for data update)
-    """
-    first_unit: int
-    last_unit: int
-
-
-class NewUnitsTuple(NamedTuple):
+class UnitsTuple(NamedTuple):
     """
     Named tuple for old units pair (for data update)
     """
@@ -45,8 +37,8 @@ class DeviceCheckService:
     @staticmethod
     def get_units(first_unit: int,
                   last_unit: int,
-                  units_dc: Union[OldUnitsTuple, NewUnitsTuple]
-                  ) -> Union[OldUnitsTuple, NewUnitsTuple]:
+                  units_dc: Type[UnitsTuple]
+                  ) -> UnitsTuple:
         """
         Get tuple with already filled units
 
@@ -64,8 +56,8 @@ class DeviceCheckService:
         return units_dc(first_unit, last_unit)
 
     @staticmethod
-    def check_unit_exist(units: NewUnitsTuple,
-                         rack_amount: Optional[int]
+    def check_unit_exist(units: UnitsTuple,
+                         rack_amount: int
                          ) -> bool:
         """
         Units exist check
@@ -105,8 +97,8 @@ class DeviceCheckService:
 
     @staticmethod
     def check_unit_busy_for_update(filled_list: List[int],
-                                   new_units: NewUnitsTuple,
-                                   old_units: OldUnitsTuple
+                                   new_units: UnitsTuple,
+                                   old_units: UnitsTuple
                                    ) -> bool:
         """
         Units busy check
@@ -137,7 +129,7 @@ class DeviceCheckService:
 
     @staticmethod
     def check_unit_busy_for_add(filled_list: List[int],
-                                new_units: NewUnitsTuple,
+                                new_units: UnitsTuple,
                                 ) -> bool:
         """
         Units busy check

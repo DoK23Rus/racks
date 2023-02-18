@@ -425,7 +425,7 @@ class TestReportService(TestCase):
         self.assertEqual(data, devices_mock_data)
 
     def test_get_racks_data(self):
-        # RAcks report data
+        # Racks report data
         racks_report_qs = Rack.objects.get_racks_report()
         data = ReportService.get_racks_data(racks_report_qs)
         # Replace datestamp

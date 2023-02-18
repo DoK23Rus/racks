@@ -1,4 +1,7 @@
+from typing import List, Optional, Union, Type
+
 from django.db.models.query import QuerySet
+
 from mainapp.models import (Building,
                             Department,
                             Device,
@@ -6,7 +9,6 @@ from mainapp.models import (Building,
                             Region,
                             Room,
                             Site)
-from typing import List, Optional
 
 
 class RegionRepository:
@@ -520,6 +522,15 @@ class DeviceRepository:
             .department_id \
             .region_id \
             .region_name
+
+
+Repository_Type = Union[Type[DeviceRepository],
+                        Type[RackRepository],
+                        Type[RoomRepository],
+                        Type[SiteRepository],
+                        Type[BuildingRepository],
+                        Type[DepartmentRepository],
+                        Type[RegionRepository]]
 
 
 class RepositoryHelper:

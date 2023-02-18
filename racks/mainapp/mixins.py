@@ -5,7 +5,6 @@ import logging
 import os
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import List, Optional
 
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
@@ -22,7 +21,8 @@ from mainapp.repository import (RepositoryHelper,
                                 SiteRepository,
                                 BuildingRepository,
                                 DepartmentRepository,
-                                RegionRepository)
+                                RegionRepository,
+                                Repository_Type)
 from mainapp.serializers import DeviceSerializer
 from mainapp.services import (date,
                               DataProcessingService,
@@ -30,7 +30,8 @@ from mainapp.services import (date,
 from mainapp.utils import (AddCheckProps,
                            DeleteCheckProps,
                            UpdateCheckProps,
-                           Checker)
+                           Checker,
+                           Checks_List_Type)
 from mainapp.tasks import delete_report_task, generate_report_task
 
 logger = logging.getLogger(__name__)
@@ -63,7 +64,7 @@ class AbstractMixin(ABC):
         raise NotImplementedError
 
     @property
-    def checks_list(self) -> List[object]:
+    def checks_list(self) -> Checks_List_Type:
         """
         List of check names
         """
@@ -160,7 +161,7 @@ class LoggingMixin(AbstractMixin):
     def create_log(self,
                    request: HttpRequest,
                    data: dict,
-                   pk: Optional[str]
+                   pk: int
                    ) -> None:
         """
         Logging for add views
@@ -183,7 +184,7 @@ class LoggingMixin(AbstractMixin):
                    request: HttpRequest,
                    old_data: dict,
                    data: dict,
-                   pk: Optional[int],
+                   pk: int,
                    ) -> None:
         """
         Logging for update views
@@ -207,7 +208,7 @@ class LoggingMixin(AbstractMixin):
     def delete_log(self,
                    request: HttpRequest,
                    obj_name: str,
-                   pk: Optional[int]
+                   pk: int
                    ) -> None:
         """
         Logging for delete views
@@ -225,6 +226,28 @@ class LoggingMixin(AbstractMixin):
             'object_name': obj_name,
             'pk': str(pk),
         })
+
+
+class HelperMixin(AbstractMixin):
+
+    def get_pk(self, data: dict, key: str) -> int:
+        try:
+            pk = data[key]
+            return pk
+        except KeyError:
+            raise ValueError("No pk in data")
+
+    def get_static_dir(self) -> str:
+        if not (static_dir := os.environ.get('STATIC_DIR')):
+            raise ValueError("No STATIC_DIR in .env file")
+        return static_dir
+
+    def check_for_instance(self, pk: int, repository: Repository_Type) -> bool:
+        try:
+            repository.get_instance(pk)
+            return True
+        except self.model.DoesNotExist:
+            return False
 
 
 class BaseApiMixin(AbstractViewMixin):
@@ -286,7 +309,7 @@ class BaseApiMixin(AbstractViewMixin):
         return Response({"invalid": "DELETE not allowed"}, status=405)
 
 
-class BaseApiGetMixin(BaseApiMixin):
+class BaseApiGetMixin(BaseApiMixin, HelperMixin):
     """
     Base api get mixin
     """
@@ -305,18 +328,20 @@ class BaseApiGetMixin(BaseApiMixin):
             Response (HttpResponse): Object with this ID
                 does not exist (exception)
         """
-        try:
-            repository = RepositoryHelper.get_model_repository(self.model)
-            instance = repository.get_instance(kwargs.get('pk'))
-            serializer = self.serializer_class(instance)
-            return Response(serializer.data)
-        except self.model.DoesNotExist:
-            message = f"{self.model.__name__} with this ID does not exist"
-            return Response({"invalid": message}, status=400)
+        pk = self.get_pk(kwargs, 'pk')
+        repository = RepositoryHelper.get_model_repository(self.model)
+        if not self.check_for_instance(pk, repository):
+            return Response({
+                "invalid": f"{self.model.__name__} with this ID does not exist"
+            }, status=400)
+        instance = repository.get_instance(pk)
+        serializer = self.serializer_class(instance)
+        return Response(serializer.data)
 
 
 class BaseApiAddMixin(BaseApiMixin,
-                      LoggingMixin):
+                      LoggingMixin,
+                      HelperMixin):
     """
     Base api add mixin
     """
@@ -339,17 +364,12 @@ class BaseApiAddMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        try:
-            fk_model_name = self.fk_model._meta.db_table
-            pk = data[f"{fk_model_name}_id"]
-        except KeyError:
-            return Response({"invalid": "Need fk for post method"})
-        try:
-            repository = RepositoryHelper.get_model_repository(self.fk_model)
-            repository.get_instance(pk)
-        except self.model.DoesNotExist:
-            message = f"{self.fk_model.__name__} with this ID does not exist"
-            return Response({"invalid": message}, status=400)
+        pk = self.get_pk(data, f"{self.fk_model._meta.db_table}_id")
+        repository = RepositoryHelper.get_model_repository(self.fk_model)
+        if not self.check_for_instance(pk, repository):
+            return Response({
+                "invalid": f"{self.model.__name__} with this ID does not exist"
+            }, status=400)
         # Add username to data
         data['updated_by'] = request.user.username
         key_name = DataProcessingService \
@@ -360,7 +380,6 @@ class BaseApiAddMixin(BaseApiMixin,
             check_props = AddCheckProps(request,
                                         pk,
                                         data,
-                                        False,
                                         self.model,
                                         self.fk_model,
                                         key_name)
@@ -375,7 +394,8 @@ class BaseApiAddMixin(BaseApiMixin,
 
 
 class BaseApiUpdateMixin(BaseApiMixin,
-                         LoggingMixin):
+                         LoggingMixin,
+                         HelperMixin):
     """
     Base update mixin
     """
@@ -397,15 +417,14 @@ class BaseApiUpdateMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        pk = kwargs.get('pk')
-        try:
-            repository = RepositoryHelper.get_model_repository(self.model)
-            instance = repository.get_instance(pk)
-        except self.model.DoesNotExist:
-            message = f"{self.model.__name__} with this ID does not exist"
-            return Response({"invalid": message}, status=400)
-        # Add fk and username to data
+        pk = self.get_pk(data, 'id')
         repository = RepositoryHelper.get_model_repository(self.model)
+        if not self.check_for_instance(pk, repository):
+            return Response({
+                "invalid": f"{self.model.__name__} with this ID does not exist"
+            }, status=400)
+        instance = repository.get_instance(pk)
+        # Add fk and username to data
         fk_model_name = self.fk_model._meta.db_table
         fk = getattr(repository.get_instance(pk), f"{fk_model_name}_id_id")
         data[f"{fk_model_name}_id"] = fk
@@ -425,9 +444,8 @@ class BaseApiUpdateMixin(BaseApiMixin,
             check_props = UpdateCheckProps(request,
                                            pk,
                                            data,
-                                           True,
-                                           fk,
                                            self.model,
+                                           fk,
                                            self.fk_model,
                                            key_name,
                                            instance_name)
@@ -448,7 +466,8 @@ class BaseApiUpdateMixin(BaseApiMixin,
 
 
 class BaseApiDeleteMixin(BaseApiMixin,
-                         LoggingMixin):
+                         LoggingMixin,
+                         HelperMixin):
     """
     Base delete mixin
     """
@@ -470,13 +489,13 @@ class BaseApiDeleteMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
-        pk = kwargs.get('pk')
-        try:
-            repository = RepositoryHelper.get_model_repository(self.model)
-            instance = repository.get_instance(pk)
-        except self.model.DoesNotExist:
-            message = f"{self.model.__name__} with this ID does not exist"
-            return Response({"invalid": message}, status=400)
+        pk = self.get_pk(data, 'id')
+        repository = RepositoryHelper.get_model_repository(self.model)
+        if not self.check_for_instance(pk, repository):
+            return Response({
+                "invalid": f"{self.model.__name__} with this ID does not exist"
+            }, status=400)
+        instance = repository.get_instance(pk)
         instance_name = DataProcessingService \
             .get_instance_name(instance, self.model)
         # Check for delete possibility
@@ -493,7 +512,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
         return Response({"sucsess": f"{instance_name} sucsessfully deleted"})
 
 
-class RackDevicesApiMixin(BaseApiMixin):
+class RackDevicesApiMixin(BaseApiMixin, HelperMixin):
     """
     Devices for rack mixin
     """
@@ -510,7 +529,8 @@ class RackDevicesApiMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with devices for a single rack
         """
-        devices = DeviceRepository.get_devices_for_rack(kwargs.get('pk'))
+        pk = self.get_pk(kwargs, 'pk')
+        devices = DeviceRepository.get_devices_for_rack(pk)
         serializaed_data = DeviceSerializer(devices, many=True).data
         return Response(serializaed_data)
 
@@ -668,7 +688,7 @@ class UserApiMixin(BaseApiMixin):
         return Response({"user": request.user.username})
 
 
-class DeviceLocationMixin(BaseApiMixin):
+class DeviceLocationMixin(BaseApiMixin, HelperMixin):
     """
     Device location mixin
     """
@@ -685,7 +705,7 @@ class DeviceLocationMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with device location data
         """
-        pk = kwargs.get('pk')
+        pk = self.get_pk(kwargs, 'pk')
         rack_name = DeviceRepository.get_device_rack_name(pk)
         room_name = DeviceRepository.get_device_room_name(pk)
         site_name = DeviceRepository.get_device_site_name(pk)
@@ -702,7 +722,7 @@ class DeviceLocationMixin(BaseApiMixin):
         })
 
 
-class RackLocationMixin(BaseApiMixin):
+class RackLocationMixin(BaseApiMixin, HelperMixin):
     """
     Rack location mixin
     """
@@ -719,7 +739,7 @@ class RackLocationMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with rack location data
         """
-        pk = kwargs.get('pk')
+        pk = self.get_pk(kwargs, 'pk')
         room_name = RackRepository.get_rack_room_name(pk)
         site_name = RackRepository.get_rack_site_name(pk)
         building_name = RackRepository.get_rack_building_name(pk)
@@ -734,7 +754,7 @@ class RackLocationMixin(BaseApiMixin):
         })
 
 
-class RacksReportMixin(BaseApiMixin):
+class RacksReportMixin(BaseApiMixin, HelperMixin):
     """
     Racks report API mixin
     """
@@ -751,7 +771,7 @@ class RacksReportMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with racks report data
         """
-        file_path = f"{os.environ.get('STATIC_DIR')}/racks_report_{date()}.csv"
+        file_path = f"{self.get_static_dir()}/racks_report_{date()}.csv"
         headers = ReportHeaders.racks_header_list
         racks_report_qs = RackRepository.get_report_data()
         data = ReportService.get_racks_data(racks_report_qs)
@@ -767,7 +787,7 @@ class RacksReportMixin(BaseApiMixin):
         return response
 
 
-class DevicesReportMixin(BaseApiMixin):
+class DevicesReportMixin(BaseApiMixin, HelperMixin):
     """
     Devices report API mixin
     """
@@ -784,8 +804,7 @@ class DevicesReportMixin(BaseApiMixin):
         Returns:
             Response (HttpResponse): Response with devices report data
         """
-        file_path = f"{os.environ.get('STATIC_DIR')}/devices_report_"
-        f"{date()}.csv"
+        file_path = f"{self.get_static_dir()}/devices_report_{date()}.csv"
         headers = ReportHeaders.devices_header_list
         devices_report_qs = DeviceRepository.get_report_data()
         data = ReportService.get_devices_data(devices_report_qs)
