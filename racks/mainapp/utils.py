@@ -363,25 +363,27 @@ class CheckUnique(BaseCheck):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self._set_props(NamesList,
+                        NameInNamesList,
+                        SameName,
                         AddCheckProps,
                         UpdateCheckProps,
-                        DeleteCheckProps,
-                        SameName)
+                        DeleteCheckProps)
         self.result = self._set_result(Result)
 
     def _set_props(self,
                    names_list_prop: Type[NamesList],
+                   name_in_names_prop: Type[NameInNamesList],
+                   same_name_prop: Type[SameName],
                    add_check_props_dc: Type[AddCheckProps],
                    update_check_props_dc: Type[UpdateCheckProps],
                    delete_check_props_dc: Type[DeleteCheckProps],
-                   same_name_prop: Type[SameName]
                    ) -> None:
         if isinstance(self.props, add_check_props_dc):
             self.names_list = names_list_prop(self.props.pk,
                                               self.props.model).names_list
             self.same_name = False
-            self.name_in_names_list = NameInNamesList(self.props.key_name,
-                                                      self.names_list) \
+            self.name_in_names_list = name_in_names_prop(self.props.key_name,
+                                                         self.names_list) \
                 .name_in_names_list
         if isinstance(self.props, update_check_props_dc):
             self.pk = self.props.fk
@@ -390,8 +392,8 @@ class CheckUnique(BaseCheck):
                                               self.model).names_list
             self.same_name = same_name_prop(self.props.instance_name,
                                             self.props.key_name).same_name
-            self.name_in_names_list = NameInNamesList(self.props.key_name,
-                                                      self.names_list) \
+            self.name_in_names_list = name_in_names_prop(self.props.key_name,
+                                                         self.names_list) \
                 .name_in_names_list
         if isinstance(self.props, delete_check_props_dc):
             pass
@@ -411,56 +413,82 @@ class CheckDeviceForAddOrUpdate(BaseCheck):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self._set_props(AddCheckProps,
-                        UpdateCheckProps,
-                        DeleteCheckProps,
+        self._set_props(FirstUnit,
+                        LastUnit,
+                        FrontsideLocation,
+                        RackAmount,
+                        NewUnits,
+                        UnitsExist,
+                        DevicesForSide,
+                        FilledList,
+                        RackId,
                         OldUnits,
                         UnitsBusyUpdate,
-                        UnitsBusyAdd)
+                        UnitsBusyAdd,
+                        AddCheckProps,
+                        UpdateCheckProps,
+                        DeleteCheckProps)
         self.result = self._set_result(Result)
 
     def _set_props(self,
-                   add_check_props_dc: Type[AddCheckProps],
-                   update_check_props_dc: Type[UpdateCheckProps],
-                   delete_check_props_dc: Type[DeleteCheckProps],
+                   first_unit_prop: Type[FirstUnit],
+                   Last_unit_prop: Type[LastUnit],
+                   frontside_location_prop: Type[FrontsideLocation],
+                   rack_amount_prop: Type[RackAmount],
+                   new_units_prop: Type[NewUnits],
+                   units_exist_prop: Type[UnitsExist],
+                   device_for_side_prop: Type[DevicesForSide],
+                   filled_list_prop: Type[FilledList],
+                   rack_id_prop: Type[RackId],
                    old_units_prop: Type[OldUnits],
                    units_busy_update_prop: Type[UnitsBusyUpdate],
-                   units_busy_add_prop: Type[UnitsBusyAdd]
+                   units_busy_add_prop: Type[UnitsBusyAdd],
+                   add_check_props_dc: Type[AddCheckProps],
+                   update_check_props_dc: Type[UpdateCheckProps],
+                   delete_check_props_dc: Type[DeleteCheckProps]
                    ) -> None:
         if isinstance(self.props, add_check_props_dc):
-            self.first_unit = FirstUnit(self.props.data).first_unit
-            self.last_unit = LastUnit(self.props.data).last_unit
-            self.frontside_location = FrontsideLocation(self.props.data) \
+            self.first_unit = first_unit_prop(self.props.data).first_unit
+            self.last_unit = Last_unit_prop(self.props.data).last_unit
+            self.frontside_location = frontside_location_prop(self.props
+                                                              .data) \
                 .frontside_location
             self.rack_id = self.props.pk
-            self.rack_amount = RackAmount(self.rack_id).rack_amount
-            self.new_units = NewUnits(self.first_unit, self.last_unit) \
+            self.rack_amount = rack_amount_prop(self.rack_id).rack_amount
+            self.new_units = new_units_prop(self.first_unit, self.last_unit) \
                 .new_units
-            self.units_exist = UnitsExist(self.new_units, self.rack_amount) \
+            self.units_exist = units_exist_prop(self.new_units,
+                                                self.rack_amount) \
                 .units_exist
-            self.devices_for_side = DevicesForSide(self.props.pk,
-                                                   self.frontside_location) \
+            self.devices_for_side = device_for_side_prop(self.props.pk,
+                                                         self
+                                                         .frontside_location) \
                 .devices_for_side
-            self.filled_list = FilledList(self.devices_for_side).filled_list
+            self.filled_list = filled_list_prop(self.devices_for_side) \
+                .filled_list
             self.units_busy = units_busy_add_prop(self.filled_list,
                                                   self.new_units).unit_busy
 
         if isinstance(self.props, update_check_props_dc):
             self.old_units = old_units_prop(self.props.pk).old_units
-            self.first_unit = FirstUnit(self.props.data).first_unit
-            self.last_unit = LastUnit(self.props.data).last_unit
-            self.frontside_location = FrontsideLocation(self.props.data) \
+            self.first_unit = first_unit_prop(self.props.data).first_unit
+            self.last_unit = Last_unit_prop(self.props.data).last_unit
+            self.frontside_location = frontside_location_prop(self.props
+                                                              .data) \
                 .frontside_location
-            self.rack_id = RackId(self.props.pk).rack_id
-            self.rack_amount = RackAmount(self.rack_id).rack_amount
-            self.new_units = NewUnits(self.first_unit, self.last_unit) \
+            self.rack_id = rack_id_prop(self.props.pk).rack_id
+            self.rack_amount = rack_amount_prop(self.rack_id).rack_amount
+            self.new_units = new_units_prop(self.first_unit, self.last_unit) \
                 .new_units
-            self.units_exist = UnitsExist(self.new_units, self.rack_amount) \
+            self.units_exist = units_exist_prop(self.new_units,
+                                                self.rack_amount) \
                 .units_exist
-            self.devices_for_side = DevicesForSide(self.rack_id,
-                                                   self.frontside_location) \
+            self.devices_for_side = device_for_side_prop(self.rack_id,
+                                                         self
+                                                         .frontside_location) \
                 .devices_for_side
-            self.filled_list = FilledList(self.devices_for_side).filled_list
+            self.filled_list = filled_list_prop(self.devices_for_side) \
+                .filled_list
             self.units_busy = units_busy_update_prop(self.filled_list,
                                                      self.new_units,
                                                      self.old_units).unit_busy
