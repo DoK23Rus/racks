@@ -72,8 +72,9 @@ class Suite:
         Returns:
             dir_name (str): Report directory name
         """
-        dir_name = f"{os.environ.get('TEST_RESULTS_PATH')}{self.name}_" \
-                   f"{datetime.datetime.today().strftime('%Y-%m-%d_%H-%M-%S')}"
+        dir_name = f"{os.environ.get('BASE_TEST_DIR')}" \
+            f"{os.environ.get('TEST_RESULTS_PATH')}{self.name}_" \
+            f"{datetime.datetime.today().strftime('%Y-%m-%d_%H-%M-%S')}"
         return dir_name
 
     def _pre_run(self) -> None:

@@ -1,6 +1,7 @@
 """
 Smoke test
 """
+import datetime
 import os
 import time
 import unittest
@@ -44,6 +45,14 @@ class E2ETestCase(unittest.TestCase):
         login.click_login()
 
     def tearDown(self):
+        # Take screenshot when tast fails
+        for method, error in self._outcome.errors:
+            if error:
+                date = datetime.datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
+                screenshot_name = f"{os.environ.get('BASE_TEST_DIR')}" \
+                    f"{os.environ.get('SCREENSHOTS_PATH')}Screen_" \
+                    f"{date}_{self._testMethodName}.png"
+                self.driver.save_screenshot(screenshot_name)
         self.driver.close()
         self.driver.quit()
 

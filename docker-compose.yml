@@ -333,7 +333,8 @@ services:
       options:
         max-size: 100m
     volumes:
-      - test_results:${BASE_APP_DIR}${TEST_RESULTS_PATH}
+      - test_results:${BASE_TEST_DIR}${TEST_RESULTS_PATH}
+      - screenshots:${BASE_TEST_DIR}${SCREENSHOTS_PATH}
     profiles: ['test']
     depends_on:
       backend:
@@ -354,4 +355,5 @@ volumes:
   log_volume: # log files for mypy, flake8, unittest
   backups_volume:
   test_results:
+  screenshots:
   vue_dist:

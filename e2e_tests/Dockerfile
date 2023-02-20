@@ -25,5 +25,6 @@ WORKDIR $TEST_HOME
 
 RUN pip install -r requirements.txt
 RUN mkdir test_results
+RUN mkdir screenshots
 
 COPY ./ $TEST_HOME
