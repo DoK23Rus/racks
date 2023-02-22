@@ -11,198 +11,15 @@ from mainapp.models import (Region,
                             Room,
                             Rack,
                             Device)
-from mainapp.services import (#UserCheckService,
-                              #UniqueCheckService,
-                              DeviceCheckService,
+from mainapp.services import (DeviceCheckService,
                               DataProcessingService,
-                              #RepoService,
-                              NewUnits,
-                              OldUnits,
+                              UnitsTuple,
                               ReportService,
                               date)
 from mainapp.utils import *
 from mainapp.repository import *
-
-
-def base_setup():
-    """
-    DB setup
-    """
-    Region.objects.get_or_create(region_name='Test_region1')
-    Region.objects.get_or_create(region_name='Test_region2')
-    region1_id = Region.objects.get(region_name='Test_region1')
-    Department.objects.get_or_create(department_name='Test_department1',
-                                     region_id=region1_id)
-    region2_id = Region.objects.get(region_name='Test_region2')
-    Department.objects.get_or_create(department_name='Test_department2',
-                                     region_id=region2_id)
-    department1_id = Department.objects.get(department_name='Test_department1')
-    Site.objects.get_or_create(site_name='Test_site1',
-                               department_id=department1_id)
-    department2_id = Department.objects.get(department_name='Test_department2')
-    Site.objects.get_or_create(site_name='Test_site2',
-                               department_id=department2_id)
-    site1_id = Site.objects.get(site_name='Test_site1')
-    Building.objects.get_or_create(building_name='Test_building1',
-                                   site_id=site1_id)
-    site2_id = Site.objects.get(site_name='Test_site2')
-    Building.objects.get_or_create(building_name='Test_building2',
-                                   site_id=site2_id)
-    building1_id = Building.objects.get(building_name='Test_building1')
-    Room.objects.get_or_create(room_name='Test_room1',
-                               building_id=building1_id)
-    building2_id = Building.objects.get(building_name='Test_building2')
-    Room.objects.get_or_create(room_name='Test_room2',
-                               building_id=building2_id)
-    room1_id = Room.objects.get(room_name='Test_room1')
-    Rack.objects.get_or_create(rack_name='Test_rack1',
-                               rack_amount=40,
-                               rack_model='Test_model1',
-                               rack_vendor='Test_vendor1',
-                               room_id=room1_id)
-    room2_id = Room.objects.get(room_name='Test_room2')
-    Rack.objects.get_or_create(rack_name='Test_rack2',
-                               rack_amount=20,
-                               rack_model='Test_model2',
-                               rack_vendor='Test_vendor2',
-                               numbering_from_bottom_to_top=False,
-                               room_id=room2_id)
-    rack1_id = Rack.objects.get(rack_name='Test_rack1')
-    Device.objects.get_or_create(first_unit=2,
-                                 last_unit=1,
-                                 device_vendor='Test_vendor1',
-                                 device_model='Test_model1',
-                                 power_w=100,
-                                 rack_id=rack1_id)
-    Device.objects.get_or_create(first_unit=5,
-                                 last_unit=5,
-                                 device_vendor='Test_vendor2',
-                                 device_model='Test_model2',
-                                 power_w=200,
-                                 rack_id=rack1_id)
-    Device.objects.get_or_create(first_unit=3,
-                                 last_unit=4,
-                                 frontside_location=False,
-                                 device_vendor='Test_vendor3',
-                                 device_model='Test_model3',
-                                 power_w=50,
-                                 rack_id=rack1_id)
-    Device.objects.get_or_create(first_unit=7,
-                                 last_unit=7,
-                                 frontside_location=False,
-                                 device_vendor='Test_vendor4',
-                                 device_model='Test_model4',
-                                 rack_id=rack1_id)
-    rack2_id = Rack.objects.get(rack_name='Test_rack2')
-    Device.objects.get_or_create(first_unit=11,
-                                 last_unit=12,
-                                 device_vendor='Test_vendor5',
-                                 device_model='Test_model5',
-                                 rack_id=rack2_id)
-    Device.objects.get_or_create(first_unit=15,
-                                 last_unit=15,
-                                 device_vendor='Test_vendor6',
-                                 device_model='Test_model6',
-                                 rack_id=rack2_id)
-    Device.objects.get_or_create(first_unit=14,
-                                 last_unit=13,
-                                 frontside_location=False,
-                                 device_vendor='Test_vendor7',
-                                 device_model='Test_model7',
-                                 rack_id=rack2_id)
-    Device.objects.get_or_create(first_unit=18,
-                                 last_unit=18,
-                                 frontside_location=False,
-                                 device_vendor='Test_vendor8',
-                                 device_model='Test_model8',
-                                 rack_id=rack2_id)
-    Device.objects.get_or_create(first_unit=17,
-                                 last_unit=17,
-                                 device_vendor='Test_vendor9',
-                                 frontside_location=False,
-                                 rack_id=rack2_id)
-    Device.objects.get_or_create(first_unit=19,
-                                 last_unit=19,
-                                 device_model='Test_model10',
-                                 frontside_location=False,
-                                 rack_id=rack2_id)
-    Device.objects.get_or_create(first_unit=20,
-                                 last_unit=20,
-                                 frontside_location=False,
-                                 rack_id=rack2_id)
-
-
-racks_mock_data = [
-    [1, 'Test_rack1', 40, 'Test_vendor1', 'Test_model1', '', 'Yes',
-        '', '', '', '', '', '', '', None, None, None, 19, None, 'Rack',
-        'Double frame', 'Floor standing', None, None, None, 'Yes', 'No',
-        '', '', 'Test_room1', 'Test_building1', 'Test_site1',
-        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/rack/1'],
-    [2, 'Test_rack2', 20, 'Test_vendor2', 'Test_model2', '', 'No',
-        '', '', '', '', '', '', '', None, None, None, 19, None, 'Rack',
-        'Double frame', 'Floor standing', None, None, None, 'Yes', 'No',
-        '', '', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/rack/2']
-]
-
-
-devices_mock_data = [
-    [4, 'Device active', 'Test_vendor4', 'Test_model4', '', '', '',
-        'Our department', '', '', '', '', '', 7, 7, 'No', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
-        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/4'],
-    [3, 'Device active', 'Test_vendor3', 'Test_model3', '', '', '',
-        'Our department', '', '', '', '', '', 3, 4, 'No', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', 50, 220, 'AC', '', '',
-        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
-        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/3'],
-    [2, 'Device active', 'Test_vendor2', 'Test_model2', '', '', '',
-        'Our department', '', '', '', '', '', 5, 5, 'Yes', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', 200, 220, 'AC', '', '',
-        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
-        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/2'],
-    [1, 'Device active', 'Test_vendor1', 'Test_model1', '', '', '',
-        'Our department', '', '', '', '', '', 2, 1, 'Yes', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', 100, 220, 'AC', '', '',
-        'Test_rack1', 'Test_room1', 'Test_building1', 'Test_site1',
-        'Test_department1', 'Test_region1', 'http://127.0.0.1:8080/device/1'],
-    [11, 'Device active', '', '', '', '', '',
-        'Our department', '', '', '', '', '', 20, 20, 'No', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/11'],
-    [10, 'Device active', '', 'Test_model10', '', '', '',
-        'Our department', '', '', '', '', '', 19, 19, 'No', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/10'],
-    [9, 'Device active', 'Test_vendor9', '', '', '', '',
-        'Our department', '', '', '', '', '', 17, 17, 'No', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/9'],
-    [8, 'Device active', 'Test_vendor8', 'Test_model8', '', '', '',
-        'Our department', '', '', '', '', '', 18, 18, 'No', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/8'],
-    [7, 'Device active', 'Test_vendor7', 'Test_model7', '', '', '',
-        'Our department', '', '', '', '', '', 14, 13, 'No', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/7'],
-    [6, 'Device active', 'Test_vendor6', 'Test_model6', '', '', '',
-        'Our department', '', '', '', '', '', 15, 15, 'Yes', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/6'],
-    [5, 'Device active', 'Test_vendor5', 'Test_model5', '', '', '',
-        'Our department', '', '', '', '', '', 11, 12, 'Yes', 'Other', '',
-        None, None, None, '', 'IEC C14 socket', None, 220, 'AC', '', '',
-        'Test_rack2', 'Test_room2', 'Test_building2', 'Test_site2',
-        'Test_department2', 'Test_region2', 'http://127.0.0.1:8080/device/5']
-]
+from mainapp.tests.mock_data import ReportMocks
+from mainapp.tests.setup import Setup
 
 
 class TestDate(TestCase):
@@ -220,37 +37,198 @@ class TestDeviceCheckService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
-    def test_get_old_units(self):
-        result = DeviceCheckService.get_old_units(1, 2)
-        self.assertEqual(result, OldUnits(1, 2))
+    def test_get_units(self):
+        result = DeviceCheckService.get_units(1, 2, UnitsTuple)
+        self.assertEqual(result, UnitsTuple(1, 2))
 
-        result = DeviceCheckService.get_old_units(5, 2)
-        self.assertEqual(result, OldUnits(2, 5))
-
-    def test_get_new_units(self):
-        result = DeviceCheckService.get_new_units(1, 2)
-        self.assertEqual(result, NewUnits(1, 2))
-
-        result = DeviceCheckService.get_new_units(5, 2)
-        self.assertEqual(result, NewUnits(2, 5))
+        result = DeviceCheckService.get_units(5, 2, UnitsTuple)
+        self.assertEqual(result, UnitsTuple(2, 5))
 
     def test_check_unit_exist(self):
         rack1_amount = Rack.objects.get(rack_name='Test_rack1').rack_amount
         result = DeviceCheckService \
-            .check_unit_exist(NewUnits(39, 40), rack1_amount)
+            .check_unit_exist(UnitsTuple(39, 40), rack1_amount)
         self.assertTrue(result)
 
         rack2_amount = Rack.objects.get(rack_name='Test_rack2').rack_amount
         result = DeviceCheckService \
-            .check_unit_exist(NewUnits(21, 22), rack2_amount)
+            .check_unit_exist(UnitsTuple(21, 22), rack2_amount)
         self.assertFalse(result)
 
-        # rack_id is None
-        # with self.assertRaises(ValueError):
-        #     DeviceCheckService.check_unit_exist(NewUnits(21, 22), None)
+    def test_get_filled_list(self):
+        rack_id = Rack.objects.get(rack_name='Test_rack1').id
+        devices_for_side_qs = Device.objects.filter(rack_id_id=rack_id)
+        result = DeviceCheckService.get_filled_list(devices_for_side_qs)
+        self.assertEqual(result, [1, 2, 5, 3, 4, 7])
 
+    def test_check_unit_busy_for_update(self):
+        result = DeviceCheckService \
+            .check_unit_busy_for_update([1, 2, 3, 4, 6, 7],
+                                        UnitsTuple(3, 6),
+                                        UnitsTuple(2, 3))
+        self.assertTrue(result)
+
+        result = DeviceCheckService \
+            .check_unit_busy_for_update([1, 2, 3, 4, 6, 7],
+                                        UnitsTuple(8, 8),
+                                        UnitsTuple(6, 7))
+        self.assertFalse(result)
+
+        result = DeviceCheckService \
+            .check_unit_busy_for_update([1, 2, 3, 4, 6, 7],
+                                        UnitsTuple(7, 8),
+                                        UnitsTuple(6, 7))
+        self.assertFalse(result)
+
+    def test_check_unit_busy_for_add(self):
+        result = DeviceCheckService \
+            .check_unit_busy_for_add([1, 2, 3, 4, 6, 7],
+                                     UnitsTuple(3, 6))
+        self.assertTrue(result)
+
+        result = DeviceCheckService \
+            .check_unit_busy_for_add([1, 2, 3, 4, 6, 7],
+                                     UnitsTuple(8, 8))
+        self.assertFalse(result)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestDataProcessingService(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        Setup.base_setup()
+
+    def test_get_devices_power_w_sum(self):
+        result = DataProcessingService \
+            .get_devices_power_w_sum([3, 5, 17])
+        self.assertEqual(result, 25)
+
+        result = DataProcessingService \
+            .get_devices_power_w_sum([100, 200, None])
+        self.assertEqual(result, 300)
+
+    def test_get_key_name(self):
+        # Get key name (if model != Device)
+        data = {'rack_name': 'Test_rack1'}
+        result = DataProcessingService.get_key_name(data, 'rack')
+        self.assertEqual(result, 'Test_rack1')
+
+        # Get key name (if model == Device)
+        data = {
+            'device_vendor': 'Test_vendor1',
+            'device_model': 'Test_model1',
+        }
+        result = DataProcessingService.get_key_name(data, 'device')
+        self.assertEqual(result, 'device Test_vendor1, Test_model1')
+
+        # For Device model, if vendor and model not specified
+        data = {}
+        result = DataProcessingService.get_key_name(data, 'device')
+        self.assertEqual(result,
+                         'device unspecified vendor, unspecified model')
+
+        data = {'device_vendor': 'Test_vendor1'}
+        result = DataProcessingService.get_key_name(data, 'device')
+        self.assertEqual(result,
+                         'device Test_vendor1, unspecified model')
+
+        data = {'device_model': 'Test_model1'}
+        result = DataProcessingService.get_key_name(data, 'device')
+        self.assertEqual(result,
+                         'device unspecified vendor, Test_model1')
+
+    def test_get_instance_name(self):
+        # Model Rack
+        rack1 = Rack.objects.get(rack_name='Test_rack1')
+        result = DataProcessingService \
+            .get_instance_name(rack1, Rack, Device)
+        self.assertEqual(result, 'Test_rack1')
+
+        # Model Device
+        device1 = Device.objects.get(device_vendor='Test_vendor1')
+        result = DataProcessingService \
+            .get_instance_name(device1, Device, Device)
+        self.assertEqual(result, 'device Test_vendor1, Test_model1')
+
+        # Model Device, unspecified model
+        device2 = Device.objects.get(device_vendor='Test_vendor9')
+        result = DataProcessingService \
+            .get_instance_name(device2, Device, Device)
+        self.assertEqual(result,
+                         'device Test_vendor9, unspecified model')
+
+        # Model Device, unspecified vendor
+        device3 = Device.objects.get(device_model='Test_model10')
+        result = DataProcessingService \
+            .get_instance_name(device3, Device, Device)
+        self.assertEqual(result,
+                         'device unspecified vendor, Test_model10')
+
+        # Model Device, unspecified vendor and model
+        device4 = Device.objects.get(first_unit=20)
+        result = DataProcessingService \
+            .get_instance_name(device4, Device, Device)
+        self.assertEqual(result,
+                         'device unspecified vendor, unspecified model')
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestReportService(TestCase):
+    """
+    Testing report services
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        Setup.base_setup()
+
+    def test_get_devices_data(self):
+        # Devices report data
+        devices_report_qs = Device.objects.get_devices_report()
+        data = ReportService.get_devices_data(devices_report_qs)
+        # Replace datestamp
+        for line in data:
+            line[27] = ''
+        self.assertEqual(data, ReportMocks.devices_mock_data)
+
+    def test_get_racks_data(self):
+        # Racks report data
+        racks_report_qs = Rack.objects.get_racks_report()
+        data = ReportService.get_racks_data(racks_report_qs)
+        # Replace datestamp
+        for line in data:
+            line[28] = ''
+        self.assertEqual(data, ReportMocks.racks_mock_data)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+#class TestCheckProps(TestCase):
+#
+#    @classmethod
+#    def setUpClass(cls):
+#        Setup.base_setup()
+#
+#    def test_NamesList(self):
+#        pk = Building.objects.get(building_name='Test_building1').id
+#        result = NamesList(pk, Building).names_list
+#        self.assertEqual(result, {'Test_building1'})
+#
+#    @classmethod
+#    def tearDownClass(cls):
+#        pass
+'''
     def test_check_unit_busy(self):
         # Rack - Test_rack1
         # Side - Front (True)
@@ -320,13 +298,14 @@ class TestDeviceCheckService(TestCase):
     @classmethod
     def tearDownClass(cls):
         pass
+'''
 
-
+'''
 class TestDataProcessingService:
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
     def test_get_devices_power_w_sum(self):
         # Rack - Test_rack1
@@ -413,7 +392,7 @@ class TestReportService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
     def test_get_devices_data(self):
         # Devices report data
@@ -442,7 +421,7 @@ class TestReportService(TestCase):
 # 
 #     @classmethod
 #     def setUpClass(cls):
-#         base_setup()
+#         Setup.base_setup()
 # 
 #     def test_TestNamesListProp(self):
 #         pk = Room.objects.get(room_name='Test_room1').id
@@ -461,6 +440,7 @@ class TestReportService(TestCase):
 #     @classmethod
 #     def tearDownClass(cls):
 #         pass
+'''
 
 '''
 class TestUserCheckService(TestCase):
@@ -470,7 +450,7 @@ class TestUserCheckService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
     def test_check_for_groups(self):
         # Department - Test_department1
@@ -587,7 +567,7 @@ class TestUniqueCheckService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
         # Add some devices with already existing params
         room1_id = Room.objects.get(room_name='Test_room1')
         Rack.objects.get_or_create(rack_name='Test_rack1',
@@ -644,7 +624,7 @@ class TestDeviceCheckService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
     # def test_get_old_units(self):
     #     # Device with Test_vendor1
@@ -760,7 +740,7 @@ class TestDataProcessingService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
     def test_get_devices_power_w_sum(self):
         # Rack - Test_rack1
@@ -861,7 +841,7 @@ class TestRepoService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
     def test_get_instance(self):
         # Region - Test_region1
@@ -1250,7 +1230,7 @@ class TestReportService(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        base_setup()
+        Setup.base_setup()
 
     def test_get_devices_data(self):
         # Devices report data
