@@ -28,6 +28,11 @@ class TestCheckProps(TestCase):
         result = NamesList(pk, Rack).names_list
         self.assertEqual(result, {'Test_rack1', 'Test_rack3'})
 
+    def test_DepartmentName(self):
+        pk = Room.objects.get(room_name='Test_room1').id
+        result = DepartmentName(pk, Rack).department_name
+        self.assertEqual(result, 'Test_department1')
+
     @classmethod
     def tearDownClass(cls):
         pass

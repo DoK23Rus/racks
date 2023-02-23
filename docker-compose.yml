@@ -1,5 +1,10 @@
 version: '3.8'
 
+# PROFILES:
+# unit - minimal build (only backend, unit tests, linter, typing)
+# dev - dev build
+# test - dev build + e2e tests
+
 services:
 # Dev containers
   portainer:
@@ -15,7 +20,10 @@ services:
       - ./portainer-data:/data
     ports:
       - ${PORTAINER_PORT}:${PORTAINER_PORT}
-    profiles: ['dev', 'test']
+    profiles: [
+      'dev',
+      'test',
+    ]
 
   database:
     container_name: postgres
@@ -34,7 +42,11 @@ services:
     logging:
       options:
         max-size: 100m
-    profiles: ['dev', 'test']
+    profiles: [
+      'dev',
+      'test',
+      'unit',
+    ]
 
   logging-db:
     # Database for mainapp logging
@@ -55,7 +67,11 @@ services:
     logging:
       options:
         max-size: 50m
-    profiles: ['dev', 'test']
+    profiles: [
+      'dev',
+      'test',
+      'unit',
+    ]
 
   message-broker:
     container_name: redis
@@ -65,7 +81,11 @@ services:
     logging:
       options:
         max-size: 50m
-    profiles: ['dev', 'test']
+    profiles: [
+      'dev',
+      'test',
+      'unit',
+    ]
 
   log-cli:
     # Log CLI tool for Mongodb
@@ -81,7 +101,10 @@ services:
         max-size: 50m
     depends_on:
       - logging-db
-    profiles: ['dev', 'test']
+    profiles: [
+      'dev',
+      'test',
+    ]
 
   backend:
     &django
@@ -112,12 +135,16 @@ services:
       - ./.database.env
       - ./.logging-db.env
       - ./e2e_tests/.test-runner.env
-    profiles: ['dev', 'test']
     depends_on:
       database:
         condition: service_healthy
       logging-db:
         condition: service_healthy
+    profiles: [
+      'dev',
+      'test',
+      'unit',
+    ]
 
   # Containers for linter, type check and unit tests
   django-linter:
@@ -162,12 +189,16 @@ services:
     logging:
       options:
         max-size: 50m
-    profiles: ['dev', 'test']
     depends_on:
       backend:
         condition: service_healthy
       message-broker:
         condition: service_started
+    profiles: [
+      'dev',
+      'test',
+      'unit',
+    ]
   
   cron:
     # Celery cron for data backups
@@ -185,7 +216,6 @@ services:
     logging:
       options:
         max-size: 50m
-    profiles: ['dev', 'test']
     depends_on:
       backend:
         condition: service_healthy
@@ -193,6 +223,11 @@ services:
         condition: service_started
       worker:
         condition: service_started
+    profiles: [
+      'dev',
+      'test',
+      'unit',
+    ]
 
   frontend:
     container_name: vue
@@ -214,9 +249,12 @@ services:
         max-size: 100m
     ports:
       - ${FRONTEND_PORT}:${FRONTEND_PORT}
-    profiles: ['dev', 'test']
     depends_on:
       - backend
+    profiles: [
+      'dev', 
+      'test',
+    ]
       
   web-server:
     container_name: nginx
@@ -229,10 +267,13 @@ services:
     volumes:
       - static_volume:${BASE_APP_DIR}${STATIC_PATH}
       - vue_dist:${VUE_DIST_DIR}
-    profiles: ['dev', 'test']
     depends_on:
       - backend
       - frontend
+    profiles: [
+      'dev',
+      'test',
+    ]
 
   flower:
     # Celery monitoring
@@ -250,7 +291,10 @@ services:
       - message-broker
       - worker
       - cron
-    profiles: ['dev', 'test']
+    profiles: [
+      'dev',
+      'test',
+    ]
 
 # E2E testing containers
   frontend-testing:
@@ -274,10 +318,12 @@ services:
     logging:
       options:
         max-size: 100m
-    profiles: ['test']
     depends_on:
       backend:
         condition: service_healthy
+    profiles: [
+      'test',
+    ]
 
   hub:
     container_name: hub
@@ -286,10 +332,12 @@ services:
       - ${SE_EVENT_BUS_PUBLISH_PORT}:${SE_EVENT_BUS_PUBLISH_PORT}
       - ${SE_EVENT_BUS_SUBSCRIBE_PORT}:${SE_EVENT_BUS_SUBSCRIBE_PORT}
       - ${SELENIUM_HUB_PORT}:${SELENIUM_HUB_PORT}
-    profiles: ['test']
     depends_on:
       frontend-testing: 
         condition: service_healthy
+    profiles: [
+      'test',
+    ]
 
   selenium:
     image: selenium/node-chrome:4.1.3
@@ -309,7 +357,6 @@ services:
         retries: 15
         start_period: 10s 
     entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
-    profiles: ['test']
     deploy:
       # /e2e_tests/.test-runner.env NUMBER_OF_THREADS
       replicas: ${SELENIUM_INSTANCES}
@@ -318,6 +365,9 @@ services:
         condition: service_started
       frontend-testing:
         condition: service_healthy
+    profiles: [
+      'test',
+    ]
 
   test-runner:
     # E2E tests
@@ -335,7 +385,6 @@ services:
     volumes:
       - test_results:${BASE_TEST_DIR}${TEST_RESULTS_PATH}
       - screenshots:${BASE_TEST_DIR}${SCREENSHOTS_PATH}
-    profiles: ['test']
     depends_on:
       backend:
         condition: service_healthy
@@ -345,6 +394,9 @@ services:
         condition: service_started
       selenium:
         condition: service_healthy
+    profiles: [
+      'test',
+    ]
 
 
 volumes:
