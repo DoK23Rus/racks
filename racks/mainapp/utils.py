@@ -381,7 +381,8 @@ class CheckUnique(BaseCheck):
                                                          self.names_list) \
                 .name_in_names_list
         if isinstance(self.props, delete_check_props_dc):
-            pass
+            raise ValueError('DeleteCheckProps cannot be used '
+                             'with CheckUnique')
 
     def _set_result(self, result: Type[Result]) -> Result:
         # For rack properties changes (name staing the same)
@@ -478,15 +479,10 @@ class CheckDeviceForAddOrUpdate(BaseCheck):
                                                      self.new_units,
                                                      self.old_units).unit_busy
         if isinstance(self.props, delete_check_props_dc):
-            pass
+            raise ValueError('DeleteCheckProps cannot be used '
+                             'with CheckDeviceForAddOrUpdate')
 
     def _set_result(self, result: Type[Result]) -> Result:
-        #if None in [
-        #    self.first_unit,
-        #    self.last_unit,
-        #    self.frontside_location,
-        #]:
-        #    return result(False, 'Missing required data')
         # Check units exists
         if not self.units_exist:
             return result(False, 'There are no such units in this rack')

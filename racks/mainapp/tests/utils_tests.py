@@ -6,57 +6,86 @@ from mainapp.models import (Region,
                             Room,
                             Rack,
                             Device)
-from mainapp.services import (DeviceCheckService,
-                              DataProcessingService,
-                              UnitsTuple,
-                              ReportService,
-                              date)
-from mainapp.utils import *
-from mainapp.repository import *
-from mainapp.tests.mock_data import ReportMocks
+from mainapp.services import UnitsTuple
 from mainapp.tests.setup import Setup
+from mainapp.utils import (Result,
+                           AddCheckProps,
+                           UpdateCheckProps,
+                           DeleteCheckProps,
+                           NamesList,
+                           DepartmentName,
+                           OldUnits,
+                           FirstUnit,
+                           LastUnit,
+                           FrontsideLocation,
+                           RackAmount,
+                           NewUnits,
+                           UnitsExist,
+                           DevicesForSide,
+                           FilledList,
+                           UnitsBusyUpdate,
+                           UnitsBusyAdd,
+                           RackId,
+                           SameName,
+                           NameInNamesList,
+                           CheckUser,
+                           CheckUnique,
+                           CheckDeviceForAddOrUpdate,
+                           Checker)
 
 
 class TestCheckProps(TestCase):
+    """
+    Test CheckProps
+    """
 
     @classmethod
     def setUpClass(cls):
         Setup.base_setup()
 
     def test_NamesList(self):
+        # Names list for racks
         pk = Room.objects.get(room_name='Test_room1').id
         result = NamesList(pk, Rack).names_list
         self.assertEqual(result, {'Test_rack1', 'Test_rack3'})
 
+        # Names list for rooms
         pk = Building.objects.get(building_name='Test_building1').id
         result = NamesList(pk, Room).names_list
         self.assertEqual(result, {'Test_room1'})
 
+        # Names list for buildings
         pk = Site.objects.get(site_name='Test_site1').id
         result = NamesList(pk, Building).names_list
         self.assertEqual(result, {'Test_building1'})
 
     def test_DepartmentName(self):
+        # Department name for department
         pk = Region.objects.get(region_name='Test_region1').id
         result = DepartmentName(pk, Department).department_name
         self.assertEqual(result, 'Test_department1')
 
+        # Department name for site
         pk = Department.objects.get(department_name='Test_department1').id
         result = DepartmentName(pk, Site).department_name
         self.assertEqual(result, 'Test_department1')
 
+        # Department name for building
         pk = Site.objects.get(site_name='Test_site1').id
         result = DepartmentName(pk, Building).department_name
         self.assertEqual(result, 'Test_department1')
 
+        # Department name for room
         pk = Building.objects.get(building_name='Test_building1').id
-        result = DepartmentName(pk, Rack).department_name
+        result = DepartmentName(pk, Room).department_name
         self.assertEqual(result, 'Test_department1')
 
+        # Department name for rack
         pk = Room.objects.get(room_name='Test_room1').id
         result = DepartmentName(pk, Rack).department_name
         self.assertEqual(result, 'Test_department1')
 
+        # Department name for device
         pk = Rack.objects.get(rack_name='Test_rack1').id
         result = DepartmentName(pk, Device).department_name
         self.assertEqual(result, 'Test_department1')
@@ -71,6 +100,7 @@ class TestCheckProps(TestCase):
         result = FirstUnit(data).first_unit
         self.assertEqual(result, 1)
 
+        # No first_unit in data
         data = {}
         with self.assertRaises(KeyError):
             FirstUnit(data).first_unit
@@ -80,6 +110,7 @@ class TestCheckProps(TestCase):
         result = LastUnit(data).last_unit
         self.assertEqual(result, 2)
 
+        # No last unit in data
         data = {}
         with self.assertRaises(KeyError):
             LastUnit(data).last_unit
@@ -93,6 +124,7 @@ class TestCheckProps(TestCase):
         result = FrontsideLocation(data).frontside_location
         self.assertFalse(result)
 
+        # No frontside_location in data
         data = {}
         with self.assertRaises(KeyError):
             FrontsideLocation(data).frontside_location
@@ -110,16 +142,20 @@ class TestCheckProps(TestCase):
         self.assertEqual(result, UnitsTuple(1, 2))
 
     def test_UnitsExist(self):
+        # Inside
         result = UnitsExist(UnitsTuple(4, 5), 40).units_exist
         self.assertTrue(result)
 
+        # Partial
         result = UnitsExist(UnitsTuple(39, 45), 40).units_exist
         self.assertFalse(result)
 
+        # Outside
         result = UnitsExist(UnitsTuple(44, 45), 40).units_exist
         self.assertFalse(result)
 
     def test_DevicesForSide(self):
+        # Frontside
         pk = Rack.objects.get(rack_name='Test_rack1').id
         result = DevicesForSide(pk, True).devices_for_side
         self.assertQuerysetEqual(result,
@@ -127,6 +163,7 @@ class TestCheckProps(TestCase):
                                  .filter(frontside_location=True),
                                  ordered=False)
 
+        # Back
         result = DevicesForSide(pk, False).devices_for_side
         self.assertQuerysetEqual(result,
                                  Device.objects.filter(rack_id_id=pk)
@@ -141,26 +178,31 @@ class TestCheckProps(TestCase):
         self.assertEqual(result, [1, 2, 5])
 
     def test_UnitsBusyUpdate(self):
+        # Partial move
         result = UnitsBusyUpdate([1, 2, 4, 5],
                                  UnitsTuple(2, 3),
                                  UnitsTuple(1, 2)).unit_busy
         self.assertFalse(result)
 
+        # Free
         result = UnitsBusyUpdate([1, 2, 4, 5],
                                  UnitsTuple(3, 3),
                                  UnitsTuple(1, 2)).unit_busy
         self.assertFalse(result)
 
+        # Busy
         result = UnitsBusyUpdate([1, 2, 4, 5],
                                  UnitsTuple(4, 4),
                                  UnitsTuple(1, 2)).unit_busy
         self.assertTrue(result)
 
     def test_UnitsBusyAdd(self):
+        # Free
         result = UnitsBusyAdd([1, 2, 4, 5],
                               UnitsTuple(6, 7)).unit_busy
         self.assertFalse(result)
 
+        # Busy
         result = UnitsBusyAdd([1, 2, 4, 5],
                               UnitsTuple(2, 3)).unit_busy
         self.assertTrue(result)
@@ -197,13 +239,15 @@ class TestCheckProps(TestCase):
 
 
 class TestChecks(TestCase):
+    """
+    Test Checks
+    """
 
     @classmethod
     def setUpClass(cls):
         Setup.base_setup()
 
     def test_CheckUser_add(self):
-        # ADD
         # device
         user_groups = ['some_group', 'Test_department1']
         pk = Device.objects.get(device_vendor='Test_vendor1').id
@@ -696,7 +740,7 @@ class TestChecks(TestCase):
                                 'A building '
                                 'with the same name already exists'))
 
-    def test_CheckUser_update(self):
+    def test_CheckUnique_update(self):
         # rack
         user_groups = ['Test_department1']
         pk = Rack.objects.get(rack_name='Test_rack1').id
@@ -837,8 +881,23 @@ class TestChecks(TestCase):
                                 'A building '
                                 'with the same name already exists'))
 
+    def test_CheckUnique_delete(self):
+        user_groups = ['Test_department1']
+        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        data = {
+            'first_unit': 1,
+            'last_unit': 2,
+            'frontside_location': True,
+        }
+        model = Device
+        with self.assertRaises(ValueError):
+            CheckUnique(DeleteCheckProps(user_groups,
+                                         pk,
+                                         data,
+                                         model)).result
+
     def test_CheckDeviceForAddOrUpdate_add(self):
-        # device
+        # Ok
         user_groups = ['Test_department1']
         pk = Rack.objects.get(rack_name='Test_rack1').id
         data = {
@@ -857,6 +916,7 @@ class TestChecks(TestCase):
                                                          key_name)).result
         self.assertEqual(result, Result(True, 'Success'))
 
+        # Units busy
         data = {
             'first_unit': 1,
             'last_unit': 2,
@@ -871,6 +931,7 @@ class TestChecks(TestCase):
         self.assertEqual(result,
                          Result(False, 'These units are busy'))
 
+        # Units busy (partial)
         data = {
             'first_unit': 2,
             'last_unit': 3,
@@ -885,6 +946,7 @@ class TestChecks(TestCase):
         self.assertEqual(result,
                          Result(False, 'These units are busy'))
 
+        # Data miss first_unit
         data = {
             'last_unit': 3,
             'frontside_location': True,
@@ -897,6 +959,7 @@ class TestChecks(TestCase):
                                                     fk_model,
                                                     key_name)).result
 
+        # Data miss last_unit
         data = {
             'first_unit': 2,
             'frontside_location': True,
@@ -909,6 +972,7 @@ class TestChecks(TestCase):
                                                     fk_model,
                                                     key_name)).result
 
+        # Data miss frontside_location
         data = {
             'first_unit': 2,
             'last_unit': 3,
@@ -921,6 +985,7 @@ class TestChecks(TestCase):
                                                     fk_model,
                                                     key_name)).result
 
+        # No such units (partial)
         data = {
             'first_unit': 39,
             'last_unit': 42,
@@ -935,6 +1000,7 @@ class TestChecks(TestCase):
         self.assertEqual(result,
                          Result(False, 'There are no such units in this rack'))
 
+        # No such units
         data = {
             'first_unit': 51,
             'last_unit': 53,
@@ -950,7 +1016,7 @@ class TestChecks(TestCase):
                          Result(False, 'There are no such units in this rack'))
 
     def test_CheckDeviceForAddOrUpdate_update(self):
-        # device
+        # Ok
         user_groups = ['Test_department1']
         pk = Device.objects.get(device_vendor='Test_vendor1').id
         data = {
@@ -974,6 +1040,7 @@ class TestChecks(TestCase):
             .result
         self.assertEqual(result, Result(True, 'Success'))
 
+        # Partial move
         data = {
             'first_unit': 2,
             'last_unit': 3,
@@ -990,6 +1057,7 @@ class TestChecks(TestCase):
             .result
         self.assertEqual(result, Result(True, 'Success'))
 
+        # Units busy (partial)
         data = {
             'first_unit': 1,
             'last_unit': 5,
@@ -1007,6 +1075,7 @@ class TestChecks(TestCase):
         self.assertEqual(result,
                          Result(False, 'These units are busy'))
 
+        # Units busy
         data = {
             'first_unit': 5,
             'last_unit': 5,
@@ -1024,6 +1093,7 @@ class TestChecks(TestCase):
         self.assertEqual(result,
                          Result(False, 'These units are busy'))
 
+        # Data miss first_unit
         data = {
             'last_unit': 3,
             'frontside_location': True,
@@ -1038,6 +1108,7 @@ class TestChecks(TestCase):
                                                        key_name,
                                                        instance_name)).result
 
+        # Data miss last_unit
         data = {
             'first_unit': 2,
             'frontside_location': True,
@@ -1052,6 +1123,7 @@ class TestChecks(TestCase):
                                                        key_name,
                                                        instance_name)).result
 
+        # Data miss frontside_location
         data = {
             'first_unit': 2,
             'last_unit': 3,
@@ -1066,6 +1138,7 @@ class TestChecks(TestCase):
                                                        key_name,
                                                        instance_name)).result
 
+        # No such units (partial)
         data = {
             'first_unit': 39,
             'last_unit': 42,
@@ -1083,6 +1156,7 @@ class TestChecks(TestCase):
         self.assertEqual(result,
                          Result(False, 'There are no such units in this rack'))
 
+        # No such units
         data = {
             'first_unit': 51,
             'last_unit': 53,
@@ -1099,6 +1173,69 @@ class TestChecks(TestCase):
             .result
         self.assertEqual(result,
                          Result(False, 'There are no such units in this rack'))
+
+    def test_CheckDeviceForAddOrUpdate_delete(self):
+        user_groups = ['Test_department1']
+        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        data = {
+            'first_unit': 1,
+            'last_unit': 2,
+            'frontside_location': True,
+        }
+        model = Device
+        with self.assertRaises(ValueError):
+            CheckDeviceForAddOrUpdate(DeleteCheckProps(user_groups,
+                                                       pk,
+                                                       data,
+                                                       model)).result
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+
+
+class TestChecker(TestCase):
+    """
+    Test Checker
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        Setup.base_setup()
+
+    def test_Checker(self):
+        # All checks pass
+        user_groups = ['Test_department1']
+        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        data = {
+            'first_unit': 29,
+            'last_unit': 30,
+            'frontside_location': True,
+        }
+        model = Device
+        fk_model = Rack
+        key_name = 'device some_vendor, some_model'
+        props = AddCheckProps(user_groups, pk, data, model, fk_model, key_name)
+        checks_list = [CheckUser, CheckDeviceForAddOrUpdate]
+        result = Checker(checks_list, props).result
+        self.assertEqual(result, Result(True, 'Success'))
+
+        # One check fail
+        user_groups = ['some_group']
+        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        data = {
+            'first_unit': 29,
+            'last_unit': 30,
+            'frontside_location': True,
+        }
+        model = Device
+        fk_model = Rack
+        key_name = 'device some_vendor, some_model'
+        props = AddCheckProps(user_groups, pk, data, model, fk_model, key_name)
+        result = Checker(checks_list, props).result
+        self.assertEqual(result,
+                         Result(False,
+                                'Permission alert, changes are prohibited'))
 
     @classmethod
     def tearDownClass(cls):
