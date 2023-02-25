@@ -7,7 +7,6 @@ from typing import List, Union, Type, Any
 
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet
-from django.http import HttpRequest
 
 from mainapp.repository import (RepositoryHelper,
                                 DeviceRepository,
@@ -27,7 +26,7 @@ class Result:
 @dataclass
 class BaseCheckProps:
 
-    request: HttpRequest
+    user_groups: list
     pk: int
     data: dict
     model: ModelBase
@@ -116,16 +115,6 @@ class DepartmentName:
         return repository.get_department_name(self.pk)
 
 
-class UserGroups:
-
-    def __init__(self, request: HttpRequest) -> None:
-        self.request = request
-        self.user_groups = self._set_prop()
-
-    def _set_prop(self) -> List[str]:
-        return list(self.request.user.groups.values_list('name', flat=True))
-
-
 class OldUnits:
 
     def __init__(self, pk: int) -> None:
@@ -155,7 +144,7 @@ class FirstUnit:
             first_unit = self.data['first_unit']
             return first_unit
         except KeyError:
-            raise ValueError("There is no first_unit in data")
+            raise KeyError("There is no first_unit in data") from None
 
 
 class LastUnit:
@@ -169,7 +158,7 @@ class LastUnit:
             first_unit = self.data['last_unit']
             return first_unit
         except KeyError:
-            raise ValueError("There is no last_unit in data")
+            raise KeyError("There is no last_unit in data") from None
 
 
 class FrontsideLocation:
@@ -183,7 +172,7 @@ class FrontsideLocation:
             first_unit = self.data['frontside_location']
             return first_unit
         except KeyError:
-            raise ValueError("There is no frontside_location in data")
+            raise KeyError("There is no frontside_location in data") from None
 
 
 class RackAmount:
@@ -324,21 +313,18 @@ class CheckUser(BaseCheck):
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self._set_props(UserGroups,
-                        DepartmentName,
+        self._set_props(DepartmentName,
                         AddCheckProps,
                         UpdateCheckProps,
                         DeleteCheckProps)
         self.result = self._set_result(Result)
 
     def _set_props(self,
-                   user_group_prop: Type[UserGroups],
                    department_name_prop: Type[DepartmentName],
                    add_check_props_dc: Type[AddCheckProps],
                    update_check_props_dc: Type[UpdateCheckProps],
                    delete_check_props_dc: Type[DeleteCheckProps]
                    ) -> None:
-        self.user_groups = user_group_prop(self.props.request).user_groups
         if isinstance(self.props, add_check_props_dc):
             self.department_name = department_name_prop(self.props.pk,
                                                         self.props.fk_model) \
@@ -353,7 +339,7 @@ class CheckUser(BaseCheck):
                 .department_name
 
     def _set_result(self, result: Type[Result]) -> Result:
-        if self.department_name not in self.user_groups:
+        if self.department_name not in self.props.user_groups:
             return result(False, 'Permission alert, changes are prohibited')
         return result(True, 'Success')
 
@@ -387,9 +373,8 @@ class CheckUnique(BaseCheck):
                 .name_in_names_list
         if isinstance(self.props, update_check_props_dc):
             self.pk = self.props.fk
-            self.model = self.props.fk_model
             self.names_list = names_list_prop(self.pk,
-                                              self.model).names_list
+                                              self.props.model).names_list
             self.same_name = same_name_prop(self.props.instance_name,
                                             self.props.key_name).same_name
             self.name_in_names_list = name_in_names_prop(self.props.key_name,
@@ -496,12 +481,12 @@ class CheckDeviceForAddOrUpdate(BaseCheck):
             pass
 
     def _set_result(self, result: Type[Result]) -> Result:
-        if None in [
-            self.first_unit,
-            self.last_unit,
-            self.frontside_location,
-        ]:
-            return result(False, "Missing required data")
+        #if None in [
+        #    self.first_unit,
+        #    self.last_unit,
+        #    self.frontside_location,
+        #]:
+        #    return result(False, 'Missing required data')
         # Check units exists
         if not self.units_exist:
             return result(False, 'There are no such units in this rack')

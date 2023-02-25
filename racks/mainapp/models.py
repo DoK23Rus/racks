@@ -868,34 +868,3 @@ class Device(models.Model):
 
     def __str__(self):
         return f'{str(self.device_vendor)} {str(self.device_model)}'
-
-
-#class ModelHelper:
-#
-#    @staticmethod
-#    def get_child_model(model):
-#        child_model = {
-#            Region: Department,
-#            Department: Site,
-#            Site: Building,
-#            Building: Room,
-#            Room: Rack,
-#            Rack: Device,
-#        }.get(model)()
-#        if not child_model:
-#            raise ValueError("model: ModelBase must be Site|Building|Room")
-#        return child_model
-#
-#    @staticmethod
-#    def get_parent_model(model):
-#        parent_model = {
-#            Department: Region,
-#            Site: Department,
-#            Building: Site,
-#            Room: Building,
-#            Rack: Room,
-#            Device: Rack,
-#        }.get(model)()
-#        if not parent_model:
-#            raise ValueError("model: ModelBase must be Site|Building|Room")
-#        return parent_model

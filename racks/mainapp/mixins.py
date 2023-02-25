@@ -364,6 +364,7 @@ class BaseApiAddMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
+        user_groups = list(request.user.groups.values_list('name', flat=True))
         pk = self.get_pk(data, f"{self.fk_model._meta.db_table}_id")
         repository = RepositoryHelper.get_model_repository(self.fk_model)
         if not self.check_for_instance(pk, repository):
@@ -377,7 +378,7 @@ class BaseApiAddMixin(BaseApiMixin,
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for add possibility
-            check_props = AddCheckProps(request,
+            check_props = AddCheckProps(user_groups,
                                         pk,
                                         data,
                                         self.model,
@@ -417,6 +418,7 @@ class BaseApiUpdateMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
+        user_groups = list(request.user.groups.values_list('name', flat=True))
         pk = self.get_pk(data, 'id')
         repository = RepositoryHelper.get_model_repository(self.model)
         if not self.check_for_instance(pk, repository):
@@ -435,13 +437,14 @@ class BaseApiUpdateMixin(BaseApiMixin,
         # Prevent rack amount updating
         if data.get('rack_amount'):
             data['rack_amount'] = RackRepository.get_rack_amount(pk)
-        key_name = DataProcessingService.get_key_name(data, self.model)
+        key_name = DataProcessingService \
+            .get_key_name(data, self.model._meta.db_table)
         instance_name = DataProcessingService \
             .get_instance_name(instance, self.model)
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for update possibility
-            check_props = UpdateCheckProps(request,
+            check_props = UpdateCheckProps(user_groups,
                                            pk,
                                            data,
                                            self.model,
@@ -489,6 +492,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
             Response (HttpResponse): Not good data (validation error)
         """
         data = request.data
+        user_groups = list(request.user.groups.values_list('name', flat=True))
         pk = self.get_pk(data, 'id')
         repository = RepositoryHelper.get_model_repository(self.model)
         if not self.check_for_instance(pk, repository):
@@ -499,7 +503,7 @@ class BaseApiDeleteMixin(BaseApiMixin,
         instance_name = DataProcessingService \
             .get_instance_name(instance, self.model)
         # Check for delete possibility
-        check_props = DeleteCheckProps(request,
+        check_props = DeleteCheckProps(user_groups,
                                        pk,
                                        data,
                                        self.model)

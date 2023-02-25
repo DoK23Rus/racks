@@ -188,7 +188,7 @@ class DataProcessingService:
                 (devices has no name, only vendor and model)
         """
         key_name = data.get(f"{model_name}_name")
-        if key_name:
+        if key_name is not None:
             return key_name
         key_name = f"device " \
             f"{str(data.get('device_vendor') or 'unspecified vendor')}, " \

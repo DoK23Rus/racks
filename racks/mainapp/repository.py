@@ -550,16 +550,16 @@ class RepositoryHelper:
             raise ValueError("model: ModelBase must be Site|Building|Room")
         return repository
 
-    @staticmethod
-    def get_child_model_repository(model):
-        child_repository = {
-            Region: DepartmentRepository,
-            Department: SiteRepository,
-            Site: BuildingRepository,
-            Building: RoomRepository,
-            Room: RackRepository,
-            Rack: DeviceRepository,
-        }.get(model)()
-        if not child_repository:
-            raise ValueError("model: ModelBase must be Site|Building|Room")
-        return child_repository
+#    @staticmethod
+#    def get_child_model_repository(model):
+#        child_repository = {
+#            Region: DepartmentRepository,
+#            Department: SiteRepository,
+#            Site: BuildingRepository,
+#            Building: RoomRepository,
+#            Room: RackRepository,
+#            Rack: DeviceRepository,
+#        }.get(model)()
+#        if not child_repository:
+#            raise ValueError("model: ModelBase must be Site|Building|Room")
+#        return child_repository
