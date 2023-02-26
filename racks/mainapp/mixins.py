@@ -229,8 +229,24 @@ class LoggingMixin(AbstractMixin):
 
 
 class HelperMixin(AbstractMixin):
+    """
+    Some helpers
+    """
 
     def get_pk(self, data: dict, key: str) -> int:
+        """
+        Get pk from data
+
+        Args:
+            data (dict): data dict
+            key (str): key name
+
+        Raises:
+            ValueError ("No pk in data")
+
+        Returns:
+            pk (int): primary key
+        """
         try:
             pk = data[key]
             return pk
@@ -238,11 +254,31 @@ class HelperMixin(AbstractMixin):
             raise ValueError("No pk in data")
 
     def get_static_dir(self) -> str:
+        """
+        Get static_dir from .env
+
+        Raises:
+            ValueError ("No STATIC_DIR in .env file")
+
+        Returns:
+            static_dir (str): primary key
+        """
         if not (static_dir := os.environ.get('STATIC_DIR')):
             raise ValueError("No STATIC_DIR in .env file")
         return static_dir
 
     def check_for_instance(self, pk: int, repository: Repository_Type) -> bool:
+        """
+        Check for instance
+
+        Args:
+            pk (int): primary key
+            repository (Repository_Type): Repository
+
+        Returns:
+            (bool): True - instance exists
+                    False - instance dont exist
+        """
         try:
             repository.get_instance(pk)
             return True
@@ -251,6 +287,9 @@ class HelperMixin(AbstractMixin):
 
 
 class BaseApiMixin(AbstractViewMixin):
+    """
+    Base API Mixin
+    """
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """

@@ -90,7 +90,6 @@ class RacksPage():
         self.wait.until(EC.element_to_be_clickable(
                        (By.ID, self.add_room_button_id))).click()
 
-
     def add_new_rack(self):
         """
         Add new rack
