@@ -1,6 +1,7 @@
-from typing import List, Optional, Union, Type
+from typing import List, Optional, Union, Type, Any
 
-from django.db.models.query import QuerySet
+from django.db.models.base import ModelBase
+from django.db.models.query import QuerySet, RawQuerySet
 
 from mainapp.models import (Building,
                             Department,
@@ -12,9 +13,13 @@ from mainapp.models import (Building,
 
 
 class RegionRepository:
+    """
+    Region repository
+    """
 
     @staticmethod
-    def get_instance(pk):
+    def get_instance(pk: int) -> ModelBase:
+
         return Region.objects.get(id=pk)
 
     @staticmethod
@@ -31,11 +36,11 @@ class RegionRepository:
 class DepartmentRepository:
 
     @staticmethod
-    def get_instance(pk):
+    def get_instance(pk: int) -> ModelBase:
         return Department.objects.get(id=pk)
 
     @staticmethod
-    def get_department_name(pk):
+    def get_department_name(pk: int) -> str:
         return Department.objects.get(id=pk) \
             .department_name
 
@@ -53,7 +58,7 @@ class DepartmentRepository:
 class SiteRepository:
 
     @staticmethod
-    def get_instance(pk):
+    def get_instance(pk: int) -> str:
         return Site.objects.get(id=pk)
 
     @staticmethod
@@ -76,18 +81,18 @@ class SiteRepository:
 class BuildingRepository:
 
     @staticmethod
-    def get_instance(pk):
+    def get_instance(pk: int) -> ModelBase:
         return Building.objects.get(id=pk)
 
     @staticmethod
-    def get_department_name(pk):
+    def get_department_name(pk: int) -> str:
         return Building.objects.get_building_department(pk) \
             .site_id \
             .department_id \
             .department_name
 
     @staticmethod
-    def get_unique_object_names_list(key):
+    def get_unique_object_names_list(key: int) -> set:
         return {building.building_name for building
                 in Building.objects.get_buildings_for_site(key)}
 
@@ -105,11 +110,11 @@ class BuildingRepository:
 class RoomRepository:
 
     @staticmethod
-    def get_instance(pk):
+    def get_instance(pk: int) -> ModelBase:
         return Room.objects.get(id=pk)
 
     @staticmethod
-    def get_department_name(pk):
+    def get_department_name(pk: int) -> str:
         return Room.objects.get_room_department(pk) \
             .building_id \
             .site_id \
@@ -117,12 +122,12 @@ class RoomRepository:
             .department_name
 
     @staticmethod
-    def get_unique_object_names_list(key):
+    def get_unique_object_names_list(key: int) -> set:
         return {room.room_name for room
                 in Room.objects.get_rooms_for_building(key)}
 
     @staticmethod
-    def get_all_rooms():
+    def get_all_rooms() -> QuerySet:
         """
         Get all rooms
 
@@ -135,11 +140,11 @@ class RoomRepository:
 class RackRepository:
 
     @staticmethod
-    def get_instance(pk):
+    def get_instance(pk: int) -> ModelBase:
         return Rack.objects.get(id=pk)
 
     @staticmethod
-    def get_department_name(pk):
+    def get_department_name(pk: int) -> str:
         return Rack.objects.get_rack_department(pk) \
             .room_id \
             .building_id \
@@ -148,16 +153,16 @@ class RackRepository:
             .department_name
 
     @staticmethod
-    def get_rack_amount(rack_id):
+    def get_rack_amount(rack_id: int) -> int:
         return int(Rack.objects.get_rack(rack_id).rack_amount)
 
     @staticmethod
-    def get_unique_object_names_list(key):
+    def get_unique_object_names_list(key: int) -> set:
         return {rack.rack_name for rack
                 in Rack.objects.get_racks_for_room(key)}
 
     @staticmethod
-    def get_report_data():
+    def get_report_data() -> RawQuerySet:
         return Rack.objects.get_racks_report()
 
     @staticmethod
@@ -185,7 +190,7 @@ class RackRepository:
         return rack_models
 
     @staticmethod
-    def get_all_racks():
+    def get_all_racks() -> QuerySet:
         """
         Get all racks
 
@@ -195,7 +200,7 @@ class RackRepository:
         return Rack.objects.get_all_racks()
 
     @staticmethod
-    def get_rack_room_name(pk) -> str:
+    def get_rack_room_name(pk: int) -> str:
         """
         Get room name for a particular rack
 
@@ -213,7 +218,7 @@ class RackRepository:
             .room_name
 
     @staticmethod
-    def get_all_racks_partial():
+    def get_all_racks_partial() -> QuerySet:
         """
         Get all racks partial
 
@@ -223,7 +228,7 @@ class RackRepository:
         return Rack.objects.get_all_racks_partial()
 
     @staticmethod
-    def get_rack_building_name(pk) -> str:
+    def get_rack_building_name(pk: int) -> str:
         """
         Get building name for a particular rack
 
@@ -242,7 +247,7 @@ class RackRepository:
             .building_name
 
     @staticmethod
-    def get_rack_site_name(pk) -> str:
+    def get_rack_site_name(pk: int) -> str:
         """
         Get building name for a particular rack
 
@@ -262,7 +267,7 @@ class RackRepository:
             .site_name
 
     @staticmethod
-    def get_rack_department_name(pk) -> str:
+    def get_rack_department_name(pk: int) -> str:
         """
         Get department name for a particular rack
 
@@ -283,7 +288,7 @@ class RackRepository:
             .department_name
 
     @staticmethod
-    def get_rack_region_name(pk) -> str:
+    def get_rack_region_name(pk: int) -> str:
         """
         Get region name for a particular rack
 
@@ -308,7 +313,7 @@ class RackRepository:
 class DeviceRepository:
 
     @staticmethod
-    def get_instance(pk):
+    def get_instance(pk: int) -> ModelBase:
         return Device.objects.get(id=pk)
 
     @staticmethod
@@ -352,11 +357,11 @@ class DeviceRepository:
         return device_models
 
     @staticmethod
-    def get_devices_for_side(pk, side):
+    def get_devices_for_side(pk: int, side: bool) -> QuerySet:
         return Device.objects.get_devices_for_side(pk, side)
 
     @staticmethod
-    def get_devices_for_rack(pk):
+    def get_devices_for_rack(pk: int) -> QuerySet:
         """
         Get devices for single rack
 
@@ -372,15 +377,15 @@ class DeviceRepository:
         return Device.objects.get_devices_for_rack(pk)
 
     @staticmethod
-    def get_first_unit(pk):
+    def get_first_unit(pk: int) -> int:
         return Device.objects.get_device(pk).first_unit
 
     @staticmethod
-    def get_last_unit(pk):
+    def get_last_unit(pk: int) -> int:
         return Device.objects.get_device(pk).last_unit
 
     @staticmethod
-    def get_department_name(pk):
+    def get_department_name(pk: int) -> str:
         return Device.objects.get_device_department(pk) \
             .rack_id \
             .room_id \
@@ -390,18 +395,18 @@ class DeviceRepository:
             .department_name
 
     @staticmethod
-    def get_devices_power_list(pk):
+    def get_devices_power_list(pk: int) -> list:
         return list(Device
                     .objects
                     .filter(rack_id_id=pk)
                     .values_list('power_w', flat=True))
 
     @staticmethod
-    def get_report_data():
+    def get_report_data() -> RawQuerySet:
         return Device.objects.get_devices_report()
 
     @staticmethod
-    def get_device_rack_name(pk) -> str:
+    def get_device_rack_name(pk: int) -> str:
         """
         Get rack name for a particular device
 
@@ -419,7 +424,7 @@ class DeviceRepository:
             .rack_name
 
     @staticmethod
-    def get_device_room_name(pk) -> str:
+    def get_device_room_name(pk: int) -> str:
         """
         Get room name for a particular device
 
@@ -438,7 +443,7 @@ class DeviceRepository:
             .room_name
 
     @staticmethod
-    def get_device_building_name(pk) -> str:
+    def get_device_building_name(pk: int) -> str:
         """
         Get building name for a particular device
 
@@ -458,7 +463,7 @@ class DeviceRepository:
             .building_name
 
     @staticmethod
-    def get_device_site_name(pk) -> str:
+    def get_device_site_name(pk: int) -> str:
         """
         Get site name for a particular device
 
@@ -479,7 +484,7 @@ class DeviceRepository:
             .site_name
 
     @staticmethod
-    def get_device_department_name(pk) -> str:
+    def get_device_department_name(pk: int) -> str:
         """
         Get department name for a particular device
 
@@ -501,7 +506,7 @@ class DeviceRepository:
             .department_name
 
     @staticmethod
-    def get_device_region_name(pk) -> str:
+    def get_device_region_name(pk: int) -> str:
         """
         Get region name for a particular device
 
@@ -536,7 +541,7 @@ Repository_Type = Union[Type[DeviceRepository],
 class RepositoryHelper:
 
     @staticmethod
-    def get_model_repository(model):
+    def get_model_repository(model: ModelBase) -> Union[object, Any]:
         repository = {
             Region: RegionRepository,
             Department: DepartmentRepository,
@@ -545,7 +550,7 @@ class RepositoryHelper:
             Room: RoomRepository,
             Rack: RackRepository,
             Device: DeviceRepository,
-        }.get(model)()
+        }.get(model, lambda *args: False)()
         if not repository:
-            raise ValueError("model: ModelBase must be Site|Building|Room")
+            raise ValueError('model: ModelBase must be Site|Building|Room')
         return repository
