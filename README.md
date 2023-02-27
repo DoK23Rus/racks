@@ -23,6 +23,10 @@ For dev environment run:
 ```
 docker-compose --profile dev up
 ```
+For backend only (unit tests, linter, typing) run:
+```
+docker-compose --profile unit up
+```
 For dev environment plus E2E tests run:
 ```
 docker-compose --profile test up
