@@ -152,7 +152,6 @@ services:
     container_name: django-linter
     entrypoint: ${BASE_APP_DIR}${BACKEND_ENTRYPOINTS_DIR}entrypoint_linter.sh
     volumes:
-      - static_volume:${BASE_APP_DIR}${STATIC_PATH}
       - log_volume:${BASE_APP_DIR}${LOGS_PATH}
     ports:
       - ${BACKEND_PORT_RESERVE}:${BACKEND_PORT_RESERVE}
@@ -172,7 +171,6 @@ services:
     container_name: django-typing
     entrypoint: ${BASE_APP_DIR}${BACKEND_ENTRYPOINTS_DIR}entrypoint_typing.sh
     volumes:
-      - static_volume:${BASE_APP_DIR}${STATIC_PATH}
       - log_volume:${BASE_APP_DIR}${LOGS_PATH}
     ports:
       - ${BACKEND_PORT_RESERVE3}:${BACKEND_PORT_RESERVE3}
