@@ -90,8 +90,11 @@ class AbstractViewMixin(AbstractMixin):
             *args: Args
             **kwargs: Kwargs
 
+        Raises:
+            NotImplementedError
+
         Returns:
-            Response (HttpResponse): HttpResponse
+            (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -109,8 +112,11 @@ class AbstractViewMixin(AbstractMixin):
             *args: Args
             **kwargs: Kwargs
 
+        Raises:
+            NotImplementedError
+
         Returns:
-            Response (HttpResponse): HttpResponse
+            (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -128,8 +134,11 @@ class AbstractViewMixin(AbstractMixin):
             *args: Args
             **kwargs: Kwargs
 
+        Raises:
+            NotImplementedError
+
         Returns:
-            Response (HttpResponse): HttpResponse
+            (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -147,8 +156,11 @@ class AbstractViewMixin(AbstractMixin):
             *args: Args
             **kwargs: Kwargs
 
+        Raises:
+            NotImplementedError
+
         Returns:
-            Response (HttpResponse): HttpResponse
+            (HttpResponse): HttpResponse
         """
         raise NotImplementedError
 
@@ -301,7 +313,7 @@ class BaseApiMixin(AbstractViewMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): This method not provided
+            (HttpResponse): This method not provided
         """
         return Response({"invalid": "GET not allowed"}, status=405)
 
@@ -315,7 +327,7 @@ class BaseApiMixin(AbstractViewMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): This method not provided
+            (HttpResponse): This method not provided
         """
         return Response({"invalid": "PUT not allowed"}, status=405)
 
@@ -329,7 +341,7 @@ class BaseApiMixin(AbstractViewMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): This method not provided
+            (HttpResponse): This method not provided
         """
         return Response({"invalid": "POST not allowed"}, status=405)
 
@@ -343,7 +355,7 @@ class BaseApiMixin(AbstractViewMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): This method not provided
+            (HttpResponse): This method not provided
         """
         return Response({"invalid": "DELETE not allowed"}, status=405)
 
@@ -363,9 +375,8 @@ class BaseApiGetMixin(BaseApiMixin, HelperMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with data
-            Response (HttpResponse): Object with this ID
-                does not exist (exception)
+            (HttpResponse): Response with data
+            (HttpResponse): Object with this ID does not exist (exception)
         """
         pk = self.get_pk(kwargs, 'pk')
         repository = RepositoryHelper.get_model_repository(self.model)
@@ -395,12 +406,11 @@ class BaseApiAddMixin(BaseApiMixin,
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Need fk for post method (exception)
-            Response (HttpResponse): Object with this ID
-                does not exist (exception)
-            Response (HttpResponse): Add not allowed (read result.message)
-            Response (HttpResponse): Sucsessfully added
-            Response (HttpResponse): Not good data (validation error)
+            (HttpResponse): Need fk for post method (exception)
+            (HttpResponse): Object with this ID does not exist (exception)
+            (HttpResponse): Add not allowed (read result.message)
+            (HttpResponse): Sucsessfully added
+            (HttpResponse): Not good data (validation error)
         """
         data = request.data
         user_groups = list(request.user.groups.values_list('name', flat=True))
@@ -450,11 +460,10 @@ class BaseApiUpdateMixin(BaseApiMixin,
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Object with this ID
-                does not exist (exception)
-            Response (HttpResponse): Update not allowed (read result.message)
-            Response (HttpResponse): Sucsessfully updated
-            Response (HttpResponse): Not good data (validation error)
+            (HttpResponse): Object with this ID does not exist (exception)
+            (HttpResponse): Update not allowed (read result.message)
+            (HttpResponse): Sucsessfully updated
+            (HttpResponse): Not good data (validation error)
         """
         data = request.data
         user_groups = list(request.user.groups.values_list('name', flat=True))
@@ -524,11 +533,10 @@ class BaseApiDeleteMixin(BaseApiMixin,
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Object with this ID
-                does not exist (exception)
-            Response (HttpResponse): Delete not allowed (read result.message)
-            Response (HttpResponse): Sucsessfully dleted
-            Response (HttpResponse): Not good data (validation error)
+            (HttpResponse): Object with this ID does not exist (exception)
+            (HttpResponse): Delete not allowed (read result.message)
+            (HttpResponse): Sucsessfully dleted
+            (HttpResponse): Not good data (validation error)
         """
         data = request.data
         user_groups = list(request.user.groups.values_list('name', flat=True))
@@ -570,7 +578,7 @@ class RackDevicesApiMixin(BaseApiMixin, HelperMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with devices for a single rack
+            (HttpResponse): Response with devices for a single rack
         """
         pk = self.get_pk(kwargs, 'pk')
         devices = DeviceRepository.get_devices_for_rack(pk)
@@ -593,7 +601,7 @@ class DeviceVendorsApiMixin(BaseApiMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with list of device vendors
+            (HttpResponse): Response with list of device vendors
         """
         device_vendors = DeviceRepository.get_device_vendors()
         return Response({"device_vendors": device_vendors})
@@ -614,7 +622,7 @@ class DeviceModelsApiMixin(BaseApiMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with list of device models
+            (HttpResponse): Response with list of device models
         """
         device_models = DeviceRepository.get_device_models()
         return Response({"device_models": device_models})
@@ -635,7 +643,7 @@ class RackVendorsApiMixin(BaseApiMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with list of device vendors
+            (HttpResponse): Response with list of device vendors
         """
         rack_vendors = RackRepository.get_rack_vendors()
         return Response({"rack_vendors": rack_vendors})
@@ -656,7 +664,7 @@ class RackModelsApiMixin(BaseApiMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with list of rack models
+            (HttpResponse): Response with list of rack models
         """
         rack_models = RackRepository.get_rack_models()
         return Response({"rack_models": rack_models})
@@ -726,7 +734,7 @@ class UserApiMixin(BaseApiMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with username
+            (HttpResponse): Response with username
         """
         return Response({"user": request.user.username})
 
@@ -746,7 +754,7 @@ class DeviceLocationMixin(BaseApiMixin, HelperMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with device location data
+            (HttpResponse): Response with device location data
         """
         pk = self.get_pk(kwargs, 'pk')
         rack_name = DeviceRepository.get_device_rack_name(pk)
@@ -780,7 +788,7 @@ class RackLocationMixin(BaseApiMixin, HelperMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with rack location data
+            (HttpResponse): Response with rack location data
         """
         pk = self.get_pk(kwargs, 'pk')
         room_name = RackRepository.get_rack_room_name(pk)
@@ -812,7 +820,7 @@ class RacksReportMixin(BaseApiMixin, HelperMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with racks report data
+            (HttpResponse): Response with racks report data
         """
         file_path = f"{self.get_static_dir()}/racks_report_{date()}.csv"
         headers = ReportHeaders.racks_header_list
@@ -845,7 +853,7 @@ class DevicesReportMixin(BaseApiMixin, HelperMixin):
             **kwargs: Kwargs
 
         Returns:
-            Response (HttpResponse): Response with devices report data
+            response (HttpResponse): Response with devices report data
         """
         file_path = f"{self.get_static_dir()}/devices_report_{date()}.csv"
         headers = ReportHeaders.devices_header_list

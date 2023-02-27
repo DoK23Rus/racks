@@ -1,4 +1,7 @@
-from typing import List, Optional, Union, Type, Any
+"""
+Repository for querysets and primitives
+"""
+from typing import List, Optional, Union, Type
 
 from django.db.models.base import ModelBase
 from django.db.models.query import QuerySet, RawQuerySet
@@ -19,6 +22,15 @@ class RegionRepository:
 
     @staticmethod
     def get_instance(pk: int) -> ModelBase:
+        """
+        Get region instance
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (ModelBase): Region instance
+        """
 
         return Region.objects.get(id=pk)
 
@@ -28,19 +40,40 @@ class RegionRepository:
         Get all regions
 
         Returns:
-            all_regions (QuerySet): All regions queryset
+            (QuerySet): All regions queryset
         """
         return Region.objects.get_all_regions()
 
 
 class DepartmentRepository:
+    """
+    Department repository
+    """
 
     @staticmethod
     def get_instance(pk: int) -> ModelBase:
+        """
+        Get department instance
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (ModelBase): Department instance
+        """
         return Department.objects.get(id=pk)
 
     @staticmethod
     def get_department_name(pk: int) -> str:
+        """
+        Get department name
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (str): Department name
+        """
         return Department.objects.get(id=pk) \
             .department_name
 
@@ -50,19 +83,40 @@ class DepartmentRepository:
         Get all departments
 
         Returns:
-            all_departments (QuerySet): All departments queryset
+            (QuerySet): All departments queryset
         """
         return Department.objects.get_all_departments()
 
 
 class SiteRepository:
+    """
+    Site repository
+    """
 
     @staticmethod
-    def get_instance(pk: int) -> str:
+    def get_instance(pk: int) -> ModelBase:
+        """
+        Get site instance
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (site): Site instance
+        """
         return Site.objects.get(id=pk)
 
     @staticmethod
-    def get_department_name(pk):
+    def get_department_name(pk: int) -> str:
+        """
+        Get department name
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (str): Department name
+        """
         return Site.objects.get_site_department(pk) \
             .department_id \
             .department_name
@@ -73,19 +127,40 @@ class SiteRepository:
         Get all sites
 
         Returns:
-            all_sites (QuerySet): All sites queryset
+            (QuerySet): All sites queryset
         """
         return Site.objects.get_all_sites()
 
 
 class BuildingRepository:
+    """
+    Building repository
+    """
 
     @staticmethod
     def get_instance(pk: int) -> ModelBase:
+        """
+        Get building instance
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (ModelBase): Building instance
+        """
         return Building.objects.get(id=pk)
 
     @staticmethod
     def get_department_name(pk: int) -> str:
+        """
+        Get department name
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (str): Department name
+        """
         return Building.objects.get_building_department(pk) \
             .site_id \
             .department_id \
@@ -93,6 +168,15 @@ class BuildingRepository:
 
     @staticmethod
     def get_unique_object_names_list(key: int) -> set:
+        """
+        Get building names set
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (set): Building names set
+        """
         return {building.building_name for building
                 in Building.objects.get_buildings_for_site(key)}
 
@@ -102,19 +186,40 @@ class BuildingRepository:
         Get all buildings
 
         Returns:
-            all_buildings (QuerySet): All buildings queryset
+            (QuerySet): All buildings queryset
         """
         return Building.objects.get_all_buildings()
 
 
 class RoomRepository:
+    """
+    Room repository
+    """
 
     @staticmethod
     def get_instance(pk: int) -> ModelBase:
+        """
+        Get room instance
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (ModelBase): Room instance
+        """
         return Room.objects.get(id=pk)
 
     @staticmethod
     def get_department_name(pk: int) -> str:
+        """
+        Get department name
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (str): Department name
+        """
         return Room.objects.get_room_department(pk) \
             .building_id \
             .site_id \
@@ -123,6 +228,15 @@ class RoomRepository:
 
     @staticmethod
     def get_unique_object_names_list(key: int) -> set:
+        """
+        Get room names set
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (set): room names set
+        """
         return {room.room_name for room
                 in Room.objects.get_rooms_for_building(key)}
 
@@ -141,10 +255,28 @@ class RackRepository:
 
     @staticmethod
     def get_instance(pk: int) -> ModelBase:
+        """
+        Get rack instance
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (ModelBase): Rack instance
+        """
         return Rack.objects.get(id=pk)
 
     @staticmethod
     def get_department_name(pk: int) -> str:
+        """
+        Get department name
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (str): Department name
+        """
         return Rack.objects.get_rack_department(pk) \
             .room_id \
             .building_id \
@@ -154,15 +286,39 @@ class RackRepository:
 
     @staticmethod
     def get_rack_amount(rack_id: int) -> int:
+        """
+        Get rack amount
+
+        Args:
+            rack_id (int): Rack id
+
+        Returns:
+            (int): Rack amount
+        """
         return int(Rack.objects.get_rack(rack_id).rack_amount)
 
     @staticmethod
     def get_unique_object_names_list(key: int) -> set:
+        """
+        Get unique names list
+
+        Args:
+            Key (int): Key
+
+        Returns:
+            (set): Set of unique rack names
+        """
         return {rack.rack_name for rack
                 in Rack.objects.get_racks_for_room(key)}
 
     @staticmethod
     def get_report_data() -> RawQuerySet:
+        """
+        Get rack report data
+
+        Returns:
+            (RawQuerySet): Rack report data
+        """
         return Rack.objects.get_racks_report()
 
     @staticmethod
@@ -195,7 +351,7 @@ class RackRepository:
         Get all racks
 
         Returns:
-            all_racks (QuerySet): All racks queryset
+            (QuerySet): All racks queryset
         """
         return Rack.objects.get_all_racks()
 
@@ -207,11 +363,8 @@ class RackRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            rack_room_name (str): Room name for particular rack
+            (str): Room name for particular rack
         """
         return Rack.objects.get_rack_room(pk) \
             .room_id \
@@ -223,7 +376,7 @@ class RackRepository:
         Get all racks partial
 
         Returns:
-            all_racks (QuerySet): All racks partial queryset
+            (QuerySet): All racks partial queryset
         """
         return Rack.objects.get_all_racks_partial()
 
@@ -235,11 +388,8 @@ class RackRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            rack_building_name (str): Building name for particular rack
+            (str): Building name for particular rack
         """
         return Rack.objects.get_rack_building(pk) \
             .room_id \
@@ -254,11 +404,8 @@ class RackRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            rack_site_name (str): Site name for particular rack
+            (str): Site name for particular rack
         """
         return Rack.objects.get_rack_site(pk) \
             .room_id \
@@ -274,11 +421,8 @@ class RackRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            rack_department_name (str): Department name for particular rack
+            (str): Department name for particular rack
         """
         return Rack.objects.get_rack_department(pk) \
             .room_id \
@@ -295,11 +439,8 @@ class RackRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            rack_region_name (str): Region name for particular rack
+            (str): Region name for particular rack
         """
         return Rack.objects.get_rack_region(pk) \
             .room_id \
@@ -311,9 +452,21 @@ class RackRepository:
 
 
 class DeviceRepository:
+    """
+    Device repository
+    """
 
     @staticmethod
     def get_instance(pk: int) -> ModelBase:
+        """
+        Get device instance
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (ModelBase): Device instance
+        """
         return Device.objects.get(id=pk)
 
     @staticmethod
@@ -324,11 +477,8 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            device_rack_id (int): Rack id for particular device
+            (int): Rack id for particular device
         """
         return Device.objects.get_device(pk).rack_id_id
 
@@ -358,6 +508,16 @@ class DeviceRepository:
 
     @staticmethod
     def get_devices_for_side(pk: int, side: bool) -> QuerySet:
+        """
+        Get devices for side
+
+        Args:
+            pk (int): Primary key
+            side (bool): Rack side
+
+        Returns:
+            (QuerySet): Devices for side queryset
+        """
         return Device.objects.get_devices_for_side(pk, side)
 
     @staticmethod
@@ -368,24 +528,48 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            devices_for_rack (QuerySet): Devices queryset (for single rack)
+            (QuerySet): Devices queryset (for single rack)
         """
         return Device.objects.get_devices_for_rack(pk)
 
     @staticmethod
     def get_first_unit(pk: int) -> int:
+        """
+        Get device first unit
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (int): Device first unit
+        """
         return Device.objects.get_device(pk).first_unit
 
     @staticmethod
     def get_last_unit(pk: int) -> int:
+        """
+        Get device last unit
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (int): Device last unit
+        """
         return Device.objects.get_device(pk).last_unit
 
     @staticmethod
     def get_department_name(pk: int) -> str:
+        """
+        Get department name
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (str): Department name
+        """
         return Device.objects.get_device_department(pk) \
             .rack_id \
             .room_id \
@@ -396,6 +580,15 @@ class DeviceRepository:
 
     @staticmethod
     def get_devices_power_list(pk: int) -> list:
+        """
+        Get devices power list
+
+        Args:
+            pk (int): Primary key
+
+        Returns:
+            (list): Devices power list
+        """
         return list(Device
                     .objects
                     .filter(rack_id_id=pk)
@@ -403,6 +596,12 @@ class DeviceRepository:
 
     @staticmethod
     def get_report_data() -> RawQuerySet:
+        """
+        Get report data
+
+        Returns:
+            (RawQuerySet): Devices report data
+        """
         return Device.objects.get_devices_report()
 
     @staticmethod
@@ -413,11 +612,8 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            device_rack_name (str): Rack name for particular device
+            (str): Rack name for particular device
         """
         return Device.objects.get_device_rack(pk) \
             .rack_id \
@@ -431,11 +627,8 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            device_room_name (str): Room name for particular device
+            (str): Room name for particular device
         """
         return Device.objects.get_device_room(pk) \
             .rack_id \
@@ -450,11 +643,8 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            device_building_name (str): Building name for particular device
+            (str): Building name for particular device
         """
         return Device.objects.get_device_building(pk) \
             .rack_id \
@@ -470,11 +660,8 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            device_site_name (str): Site name for particular device
+            (str): Site name for particular device
         """
         return Device.objects.get_device_site(pk) \
             .rack_id \
@@ -491,11 +678,8 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            device_department_name (str): Site name for particular device
+            (str): Site name for particular device
         """
         return Device.objects.get_device_department(pk) \
             .rack_id \
@@ -513,11 +697,8 @@ class DeviceRepository:
         Args:
             pk (int): Primary key
 
-        Raises:
-            ValueError ("pk cannot be None")
-
         Returns:
-            device_region_name (str): Region name for particular device
+            (str): Region name for particular device
         """
         return Device.objects.get_device_region(pk) \
             .rack_id \
@@ -539,9 +720,24 @@ Repository_Type = Union[Type[DeviceRepository],
 
 
 class RepositoryHelper:
+    """
+    Repository helper
+    """
 
     @staticmethod
-    def get_model_repository(model: ModelBase) -> Union[object, Any]:
+    def get_model_repository(model):
+        """
+        Get repository based on model
+
+        Args:
+            model (BaseModel): Model
+
+        Raises:
+           raise ValueError('model: ModelBase must be Site|Building|Room')
+
+        Returns:
+            (repository): Repository class
+        """
         repository = {
             Region: RegionRepository,
             Department: DepartmentRepository,
