@@ -1,5 +1,5 @@
 """
-Testing business logic
+Tests for services
 """
 import datetime
 

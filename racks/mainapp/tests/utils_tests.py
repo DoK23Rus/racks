@@ -1,3 +1,6 @@
+"""
+Tests for utils
+"""
 from django.test import TestCase
 from mainapp.models import (Region,
                             Department,

@@ -1,3 +1,6 @@
+"""
+Entrypoint for all unit tests
+"""
 import unittest
 
 from mainapp.tests.services_tests import (TestDataProcessingService,

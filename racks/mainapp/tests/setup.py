@@ -1,3 +1,6 @@
+"""
+Database setup
+"""
 from mainapp.models import (Region,
                             Department,
                             Site,

@@ -1,3 +1,8 @@
+"""
+Mock data for reports testing
+"""
+
+
 class ReportMocks:
     racks_mock_data = [
         [2, 'Test_rack3', 40, 'Test_vendor3', 'Test_model3', '', 'Yes',
