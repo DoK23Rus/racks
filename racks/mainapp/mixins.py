@@ -406,7 +406,6 @@ class BaseApiAddMixin(BaseApiMixin,
             **kwargs: Kwargs
 
         Returns:
-            (HttpResponse): Need fk for post method (exception)
             (HttpResponse): Object with this ID does not exist (exception)
             (HttpResponse): Add not allowed (read result.message)
             (HttpResponse): Sucsessfully added
@@ -536,7 +535,6 @@ class BaseApiDeleteMixin(BaseApiMixin,
             (HttpResponse): Object with this ID does not exist (exception)
             (HttpResponse): Delete not allowed (read result.message)
             (HttpResponse): Sucsessfully dleted
-            (HttpResponse): Not good data (validation error)
         """
         data = request.data
         user_groups = list(request.user.groups.values_list('name', flat=True))
