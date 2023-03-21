@@ -117,7 +117,7 @@ services:
     healthcheck:
       test: curl -f http://${LOCALHOST}:${BACKEND_PORT}/api/v1 || exit 1
       interval: 5s
-      retries: 10
+      retries: 20
       start_period: 15s
       timeout: 10s
     ports:

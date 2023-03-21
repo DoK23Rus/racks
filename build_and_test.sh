@@ -32,11 +32,11 @@ E2E=$(docker inspect e2e-tests --format='{{.State.ExitCode}}')
 
 # Compose down
 docker-compose -p racks down
-docker-compose ls | grep racks > /dev/null 2>/dev/null
+docker-compose ps | grep Up > /dev/null 2>/dev/null
 while [ $? -eq 0 ]
 do
     sleep 1
-    docker-compose ls | grep racks > /dev/null 2>/dev/null
+    docker-compose ps | grep Up > /dev/null 2>/dev/null
 done
 
 CODE_ARR=($LINTER, $TYPING, $UNITS, $E2E)
