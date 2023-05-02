@@ -165,6 +165,9 @@ services:
       - log_volume:${BASE_APP_DIR}${LOGS_PATH}
     ports:
       - ${BACKEND_PORT_RESERVE2}:${BACKEND_PORT_RESERVE2}
+    depends_on:
+      backend:
+        condition: service_healthy
 
   django-typing:
     <<: *django

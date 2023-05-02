@@ -2,9 +2,9 @@
 Checking and setuping users for E2E testing
 """
 from django.contrib.auth.models import User, Group
-from typing import List, Dict
+from typing import Tuple
 from rest_framework.authtoken.models import Token
-from users_data import users, group_name
+from users_data import users, group_name, TestUser
 globals().update(locals())
 
 
@@ -22,12 +22,12 @@ class CheckUser:
     Checking users (creating and adding groups)
     """
 
-    def __init__(self, group_name: str, group_id: int, user: Dict):
+    def __init__(self, group_name: str, group_id: int, user: TestUser) -> None:
         self.group_name = group_name
         self.group_id = group_id
         self.user = user
-        self.username = user['username']
-        self.password = user['password']
+        self.username = user.username
+        self.password = user.password
 
     def __repr__(self) -> str:
         return (f'{self.__class__.__name__}('
@@ -61,7 +61,7 @@ class CheckUser:
 globals().update(locals())
 
 
-def check_users(users: List[Dict]) -> None:
+def check_users(users: Tuple[TestUser]) -> None:
     """
     Final user check
     """

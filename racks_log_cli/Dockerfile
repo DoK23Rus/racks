@@ -4,10 +4,10 @@ RUN apt-get install -y git
 
 WORKDIR /usr/src/racks-log-cli
 
-RUN mkdir -p /home/log
-RUN groupadd log
-RUN useradd -m -g log log -p racks
-RUN usermod -aG log log
+RUN mkdir -p /home/log && \
+    groupadd log && \
+    useradd -m -g log log -p racks && \
+    usermod -aG log log
 
 COPY go.mod .
 COPY go.sum .

@@ -1,3 +1,6 @@
+"""
+Celery tasks
+"""
 import csv
 import os
 
