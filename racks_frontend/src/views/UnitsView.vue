@@ -50,6 +50,7 @@
       :startList="this.startList"
     />
     <br>
+    <br>
   </div>
 </template>
 
@@ -82,11 +83,12 @@ export default {
   methods: {
     async setRackData() {
       this.rack = await getObject('rack', '/rack/', this.$route.params.id);
-      this.startList = this.setStartList()
+      this.startList = this.setStartList(this.rack)
     },
     async setDevicesData() {
       const devices = await getObject('devices', '/rack/', this.$route.params.id, '/devices');
-      this.setDevicesForSide(devices)
+      this.devicesFront = this.setDevicesForSide(devices).front
+      this.devicesBack = this.setDevicesForSide(devices).back
       this.firstUnitsFront = this.firstUnits(this.devicesFront)
       this.firstUnitsBack = this.firstUnits(this.devicesBack)
       this.rowSpansFront = this.rowSpans(this.devicesFront)
@@ -94,17 +96,22 @@ export default {
     },
     setDevicesForSide(devices) {
       // Devices for side
+      let devicesForSide = {
+        front: [],
+        back: []
+      }
       devices.forEach((device) => {
           if (!device.frontside_location) {
-            this.devicesBack.push(device);
+            devicesForSide.back.push(device);
           }
-          this.devicesFront.push(device);
+          devicesForSide.front.push(device);
       });
+      return devicesForSide
     },
-    setStartList() {
+    setStartList(rack) {
       // List of rack units
-      const arr = Array.from({length: this.rack.rack_amount}, (_, i) => i + 1);
-      if (!this.rack.numbering_from_bottom_to_top) {
+      const arr = Array.from({length: rack.rack_amount}, (_, i) => i + 1);
+      if (!rack.numbering_from_bottom_to_top) {
         return arr;
       } else {
         return arr.reverse();

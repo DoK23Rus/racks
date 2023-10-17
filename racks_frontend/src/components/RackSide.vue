@@ -18,60 +18,61 @@
         <th class="font-semibold text-sm uppercase px-6 py-4 w-8"></th>
       </tr>
     </thead>
-      <tbody class="divide-y-2 divide-gray-300">
+    <tbody class="divide-y-2 divide-gray-300">
       <template v-for="list in startList">
-      <tr>
-        <td class="px-4 py-2 text-black">
-          {{ list }}
-        </td>
-        <template v-for="device in devices">
-          <template v-for="(first_unit, device_number) in firstUnits">
-            <template v-if="first_unit == list">
-              <template v-if="device_number == device.id">
-                <template v-for="(rowspan, device_id) in rowSpans">
-                  <template v-if="device_id == device.id">
-                    <template v-if="device.status == 'Device active'">
-                      <template v-if="device.ownership == 'Our department'">
-                        <Unit
-                          :className="`text-center text-white ${classNameOur}`"
-                          :deviceVendor="device.device_vendor"
-                          :deviceModel="device.device_model"
-                          :deviceId="device.id"
-                          :deviceType="device.device_type"
-                          :rowspan="rowspan"
-                        />
+        <tr>
+          <td class="px-4 py-2 text-black">
+            {{ list }}
+          </td>
+          <template v-for="device in devices">
+            <template v-for="(first_unit, device_number) in firstUnits">
+              <template v-if="first_unit == list">
+                <template v-if="device_number == device.id">
+                  <template v-for="(rowspan, device_id) in rowSpans">
+                    <template v-if="device_id == device.id">
+                      <template v-if="device.status == 'Device active'">
+                        <template v-if="device.ownership == 'Our department'">
+                          <Unit
+                            :className="`text-center text-white ${classNameOur}`"
+                            :deviceVendor="device.device_vendor"
+                            :deviceModel="device.device_model"
+                            :deviceId="device.id"
+                            :deviceType="device.device_type"
+                            :rowspan="rowspan"
+                          />
+                        </template>
+                        <template v-else>
+                          <Unit
+                            :className="`text-center text-white ${classNameAlien}`"
+                            :deviceVendor="device.device_vendor"
+                            :deviceModel="device.device_model"
+                            :deviceId="device.id"
+                            :deviceType="device.device_type"
+                            :rowspan="rowspan"
+                          />
+                        </template>
                       </template>
                       <template v-else>
-                        <Unit
-                          :className="`text-center text-white ${classNameAlien}`"
-                          :deviceVendor="device.device_vendor"
-                          :deviceModel="device.device_model"
-                          :deviceId="device.id"
-                          :deviceType="device.device_type"
-                          :rowspan="rowspan"
-                        />
-                      </template>
-                    </template>
-                    <template v-else>
-                      <template v-if="device.ownership == 'Our department'">
-                        <Unit
-                          :className="`text-center text-white ${classNameEmpty} ${classNameOur}`"
-                          :deviceVendor="device.device_vendor"
-                          :deviceModel="device.device_model"
-                          :deviceId="device.id"
-                          :deviceType="device.device_type"
-                          :rowspan="rowspan"
-                        />
-                      </template>
-                      <template v-else>
-                        <Unit
-                          :className="`text-center text-white ${classNameAlien} ${classNameEmpty}`"
-                          :deviceVendor="device.device_vendor"
-                          :deviceModel="device.device_model"
-                          :deviceId="device.id"
-                          :deviceType="device.device_type"
-                          :rowspan="rowspan"
-                        />
+                        <template v-if="device.ownership == 'Our department'">
+                          <Unit
+                            :className="`text-center text-white ${classNameEmpty} ${classNameOur}`"
+                            :deviceVendor="device.device_vendor"
+                            :deviceModel="device.device_model"
+                            :deviceId="device.id"
+                            :deviceType="device.device_type"
+                            :rowspan="rowspan"
+                          />
+                        </template>
+                        <template v-else>
+                          <Unit
+                            :className="`text-center text-white ${classNameAlien} ${classNameEmpty}`"
+                            :deviceVendor="device.device_vendor"
+                            :deviceModel="device.device_model"
+                            :deviceId="device.id"
+                            :deviceType="device.device_type"
+                            :rowspan="rowspan"
+                          />
+                        </template>
                       </template>
                     </template>
                   </template>
@@ -79,8 +80,7 @@
               </template>
             </template>
           </template>
-        </template>
-      </tr>
+        </tr>
       </template>
     </tbody>
   </table>
