@@ -1,27 +1,44 @@
 <template>
   <td v-bind="{
-    rowspan: rowspan, 
-    deviceId: deviceId, 
-    deviceVendor: deviceVendor, 
-    deviceModel: deviceModel,
-    deviceType: deviceType,
-    className: className
-    }" :class="className" :rowspan="rowspan">
-    <router-link  :to="{path: '/device/' + deviceId}" target="_blank">
+      rowspan: rowspan, 
+      deviceId: deviceId, 
+      deviceVendor: deviceVendor, 
+      deviceModel: deviceModel,
+      deviceType: deviceType,
+      className: className
+    }"
+    :class="className"
+    :rowspan="rowspan"
+  >
+    <router-link
+      :to="{path: '/device/' + deviceId}"
+      target="_blank"
+    >
       <template v-if="deviceVendor || deviceModel">
-        <a >{{truncate(`${deviceVendor} ${deviceModel}`, 30)}}</a>
+        <a>
+          {{truncate(`${deviceVendor} ${deviceModel}`, 30)}}
+        </a>
       </template>
       <template v-else>
         {{ truncate(deviceType, 30) }}
       </template>
     </router-link>    
   </td>
-  <td v-bind="{
-    rowspan: rowspan,
-    deviceId: deviceId
-    }" class="text-center" :rowspan="rowspan">
-    <router-link :to="{path: '/device/' + deviceId}" target="_blank">
-      <a>№{{ deviceId }}</a>
+  <td 
+    v-bind="{
+      rowspan: rowspan,
+      deviceId: deviceId
+    }"
+    class="text-center"
+    :rowspan="rowspan"
+  >
+    <router-link
+      :to="{path: '/device/' + deviceId}"
+      target="_blank"
+    >
+      <a>
+        №{{ deviceId }}
+      </a>
     </router-link> 
   </td>
 </template>
