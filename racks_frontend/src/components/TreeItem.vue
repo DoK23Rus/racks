@@ -5,7 +5,7 @@
       v-if="item.region_name"
       :class="caret()" 
       :id="setId(item.region_name)"
-      @click="toggle()"
+      v-on:click="toggle()"
     >
       {{ truncate(item.region_name, 50) }}
     </span>
@@ -14,7 +14,7 @@
       v-else-if="item.department_name"
       :class="caret()" 
       :id="setId(item.department_name)"
-      @click="toggle()"
+      v-on:click="toggle()"
     >
       {{ truncate(item.department_name, 50) }}
       <router-link 
@@ -36,7 +36,7 @@
       v-else-if="item.site_name"
       :class="caret()" 
       :id="setId(item.site_name)"
-      @click="toggle()"
+      v-on:click="toggle()"
     >
       {{ truncate(item.site_name, 50) }}
       <router-link
@@ -62,7 +62,7 @@
       <button
         class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-        @click="deleteItem(item.id, item.site_name, 'site')"
+        v-on:click="deleteItem(item.id, item.site_name, 'site')"
       >
         Delete
       </button>
@@ -72,7 +72,7 @@
       v-else-if="item.building_name"
       :class="caret()" 
       :id="setId(item.building_name)"
-      @click="toggle()"
+      v-on:click="toggle()"
     >
       {{ truncate(item.building_name, 50) }}
       <router-link
@@ -98,7 +98,7 @@
       <button
         class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-        @click="deleteItem(item.id, item.building_name, 'building')"
+        v-on:click="deleteItem(item.id, item.building_name, 'building')"
       >
         Delete
       </button>
@@ -108,7 +108,7 @@
       v-else-if="item.room_name"
       :class="caret()" 
       :id="setId(item.room_name)"
-      @click="toggle()"
+      v-on:click="toggle()"
     >
       {{ truncate(item.room_name, 50) }}
       <router-link
@@ -134,7 +134,7 @@
       <button
         class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-        @click="deleteItem(item.id, item.room_name, 'room')"
+        v-on:click="deleteItem(item.id, item.room_name, 'room')"
       >
         Delete
       </button>

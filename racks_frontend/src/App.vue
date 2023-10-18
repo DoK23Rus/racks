@@ -1,19 +1,19 @@
 <template>
   <div id="App">
-    <Header />
+    <TheHeader />
     <router-view />
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-import Header from '@/components/Header.vue'
+import TheHeader from '@/components/TheHeader.vue'
 
 
 export default {
   name: 'App',
   components: {
-    Header
+    TheHeader
   },
   beforeCreate() {
     this.$store.commit('initializeStore');

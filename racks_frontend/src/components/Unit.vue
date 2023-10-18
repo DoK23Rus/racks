@@ -11,7 +11,7 @@
     :rowspan="rowspan"
   >
     <router-link
-      :to="{path: '/device/' + deviceId}"
+      :to="{path: `/device/${deviceId}`}"
       target="_blank"
     >
       <template v-if="deviceVendor || deviceModel">
@@ -33,7 +33,7 @@
     :rowspan="rowspan"
   >
     <router-link
-      :to="{path: '/device/' + deviceId}"
+      :to="{path: `/device/${deviceId}`}"
       target="_blank"
     >
       <a>

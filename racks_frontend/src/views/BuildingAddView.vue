@@ -1,10 +1,13 @@
 <template>
   <div class="min-h-screen">
     <div class="container px-4 mx-auto justify-between pl-8 font-sans font-thin text-xl">
-      <Message :messageProps="messageProps" />
+      <TheMessage :messageProps="messageProps" />
     </div>
     <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-sm">
-      <BuildingForm :formProps="formProps" @on-submit="submitForm" />
+      <BuildingForm 
+        :formProps="formProps" 
+        v-on:on-submit="submitForm" 
+      />
     </div>
   </div>
 </template>
@@ -12,25 +15,25 @@
 <script>
 import { postObject } from '@/api';
 import BuildingForm from '@/components/BuildingForm.vue';
-import Message from '@/components/Message.vue';
+import TheMessage from '@/components/TheMessage.vue';
 
 
 export default {
   name: 'BuildingAddView',
   components: {
     BuildingForm,
-    Message
+    TheMessage
   },
   data() {
-    return {
-      formProps: {
-        oldBuildingName: ''
+		return {
+			formProps: {
+          oldBuildingName: ''
       },
-      messageProps: {
+			messageProps: {
         message: ''
-      },
-    };
-  },
+      }
+		}
+	},
   methods: {
     async submitForm(form) {
       const formData = {

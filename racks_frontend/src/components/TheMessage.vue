@@ -1,9 +1,13 @@
 <template>
   <template v-if="messageProps.message.sucsess">
-    <text>{{ messageProps.message.sucsess }}</text>
+    <text>
+      {{ messageProps.message.sucsess }}
+    </text>
   </template>
   <template v-else-if="messageProps.message.invalid">
-    <text class="text-red-500">{{ messageProps.message.invalid }}</text>
+    <text class="text-red-500">
+      {{ messageProps.message.invalid }}
+    </text>
   </template>
   <template v-else>
     <text></text>
@@ -12,7 +16,7 @@
 
 <script>
 export default {
-  name: 'Message',
+  name: 'TheMessage',
   props: {
     messageProps: {
       type: Object

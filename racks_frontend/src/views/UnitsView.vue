@@ -3,7 +3,7 @@
     <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
       Rack №{{ rack.id }}
       <router-link
-        :to="{path: '/device/create/' + this.$route.params.id}"
+        :to="{path: `/device/create/${this.$route.params.id}`}"
         target="_blank"
       >
         <button 
@@ -15,7 +15,7 @@
         </button>
       </router-link>
       <router-link
-        :to="{path: '/rack/' + this.$route.params.id}"
+        :to="{path: `/rack/${this.$route.params.id}`}"
         target="_blank"
       >
         <button class=" text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
@@ -33,21 +33,21 @@
       </div>
     </div>
     <br>
-    <RackSide
+    <RackSideItem
       :side="`front side`"
-      :devices="this.devicesFront"
-      :firstUnits="this.firstUnitsFront"
-      :rowSpans="this.rowSpansFront"
-      :startList="this.startList"
+      :devices="devicesFront"
+      :firstUnits="firstUnitsFront"
+      :rowSpans="rowSpansFront"
+      :startList="startList"
     />
     <br>
     <br>
-    <RackSide
+    <RackSideItem
       :side="`back side`"
-      :devices="this.devicesBack"
-      :firstUnits="this.firstUnitsBack"
-      :rowSpans="this.rowSpansBack"
-      :startList="this.startList"
+      :devices="devicesBack"
+      :firstUnits="firstUnitsBack"
+      :rowSpans="rowSpansBack"
+      :startList="startList"
     />
     <br>
     <br>
@@ -56,101 +56,59 @@
 
 <script>
 import { getObject } from '@/api';
-import RackSide from '@/components/RackSide.vue';
+import RackSideItem from '@/components/RackSideItem.vue';
+import { getRowSpans, getFirstUnits, getStartList, getDevicesForSide } from '@/helpers';
 
 
 export default {
   name: 'UnitsView',
   components: {
-    RackSide
+    RackSideItem
   },
   data() {
     return {
       rack: [],
-      startList: [],
-      devicesFront: [],
-      devicesBack: [],
-      firstUnitsFront: {},
-      firstUnitsBack: {},
-      rowSpansFront: [],
-      rowSpansBack: []
+      devices: []
     }
   },
   created () {
-    this.setRackData();
-    this.setDevicesData();
+    this.setRack();
+    this.setDevices();
+  },
+  computed: {
+    devicesFront() {
+      return this.getDevicesForSide(this.devices).front
+    },
+    devicesBack() { 
+      return this.getDevicesForSide(this.devices).back
+    },
+    firstUnitsFront() {
+      return this.getFirstUnits(this.devicesFront, this.rack.numbering_from_bottom_to_top)
+    },
+    firstUnitsBack() {
+      return this.getFirstUnits(this.devicesBack, this.rack.numbering_from_bottom_to_top)
+    },
+    rowSpansFront() {
+      return this.getRowSpans(this.devicesFront)
+    },
+    rowSpansBack() {
+      return this.getRowSpans(this.devicesBack)
+    },
+    startList() {
+      return this.getStartList(this.rack);
+    }
   },
   methods: {
-    async setRackData() {
+    async setRack() {
       this.rack = await getObject('rack', '/rack/', this.$route.params.id);
-      this.startList = this.setStartList(this.rack)
     },
-    async setDevicesData() {
-      const devices = await getObject('devices', '/rack/', this.$route.params.id, '/devices');
-      this.devicesFront = this.setDevicesForSide(devices).front
-      this.devicesBack = this.setDevicesForSide(devices).back
-      this.firstUnitsFront = this.firstUnits(this.devicesFront)
-      this.firstUnitsBack = this.firstUnits(this.devicesBack)
-      this.rowSpansFront = this.rowSpans(this.devicesFront)
-      this.rowSpansBack = this.rowSpans(this.devicesBack)
+    async setDevices() {
+      this.devices = await getObject('devices', '/rack/', this.$route.params.id, '/devices');
     },
-    setDevicesForSide(devices) {
-      // Devices for side
-      let devicesForSide = {
-        front: [],
-        back: []
-      }
-      devices.forEach((device) => {
-          if (!device.frontside_location) {
-            devicesForSide.back.push(device);
-          }
-          devicesForSide.front.push(device);
-      });
-      return devicesForSide
-    },
-    setStartList(rack) {
-      // List of rack units
-      const arr = Array.from({length: rack.rack_amount}, (_, i) => i + 1);
-      if (!rack.numbering_from_bottom_to_top) {
-        return arr;
-      } else {
-        return arr.reverse();
-      };
-    },
-    firstUnits(devices) {
-      // Devices first units
-      let firstUnits = {};
-      for (const device of devices) {
-        let lastUnit = device.last_unit;
-        let firstUnit = device.first_unit;
-        if (this.rack.numbering_from_bottom_to_top) {
-          if (lastUnit > firstUnit) {
-            firstUnit = device.last_unit;
-          }
-          firstUnits[device.id] = firstUnit;
-        } else {
-          if (lastUnit < firstUnit) {
-            firstUnit = device.last_unit;
-          }
-          firstUnits[device.id] = firstUnit;
-        }
-      }
-      return firstUnits;
-    },
-    rowSpans(devices) {
-      // Rowspans for each device
-      let rowSpans = {};
-      for (const device of devices) {
-        let lastUnit = device.last_unit;
-        let firstUnit = device.first_unit;
-        if (lastUnit < firstUnit) {
-          firstUnit = device.last_unit;
-          lastUnit = device.first_unit;
-        }
-        rowSpans[device.id] = lastUnit - firstUnit + 1;
-      }
-      return rowSpans;
-    },
+    getRowSpans: getRowSpans,
+    getFirstUnits: getFirstUnits,
+    getStartList: getStartList,
+    getDevicesForSide: getDevicesForSide
   }
 }
 </script>

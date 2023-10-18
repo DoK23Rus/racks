@@ -1,23 +1,26 @@
 <template>
   <div class="container px-4 mx-auto justify-between pl-8 font-sans font-thin text-xl">
-    <Message :messageProps="messageProps" />
+    <TheMessage :messageProps="messageProps" />
   </div>
   <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-sm">
-    <DeviceForm :formProps="formProps" @on-submit="submitForm" />
+    <DeviceForm 
+      :formProps="formProps" 
+      v-on:on-submit="submitForm" 
+    />
   </div>
 </template>
 
 <script>
 import { postObject } from '@/api';
 import DeviceForm from '@/components/DeviceForm.vue';
-import Message from '@/components/Message.vue';
+import TheMessage from '@/components/TheMessage.vue';
 
 
 export default {
   name: 'DeviceAddView',
   components: {
     DeviceForm,
-    Message
+    TheMessage
   },
   data() {
     return {

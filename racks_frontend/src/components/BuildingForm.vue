@@ -1,18 +1,33 @@
 <template>
-  <form @submit.prevent="emitData">
+  <form v-on:submit.prevent="emitData">
     <br>
-    <label for="siteName">Building Name:</label>
-    <input id="e2e_building_name" class="block w-96" placeholder="Enter building name here" name="buildingName" type="text" v-model="form.buildingName"/>
+    <label for="siteName">
+      Building Name:
+    </label>
+    <input 
+      id="e2e_building_name"
+      class="block w-96"
+      placeholder="Enter building name here"
+      name="buildingName"
+      type="text"
+      v-model="form.buildingName"
+    />
     <p
       v-for="error of v$.form.buildingName.$errors"
       :key="error.$uid"
     >
-    <div class="text-red-500">{{ error.$message }}</div>
+      <div class="text-red-500">
+        {{ error.$message }}
+      </div>
     </p>
     <br>
-    <button class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-sm 
+    <button 
+      class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-sm 
       px-7 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      type="submit" id="e2e_submit_button" @click="submit">
+      type="submit"
+      id="e2e_submit_button"
+      v-on:click="submit"
+    >
       Submit data
     </button>
   </form>
@@ -27,7 +42,7 @@ export default {
   name: 'SiteForm',
   props: {
     formProps: {
-        type: Object
+      type: Object
     }
   },
   data() {
@@ -39,9 +54,7 @@ export default {
     }
   },
   created() {
-    if (this.formProps.oldBuildingName) {
-      this.form.buildingName = this.formProps.oldBuildingName
-    }
+    this.setBuildingFormProps();
   },
   validations() {
     return {
@@ -51,6 +64,11 @@ export default {
     }
   },
   methods: {
+    setBuildingFormProps() {
+      if (this.formProps.oldBuildingName) {
+        this.form.buildingName = this.formProps.oldBuildingName
+      }
+    },
     submit() {
       this.v$.$touch();
     },

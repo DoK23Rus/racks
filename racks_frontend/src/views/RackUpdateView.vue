@@ -1,10 +1,13 @@
 <template>
   <div class="container px-4 mx-auto justify-between pl-8 font-sans font-thin text-xl">
-    <Message :messageProps="messageProps" />
+    <TheMessage :messageProps="messageProps" />
   </div>
   <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-sm">
     <template v-if="formProps.oldRackName">
-      <RackForm :formProps="formProps" @on-submit="submitForm" />
+      <RackForm 
+        :formProps="formProps" 
+        v-on:on-submit="submitForm" 
+      />
     </template>
   </div>
 </template>
@@ -12,14 +15,14 @@
 <script>
 import { putObject, getObject } from '@/api';
 import RackForm from '@/components/RackForm.vue';
-import Message from '@/components/Message.vue';
+import TheMessage from '@/components/TheMessage.vue';
 
 
 export default {
   name: 'RackUpdateView',
   components: {
     RackForm,
-    Message
+    TheMessage
   },
   data() {
     return {

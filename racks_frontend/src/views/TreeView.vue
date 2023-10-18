@@ -1,6 +1,6 @@
 <template>
 	<div class="container px-4 mx-auto justify-between pl-8 font-sans font-thin text-2xl pb-4">
-    <Message
+    <TheMessage
 			:messageProps="messageProps"
 		/>
   </div>
@@ -19,7 +19,7 @@
 
 <script>
 import { getUnique, deleteObject } from '@/api';
-import Message from '@/components/Message.vue';
+import TheMessage from '@/components/TheMessage.vue';
 import TreeItem from '@/components/TreeItem.vue';
 
 
@@ -27,7 +27,7 @@ export default {
 	name: 'TreeView',
 	components: {
 		TreeItem,
-		Message
+		TheMessage
 	},
 	data() {
 		return {

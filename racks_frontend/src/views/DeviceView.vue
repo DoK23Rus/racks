@@ -1,18 +1,26 @@
 <template>
   <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
     <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-xl">
-      <Message :messageProps="messageProps" />
+      <TheMessage :messageProps="messageProps" />
     </div>
     Device №{{ device.id }}
-    <router-link :to="{path: '/device/' + device.id + '/update'}" target="_blank">
-      <button id="e2e_device_edit" class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
-        px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+    <router-link 
+      :to="{path: `/device/${device.id}/update`}" 
+      target="_blank"
+    >
+      <button 
+        id="e2e_device_edit" 
+        class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
+        px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+      >
         Edit
       </button>
     </router-link>
-    <button class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
+    <button 
+      class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
       px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-      @click="deleteDevice(device.id, `${device.deviceVendor} ${device.deviceModel}`)">
+      v-on:click="deleteDevice(device.id, `${device.deviceVendor} ${device.deviceModel}`)"
+    >
       Delete
     </button>
     <br>
@@ -22,56 +30,123 @@
         {{ deviceLocation.roomName }} &#9002; {{ deviceLocation.rackName }}
       </div>
   <div class="text-base">
-    Status: <text class="text-slate-500">{{ device.status }}</text>
+    Status: 
+      <text class="text-slate-500">
+        {{ device.status }}
+      </text>
     <br>
-      Description: <text class="text-slate-500">{{ device.deviceDescription }}</text>
+      Description: 
+        <text class="text-slate-500">
+          {{ device.deviceDescription }}
+        </text>
     <br>
       <template v-if="device.frontsideLocation">
-        Located on the front of the rack: <text class="text-slate-500">Yes</text>
+        Located on the front of the rack: 
+          <text class="text-slate-500">
+            Yes
+          </text>
       </template>
       <template v-else="device.frontsideLocation">
-        Located on the front of the rack: <text class="text-slate-500">No</text>
+        Located on the front of the rack: 
+          <text class="text-slate-500">
+            No
+          </text>
       </template>
     <br>
-      Installed in: <a class="text-slate-500" v-bind:href="'/rack/' + device.rackId" target="_blank">
-        <text class="text-blue-300">&#9873; </text>
-        Rack №{{ device.rackId }}</a>
+      Installed in: 
+        <a
+          class="text-slate-500" 
+          v-bind:href="`/rack/${device.rackId}`"
+          target="_blank"
+        >
+          <text class="text-blue-300">
+            &#9873; 
+          </text>
+          Rack №{{ device.rackId }}
+        </a>
     <br>
-      First unit: <text class="text-slate-500">{{ device.firstUnit }}</text>
+      First unit: 
+        <text class="text-slate-500">
+          {{ device.firstUnit }}
+        </text>
     <br>
-      Last unit: <text class="text-slate-500">{{ device.lastUnit }}</text>
+      Last unit: 
+        <text class="text-slate-500">
+          {{ device.lastUnit }}
+        </text>
     <br>
-      Ownership: <text class="text-slate-500">{{ device.ownership }}</text>
+      Ownership: 
+        <text class="text-slate-500">
+          {{ device.ownership }}
+        </text>
     <br>
-      Responsible: <text class="text-slate-500">{{ device.responsible }}</text>
+      Responsible: 
+        <text class="text-slate-500">
+          {{ device.responsible }}
+        </text>
     <br>
-      Project: <text class="text-slate-500">{{ device.project }}</text>
+      Project: 
+        <text class="text-slate-500">
+          {{ device.project }}
+        </text>
     <br>
-      Inventory number: <text class="text-slate-500">{{ device.deviceInventoryNumber}}</text>
+      Inventory number: 
+        <text class="text-slate-500">
+          {{ device.deviceInventoryNumber}}
+        </text>
     <br>
-      Financially responsible: <text class="text-slate-500">{{ device.financiallyResponsiblePerson }}</text>
+      Financially responsible: 
+        <text class="text-slate-500">
+          {{ device.financiallyResponsiblePerson }}
+        </text>
     <br>
-      Fixed asset: <text class="text-slate-500">{{ device.fixedAsset }}</text>
+      Fixed asset: 
+        <text class="text-slate-500">
+          {{ device.fixedAsset }}
+        </text>
     <br>
       <template v-if="device.link">
-        Link to docs: <a class="text-slate-500" href="{{ device.link }}"><text class="text-blue-300">&#9873; </text>
-        {{ device.link }}</a>
+        Link to docs: 
+          <a 
+            class="text-slate-500" 
+            v-bind:href="device.link"
+          >
+            <text class="text-blue-300">
+              &#9873; 
+            </text>
+            {{ device.link }}
+          </a>
       </template>
       <template v-else>
         Link to docs:
       </template>
     <br>
     <br>
-      Vendor: <text class="text-slate-500">{{ device.deviceVendor }}</text>
+      Vendor: 
+        <text class="text-slate-500">
+          {{ device.deviceVendor }}
+        </text>
     <br>
-      Model: <text class="text-slate-500">{{ device.deviceModel }}</text>
+      Model: 
+        <text class="text-slate-500">
+          {{ device.deviceModel }}
+        </text>
     <br>
-      Device type: <text class="text-slate-500">{{ device.deviceType }}</text>
+      Device type: 
+        <text class="text-slate-500">
+          {{ device.deviceType }}
+        </text>
     <br>
-      Hostname: <text class="text-slate-500">{{ device.deviceHostname }}</text>
+      Hostname: 
+        <text class="text-slate-500">
+          {{ device.deviceHostname }}
+        </text>
     <br>
       <template v-if="device.ip != null">
-        IP-address: <text class="text-slate-500">{{ device.ip }}</text>
+        IP-address: 
+          <text class="text-slate-500">
+            {{ device.ip }}
+          </text>
       </template>
       <template v-else>
         IP-address:
@@ -79,37 +154,61 @@
     <br>
       <template v-if="device.deviceStack != null">
         Stack/Reserve (reserve ID): 
-        <a class="text-slate-500" v-bind:href="'/device/' + device.deviceStack" 
-        target="_blank">
-        <text class="text-blue-300">&#9873; </text>
-        Device №{{ device.deviceStack }}</a>
+        <a 
+          class="text-slate-500" 
+          v-bind:href="`/device/${device.deviceStack}`" 
+          target="_blank"
+        >
+          <text class="text-blue-300">
+            &#9873; 
+          </text>
+          Device №{{ device.deviceStack }}
+        </a>
       </template>
       <template v-else>
         Stack/Reserve (reserve ID):
       </template>
     <br>
       <template v-if="device.portsAmout != null">
-        Port capacity: <text class="text-slate-500">{{ device.portsAmout }}</text>
+        Port capacity: 
+          <text class="text-slate-500">
+            {{ device.portsAmout }}
+          </text>
       </template>
       <template>
         Port capacity:
       </template>
     <br>
-      Software version: <text class="text-slate-500">{{ device.version }}</text>
+      Software version: 
+        <text class="text-slate-500">
+          {{ device.version }}
+        </text>
     <br>
-      Serial number: <text class="text-slate-500">{{ device.deviceSerialNumber }}</text>
+      Serial number: 
+        <text class="text-slate-500">
+          {{ device.deviceSerialNumber }}
+        </text>
     <br>
-      Socket type: <text class="text-slate-500">{{ device.powerType }}</text>
+      Socket type: 
+        <text class="text-slate-500">
+          {{ device.powerType }}
+        </text>
     <br>
       <template v-if="device.powerW != null">
-        Power requirement (W): <text class="text-slate-500">{{ device.powerW }}</text>
+        Power requirement (W): 
+          <text class="text-slate-500">
+            {{ device.powerW }}
+          </text>
       </template>
       <template v-else>
         Power requirement (W):
       </template>
     <br>
       <template v-if="device.powerV != null">
-        Voltage (V): <text class="text-slate-500">{{ device.powerV }}</text>
+        Voltage (V): 
+          <text class="text-slate-500">
+            {{ device.powerV }}
+          </text>
       </template>
       <template v-else>
         Voltage (V):
@@ -117,22 +216,29 @@
   </div>
     <br>
       <div class="text-xs">
-          Updated by: <text class="text-slate-500">{{ device.updatedBy }}</text>
+          Updated by: 
+            <text class="text-slate-500">
+              {{ device.updatedBy }}
+            </text>
         <br>
-          Updated at: <text class="text-slate-500">{{ device.updatedAt }}</text>
+          Updated at: 
+            <text class="text-slate-500">
+              {{ device.updatedAt }}
+            </text>
       </div>
+    <br>
   </div>
 </template>
 
 <script>
 import { getObject, deleteObject } from '@/api';
-import Message from '@/components/Message.vue';
+import TheMessage from '@/components/TheMessage.vue';
 
 
 export default {
   name: 'DeviceView',
   components: {
-    Message
+    TheMessage
   },
   data() {
     return {

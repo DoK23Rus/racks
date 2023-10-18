@@ -90,7 +90,7 @@
 import Unit from '@/components/Unit.vue';
 
 export default {
-  name: 'RackSide',
+  name: 'RackSideItem',
   components: {
     Unit
   },

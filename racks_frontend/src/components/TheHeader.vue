@@ -1,8 +1,14 @@
 <template>
   <nav class="relative flex flex-wrap items-center justify-between px-2 py-3 bg-blue-800 mb-3">
     <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
-      <img class="object-fill h-16 w-32" :src="mySVG" />
-      <div class="lg:flex flex-grow items-center" id="example-navbar-warning">
+      <img
+        class="object-fill h-16 w-32"
+        :src="mySVG" 
+      />
+      <div
+        class="lg:flex flex-grow items-center"
+        id="example-navbar-warning"
+      >
         <ul class="flex flex-col lg:flex-row list-none ml-auto">
           <li class="nav-item">
             <router-link :to="{path: '/'}">
@@ -26,7 +32,7 @@
 
 <script>
 export default {
-  name: 'Header',
+  name: 'TheHeader',
   data(){
     return {
       mySVG: require('@/assets/logo-svg.svg')
