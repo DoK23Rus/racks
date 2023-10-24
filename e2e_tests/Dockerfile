@@ -5,9 +5,9 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt-get install curl wget tar -y && \
-    apt-get upgrade -y && \
-    pip install --upgrade pip
+RUN apt-get install curl wget tar -y
+RUN apt-get upgrade -y
+RUN pip install --upgrade pip
 
 RUN mkdir -p /home/app && \
     groupadd test && \

@@ -97,7 +97,7 @@ const routes = [
     path: '/device/:id/update',
     name: 'DeviceUpdateView',
     component: DeviceUpdateView
-  },
+  }
 ]
 
 const router = createRouter({

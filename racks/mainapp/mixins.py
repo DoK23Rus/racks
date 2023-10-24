@@ -23,7 +23,10 @@ from mainapp.repository import (RepositoryHelper,
                                 DepartmentRepository,
                                 RegionRepository,
                                 Repository_Type)
-from mainapp.serializers import DeviceSerializer
+from mainapp.serializers import (DeviceSerializer,
+                                 DepartmentSerializer,
+                                 TreeRegionSerializer
+                                 )
 from mainapp.services import (date,
                               DataProcessingService,
                               ReportService,)
@@ -580,8 +583,8 @@ class RackDevicesApiMixin(BaseApiMixin, HelperMixin):
         """
         pk = self.get_pk(kwargs, 'pk')
         devices = DeviceRepository.get_devices_for_rack(pk)
-        serializaed_data = DeviceSerializer(devices, many=True).data
-        return Response(serializaed_data)
+        serialized_data = DeviceSerializer(devices, many=True).data
+        return Response(serialized_data)
 
 
 class DeviceVendorsApiMixin(BaseApiMixin):
@@ -680,6 +683,17 @@ class DepartmentListApiMixin:
     Departments list mixin
     """
     queryset: QuerySet = DepartmentRepository.get_all_departments()
+
+
+class RegionDepartmentsListApiMixin(BaseApiMixin, HelperMixin):
+    """
+    Departments list mixin
+    """
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        pk = self.get_pk(kwargs, 'pk')
+        departments = DepartmentRepository.get_departments_for_region(pk)
+        serializaed_data = DepartmentSerializer(departments, many=True).data
+        return Response(serializaed_data)
 
 
 class SiteListApiMixin:
@@ -867,3 +881,13 @@ class DevicesReportMixin(BaseApiMixin, HelperMixin):
             response['Content-Disposition'] = 'inline; filename=report.csv'
         delete_report_task.delay(file_path)
         return response
+
+
+class TreeRegionApiMixin(BaseApiMixin):
+    """
+    Departments list mixin
+    """
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        regions = RegionRepository.get_all_regions()
+        serialized_data = TreeRegionSerializer(regions, many=True).data
+        return Response(serialized_data)

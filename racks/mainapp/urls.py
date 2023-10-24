@@ -6,6 +6,7 @@ from django.urls import path
 from mainapp.views import (RackDevicesApiView,
                            DepartmentListApiView,
                            RegionListApiView,
+                           RegionDepartmentsListApiView,
                            SiteListApiView,
                            BuildingListApiView,
                            RoomListApiView,
@@ -39,12 +40,17 @@ from mainapp.views import (RackDevicesApiView,
                            RacksReportApiView,
                            DevicesReportApiView,
                            DeviceLocationApiView,
-                           RackLocationApiView)
+                           RackLocationApiView,
+                           TreeRegionApiView
+                           )
 
 
 urlpatterns = [
     path('user/', UserApiView.as_view()),
+    path('tree/', TreeRegionApiView.as_view()),
     path('region/all/', RegionListApiView.as_view()),
+    path('region/<int:pk>/departments/',
+         RegionDepartmentsListApiView.as_view()),
     path('department/all/', DepartmentListApiView.as_view()),
     path('site/all/', SiteListApiView.as_view()),
     path('site/<int:pk>/', SiteDetailApiView.as_view()),

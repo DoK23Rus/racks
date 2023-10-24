@@ -14,78 +14,59 @@ from mainapp.repository import DeviceRepository
 from mainapp.services import DataProcessingService
 
 
-class RegionSerializer(serializers.ModelSerializer):
+class DeviceSerializer(serializers.ModelSerializer):
     """
-    Region serializer
+    Device serializer
     """
+    frontside_location = serializers.BooleanField(required=True)
 
     class Meta:
-        model: ModelBase = Region
+        model: ModelBase = Device
         fields: List = [
             'id',
-            'region_name'
-        ]
-
-
-class DepartmentSerializer(serializers.ModelSerializer):
-    """
-    Department serializer
-    """
-
-    class Meta:
-        model: ModelBase = Department
-        fields: List = [
-            'id',
-            'department_name',
-            'region_id'
-        ]
-
-
-class SiteSerializer(serializers.ModelSerializer):
-    """
-    Site serializer
-    """
-
-    class Meta:
-        model: ModelBase = Site
-        fields: List = [
-            'id',
-            'site_name',
+            'first_unit',
+            'last_unit',
+            'frontside_location',
+            'status',
+            'device_type',
+            'device_vendor',
+            'device_model',
+            'device_hostname',
+            'ip',
+            'device_stack',
+            'ports_amout',
+            'version',
+            'power_type',
+            'power_w',
+            'power_v',
+            'power_ac_dc',
+            'device_serial_number',
+            'device_description',
+            'project',
+            'ownership',
+            'responsible',
+            'financially_responsible_person',
+            'device_inventory_number',
+            'fixed_asset',
+            'link',
             'updated_by',
             'updated_at',
-            'department_id'
+            'rack_id',
         ]
 
 
-class BuildingSerializer(serializers.ModelSerializer):
+class RackPartialSerializer(serializers.ModelSerializer):
     """
-    Building serializer
+    Rack partial serializer (for tree view)
     """
-
     class Meta:
-        model: ModelBase = Building
+        model: ModelBase = Rack
         fields: List = [
             'id',
-            'building_name',
-            'updated_by',
-            'updated_at',
-            'site_id'
-        ]
-
-
-class RoomSerializer(serializers.ModelSerializer):
-    """
-    Room serializer
-    """
-
-    class Meta:
-        model: ModelBase = Room
-        fields: List = [
-            'id',
-            'room_name',
-            'updated_by',
-            'updated_at',
-            'building_id'
+            'rack_name',
+            'rack_amount',
+            'numbering_from_bottom_to_top',
+            'room_id'
         ]
 
 
@@ -142,61 +123,271 @@ class RackSerializer(serializers.ModelSerializer):
             'total_power_w',
             'updated_by',
             'updated_at',
-            'room_id',
-        ]
-
-
-class RackPartialSerializer(serializers.ModelSerializer):
-    """
-    Rack partial serializer (for tree view)
-    """
-    class Meta:
-        model: ModelBase = Rack
-        fields: List = [
-            'id',
-            'rack_name',
-            'rack_amount',
-            'numbering_from_bottom_to_top',
             'room_id'
         ]
 
 
-class DeviceSerializer(serializers.ModelSerializer):
+class RoomSerializer(serializers.ModelSerializer):
     """
-    Device serializer
+    Room serializer
     """
-    frontside_location = serializers.BooleanField(required=True)
 
     class Meta:
-        model: ModelBase = Device
+        model: ModelBase = Room
         fields: List = [
             'id',
-            'first_unit',
-            'last_unit',
-            'frontside_location',
-            'status',
-            'device_type',
-            'device_vendor',
-            'device_model',
-            'device_hostname',
-            'ip',
-            'device_stack',
-            'ports_amout',
-            'version',
-            'power_type',
-            'power_w',
-            'power_v',
-            'power_ac_dc',
-            'device_serial_number',
-            'device_description',
-            'project',
-            'ownership',
-            'responsible',
-            'financially_responsible_person',
-            'device_inventory_number',
-            'fixed_asset',
-            'link',
+            'room_name',
+            'children',
             'updated_by',
             'updated_at',
-            'rack_id',
+            'building_id'
         ]
+        read_only_fields = ['children']
+
+
+class BuildingSerializer(serializers.ModelSerializer):
+    """
+    Building serializer
+    """
+
+    class Meta:
+        model: ModelBase = Building
+        fields: List = [
+            'id',
+            'building_name',
+            'children',
+            'updated_by',
+            'updated_at',
+            'site_id'
+        ]
+        read_only_fields = ['children']
+
+
+class SiteSerializer(serializers.ModelSerializer):
+    """
+    Site serializer
+    """
+
+    class Meta:
+        model: ModelBase = Site
+        fields: List = [
+            'id',
+            'site_name',
+            'children',
+            'updated_by',
+            'updated_at',
+            'department_id'
+        ]
+        read_only_fields = ['children']
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    """
+    Department serializer
+    """
+
+    class Meta:
+        model: ModelBase = Department
+        fields: List = [
+            'id',
+            'department_name',
+            'children',
+            'region_id',
+        ]
+        read_only_fields = ['children']
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    """
+    Region serializer
+    """
+
+    class Meta:
+        model: ModelBase = Region
+        fields: List = [
+            'id',
+            'region_name',
+            'children',
+        ]
+        read_only_fields = ['children']
+
+
+'''
+class TreeRackSerializer(serializers.ModelSerializer):
+    """
+    Rack serializer
+    """
+    name = serializers.CharField(source='rack_name')
+    model = serializers.ReadOnlyField(default='rack')
+
+    class Meta:
+        model: ModelBase = Rack
+        fields: List = [
+            'id',
+            'model',
+            'name'
+        ]
+
+
+class TreeRoomSerializer(serializers.ModelSerializer):
+    """
+    Room serializer
+    """
+    children = TreeRackSerializer(many=True)
+    name = serializers.CharField(source='room_name')
+    model = serializers.ReadOnlyField(default='room')
+
+    class Meta:
+        model: ModelBase = Room
+        depth = 1
+        fields: List = [
+            'id',
+            'name',
+            'model',
+            'children'
+        ]
+
+
+class TreeBuildingSerializer(serializers.ModelSerializer):
+    """
+    Building serializer
+    """
+    children = TreeRoomSerializer(many=True)
+    name = serializers.CharField(source='building_name')
+    model = serializers.ReadOnlyField(default='building')
+
+    class Meta:
+        model: ModelBase = Building
+        depth = 1
+        fields: List = [
+            'id',
+            'name',
+            'model',
+            'children'
+        ]
+
+
+class TreeSiteSerializer(serializers.ModelSerializer):
+    """
+    Site serializer
+    """
+    children = TreeBuildingSerializer(many=True)
+    name = serializers.CharField(source='site_name')
+    model = serializers.ReadOnlyField(default='site')
+
+    class Meta:
+        model: ModelBase = Site
+        depth = 1
+        fields: List = [
+            'id',
+            'name',
+            'model',
+            'children'
+        ]
+
+
+class TreeDepartmentSerializer(serializers.ModelSerializer):
+    """
+    Department serializer
+    """
+    children = TreeSiteSerializer(many=True)
+    name = serializers.CharField(source='department_name')
+    model = serializers.ReadOnlyField(default='department')
+
+    class Meta:
+        model: ModelBase = Department
+        depth = 1
+        fields: List = [
+            'id',
+            'name',
+            'model',
+            'children'
+        ]
+
+
+class TreeRegionSerializer(serializers.ModelSerializer):
+    """
+    Region serializer
+    """
+    children = TreeDepartmentSerializer(many=True)
+    name = serializers.CharField(source='region_name')
+    model = serializers.ReadOnlyField(default='region')
+
+    class Meta:
+        model: ModelBase = Region
+        depth = 1
+        fields: List = [
+            'id',
+            'name',
+            'model',
+            'children'
+        ]
+'''
+
+
+class TreeRackSerializer(serializers.ModelSerializer):
+    """
+    Rack serializer
+    """
+
+    class Meta:
+        model: ModelBase = Rack
+        fields: List = [
+            'id',
+            'rack_name'
+        ]
+
+
+class TreeRoomSerializer(serializers.ModelSerializer):
+    """
+    Room serializer
+    """
+    children = TreeRackSerializer(many=True)
+
+    class Meta:
+        model: ModelBase = Room
+        fields: List = '__all__'
+
+
+class TreeBuildingSerializer(serializers.ModelSerializer):
+    """
+    Building serializer
+    """
+    children = TreeRoomSerializer(many=True)
+
+    class Meta:
+        model: ModelBase = Building
+        fields: List = '__all__'
+
+
+class TreeSiteSerializer(serializers.ModelSerializer):
+    """
+    Site serializer
+    """
+    children = TreeBuildingSerializer(many=True)
+
+    class Meta:
+        model: ModelBase = Site
+        fields: List = '__all__'
+
+
+class TreeDepartmentSerializer(serializers.ModelSerializer):
+    """
+    Department serializer
+    """
+    children = TreeSiteSerializer(many=True)
+
+    class Meta:
+        model: ModelBase = Department
+        fields: List = '__all__'
+
+
+class TreeRegionSerializer(serializers.ModelSerializer):
+    """
+    Region serializer
+    """
+    children = TreeDepartmentSerializer(many=True)
+
+    class Meta:
+        model: ModelBase = Region
+        fields: List = '__all__'

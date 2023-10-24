@@ -87,6 +87,10 @@ class DepartmentRepository:
         """
         return Department.objects.get_all_departments()
 
+    @staticmethod
+    def get_departments_for_region(pk: int) -> ModelBase:
+        return Department.objects.get_departments_for_region(pk)
+
 
 class SiteRepository:
     """

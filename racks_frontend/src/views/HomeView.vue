@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { getObject, getUser } from '@/api';
+import { getUser } from '@/api';
 import axios from 'axios';
 
 export default {

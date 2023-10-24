@@ -9,6 +9,7 @@ from mainapp.mixins import (BaseApiAddMixin,
                             BaseApiUpdateMixin,
                             BuildingListApiMixin,
                             DepartmentListApiMixin,
+                            RegionDepartmentsListApiMixin,
                             DeviceLocationMixin,
                             DeviceModelsApiMixin,
                             DeviceVendorsApiMixin,
@@ -23,7 +24,9 @@ from mainapp.mixins import (BaseApiAddMixin,
                             RegionListApiMixin,
                             RoomListApiMixin,
                             SiteListApiMixin,
-                            UserApiMixin)
+                            UserApiMixin,
+                            TreeRegionApiMixin
+                            )
 from mainapp.models import (Building,
                             Department,
                             Device,
@@ -241,6 +244,11 @@ class DepartmentListApiView(DepartmentListApiMixin, ListAPIView):
     serializer_class: SerializerMetaclass = DepartmentSerializer
 
 
+class RegionDepartmentsListApiView(RegionDepartmentsListApiMixin,
+                                   APIView):
+    pass
+
+
 class SiteListApiView(SiteListApiMixin, ListAPIView):
     """
     Sites list API view
@@ -348,4 +356,8 @@ class RackLocationApiView(RackLocationMixin, APIView):
     """
     Rack location API view
     """
+    pass
+
+
+class TreeRegionApiView(TreeRegionApiMixin, APIView):
     pass

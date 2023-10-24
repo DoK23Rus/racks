@@ -61,7 +61,7 @@ export async function getUser(objName) {
 };
 
 export async function getUnique(objName, path) {
-  // Get unique list (for vendors and models)
+  // Get from unique endpoint
   try {
     const response = await axios.get(`${BASE_PATH}${path}`);
     return response.data;
@@ -70,4 +70,3 @@ export async function getUnique(objName, path) {
     return error.response.data;
   }
 };
-

@@ -30,6 +30,9 @@ class DepartmentManager(models.Manager):
         """
         return Department.objects.all()
 
+    def get_departments_for_region(self, pk):
+        return Department.objects.filter(region_id_id=pk)
+
 
 class SiteManager(models.Manager):
     """
@@ -537,7 +540,8 @@ class Department(models.Model):
                                        verbose_name='Department')
     region_id = models.ForeignKey(Region,
                                   on_delete=models.CASCADE,
-                                  verbose_name='Region')
+                                  verbose_name='Region',
+                                  related_name='children')
     objects = DepartmentManager()
 
     class Meta:
@@ -562,7 +566,8 @@ class Site(models.Model):
                                       verbose_name='Updated at')
     department_id = models.ForeignKey(Department,
                                       on_delete=models.CASCADE,
-                                      verbose_name='Department')
+                                      verbose_name='Department',
+                                      related_name='children')
     objects = SiteManager()
 
     class Meta:
@@ -586,7 +591,8 @@ class Building(models.Model):
                                       verbose_name='Updated at')
     site_id = models.ForeignKey(Site,
                                 on_delete=models.CASCADE,
-                                verbose_name='Site')
+                                verbose_name='Site',
+                                related_name='children')
     objects = BuildingManager()
 
     class Meta:
@@ -610,7 +616,8 @@ class Room(models.Model):
                                       verbose_name='Updated at')
     building_id = models.ForeignKey(Building,
                                     on_delete=models.CASCADE,
-                                    verbose_name='Building')
+                                    verbose_name='Building',
+                                    related_name='children')
     objects = RoomManager()
 
     class Meta:
@@ -725,7 +732,8 @@ class Rack(models.Model):
                                       verbose_name='Updated at')
     room_id = models.ForeignKey(Room,
                                 on_delete=models.CASCADE,
-                                verbose_name='Room')
+                                verbose_name='Room',
+                                related_name='children')
     objects = RackManager()
 
     class Meta:
