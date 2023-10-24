@@ -901,9 +901,21 @@ class DevicesReportMixin(BaseApiMixin, HelperMixin):
 
 class TreeRegionApiMixin(BaseApiMixin):
     """
-    Departments list mixin
+    Tree data API mixin
     """
+
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Get devices report
+
+        Args:
+            request (HttpRequest): Request
+            *args: Args
+            **kwargs: Kwargs
+
+        Returns:
+            response (HttpResponse): Response with tree data
+        """
         regions = RegionRepository.get_all_regions()
         serialized_data = TreeRegionSerializer(regions, many=True).data
         return Response(serialized_data)

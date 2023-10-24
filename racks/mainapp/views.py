@@ -360,4 +360,7 @@ class RackLocationApiView(RackLocationMixin, APIView):
 
 
 class TreeRegionApiView(TreeRegionApiMixin, APIView):
+    """
+    Tree data view
+    """
     pass

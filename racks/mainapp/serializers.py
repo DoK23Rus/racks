@@ -211,7 +211,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
 class TreeRackSerializer(serializers.ModelSerializer):
     """
-    Rack serializer
+    Tree rack serializer
     """
 
     class Meta:
@@ -224,7 +224,7 @@ class TreeRackSerializer(serializers.ModelSerializer):
 
 class TreeRoomSerializer(serializers.ModelSerializer):
     """
-    Room serializer
+    Tree room serializer
     """
     children = TreeRackSerializer(many=True)
 
@@ -235,7 +235,7 @@ class TreeRoomSerializer(serializers.ModelSerializer):
 
 class TreeBuildingSerializer(serializers.ModelSerializer):
     """
-    Building serializer
+    Tree building serializer
     """
     children = TreeRoomSerializer(many=True)
 
@@ -246,7 +246,7 @@ class TreeBuildingSerializer(serializers.ModelSerializer):
 
 class TreeSiteSerializer(serializers.ModelSerializer):
     """
-    Site serializer
+    Tree site serializer
     """
     children = TreeBuildingSerializer(many=True)
 
@@ -257,7 +257,7 @@ class TreeSiteSerializer(serializers.ModelSerializer):
 
 class TreeDepartmentSerializer(serializers.ModelSerializer):
     """
-    Department serializer
+    Tree department serializer
     """
     children = TreeSiteSerializer(many=True)
 
@@ -268,7 +268,7 @@ class TreeDepartmentSerializer(serializers.ModelSerializer):
 
 class TreeRegionSerializer(serializers.ModelSerializer):
     """
-    Region serializer
+    Tree region serializer
     """
     children = TreeDepartmentSerializer(many=True)
 

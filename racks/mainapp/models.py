@@ -298,6 +298,12 @@ class RackManager(models.Manager):
             .get(id=pk)
 
     def get_racks_report(self):
+        """
+        Get racks report
+
+        Returns:
+            (RawQuerySet): Racks report data
+        """
         return Rack.objects.raw("""SELECT rack.id as id,
                                 rack.*,
                                 room.room_name,
@@ -484,6 +490,12 @@ class DeviceManager(models.Manager):
         return Device.objects.values_list('device_model', flat=True)
 
     def get_devices_report(self):
+        """
+        Get devices report
+
+        Returns:
+            (RawQuerySet): Devices report data
+        """
         return Device.objects.raw("""SELECT device.id as id,
                                   device.*,
                                   rack.rack_name,
