@@ -73,6 +73,19 @@ const getDataFromMatch = (itemType, matchObject) => {
   return (matchObject[itemType] || matchObject['default'])();
 }
 
+const getCaretClass = (status) => {
+  // Get caret class for tree expand
+  return `caret ${status? 'down' : ''}`
+}
+
+const getId = (itemName, action, element) => {
+  // Get custom id for e2e testing
+  const baseId = `e2e_${itemName.replaceAll(' ', '_')}`
+  if (action && element) {
+    return`${baseId}_${action}_${element}`
+  }
+  return baseId
+}
 
 export { 
   getRowSpans, 
@@ -81,5 +94,6 @@ export {
   getDevicesForSide,
   setEmptyStringToNull,
   getDataFromMatch,
-  copyOnClick
+  getCaretClass,
+  getId
 }
