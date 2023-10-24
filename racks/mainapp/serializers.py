@@ -1,6 +1,3 @@
-from typing import List
-
-from django.db.models.base import ModelBase
 from rest_framework import serializers
 
 from mainapp.models import (Building,
@@ -21,8 +18,8 @@ class DeviceSerializer(serializers.ModelSerializer):
     frontside_location = serializers.BooleanField(required=True)
 
     class Meta:
-        model: ModelBase = Device
-        fields: List = [
+        model = Device
+        fields = [
             'id',
             'first_unit',
             'last_unit',
@@ -60,8 +57,8 @@ class RackPartialSerializer(serializers.ModelSerializer):
     Rack partial serializer (for tree view)
     """
     class Meta:
-        model: ModelBase = Rack
-        fields: List = [
+        model = Rack
+        fields = [
             'id',
             'rack_name',
             'rack_amount',
@@ -91,8 +88,8 @@ class RackSerializer(serializers.ModelSerializer):
         return DataProcessingService.get_devices_power_w_sum(power_w_list)
 
     class Meta:
-        model: ModelBase = Rack
-        fields: List = [
+        model = Rack
+        fields = [
             'id',
             'rack_name',
             'rack_amount',
@@ -133,8 +130,8 @@ class RoomSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model: ModelBase = Room
-        fields: List = [
+        model = Room
+        fields = [
             'id',
             'room_name',
             'children',
@@ -151,8 +148,8 @@ class BuildingSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model: ModelBase = Building
-        fields: List = [
+        model = Building
+        fields = [
             'id',
             'building_name',
             'children',
@@ -169,8 +166,8 @@ class SiteSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model: ModelBase = Site
-        fields: List = [
+        model = Site
+        fields = [
             'id',
             'site_name',
             'children',
@@ -187,8 +184,8 @@ class DepartmentSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model: ModelBase = Department
-        fields: List = [
+        model = Department
+        fields = [
             'id',
             'department_name',
             'children',
@@ -203,8 +200,8 @@ class RegionSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model: ModelBase = Region
-        fields: List = [
+        model = Region
+        fields = [
             'id',
             'region_name',
             'children',
@@ -218,8 +215,8 @@ class TreeRackSerializer(serializers.ModelSerializer):
     """
 
     class Meta:
-        model: ModelBase = Rack
-        fields: List = [
+        model = Rack
+        fields = [
             'id',
             'rack_name'
         ]
@@ -232,8 +229,8 @@ class TreeRoomSerializer(serializers.ModelSerializer):
     children = TreeRackSerializer(many=True)
 
     class Meta:
-        model: ModelBase = Room
-        fields: List = '__all__'
+        model = Room
+        fields = '__all__'
 
 
 class TreeBuildingSerializer(serializers.ModelSerializer):
@@ -243,8 +240,8 @@ class TreeBuildingSerializer(serializers.ModelSerializer):
     children = TreeRoomSerializer(many=True)
 
     class Meta:
-        model: ModelBase = Building
-        fields: List = '__all__'
+        model = Building
+        fields = '__all__'
 
 
 class TreeSiteSerializer(serializers.ModelSerializer):
@@ -254,8 +251,8 @@ class TreeSiteSerializer(serializers.ModelSerializer):
     children = TreeBuildingSerializer(many=True)
 
     class Meta:
-        model: ModelBase = Site
-        fields: List = '__all__'
+        model = Site
+        fields = '__all__'
 
 
 class TreeDepartmentSerializer(serializers.ModelSerializer):
@@ -265,8 +262,8 @@ class TreeDepartmentSerializer(serializers.ModelSerializer):
     children = TreeSiteSerializer(many=True)
 
     class Meta:
-        model: ModelBase = Department
-        fields: List = '__all__'
+        model = Department
+        fields = '__all__'
 
 
 class TreeRegionSerializer(serializers.ModelSerializer):
@@ -276,5 +273,5 @@ class TreeRegionSerializer(serializers.ModelSerializer):
     children = TreeDepartmentSerializer(many=True)
 
     class Meta:
-        model: ModelBase = Region
-        fields: List = '__all__'
+        model = Region
+        fields = '__all__'
