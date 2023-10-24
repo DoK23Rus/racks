@@ -605,7 +605,11 @@ class DeviceVendorsApiMixin(BaseApiMixin):
             (HttpResponse): Response with list of device vendors
         """
         device_vendors = DeviceRepository.get_device_vendors()
-        return Response({"device_vendors": device_vendors})
+        # return Response({"device_vendors": device_vendors})
+        return Response({
+            "item_type": "device_vendor",
+            "items": device_vendors
+        })
 
 
 class DeviceModelsApiMixin(BaseApiMixin):
@@ -626,7 +630,11 @@ class DeviceModelsApiMixin(BaseApiMixin):
             (HttpResponse): Response with list of device models
         """
         device_models = DeviceRepository.get_device_models()
-        return Response({"device_models": device_models})
+        # return Response({"device_models": device_models})
+        return Response({
+            "item_type": "device_model",
+            "items": device_models
+        })
 
 
 class RackVendorsApiMixin(BaseApiMixin):
@@ -647,7 +655,11 @@ class RackVendorsApiMixin(BaseApiMixin):
             (HttpResponse): Response with list of device vendors
         """
         rack_vendors = RackRepository.get_rack_vendors()
-        return Response({"rack_vendors": rack_vendors})
+        # return Response({"rack_vendors": rack_vendors})
+        return Response({
+            "item_type": "rack_vendor",
+            "items": rack_vendors
+        })
 
 
 class RackModelsApiMixin(BaseApiMixin):
@@ -668,7 +680,11 @@ class RackModelsApiMixin(BaseApiMixin):
             (HttpResponse): Response with list of rack models
         """
         rack_models = RackRepository.get_rack_models()
-        return Response({"rack_models": rack_models})
+        # return Response({"rack_models": rack_models})
+        return Response({
+            "item_type": "rack_model",
+            "items": rack_models
+        })
 
 
 class RegionListApiMixin:

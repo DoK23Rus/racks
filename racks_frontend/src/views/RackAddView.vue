@@ -63,7 +63,7 @@ export default {
       const formData = {
         rack_name: form.rackName,
         rack_amount: parseInt(form.rackAmount),
-        rack_vendor: form.rack_vendor,
+        rack_vendor: form.rackVendor,
         rack_model: form.rackModel,
         rack_description: form.rackDescription,
         numbering_from_bottom_to_top: form.numberingFromBottomToTop,

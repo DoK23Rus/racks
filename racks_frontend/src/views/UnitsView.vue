@@ -57,7 +57,7 @@
 <script>
 import { getObject } from '@/api';
 import RackSideItem from '@/components/RackSideItem.vue';
-import { getRowSpans, getFirstUnits, getStartList, getDevicesForSide } from '@/helpers';
+import { getRowSpans, getFirstUnits, getStartList, getDevicesForSide } from '@/functions';
 
 
 export default {

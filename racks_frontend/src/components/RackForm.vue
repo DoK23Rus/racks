@@ -22,99 +22,52 @@
       </p>
     <br>
       <template v-if="!form.update">
-      <label for="rackAmount">
-        Rack amount (units): 
-      </label>
-      <input
-        id="e2e_rack_amount" 
-        class="block w-96" 
-        placeholder="Filled in once (cannot be changed later)" 
-        name="rackAmount" 
-        type="text" 
-        v-model="form.rackAmount"
-      />
-      <p
-        v-for="error of v$.form.rackAmount.$errors"
-        :key="error.$uid"
-      >
-      <div class="text-red-500">
-        {{ error.$message }}
-      </div>
-      </p>
-    <br>
+        <label for="rackAmount">
+          Rack amount (units): 
+        </label>
+        <input
+          id="e2e_rack_amount" 
+          class="block w-96" 
+          placeholder="Filled in once (cannot be changed later)" 
+          name="rackAmount" 
+          type="text" 
+          v-model="form.rackAmount"
+        />
+        <p
+          v-for="error of v$.form.rackAmount.$errors"
+          :key="error.$uid"
+        >
+        <div class="text-red-500">
+          {{ error.$message }}
+        </div>
+        </p>
       </template>
-      <label for="rackVendor">
-        Rack vendor: 
-      </label>
-      <input
-        class="block w-96" 
-        placeholder="Enter rack vendor here" 
-        id="rackVendor" 
-        name="rackVendor" 
-        type="text" 
-        v-model="form.rackVendor"
-      />
-      <button 
-        type="button" 
-        class="pb-2 text-slate-500 pl-56"
-        v-on:click="vendorsIsHidden = !vendorsIsHidden" 
-      >
-        <text class="text-blue-300">
-          &#9873; 
-        </text>
-        Choose from existing
-      </button>
-      <div v-if="!vendorsIsHidden">
-        <template v-for="vendor in vendors.rack_vendors">
-          <template v-if="vendor !== ''">
-            <button 
-              class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
-              px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-              type="button"
-              :id="vendor"
-              v-on:click="copyOnClick(vendor, 'rackVendor')"
-            >
-              {{ vendor }}
-            </button>
-          </template>
-        </template>
-      </div>
-    <br>     
-      <label for="rackModel">
-        Rack model: 
-      </label>
-      <input
-        class="block w-96" 
-        placeholder="Enter rack vendor here" 
-        id="rackModel" 
-        name="rackModel" 
-        type="text" 
-        v-model="form.rackModel"
-      />
-      <button 
-        type="button" 
-        class="pb-2 text-slate-500 pl-56"
-        v-on:click="modelsIsHidden = !modelsIsHidden" 
-      >
-        <text class="text-blue-300">
-          &#9873; 
-        </text>
-        Choose from existing
-        </button>
-      <div v-if="!modelsIsHidden">
-        <template v-for="model in models.rack_models">
-          <template v-if="model !== ''">
-            <button class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
-              px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-              type="button" 
-              :id="model" 
-              v-on:click="copyOnClick(model, 'rackModel')"
-            >
-              {{ model }}
-            </button>
-          </template>
-        </template>
-      </div>
+    <br>
+      <template v-if="rackModels.item_type">
+        <ChooseExistingItem
+          :itemsData="rackModels"
+          :isHidden="modelsIsHidden"
+          v-model:modelValue="form.rackModel"
+        />
+      </template>
+      <template v-else>
+        <br>
+        Please wait...
+        <br>
+      </template>
+    <br>
+      <template v-if="rackVendors.item_type">
+        <ChooseExistingItem
+          :itemsData="rackVendors"
+          :isHidden="modelsIsHidden"
+          v-model:modelValue="form.rackVendor"
+        />
+      </template>
+      <template v-else>
+        <br>
+        Please wait...
+        <br>
+      </template>  
     <br>
       <label for="rackDescription">
         Description: 
@@ -441,13 +394,17 @@
 
 <script>
 import useVuelidate from '@vuelidate/core';
+import ChooseExistingItem from './ChooseExistingItem.vue';
 import { required, numeric, minValue } from '@vuelidate/validators';
 import { getUnique } from '@/api';
 import { numericGTZOrNull, numericOrNull } from '@/validators';
-import { setEmptyStringToNull, copyOnClick } from '@/helpers';
+import { setEmptyStringToNull } from '@/functions';
 
 export default {
   name: 'RackForm',
+  components: {
+    ChooseExistingItem
+  },
   props: {
     formProps: {
       type: Object
@@ -458,8 +415,8 @@ export default {
       v$: useVuelidate(),
       vendorsIsHidden: true,
       modelsIsHidden: true,
-      vendors: {},
-      models: {},
+      rackVendors: {},
+      rackModels: {},
       form: {
         rackName: '',
         rackAmount: null,
@@ -489,12 +446,14 @@ export default {
         cooler: false,
         update: false
       },
-      numericOrNullValidationError: 'Value must be an integer and greater than zero'
+      numericOrNullValidationError: 'Value must be an integer and greater than zero',
+      selectedModel: '',
+      searchTerm: ''
     };
   },
   created() {
-    this.getVendors();
-    this.getModels();
+    this.getRackVendors();
+    this.getRackModels();
     this.setRackFormProps();
     
   },
@@ -518,11 +477,11 @@ export default {
     submit() {
       this.v$.$touch();
     },
-    async getVendors() {
-      this.vendors = await getUnique('rack vendors', '/rack/vendors');
+    async getRackVendors() {
+      this.rackVendors = await getUnique('rack vendors', '/rack/vendors');
     },
-    async getModels() {
-      this.models= await getUnique('rack models', '/rack/models');
+    async getRackModels() {
+      this.rackModels = await getUnique('rack models', '/rack/models');
     },
     setRackFormProps() {
       if (this.formProps.oldRackName) { 
@@ -576,8 +535,7 @@ export default {
         return;
       }
     },
-    setEmptyStringToNull: setEmptyStringToNull,
-    copyOnClick: copyOnClick
+    setEmptyStringToNull: setEmptyStringToNull
   }
 }
 </script>

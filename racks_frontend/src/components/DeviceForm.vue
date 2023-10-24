@@ -125,77 +125,31 @@
         </option>
       </select>
     <br>
-      <label for="deviceVendor">
-        Device vendor: 
-      </label>
-      <input
-        class="block w-96"
-        id="deviceVendor"
-        name="deviceVendor"
-        type="text"
-        v-model="form.deviceVendor"
-      />
-      <button
-        type="button"
-        v-on:click="vendorsIsHidden = !vendorsIsHidden"
-        class="pb-2 text-slate-500 pl-56"
-      >
-        <text class="text-blue-300">
-          &#9873; 
-        </text>
-        Choose from existing
-      </button>
-      <div v-if="!vendorsIsHidden">
-        <template v-for="vendor in vendors.device_vendors">
-          <template v-if="vendor !== ''">
-            <button 
-              class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
-              px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-              type="button"
-              :id="vendor"
-              v-on:click="copyOnClick(vendor, 'deviceVendor')"
-            >
-              {{ vendor }}
-            </button>
-          </template>
-        </template>
-      </div>
+    <template v-if="deviceModels.item_type">
+        <ChooseExistingItem
+          :itemsData="deviceModels"
+          :isHidden="modelsIsHidden"
+          v-model:modelValue="form.deviceModel"
+        />
+      </template>
+      <template v-else>
+        <br>
+        Please wait...
+        <br>
+      </template>
     <br>
-      <label for="deviceModel">
-        Device model: 
-      </label>
-      <input 
-        class="block w-96" 
-        id="deviceModel" 
-        name="deviceModel" 
-        type="text" 
-        v-model="form.deviceModel"
-      />
-      <button 
-        type="button" 
-        v-on:click="modelsIsHidden = !modelsIsHidden" 
-        class="pb-2 text-slate-500 pl-56"
-      >
-        <text class="text-blue-300">
-          &#9873; 
-        </text>
-        Choose from existing
-      </button>
-      <div v-if="!modelsIsHidden">
-        <template v-for="model in models.device_models">
-          <template v-if="model !== ''">
-            <button
-              class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
-              px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-              type="button"
-              :id="model"
-              v-on:click="copyOnClick(model, 'deviceModel')"
-            >
-              {{ model }}
-            </button>
-          </template>
-        </template>
-      </div>
+      <template v-if="deviceVendors.item_type">
+        <ChooseExistingItem
+          :itemsData="deviceVendors"
+          :isHidden="modelsIsHidden"
+          v-model:modelValue="form.deviceVendor"
+        />
+      </template>
+      <template v-else>
+        <br>
+        Please wait...
+        <br>
+      </template>  
     <br>
       <label for="deviceHostname">
         Hostname: 
@@ -456,10 +410,11 @@
 
 <script>
 import useVuelidate from '@vuelidate/core';
+import ChooseExistingItem from './ChooseExistingItem.vue';
 import { required, numeric, minValue, ipAddress } from '@vuelidate/validators';
 import { getUnique } from '@/api';
 import { numericGTZOrNull } from '@/validators';
-import { setEmptyStringToNull, copyOnClick } from '@/helpers';
+import { setEmptyStringToNull } from '@/functions';
 
 
 export default {
@@ -469,13 +424,16 @@ export default {
       type: Object
     }
   },
+  components: {
+    ChooseExistingItem
+  },
   data() {
     return {
       v$: useVuelidate(),
       vendorsIsHidden: true,
       modelsIsHidden: true,
-      vendors: {},
-      models: {},
+      deviceVendors: {},
+      deviceModels: {},
       form: {
         firstUnit: null,
         lastUnit: null,
@@ -502,7 +460,9 @@ export default {
         deviceInventoryNumber: '',
         fixedAsset: ''
       },
-      numericOrNullValidationError: 'Value must be an integer and greater than zero'
+      numericOrNullValidationError: 'Value must be an integer and greater than zero',
+      selectedModel: '',
+      searchTerm: ''
     };
   },
   created() {
@@ -529,10 +489,10 @@ export default {
       this.v$.$touch();
     },
     async getVendors() {
-      this.vendors = await getUnique('device vendors', '/device/vendors');
+      this.deviceVendors = await getUnique('device vendors', '/device/vendors');
     },
     async getModels() {
-      this.models= await getUnique('device models', '/device/models');
+      this.deviceModels= await getUnique('device models', '/device/models');
     },
     setDeviceFormProps() {
       if (this.formProps.oldFirstUnit) { 
@@ -581,7 +541,6 @@ export default {
       }
     },
     setEmptyStringToNull: setEmptyStringToNull,
-    copyOnClick: copyOnClick
   }
 }
 </script>
