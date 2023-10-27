@@ -3,15 +3,15 @@
     <TheMessage
       :messageProps="messageProps"
     />
-      </div>
-      <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light"></div>
-      <div class="container min-h-screen px-4 mx-auto flex flex-wrap justify-between text-xl pl-8 font-sans tracking-tight font-thin">
-      <ul>
-        <li v-for="treeData in regions">
-          <TreeItem
-            :item="treeData"
-            :deleteItem="deleteItem"
-          />
+  </div>
+  <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light"></div>
+  <div class="container min-h-screen px-4 mx-auto flex flex-wrap justify-between text-xl pl-8 font-sans tracking-tight font-thin">
+    <ul>
+      <li v-for="treeData in regions">
+        <TreeItem
+          :item="treeData"
+          :deleteItem="deleteItem"
+        />
       </li>
     </ul>
   </div>
@@ -24,44 +24,44 @@ import { getUnique, deleteObject } from '@/api';
 
 
 export default {
-	name: 'TreeView',
-	components: {
-		TreeItem,
-		TheMessage
-	},
-	data() {
-		return {
-			regions: {},
-			messageProps: {
+  name: 'TreeView',
+  components: {
+    TreeItem,
+    TheMessage
+  },
+  data() {
+    return {
+      regions: {},
+      messageProps: {
         message: ''
       }
-		}
-	},
-	created() {
-		this.getTreeData();
-	},
-	methods: {
-		/**
-		 * Fetch and set tree data
-		 */
-		async getTreeData() {
-			this.regions = await getUnique('tree', '/tree/')
-		},
+    }
+  },
+  created() {
+    this.getTreeData();
+  },
+  methods: {
+    /**
+     * Fetch and set tree data
+     */
+    async getTreeData() {
+    	this.regions = await getUnique('tree', '/tree/')
+    },
     /**
      * Delete tree item
      * @param {Number} id Item id
      * @param {String} itemName Item name
      * @param {String} itemType Item type
      */
-		async deleteItem(id, itemName, itemType) {
-			const payload = {
-				id: id,
-			}
-			if (confirm(`Do you really want to delete ${itemType} ${itemName} and all releated items?`)) {
-				this.messageProps.message = await deleteObject(itemType, `/${itemType}/${id}/delete/`, payload);
-				console.log(this.messageProps.message);
-				this.getTreeData();
-			}
+    async deleteItem(id, itemName, itemType) {
+      const payload = {
+        id: id,
+      }
+      if (confirm(`Do you really want to delete ${itemType} ${itemName} and all releated items?`)) {
+        this.messageProps.message = await deleteObject(itemType, `/${itemType}/${id}/delete/`, payload);
+        console.log(this.messageProps.message);
+        this.getTreeData();
+      }
 		},
 	}
 }
