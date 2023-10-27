@@ -29,7 +29,7 @@ export default {
   data() {
 		return {
 			formProps: {
-          oldBuildingName: ''
+        oldName: ''
       },
 			messageProps: {
         message: ''
@@ -43,7 +43,7 @@ export default {
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
-        name: form.buildingName
+        name: form.name
       };
       this.messageProps.message = await putObject('building', `/building/${this.$route.params.id}/update/`, formData);
     },
@@ -51,7 +51,7 @@ export default {
       // Get building old data
       const response = await getObject('building', '/building/', this.$route.params.id);
       this.messageProps.message = response;
-      this.formProps.oldBuildingName = response.name;
+      this.formProps.oldName = response.name;
     }
   }
 };

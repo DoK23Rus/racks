@@ -1,19 +1,19 @@
 <template>
   <form v-on:submit.prevent="emitData">
     <br>
-      <label for="rackName">
-        Rack Name: 
+      <label for="name">
+        Rack name: 
       </label>
       <input
         id="e2e_rack_name" 
         class="block w-96" 
         placeholder="Enter rack name here" 
-        name="rackName" 
+        name="name" 
         type="text" 
-        v-model="form.rackName"
+        v-model="form.name"
       />
       <p
-        v-for="error of v$.form.rackName.$errors"
+        v-for="error of v$.form.name.$errors"
         :key="error.$uid"
       >
       <div class="text-red-500">
@@ -22,19 +22,19 @@
       </p>
     <br>
       <template v-if="!form.update">
-        <label for="rackAmount">
+        <label for="amount">
           Rack amount (units): 
         </label>
         <input
           id="e2e_rack_amount" 
           class="block w-96" 
           placeholder="Filled in once (cannot be changed later)" 
-          name="rackAmount" 
+          name="amount" 
           type="text" 
-          v-model="form.rackAmount"
+          v-model="form.amount"
         />
         <p
-          v-for="error of v$.form.rackAmount.$errors"
+          v-for="error of v$.form.amount.$errors"
           :key="error.$uid"
         >
         <div class="text-red-500">
@@ -43,11 +43,11 @@
         </p>
       </template>
     <br>
-      <template v-if="rackModels.item_type">
+      <template v-if="models.item_type">
         <ChooseExistingItem
-          :itemsData="rackModels"
+          :itemsData="models"
           :isHidden="modelsIsHidden"
-          v-model:modelValue="form.rackModel"
+          v-model:modelValue="form.model"
         />
       </template>
       <template v-else>
@@ -56,11 +56,11 @@
         <br>
       </template>
     <br>
-      <template v-if="rackVendors.item_type">
+      <template v-if="vendors.item_type">
         <ChooseExistingItem
-          :itemsData="rackVendors"
-          :isHidden="modelsIsHidden"
-          v-model:modelValue="form.rackVendor"
+          :itemsData="vendors"
+          :isHidden="vendorsIsHidden"
+          v-model:modelValue="form.vendor"
         />
       </template>
       <template v-else>
@@ -69,15 +69,15 @@
         <br>
       </template>  
     <br>
-      <label for="rackDescription">
+      <label for="description">
         Description: 
       </label>
       <input 
         class="block w-96" 
         placeholder="Can be used for notes" 
-        name="rackDescription" 
+        name="description" 
         type="text" 
-        v-model="form.rackDescription"
+        v-model="form.description"
       />
     <br>
       <label for="numberingFromBottomToTop">
@@ -85,7 +85,7 @@
       </label>
       <input 
         class="block" 
-        name="rackModel" 
+        name="numberingFromBottomToTop"
         type="checkbox" 
         v-model="form.numberingFromBottomToTop"
       />
@@ -100,24 +100,24 @@
         v-model="form.responsible"
       />
     <br>
-      <label for="rackFinanciallyResponsiblePerson">
+      <label for="financiallyResponsiblePerson">
         Financially responsible: 
       </label>
       <input 
         class="block w-96" 
-        name="rackFinanciallyResponsiblePerson" 
+        name="financiallyResponsiblePerson" 
         type="text" 
-        v-model="form.rackFinanciallyResponsiblePerson"
+        v-model="form.financiallyResponsiblePerson"
       />
     <br>
-      <label for="rackInventoryNumber">
+      <label for="inventoryNumber">
         Inventory number: 
       </label>
       <input 
         class="block w-96" 
-        name="rackInventoryNumber" 
+        name="inventoryNumber" 
         type="text" 
-        v-model="form.rackInventoryNumber"
+        v-model="form.inventoryNumber"
       />
     <br>
       <label for="fixedAsset">
@@ -161,17 +161,17 @@
         v-model="form.place"
       />
     <br>
-      <label for="rackHeight">
+      <label for="height">
         Rack height (mm): 
       </label>
       <input 
         class="block w-96" 
-        name="rackHeight" 
+        name="height" 
         type="text" 
-        v-model="form.rackHeight"
+        v-model="form.height"
       />
       <p
-        v-for="error of v$.form.rackHeight.$errors"
+        v-for="error of v$.form.height.$errors"
         :key="error.$uid"
       >
       <div class="text-red-500">
@@ -179,17 +179,17 @@
       </div>
       </p>
     <br>
-      <label for="rackWidth">
+      <label for="width">
         Rack width (mm): 
       </label>
       <input 
         class="block w-96" 
-        name="rackWidth" 
+        name="width" 
         type="text" 
-        v-model="form.rackWidth"
+        v-model="form.width"
       />
       <p
-        v-for="error of v$.form.rackWidth.$errors"
+        v-for="error of v$.form.width.$errors"
         :key="error.$uid"
       >
       <div class="text-red-500">
@@ -197,17 +197,17 @@
       </div>
       </p>
     <br>
-      <label for="rackDepth">
+      <label for="depth">
         Rack depth (mm): 
       </label>
       <input 
         class="block w-96" 
-        name="rackDepth" 
+        name="depth" 
         type="text" 
-        v-model="form.rackDepth"
+        v-model="form.depth"
       />
       <p
-        v-for="error of v$.form.rackDepth.$errors"
+        v-for="error of v$.form.depth.$errors"
         :key="error.$uid"
       >
       <div class="text-red-500">
@@ -215,18 +215,18 @@
       </div>
       </p>
     <br>
-      <label for="rackUnitWidth">
+      <label for="unitWidth">
         Useful rack width (inches): 
       </label>
       <input
         class="block w-96" 
         placeholder="Frame width" 
-        name="rackUnitWidth" 
+        name="unitWidth" 
         type="text" 
-        v-model="form.rackUnitWidth"
+        v-model="form.unitWidth"
       />
       <p
-        v-for="error of v$.form.rackUnitWidth.$errors"
+        v-for="error of v$.form.unitWidth.$errors"
         :key="error.$uid"
       >
       <div class="text-red-500">
@@ -234,18 +234,18 @@
       </div>
       </p>
     <br>
-      <label for="rackUnitDepth">
+      <label for="unitDepth">
         Useful rack depth (mm): 
       </label>
       <input 
         class="block w-96"
         placeholder="Depth from frame to frame" 
-        name="rackUnitDepth" 
+        name="unitDepth" 
         type="text" 
-        v-model="form.rackUnitDepth"
+        v-model="form.unitDepth"
       />
       <p
-        v-for="error of v$.form.rackUnitDepth.$errors"
+        v-for="error of v$.form.unitDepth.$errors"
         :key="error.$uid"
       >
       <div class="text-red-500">
@@ -253,12 +253,12 @@
       </div>
       </p>
     <br>
-      <label for="rackType">
+      <label for="type">
         Execution variant: 
       </label>
       <select 
         class="block" 
-        v-model="form.rackType"
+        v-model="form.type"
       >
         <option 
           value="Rack" 
@@ -271,12 +271,12 @@
         </option>
       </select>
     <br>
-      <label for="rackFrame">
+      <label for="frame">
         Construction: 
       </label>
       <select 
         class="block" 
-        v-model="form.rackFrame"
+        v-model="form.frame"
       >
         <option
           value="Double frame"
@@ -289,12 +289,12 @@
         </option>
       </select>
     <br>
-      <label for="rackPlaceType">
+      <label for="placeType">
         Location type: 
       </label>
       <select 
         class="block" 
-        v-model="form.rackPlaceType"
+        v-model="form.placeType"
       >
         <option 
           value="Floor standing" 
@@ -415,30 +415,30 @@ export default {
       v$: useVuelidate(),
       vendorsIsHidden: true,
       modelsIsHidden: true,
-      rackVendors: {},
-      rackModels: {},
+      vendors: {},
+      models: {},
       form: {
-        rackName: '',
-        rackAmount: null,
-        rackVendor: '',
-        rackModel: '',
-        rackDescription: '',
+        name: '',
+        amount: null,
+        vendor: '',
+        model: '',
+        description: '',
         numberingFromBottomToTop: true,
         responsible: '',
-        rackFinanciallyResponsiblePerson: '',
-        rackInventoryNumber: '',
+        financiallyResponsiblePerson: '',
+        inventoryNumber: '',
         fixedAsset: '',
         link: '',
         row: '',
         place: '',
-        rackHeight: null,
-        rackWidth: null,
-        rackDepth: null,
-        rackUnitWidth: null,
-        rackUnitDepth: null,
-        rackType: 'Rack',
-        rackFrame: 'Double frame',
-        rackPlaceType: 'Floor standing',
+        height: null,
+        width: null,
+        depth: null,
+        unitWidth: null,
+        unitDepth: null,
+        type: 'Rack',
+        frame: 'Double frame',
+        placeType: 'Floor standing',
         maxLoad: null,
         powerSockets: null,
         powerSocketsUps: null,
@@ -460,13 +460,13 @@ export default {
   validations() {
     return {
       form: {
-        rackName: {required},
-        rackAmount: {required, numeric, minValue: minValue(1)},
-        rackHeight: {numericGTZOrNull},
-        rackWidth: {numericGTZOrNull},
-        rackDepth: {numericGTZOrNull},
-        rackUnitWidth: {numericGTZOrNull},
-        rackUnitDepth: {numericGTZOrNull},
+        name: {required},
+        amount: {required, numeric, minValue: minValue(1)},
+        height: {numericGTZOrNull},
+        width: {numericGTZOrNull},
+        depth: {numericGTZOrNull},
+        unitWidth: {numericGTZOrNull},
+        unitDepth: {numericGTZOrNull},
         maxLoad: {numericGTZOrNull},
         powerSockets: {numericOrNull},
         powerSocketsUps: {numericOrNull}
@@ -478,34 +478,34 @@ export default {
       this.v$.$touch();
     },
     async getRackVendors() {
-      this.rackVendors = await getUnique('rack vendors', '/rack/vendors');
+      this.vendors = await getUnique('rack vendors', '/rack/vendors');
     },
     async getRackModels() {
-      this.rackModels = await getUnique('rack models', '/rack/models');
+      this.models = await getUnique('rack models', '/rack/models');
     },
     setRackFormProps() {
-      if (this.formProps.oldRackName) { 
-        this.form.rackName = this.formProps.oldRackName;
-        this.form.rackAmount = this.formProps.oldRackAmount;
-        this.form.rackVendor = this.formProps.oldRackVendor;
-        this.form.rackModel = this.formProps.oldRackModel;
-        this.form.rackDescription = this.formProps.oldRackDescription;
+      if (this.formProps.oldName) { 
+        this.form.name = this.formProps.oldName;
+        this.form.amount = this.formProps.oldAmount;
+        this.form.vendor = this.formProps.oldVendor;
+        this.form.model = this.formProps.oldModel;
+        this.form.description = this.formProps.oldDescription;
         this.form.numberingFromBottomToTop =this.formProps.oldNumberingFromBottomToTop;
         this.form.responsible = this.formProps.oldResponsible;
-        this.form.rackFinanciallyResponsiblePerson = this.formProps.oldRackFinanciallyResponsiblePerson;
-        this.form.rackInventoryNumber = this.formProps.oldRackInventoryNumber;
+        this.form.financiallyResponsiblePerson = this.formProps.oldFinanciallyResponsiblePerson;
+        this.form.inventoryNumber = this.formProps.oldInventoryNumber;
         this.form.fixedAsset = this.formProps.oldFixedAsset;
         this.form.link = this.formProps.oldLink;
         this.form.row = this.formProps.oldRow;
         this.form.place = this.formProps.oldPlace;
-        this.form.rackHeight = this.formProps.oldRackHeight;
-        this.form.rackWidth = this.formProps.oldRackWidth;
-        this.form.rackDepth = this.formProps.oldRackDepth;
-        this.form.rackUnitWidth = this.formProps.oldRackUnitWidth;
-        this.form.rackUnitDepth = this.formProps.oldRackUnitDepth;
-        this.form.rackType = this.formProps.oldRackType;
-        this.form.rackFrame = this.formProps.oldRackFrame;
-        this.form.rackPlaceType = this.formProps.oldRackPlaceType;
+        this.form.height = this.formProps.oldHeight;
+        this.form.width = this.formProps.oldWidth;
+        this.form.depth = this.formProps.oldDepth;
+        this.form.unitWidth = this.formProps.oldUnitWidth;
+        this.form.unitDepth = this.formProps.oldUnitDepth;
+        this.form.type = this.formProps.oldType;
+        this.form.frame = this.formProps.oldFrame;
+        this.form.placeType = this.formProps.oldPlaceType;
         this.form.maxLoad = this.formProps.oldMaxLoad;
         this.form.powerSockets = this.formProps.oldPowerSockets;
         this.form.powerSocketsUps = this.formProps.oldPowerSocketsUps;
@@ -518,11 +518,11 @@ export default {
       if (this.v$.$errors.length == 0) {
         // Yes, this is a crutch, but quite simple and understandable
         const fieldNamesArr = [
-          'rackHeight',
-          'rackWidth',
-          'rackDepth',
-          'rackUnitWidth',
-          'rackUnitDepth',
+          'height',
+          'width',
+          'depth',
+          'unitWidth',
+          'unitDepth',
           'maxLoad',
           'powerSockets',
           'powerSocketsUps'

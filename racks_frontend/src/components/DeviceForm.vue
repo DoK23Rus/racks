@@ -82,7 +82,7 @@
       </label>
       <select 
         class="block"
-        v-model="form.deviceType"
+        v-model="form.type"
       >
         <option
           value="Other"
@@ -125,11 +125,11 @@
         </option>
       </select>
     <br>
-    <template v-if="deviceModels.item_type">
+    <template v-if="models.item_type">
         <ChooseExistingItem
-          :itemsData="deviceModels"
+          :itemsData="models"
           :isHidden="modelsIsHidden"
-          v-model:modelValue="form.deviceModel"
+          v-model:modelValue="form.model"
         />
       </template>
       <template v-else>
@@ -138,11 +138,11 @@
         <br>
       </template>
     <br>
-      <template v-if="deviceVendors.item_type">
+      <template v-if="vendors.item_type">
         <ChooseExistingItem
-          :itemsData="deviceVendors"
-          :isHidden="modelsIsHidden"
-          v-model:modelValue="form.deviceVendor"
+          :itemsData="vendors"
+          :isHidden="vendorsIsHidden"
+          v-model:modelValue="form.vendor"
         />
       </template>
       <template v-else>
@@ -151,13 +151,13 @@
         <br>
       </template>  
     <br>
-      <label for="deviceHostname">
+      <label for="hostname">
         Hostname: 
       </label>
       <input
         class="block w-96"
-        name="deviceHostname"
-        type="text" v-model="form.deviceHostname"
+        name="hostname"
+        type="text" v-model="form.hostname"
       />
     <br>
       <label for="ip">
@@ -176,17 +176,17 @@
         {{ error.$message }}
       </p>
     <br>
-      <label for="deviceStack">
+      <label for="stack">
         Stack/Reserve (reserve ID): 
       </label>
       <input 
         class="block w-96" 
-        name="deviceStack" 
+        name="stack" 
         type="text" 
-        v-model="form.deviceStack"
+        v-model="form.stack"
       />
       <p
-        v-for="error of v$.form.deviceStack.$errors"
+        v-for="error of v$.form.stack.$errors"
         :key="error.$uid"
       >
       <div class="text-red-500">
@@ -304,25 +304,25 @@
         </option>
       </select>
     <br>
-      <label for="deviceSerialNumber">
+      <label for="serialNumber">
         Serial number: 
       </label>
       <input 
         class="block w-96" 
-        name="deviceSerialNumber" 
+        name="serialNumber" 
         type="text" 
-        v-model="form.deviceSerialNumber"
+        v-model="form.serialNumber"
       />
     <br>
-      <label for="deviceDescription">
+      <label for="description">
         Description: 
       </label>
       <input 
         class="block w-96" 
         placeholder="Device purpose" 
-        name="deviceDescription" 
+        name="description" 
         type="text" 
-        v-model="form.deviceDescription"
+        v-model="form.description"
       />
     <br>
       <label for="project">
@@ -365,14 +365,14 @@
         v-model="form.financiallyResponsiblePerson"
       />
     <br>
-      <label for="deviceInventoryNumber">
+      <label for="inventoryNumber">
         Inventory number: 
       </label>
       <input 
         class="block w-96" 
-        name="deviceInventoryNumber" 
+        name="inventoryNumber" 
         type="text" 
-        v-model="form.deviceInventoryNumber"
+        v-model="form.inventoryNumber"
       />
     <br>
       <label for="fixedAsset">
@@ -432,17 +432,17 @@ export default {
       v$: useVuelidate(),
       vendorsIsHidden: true,
       modelsIsHidden: true,
-      deviceVendors: {},
-      deviceModels: {},
+      vendors: {},
+      models: {},
       form: {
         firstUnit: null,
         lastUnit: null,
         frontsideLocation: true,
         status: 'Device active',
-        deviceType: 'Other',
-        deviceVendor: '',
-        deviceModel: '',
-        deviceHostname: '',
+        type: 'Other',
+        vendor: '',
+        model: '',
+        hostname: '',
         ip: null,
         deviceStack: '',
         portsAmout: null,
@@ -451,13 +451,13 @@ export default {
         powerW: null,
         powerV: null,
         powerACDC: 'AC',
-        deviceSerialNumber: '',
-        deviceDescription: '',
+        serialNumber: '',
+        description: '',
         project: '',
         ownership: 'Our department',
         responsible: '',
         financiallyResponsiblePerson: '',
-        deviceInventoryNumber: '',
+        inventoryNumber: '',
         fixedAsset: ''
       },
       numericOrNullValidationError: 'Value must be an integer and greater than zero',
@@ -477,7 +477,7 @@ export default {
         firstUnit: {required, numeric, minValue: minValue(1)},
         lastUnit: {required, numeric, minValue: minValue(1)},
         ip: {ipAddress},
-        deviceStack: {numericGTZOrNull},
+        stack: {numericGTZOrNull},
         portsAmout: {numericGTZOrNull},
         powerW: {numericGTZOrNull},
         powerV: {numericGTZOrNull}
@@ -489,10 +489,10 @@ export default {
       this.v$.$touch();
     },
     async getVendors() {
-      this.deviceVendors = await getUnique('device vendors', '/device/vendors');
+      this.vendors = await getUnique('device vendors', '/device/vendors');
     },
     async getModels() {
-      this.deviceModels= await getUnique('device models', '/device/models');
+      this.models= await getUnique('device models', '/device/models');
     },
     setDeviceFormProps() {
       if (this.formProps.oldFirstUnit) { 
@@ -500,25 +500,25 @@ export default {
         this.form.lastUnit = this.formProps.oldLastUnit;
         this.form.frontsideLocation = this.formProps.oldFrontsideLocation;
         this.form.status = this.formProps.oldStatus;
-        this.form.deviceType = this.formProps.oldDeviceType;
-        this.form.deviceVendor = this.formProps.oldDeviceVendor;
-        this.form.deviceModel = this.formProps.oldDeviceModel;
-        this.form.deviceHostname = this.formProps.oldDeviceHostname;
+        this.form.type = this.formProps.oldType;
+        this.form.vendor = this.formProps.oldVendor;
+        this.form.model = this.formProps.oldModel;
+        this.form.hostname = this.formProps.oldHostname;
         this.form.ip = this.formProps.oldIp;
-        this.form.deviceStack = this.formProps.oldDeviceStack;
+        this.form.stack = this.formProps.oldStack;
         this.form.portsAmout = this.formProps.oldPortsAmout;
         this.form.version = this.formProps.oldVersion;
         this.form.powerType = this.formProps.oldPowerType;
         this.form.powerW = this.formProps.oldPowerW;
         this.form.powerV = this.formProps.oldPowerV;
         this.form.powerACDC = this.formProps.oldPowerACDC;
-        this.form.deviceSerialNumber = this.formProps.oldDeviceSerialNumber;
-        this.form.deviceDescription = this.formProps.oldDeviceDescription;
+        this.form.serialNumber = this.formProps.oldSerialNumber;
+        this.form.description = this.formProps.oldDescription;
         this.form.project = this.formProps.oldProject;
         this.form.ownership = this.formProps.oldOwnership;
         this.form.responsible = this.formProps.oldResponsible;
         this.form.financiallyResponsiblePerson = this.formProps.oldFinanciallyResponsiblePerson;
-        this.form.deviceInventoryNumber = this.formProps.oldDeviceInventoryNumber;
+        this.form.inventoryNumber = this.formProps.oldInventoryNumber;
         this.form.fixedAsset = this.formProps.oldFixedAsset;
       }
     },
@@ -526,7 +526,7 @@ export default {
       if (this.v$.$errors.length == 0) {
         //Yes, this is a crutch, but quite simple and understandable
         const fieldNamesArr = [
-          'deviceStack',
+          'stack',
           'portsAmout',
           'powerW',
           'powerV'

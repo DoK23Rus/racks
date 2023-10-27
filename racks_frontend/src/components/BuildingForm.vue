@@ -2,7 +2,7 @@
   <form v-on:submit.prevent="emitData">
     <br>
     <label for="siteName">
-      Building Name:
+      Building name:
     </label>
     <input 
       id="e2e_building_name"
@@ -10,10 +10,10 @@
       placeholder="Enter building name here"
       name="buildingName"
       type="text"
-      v-model="form.buildingName"
+      v-model="form.name"
     />
     <p
-      v-for="error of v$.form.buildingName.$errors"
+      v-for="error of v$.form.name.$errors"
       :key="error.$uid"
     >
       <div class="text-red-500">
@@ -49,7 +49,7 @@ export default {
     return {
       v$: useVuelidate(),
       form: {
-        buildingName: ''
+        name: ''
       }
     }
   },
@@ -59,14 +59,14 @@ export default {
   validations() {
     return {
       form: {
-        buildingName: {required},
+        name: {required},
       }
     }
   },
   methods: {
     setBuildingFormProps() {
-      if (this.formProps.oldBuildingName) {
-        this.form.buildingName = this.formProps.oldBuildingName
+      if (this.formProps.oldName) {
+        this.form.Name = this.formProps.oldName
       }
     },
     submit() {

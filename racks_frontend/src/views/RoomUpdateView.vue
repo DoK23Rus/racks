@@ -4,7 +4,7 @@
       <TheMessage :messageProps="messageProps" />
     </div>
     <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-sm">
-      <template v-if="formProps.oldRoomName">
+      <template v-if="formProps.oldName">
         <RoomForm 
           :formProps="formProps" 
           v-on:on-submit="submitForm" 
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       formProps: {
-        oldRoomName: ''
+        oldName: ''
       },
       messageProps: {
         message: ''
@@ -43,7 +43,7 @@ export default {
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
-        name: form.roomName
+        name: form.name
       };
       this.messageProps.message = await putObject('room', `/room/${this.$route.params.id}/update/`, formData);
     },
@@ -51,7 +51,7 @@ export default {
       // Get room old data
       const response = await getObject('room', '/room/', this.$route.params.id);
       this.messageProps.message = response;
-      this.formProps.oldRoomName = response.name;
+      this.formProps.oldName = response.name;
     }
   }
 };

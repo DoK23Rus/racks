@@ -30,25 +30,25 @@ export default {
         oldLastUnit: null,
         oldFrontsideLocation: true,
         oldStatus: 'Device active',
-        oldDeviceType: 'Other',
-        oldDeviceVendor: '',
-        oldDeviceModel: '',
-        oldDeviceHostname: '',
+        oldType: 'Other',
+        oldVendor: '',
+        oldModel: '',
+        oldHostname: '',
         oldIp: null,
-        oldDeviceStack: null,
+        oldStack: null,
         oldPortsAmout: null,
         oldVersion: '',
         oldPowerType: 'IEC C14 socket',
         oldPowerW: null,
         oldPowerV: null,
         oldPowerACDC: 'AC',
-        oldDeviceSerialNumber: '',
-        oldDeviceDescription: '',
+        oldSerialNumber: '',
+        oldDescription: '',
         oldProject: '',
         oldOwnership: '',
         oldResponsible: '',
         oldFinanciallyResponsiblePerson: '',
-        oldDeviceInventoryNumber: '',
+        oldInventoryNumber: '',
         oldFixedAsset: ''
       },
       rackId: null,
@@ -68,25 +68,25 @@ export default {
         last_unit: parseInt(form.lastUnit),
         frontside_location: form.frontsideLocation,
         status: form.status,
-        type: form.deviceType,
-        vendor: form.deviceVendor,
-        model: form.deviceModel,
-        hostname: form.deviceHostname,
+        type: form.type,
+        vendor: form.vendor,
+        model: form.model,
+        hostname: form.hostname,
         ip: form.ip,
-        stack: form.deviceStack,
+        stack: form.stack,
         ports_amout: form.portsAmout,
         version: form.version,
         power_type: form.powerType,
         power_w: form.powerW,
         power_v: form.powerV,
         power_ac_dc: form.powerACDC,
-        serial_number: form.deviceSerialNumber,
-        description: form.deviceDescription,
+        serial_number: form.serialNumber,
+        description: form.description,
         project: form.project,
         ownership: form.ownership,
         responsible: form.responsible,
         financially_responsible_person: form.financiallyResponsiblePerson,
-        inventory_number: form.deviceInventoryNumber,
+        inventory_number: form.inventoryNumber,
         fixed_asset: form.fixedAsset,
         rack_id: this.rack_id
       };
@@ -101,25 +101,25 @@ export default {
       this.formProps.oldLastUnit = response.last_unit;
       this.formProps.oldFrontsideLocation = response.frontside_location;
       this.formProps.oldStatus = response.status;
-      this.formProps.oldDeviceType = response.type;
-      this.formProps.oldDeviceVendor = response.vendor;
-      this.formProps.oldDeviceModel = response.model;
-      this.formProps.oldDeviceHostname = response.hostname;
+      this.formProps.oldType = response.type;
+      this.formProps.oldVendor = response.vendor;
+      this.formProps.oldModel = response.model;
+      this.formProps.oldHostname = response.hostname;
       this.formProps.oldIp = response.ip;
-      this.formProps.oldDeviceStack = response.stack;
+      this.formProps.oldStack = response.stack;
       this.formProps.oldPortsAmout = response.ports_amout;
       this.formProps.oldVersion = response.version;
       this.formProps.oldPowerType = response.power_type;
       this.formProps.oldPowerW = response.power_w;
       this.formProps.oldPowerV = response.power_v;
       this.formProps.oldPowerACDC = response.power_ac_dc;
-      this.formProps.oldDeviceSerialNumber = response.serial_number;
-      this.formProps.oldDeviceDescription = response.description;
+      this.formProps.oldSerialNumber = response.serial_number;
+      this.formProps.oldDescription = response.description;
       this.formProps.oldProject = response.project;
       this.formProps.oldOwnership = response.ownership;
       this.formProps.oldResponsible = response.responsible;
       this.formProps.oldFinanciallyResponsiblePerson = response.financially_responsible_person;
-      this.formProps.oldDeviceInventoryNumber = response.inventory_number;
+      this.formProps.oldInventoryNumber = response.inventory_number;
       this.formProps.oldFixedAsset = response.fixed_asset;
       this.rackId = response.rack_id;
     }

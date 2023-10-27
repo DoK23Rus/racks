@@ -1,13 +1,13 @@
 <template>
   <div v-bind="{
-    regionName: regionName,
+    name: name,
     isOpen: isOpen
   }">
     <span 
       :class="getCaretClass(isOpen)" 
-      :id="getId(regionName)"
+      :id="getId(name)"
     >
-      {{ truncate(regionName, 50) }}
+      {{ truncate(name, 50) }}
     </span>
   </div>
 </template>
@@ -19,7 +19,7 @@ import { truncate } from '@/filters'
 export default {
   name: 'RegionTreeItem',
   props: {
-    regionName: String,
+    name: String,
     isOpen: Boolean
   },
   methods: {

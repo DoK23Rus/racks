@@ -1,19 +1,19 @@
 <template>
     <form v-on:submit.prevent="emitData">
       <br>
-        <label for="siteName">
-          Site Name:
+        <label for="name">
+          Site name:
         </label>
         <input
           id="e2e_site_name"
           class="block w-96" 
           placeholder="Enter site name here" 
-          name="siteName" 
+          name="name" 
           type="text" 
-          v-model="form.siteName"
+          v-model="form.name"
         />
         <p
-          v-for="error of v$.form.siteName.$errors"
+          v-for="error of v$.form.name.$errors"
           :key="error.$uid"
           >
         <div class="text-red-500">
@@ -49,7 +49,7 @@ export default {
     return {
       v$: useVuelidate(),
       form: {
-        siteName: ''
+        name: ''
       }
     }
   },
@@ -59,14 +59,14 @@ export default {
   validations() {
     return {
       form: {
-        siteName: {required},
+        name: {required},
       }
     }
   },
   methods: {
     setSiteFormProps() {
-      if (this.formProps.oldSiteName) {
-        this.form.siteName = this.formProps.oldSiteName;
+      if (this.formProps.oldName) {
+        this.form.name = this.formProps.oldName;
       }
     },
     submit() {

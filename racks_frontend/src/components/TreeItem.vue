@@ -2,42 +2,42 @@
   <li>
     <RegionTreeItem
       v-if="item.region_name"
-      :regionName="item.region_name"
+      :name="item.region_name"
       :isOpen="isOpen"
       v-on:click="toggle()"
     />
     <DepartmentTreeItem
       v-if="item.department_name"
-      :departmentId="item.id"
-      :departmentName="item.department_name"
+      :id="item.id"
+      :name="item.department_name"
       :isOpen="isOpen"
       v-on:click="toggle()"
     />
     <SiteTreeItem
       v-if="item.site_name"
-      :siteId="item.id"
-      :siteName="item.site_name"
+      :id="item.id"
+      :name="item.site_name"
       :isOpen="isOpen"
       v-on:click="toggle()"
     />
     <BuildingTreeItem
       v-if="item.building_name"
-      :buildingId="item.id"
-      :buildingName="item.building_name"
+      :id="item.id"
+      :name="item.building_name"
       :isOpen="isOpen"
       v-on:click="toggle()"
     />
     <RoomTreeItem
       v-if="item.room_name"
-      :roomId="item.id"
-      :roomName="item.room_name"
+      :id="item.id"
+      :name="item.room_name"
       :isOpen="isOpen"
       v-on:click="toggle()"
     />
     <RackTreeItem
       v-if="item.rack_name"
-      :rackId="item.id"
-      :rackName="item.rack_name"
+      :id="item.id"
+      :name="item.rack_name"
       :isOpen="isOpen"
       v-on:click="toggle()"
     />

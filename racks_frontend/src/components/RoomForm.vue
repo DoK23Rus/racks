@@ -1,19 +1,19 @@
 <template>
     <form v-on:submit.prevent="emitData">
       <br>
-        <label for="roomName">
-          Room Name:
+        <label for="name">
+          Room name:
         </label>
         <input
           id="e2e_room_name"
           class="block w-96"
           placeholder="Enter room name here" 
-          name="roomName" 
+          name="name" 
           type="text" 
-          v-model="form.roomName"
+          v-model="form.name"
         />
         <p
-          v-for="error of v$.form.roomName.$errors"
+          v-for="error of v$.form.name.$errors"
           :key="error.$uid"
         >
         <div class="text-red-500">
@@ -49,7 +49,7 @@ export default {
     return {
       v$: useVuelidate(),
       form: {
-        roomName: ''
+        name: ''
       }
     }
   },
@@ -59,14 +59,14 @@ export default {
   validations() {
     return {
       form: {
-        roomName: {required},
+        name: {required},
       }
     }
   },
   methods: {
     setRoomFormProps() {
-      if (this.formProps.oldRoomName) {
-        this.form.roomName = this.formProps.oldRoomName;
+      if (this.formProps.oldName) {
+        this.form.name = this.formProps.oldName;
       }
     },
     submit() {

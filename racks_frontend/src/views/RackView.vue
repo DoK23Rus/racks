@@ -16,19 +16,19 @@
     <button 
       class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
       px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-      v-on:click="deleteRack(rack.id, rack.rackName)"
+      v-on:click="deleteRack(rack.id, rack.name)"
     >
       Delete
     </button>
     <br>
       <div class="text-xs pb-4 text-slate-500">
-        {{ rackLocation.regionName }} &#9002; {{ rackLocation.departmentName }} &#9002; 
-        {{ rackLocation.siteName }} &#9002; {{ rackLocation.buildingName }} &#9002; {{ rackLocation.roomName }}
+        {{ location.regionName }} &#9002; {{ location.departmentName }} &#9002; 
+        {{ location.siteName }} &#9002; {{ location.buildingName }} &#9002; {{ location.roomName }}
       </div>
   <div class="text-base">
       Rack name: 
         <text class="text-slate-500">
-          {{ rack.rackName }}
+          {{ rack.name }}
         </text>
     <br>
       Responsible: 
@@ -48,17 +48,17 @@
     <br>
       Description: 
         <text class="text-slate-500">
-          {{ rack.rackDescription }}
+          {{ rack.description }}
         </text>
     <br>
       Inventory number: 
         <text class="text-slate-500">
-          {{ rack.rackInventoryNumber }}
+          {{ rack.inventoryNumber }}
         </text>
     <br>
       Financially responsible: 
         <text class="text-slate-500">
-          {{ rack.rackFinanciallyResponsiblePerson }}
+          {{ rack.financiallyResponsiblePerson }}
         </text>
     <br>
       Fixed asset: 
@@ -85,17 +85,17 @@
     <br>
       Vendor: 
         <text class="text-slate-500">
-          {{ rack.rackVendor }}
+          {{ rack.vendor }}
         </text>
     <br>
       Model: 
         <text class="text-slate-500">
-          {{ rack.rackModel }}
+          {{ rack.model }}
         </text>
     <br>
       Rack amount (units): 
         <text class="text-slate-500">
-          {{ rack.rackAmount }}
+          {{ rack.amount }}
         </text>
     <br>
       <template v-if="rack.numberingFromBottomToTop == true">
@@ -111,50 +111,50 @@
           </text>
       </template>
     <br>
-      <template v-if="rack.rackHeight != null">
+      <template v-if="rack.height != null">
         Rack height (mm): 
           <text class="text-slate-500">
-            {{ rack.rackHeight }}
+            {{ rack.height }}
           </text>
       </template>
       <template v-else>
         Rack height (mm):
       </template>
     <br>
-      <template v-if="rack.rackWidth != null">
+      <template v-if="rack.width != null">
         Rack width (mm): 
           <text class="text-slate-500">
-            {{ rack.rackWidth }}
+            {{ rack.width }}
           </text>
       </template>
       <template v-else>
         Rack width (mm):
       </template>
     <br>
-      <template v-if="rack.rackDepth != null">
+      <template v-if="rack.depth != null">
         Rack depth (mm): 
           <text class="text-slate-500">
-            {{ rack.rackDepth }}
+            {{ rack.depth }}
           </text>
       </template>
       <template v-else>
         Rack depth (mm):
       </template>
     <br>
-      <template v-if="rack.rackUnitWidth != null">
+      <template v-if="rack.unitWidth != null">
         Useful rack width (inches): 
           <text class="text-slate-500">
-            {{ rack.rackUnitWidth }}
+            {{ rack.unitWidth }}
           </text>
       </template>
       <template v-else>
         Useful rack width (inches):
       </template>
     <br>
-      <template v-if="rack.rackUnitDepth != null">
+      <template v-if="rack.unitDepth != null">
         Useful rack depth (mm): 
           <text class="text-slate-500">
-            {{ rack.rackUnitDepth }}
+            {{ rack.unitDepth }}
           </text>
       </template>
       <template v-else>
@@ -163,17 +163,17 @@
     <br>
       Execution variant: 
         <text class="text-slate-500">
-          {{ rack.rackType }}
+          {{ rack.type }}
         </text>
     <br>
       Construction: 
         <text class="text-slate-500">
-          {{ rack.rackFrame }}
+          {{ rack.frame }}
         </text>
     <br>
       Location type: 
         <text class="text-slate-500">
-          {{ rack.rackPlaceType }}
+          {{ rack.placeType }}
         </text>
     <br>
       <template v-if="rack.maxLoad != null">
@@ -263,27 +263,27 @@ export default {
     return {
       rack: {
         id: this.$route.params.id,
-        rackName: '',
-        rackAmount: null,
-        rackVendor: '',
-        rackModel: '',
-        rackDescription: '',
+        name: '',
+        amount: null,
+        vendor: '',
+        model: '',
+        description: '',
         numberingFromBottomToTop: true,
         responsible: '',
-        rackFinanciallyResponsiblePerson: '',
-        rackInventoryNumber: '',
+        financiallyResponsiblePerson: '',
+        inventoryNumber: '',
         fixedAsset: '',
         link: '',
         row: '',
         place: '',
-        rackHeight: null,
-        rackWidth: null,
-        rackDepth: null,
-        rackUnitWidth: null,
-        rackUnitDepth: null,
-        rackType: 'Rack',
-        rackFrame: 'Double frame',
-        rackPlaceType: 'Floor standing',
+        height: null,
+        width: null,
+        depth: null,
+        unitWidth: null,
+        unitDepth: null,
+        type: 'Rack',
+        frame: 'Double frame',
+        placeType: 'Floor standing',
         maxLoad: null,
         powerSockets: null,
         powerSocketsUps: null,
@@ -296,7 +296,7 @@ export default {
       messageProps: {
         message: ''
       },
-      rackLocation: {
+      location: {
         roomName: '',
         buildingName: '',
         siteName: '',
@@ -314,27 +314,27 @@ export default {
     async getRack() {
       const response = await getObject('rack', '/rack/', this.$route.params.id);
       this.message = response
-      this.rack.rackName = response.name;
-      this.rack.rackAmount = response.amount;
-      this.rack.rackVendor = response.vendor;
-      this.rack.rackModel = response.model;
-      this.rack.rackDescription = response.description;
+      this.rack.name = response.name;
+      this.rack.amount = response.amount;
+      this.rack.vendor = response.vendor;
+      this.rack.model = response.model;
+      this.rack.description = response.description;
       this.rack.numberingFromBottomToTop = response.mumbering_from_bottom_to_top;
       this.rack.responsible = response.responsible;
-      this.rack.rackFinanciallyResponsiblePerson = response.financially_responsible_person;
-      this.rack.rackInventoryNumber = response.inventory_number;
+      this.rack.financiallyResponsiblePerson = response.financially_responsible_person;
+      this.rack.inventoryNumber = response.inventory_number;
       this.rack.fixedAsset = response.fixed_asset;
       this.rack.link = response.link;
       this.rack.row = response.row;
       this.rack.place = response.place;
-      this.rack.rackHeight = response.height;
-      this.rack.rackWidth = response.width;
-      this.rack.rackDepth = response.depth;
-      this.rack.rackUnitWidth = response.unit_width;
-      this.rack.rackUnitDepth = response.unit_depth;
-      this.rack.rackType = response.type;
-      this.rack.rackFrame = response.frame;
-      this.rack.rackPlaceType = response.place_type;
+      this.rack.height = response.height;
+      this.rack.width = response.width;
+      this.rack.depth = response.depth;
+      this.rack.unitWidth = response.unit_width;
+      this.rack.unitDepth = response.unit_depth;
+      this.rack.type = response.type;
+      this.rack.frame = response.frame;
+      this.rack.placeType = response.place_type;
       this.rack.maxLoad = response.max_load;
       this.rack.powerSockets = response.power_sockets;
       this.rack.powerSocketsUps = response.power_sockets_ups;
@@ -345,11 +345,11 @@ export default {
       this.rack.updatedAt = response.updated_at;
       this.rack.roomId = response.room_id;
     },
-    async deleteRack(id, rackName) {
+    async deleteRack(id, name) {
       const payload = {
         id: id,
       }
-      if (confirm(`Do you really want to delete rack ${rackName} and all releated items?`)) {
+      if (confirm(`Do you really want to delete rack ${name} and all releated items?`)) {
         this.messageProps.message = await deleteObject('rack', `/rack/${this.$route.params.id}/delete/`, payload);
         if (this.messageProps.message.sucsess) {
           alert(this.messageProps.message.sucsess);
@@ -360,11 +360,11 @@ export default {
     async getRackLocation() {
       // Get rack location
       const response = await getObject('rack', '/rack/', this.$route.params.id, '/location/');
-      this.rackLocation.roomName = response.room_name;
-      this.rackLocation.buildingName = response.building_name;
-      this.rackLocation.siteName = response.site_name;
-      this.rackLocation.departmentName = response.department_name;
-      this.rackLocation.regionName = response.region_name;
+      this.location.roomName = response.room_name;
+      this.location.buildingName = response.building_name;
+      this.location.siteName = response.site_name;
+      this.location.departmentName = response.department_name;
+      this.location.regionName = response.region_name;
     },
   }
 }

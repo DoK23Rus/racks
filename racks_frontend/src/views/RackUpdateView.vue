@@ -3,7 +3,7 @@
     <TheMessage :messageProps="messageProps" />
   </div>
   <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-sm">
-    <template v-if="formProps.oldRackName">
+    <template v-if="formProps.oldName">
       <RackForm 
         :formProps="formProps" 
         v-on:on-submit="submitForm" 
@@ -27,27 +27,27 @@ export default {
   data() {
     return {
       formProps: {
-        oldRackName: '',
-        oldRackAmount: null,
-        oldRackVendor: '',
-        oldRackModel: '',
-        oldRackDescription: '',
+        oldName: '',
+        oldAmount: null,
+        oldVendor: '',
+        oldModel: '',
+        oldDescription: '',
         oldNumberingFromBottomToTop: true,
         oldResponsible: '',
-        oldRackFinanciallyResponsiblePerson: '',
-        oldRackInventoryNumber: '',
+        oldFinanciallyResponsiblePerson: '',
+        oldInventoryNumber: '',
         oldFixedAsset: '',
         oldLink: '',
         oldRow: '',
         oldPlace: '',
-        oldRackHeight: null,
-        oldRackWidth: null,
-        oldRackDepth: null,
-        oldRackUnitWidth: null,
-        oldRackUnitDepth: null,
-        oldRackType: 'Rack',
-        oldRackFrame: 'Double frame',
-        oldRackPlaceType: 'Floor standing',
+        oldHeight: null,
+        oldWidth: null,
+        oldDepth: null,
+        oldUnitWidth: null,
+        oldUnitDepth: null,
+        oldType: 'Rack',
+        oldFrame: 'Double frame',
+        oldPlaceType: 'Floor standing',
         oldMaxLoad: null,
         oldPowerSockets: null,
         oldPowerSocketsUps: null,
@@ -68,27 +68,27 @@ export default {
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
-        name: form.rackName,
-        amount: parseInt(form.rackAmount),
-        vendor: form.rackVendor,
-        model: form.rackModel,
-        description: form.rackDescription,
+        name: form.name,
+        amount: parseInt(form.amount),
+        vendor: form.vendor,
+        model: form.model,
+        description: form.description,
         numbering_from_bottom_to_top: form.numberingFromBottomToTop,
         responsible: form.responsible,
-        financially_responsible_person: form.rackFinanciallyResponsiblePerson,
-        inventory_number: form.rackInventoryNumber,
+        financially_responsible_person: form.financiallyResponsiblePerson,
+        inventory_number: form.inventoryNumber,
         fixed_asset: form.fixedAsset,
         link: form.link,
         row: form.row,
         place: form.place,
-        height: form.rackHeight,
-        width: form.rackWidth,
-        depth: form.rackDepth,
-        unit_width: form.rackUnitWidth,
-        unit_depth: form.rackUnitDepth,
-        type: form.rackType,
-        frame: form.rackFrame,
-        place_type: form.rackPlaceType,
+        height: form.height,
+        width: form.width,
+        depth: form.depth,
+        unit_width: form.unitWidth,
+        unit_depth: form.unitDepth,
+        type: form.type,
+        frame: form.frame,
+        place_type: form.placeType,
         max_load: form.maxLoad,
         power_sockets: form.powerSockets,
         power_sockets_ups: form.powerSocketsUps,
@@ -103,27 +103,27 @@ export default {
       // Get rack old data
       const response = await getObject('rack', '/rack/', this.$route.params.id);
       this.messageProps.message = response;
-      this.formProps.oldRackName = response.name;
-      this.formProps.oldRackAmount = response.amount;
-      this.formProps.oldRackVendor = response.vendor;
-      this.formProps.oldRackModel = response.model;
-      this.formProps.oldRackDescription = response.description;
+      this.formProps.oldName = response.name;
+      this.formProps.oldAmount = response.amount;
+      this.formProps.oldVendor = response.vendor;
+      this.formProps.oldModel = response.model;
+      this.formProps.oldDescription = response.description;
       this.formProps.oldNumberingFromBottomToTop = response.mumbering_from_bottom_to_top;
       this.formProps.oldResponsible = response.responsible;
-      this.formProps.oldRackFinanciallyResponsiblePerson = response.financially_responsible_person;
-      this.formProps.oldRackInventoryNumber = response.inventory_number;
+      this.formProps.oldFinanciallyResponsiblePerson = response.financially_responsible_person;
+      this.formProps.oldInventoryNumber = response.inventory_number;
       this.formProps.oldFixedAsset = response.fixed_asset;
       this.formProps.oldLink = response.link;
       this.formProps.oldRow = response.row;
       this.formProps.oldPlace = response.place;
-      this.formProps.oldRackHeight = response.height;
-      this.formProps.oldRackWidth = response.width;
-      this.formProps.oldRackDepth = response.depth;
-      this.formProps.oldRackUnitWidth = response.unit_width;
-      this.formProps.oldRackUnitDepth = response.unit_depth;
-      this.formProps.oldRackType = response.type;
-      this.formProps.oldRackFrame = response.frame;
-      this.formProps.oldRackPlaceType = response.place_type;
+      this.formProps.oldHeight = response.height;
+      this.formProps.oldWidth = response.width;
+      this.formProps.oldDepth = response.depth;
+      this.formProps.oldUnitWidth = response.unit_width;
+      this.formProps.oldUnitDepth = response.unit_depth;
+      this.formProps.oldType = response.type;
+      this.formProps.oldFrame = response.frame;
+      this.formProps.oldPlaceType = response.place_type;
       this.formProps.oldMaxLoad = response.max_load;
       this.formProps.oldPowerSockets = response.power_sockets;
       this.formProps.oldPowerSocketsUps = response.power_sockets_ups;

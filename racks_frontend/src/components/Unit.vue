@@ -1,43 +1,43 @@
 <template>
   <td v-bind="{
       rowspan: rowspan, 
-      deviceId: deviceId, 
-      deviceVendor: deviceVendor, 
-      deviceModel: deviceModel,
-      deviceType: deviceType,
+      id: id, 
+      vendor: vendor, 
+      model: model,
+      type: type,
       className: className
     }"
     :class="className"
     :rowspan="rowspan"
   >
     <router-link
-      :to="{path: `/device/${deviceId}`}"
+      :to="{path: `/device/${id}`}"
       target="_blank"
     >
-      <template v-if="deviceVendor || deviceModel">
+      <template v-if="vendor || model">
         <a>
-          {{truncate(`${deviceVendor} ${deviceModel}`, 30)}}
+          {{truncate(`${vendor} ${model}`, 30)}}
         </a>
       </template>
       <template v-else>
-        {{ truncate(deviceType, 30) }}
+        {{ truncate(type, 30) }}
       </template>
     </router-link>    
   </td>
   <td 
     v-bind="{
       rowspan: rowspan,
-      deviceId: deviceId
+      id: id
     }"
     class="text-center"
     :rowspan="rowspan"
   >
     <router-link
-      :to="{path: `/device/${deviceId}`}"
+      :to="{path: `/device/${id}`}"
       target="_blank"
     >
       <a>
-        №{{ deviceId }}
+        №{{ id }}
       </a>
     </router-link> 
   </td>
@@ -51,19 +51,19 @@ export default {
   name: 'Unit',
   inheritAttrs: false,
   props: {
-    deviceVendor: {
+    vendor: {
       type: String,
       default: ''
     },
-    deviceModel: {
+    model: {
       type: String,
       default: ''
     },
-    deviceType: {
+    type: {
       type: String,
       default: ''
     },
-    deviceId: {
+    id: {
       type: Number,
       default: null
     },

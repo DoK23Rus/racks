@@ -4,7 +4,7 @@
       <TheMessage :messageProps="messageProps" />
     </div>
     <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-sm">
-      <template v-if="formProps.oldSiteName">
+      <template v-if="formProps.oldName">
         <SiteForm 
           :formProps="formProps" 
           v-on:on-submit="submitForm" 
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       formProps: {
-        oldSiteName: ''
+        oldName: ''
       },
       messageProps: {
         message: ''
@@ -43,7 +43,7 @@ export default {
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
-        name: form.siteName
+        name: form.name
       };
       this.messageProps.message = await putObject('site', `/site/${this.$route.params.id}/update/`, formData)
       if (this.messageProps.message.name == "Site with this Site already exists.") {
@@ -54,7 +54,7 @@ export default {
       // Get site old data
       const response = await getObject('site', '/site/', this.$route.params.id);
       this.messageProps.message = response;
-      this.formProps.oldSiteName = response.name;
+      this.formProps.oldName = response.name;
     }
   }
 };

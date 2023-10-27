@@ -19,15 +19,15 @@
     <button 
       class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
       px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-      v-on:click="deleteDevice(device.id, `${device.deviceVendor} ${device.deviceModel}`)"
+      v-on:click="deleteDevice(device.id, `${device.vendor} ${device.model}`)"
     >
       Delete
     </button>
     <br>
       <div class="text-xs pb-4 text-slate-500">
-        {{ deviceLocation.regionName }} &#9002; {{ deviceLocation.departmentName }} &#9002; 
-        {{ deviceLocation.siteName }} &#9002; {{ deviceLocation.buildingName }} &#9002; 
-        {{ deviceLocation.roomName }} &#9002; {{ deviceLocation.rackName }}
+        {{ location.regionName }} &#9002; {{ location.departmentName }} &#9002; 
+        {{ location.siteName }} &#9002; {{ location.buildingName }} &#9002; 
+        {{ location.roomName }} &#9002; {{ location.rackName }}
       </div>
   <div class="text-base">
     Status: 
@@ -37,7 +37,7 @@
     <br>
       Description: 
         <text class="text-slate-500">
-          {{ device.deviceDescription }}
+          {{ device.description }}
         </text>
     <br>
       <template v-if="device.frontsideLocation">
@@ -92,7 +92,7 @@
     <br>
       Inventory number: 
         <text class="text-slate-500">
-          {{ device.deviceInventoryNumber}}
+          {{ device.inventoryNumber}}
         </text>
     <br>
       Financially responsible: 
@@ -124,22 +124,22 @@
     <br>
       Vendor: 
         <text class="text-slate-500">
-          {{ device.deviceVendor }}
+          {{ device.vendor }}
         </text>
     <br>
       Model: 
         <text class="text-slate-500">
-          {{ device.deviceModel }}
+          {{ device.model }}
         </text>
     <br>
       Device type: 
         <text class="text-slate-500">
-          {{ device.deviceType }}
+          {{ device.type }}
         </text>
     <br>
       Hostname: 
         <text class="text-slate-500">
-          {{ device.deviceHostname }}
+          {{ device.hostname }}
         </text>
     <br>
       <template v-if="device.ip != null">
@@ -152,17 +152,17 @@
         IP-address:
       </template>
     <br>
-      <template v-if="device.deviceStack != null">
+      <template v-if="device.stack != null">
         Stack/Reserve (reserve ID): 
         <a 
           class="text-slate-500" 
-          v-bind:href="`/device/${device.deviceStack}`" 
+          v-bind:href="`/device/${device.stack}`" 
           target="_blank"
         >
           <text class="text-blue-300">
             &#9873; 
           </text>
-          Device №{{ device.deviceStack }}
+          Device №{{ device.stack }}
         </a>
       </template>
       <template v-else>
@@ -186,7 +186,7 @@
     <br>
       Serial number: 
         <text class="text-slate-500">
-          {{ device.deviceSerialNumber }}
+          {{ device.serialNumber }}
         </text>
     <br>
       Socket type: 
@@ -248,36 +248,35 @@ export default {
         lastUnit: null,
         frontsideLocation: true,
         status: 'Device active',
-        deviceType: 'Other',
-        deviceVendor: '',
-        deviceModel: '',
-        deviceHostname: '',
+        type: 'Other',
+        vendor: '',
+        model: '',
+        hostname: '',
         ip: null,
-        deviceStack: null,
+        stack: null,
         portsAmout: null,
         version: '',
         powerType: 'IEC C14 socket',
         powerW: null,
         powerV: null,
         powerACDC: 'AC',
-        deviceSerialNumber: '',
-        deviceDescription: '',
+        serialNumber: '',
+        description: '',
         project: '',
         ownership: 'Our department',
         responsible: '',
         financiallyResponsiblePerson: '',
-        deviceInventoryNumber: '',
+        inventoryNumber: '',
         fixedAsset: '',
         link:'',
         updatedBy: '',
         updatedAt: '',
-        rackId: '',
-        
+        rackId: ''
       },
       messageProps: {
         message: ''
       },
-      deviceLocation: {
+      location: {
         rackName: '',
         roomName: '',
         buildingName: '',
@@ -300,36 +299,36 @@ export default {
       this.device.lastUnit = response.last_unit;
       this.device.frontsideLocation = response.frontside_location;
       this.device.status = response.status;
-      this.device.deviceType = response.type;
-      this.device.deviceVendor = response.vendor;
-      this.device.deviceModel = response.model;
-      this.device.deviceHostname = response.hostname;
+      this.device.type = response.type;
+      this.device.vendor = response.vendor;
+      this.device.model = response.model;
+      this.device.hostname = response.hostname;
       this.device.ip = response.ip;
-      this.device.deviceStack = response.stack;
+      this.device.stack = response.stack;
       this.device.portsAmout = response.ports_amout;
       this.device.version = response.version;
       this.device.powerType = response.power_type;
       this.device.powerW = response.power_w;
       this.device.powerV = response.power_v;
       this.device.powerACDC = response.power_ac_dc;
-      this.device.deviceSerialNumber = response.serial_number;
-      this.device.deviceDescription = response.description;
+      this.device.serialNumber = response.serial_number;
+      this.device.description = response.description;
       this.device.project = response.project;
       this.device.ownership = response.ownership;
       this.device.responsible = response.responsible;
       this.device.financiallyResponsiblePerson = response.financially_responsible_person;
-      this.device.deviceInventoryNumber = response.inventory_number;
+      this.device.inventoryNumber = response.inventory_number;
       this.device.fixedAsset = response.fixed_asset;
       this.device.link = response.link;
       this.device.updatedBy = response.updated_by;
       this.device.updatedAt = response.updated_at;
       this.device.rackId = response.rack_id;
     },
-    async deleteDevice(id, deviceName) {
+    async deleteDevice(id, name) {
       const payload = {
         id: id,
       }
-      if (confirm(`Do you really want to delete device ${deviceName}?`)) {
+      if (confirm(`Do you really want to delete device ${name}?`)) {
         this.messageProps.message = await deleteObject('device', `/device/${this.$route.params.id}/delete/`, payload);
         if (this.messageProps.message.sucsess) {
           alert(this.messageProps.message.sucsess);
@@ -340,12 +339,12 @@ export default {
     async getDeviceLocation() {
       // Get racks location
       const response = await getObject('device', '/device/', this.$route.params.id, '/location/');
-      this.deviceLocation.rackName = response.rack_name;
-      this.deviceLocation.roomName = response.room_name;
-      this.deviceLocation.buildingName = response.building_name;
-      this.deviceLocation.siteName = response.site_name;
-      this.deviceLocation.departmentName = response.department_name;
-      this.deviceLocation.regionName = response.region_name;
+      this.location.rackName = response.rack_name;
+      this.location.roomName = response.room_name;
+      this.location.buildingName = response.building_name;
+      this.location.siteName = response.site_name;
+      this.location.departmentName = response.department_name;
+      this.location.regionName = response.region_name;
     },
   }
 }

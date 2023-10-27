@@ -1,20 +1,20 @@
 <template>
   <div v-bind="{
-    siteId: siteId,
-    siteName: siteName,
+    id: id,
+    name: name,
     isOpen: isOpen
   }">
     <span 
       :class="getCaretClass(isOpen)" 
-      :id="getId(siteName)"
+      :id="getId(name)"
     >
-      {{ truncate(siteName, 50) }}
+      {{ truncate(name, 50) }}
       <router-link
-        :to="{path: `/building/create/${siteId}`}" 
+        :to="{path: `/building/create/${id}`}" 
         target="_blank"
       >
         <button
-          :id="getId(siteName, 'add', 'button')"
+          :id="getId(name, 'add', 'button')"
           class="text-white font-light bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
           px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         >
@@ -22,7 +22,7 @@
         </button>
       </router-link>
       <router-link 
-        :to="{path: `/site/${siteId}/update`}" 
+        :to="{path: `/site/${id}/update`}" 
         target="_blank">
         <button 
           class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
@@ -34,7 +34,7 @@
       <button
         class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs 
         px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" 
-        v-on:click="deleteItem(siteId, siteName, 'site')"
+        v-on:click="deleteItem(id, name, 'site')"
       >
         Delete
       </button>
@@ -49,8 +49,8 @@ import { truncate } from '@/filters'
 export default {
   name: 'SiteTreeItem',
   props: {
-    siteId: Number,
-    siteName: String,
+    id: Number,
+    name: String,
     isOpen: Boolean
   },
   methods: {
