@@ -62,7 +62,7 @@ export default {
         console.log(this.messageProps.message);
         this.getTreeData();
       }
-		},
-	}
+    },
+  }
 }
 </script>
