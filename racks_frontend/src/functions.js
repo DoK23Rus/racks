@@ -19,7 +19,7 @@ const getDevicesForSide = (devices) => {
 
 /**
  * Get list of rack units in numbering order
- * @param {*} rack Rack object
+ * @param {Object} rack Rack object
  * @returns {Array} List of rack units
  */
 const getStartList = (rack) => {
