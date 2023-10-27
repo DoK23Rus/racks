@@ -1,20 +1,20 @@
 <template>
-	<div class="container px-4 mx-auto justify-between pl-8 font-sans font-thin text-2xl pb-4">
+  <div class="container px-4 mx-auto justify-between pl-8 font-sans font-thin text-2xl pb-4">
     <TheMessage
-			:messageProps="messageProps"
-		/>
+      :messageProps="messageProps"
+    />
+      </div>
+      <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light"></div>
+      <div class="container min-h-screen px-4 mx-auto flex flex-wrap justify-between text-xl pl-8 font-sans tracking-tight font-thin">
+      <ul>
+        <li v-for="treeData in regions">
+          <TreeItem
+            :item="treeData"
+            :deleteItem="deleteItem"
+          />
+      </li>
+    </ul>
   </div>
-	<div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light"></div>
-	<div class="container min-h-screen px-4 mx-auto flex flex-wrap justify-between text-xl pl-8 font-sans tracking-tight font-thin">
-		<ul>
-			<li v-for="treeData in regions">
-				<TreeItem
-					:item="treeData"
-					:deleteItem="deleteItem"
-				/>
-			</li>
-		</ul>
-	</div>
 </template>
 
 <script>
