@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import { postObject } from '@/api';
 import BuildingForm from '@/components/BuildingForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { postObject } from '@/api';
 
 
 export default {
@@ -35,6 +35,10 @@ export default {
 		}
 	},
   methods: {
+    /**
+     * Submit building form
+     * @param {Object} form Building form
+     */
     async submitForm(form) {
       const formData = {
         name: form.name,

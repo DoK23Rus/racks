@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import { postObject } from '@/api';
 import DeviceForm from '@/components/DeviceForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { postObject } from '@/api';
 
 
 export default {
@@ -56,6 +56,10 @@ export default {
     };
   },
   methods: {
+    /**
+     * Submit device form
+     * @param {Object} form Device form
+     */
     async submitForm(form) {
       const formData = {
         first_unit: parseInt(form.firstUnit),

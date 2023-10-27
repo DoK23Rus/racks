@@ -1,3 +1,8 @@
+/**
+ * Validator for numeric greater then zero or null
+ * @param {*} value Validation value
+ * @returns {Boolean} Pass or not
+ */
 const numericGTZOrNull = (value) => {
   if (typeof value === 'string') {
     let val = +value
@@ -13,6 +18,11 @@ const numericGTZOrNull = (value) => {
   }
 }
 
+/**
+ * Validator for numeric greater then zero
+ * @param {*} value Validation value
+ * @returns {Boolean} Pass or not
+ */
 const numericOrNull = (value) => {
   if (typeof value === 'string') {
     let val = +value

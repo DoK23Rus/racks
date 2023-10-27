@@ -72,10 +72,18 @@ export default {
     this.fetchUser();
   },
   methods: {
+    /**
+     * Logout
+     */
     logout() {
       localStorage.removeItem("token");
       this.$router.push('/login');
     },
+    /**
+     * Download report
+     * @param {String} reportName Report name
+     * @param {String} fileName File name
+     */
     async downloadReport(reportName, fileName) {
       alert("Download will start in a few seconds");
       await axios({
@@ -92,6 +100,9 @@ export default {
         link.remove();
       });
     },
+    /**
+     * Fetch and set user
+     */
     async fetchUser () {
       this.username = await getUser('username');
     },

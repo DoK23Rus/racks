@@ -231,8 +231,8 @@
 </template>
 
 <script>
-import { getObject, deleteObject } from '@/api';
 import TheMessage from '@/components/TheMessage.vue';
+import { getObject, deleteObject } from '@/api';
 
 
 export default {
@@ -291,8 +291,10 @@ export default {
     this.getDeviceLocation();
   },
   methods: {
+    /**
+     * Fetch and set device data
+     */
     async getDevice() {
-      // Get device data
       const response = await getObject('device', '/device/', this.$route.params.id);
       this.messageProps.message = response;
       this.device.firstUnit = response.first_unit;
@@ -324,6 +326,11 @@ export default {
       this.device.updatedAt = response.updated_at;
       this.device.rackId = response.rack_id;
     },
+    /**
+     * Delete device
+     * @param {Number} id Device id
+     * @param {String} name Device name
+     */
     async deleteDevice(id, name) {
       const payload = {
         id: id,
@@ -336,8 +343,10 @@ export default {
         }
       }
     },
+    /**
+     * Fetch and set device location
+     */
     async getDeviceLocation() {
-      // Get racks location
       const response = await getObject('device', '/device/', this.$route.params.id, '/location/');
       this.location.rackName = response.rack_name;
       this.location.roomName = response.room_name;

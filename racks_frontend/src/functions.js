@@ -1,5 +1,9 @@
+/**
+ * Get devices for one rack side
+ * @param {Object} devices Devices for single rack
+ * @returns {Object} Devices for side
+ */
 const getDevicesForSide = (devices) => {
-  // Devices for side
   let devicesForSide = {
     front: [],
     back: []
@@ -13,8 +17,12 @@ const getDevicesForSide = (devices) => {
   return devicesForSide
 }
 
+/**
+ * Get list of rack units in numbering order
+ * @param {*} rack Rack object
+ * @returns {Array} List of rack units
+ */
 const getStartList = (rack) => {
-  // List of rack units
   const arr = Array.from({length: rack.amount}, (_, i) => i + 1);
   if (!rack.numbering_from_bottom_to_top) {
     return arr;
@@ -23,8 +31,13 @@ const getStartList = (rack) => {
   };
 }
 
+/**
+ * Get devices first units
+ * @param {Object} devices Devices for one side
+ * @param {Boolean} direction Numbering direction
+ * @returns {Object} Devices first units
+ */
 const getFirstUnits = (devices, direction) => {
-  // Devices first units
   let firstUnits = {};
   for (const device of devices) {
     let lastUnit = device.last_unit;
@@ -44,8 +57,12 @@ const getFirstUnits = (devices, direction) => {
   return firstUnits;
 }
 
+/**
+ * Get rowspans for each device
+ * @param {Object} devices Devices for one side
+ * @returns {Object} Rowspans for each device
+ */
 const getRowSpans = (devices) => {
-  // Rowspans for each device
   let rowSpans = {};
   for (const device of devices) {
     let lastUnit = device.last_unit;
@@ -59,8 +76,12 @@ const getRowSpans = (devices) => {
   return rowSpans;
 }
 
+/**
+ * Set empty string to null in form for validation
+ * @param {Array} arr Array of field names
+ * @param {Object} form Form
+ */
 const setEmptyStringToNull = (arr, form) => {
-  // Set empty string to null in form for validation
   arr.forEach((element) => {
     if (form[element] === "") {
       form[element] = null;
@@ -68,18 +89,33 @@ const setEmptyStringToNull = (arr, form) => {
   })
 }
 
+/**
+ * Get data from object that contains match
+ * @param {String} itemType Item type from vendors/models/etc objects
+ * @param {Object} matchObject Objects from helpers
+ * @returns {String} Matching string
+ */
 const getDataFromMatch = (itemType, matchObject) => {
-  // Get data from object that contains match
   return (matchObject[itemType] || matchObject['default'])();
 }
 
+/**
+ * Get caret class for tree expand
+ * @param {String} status Caret status string
+ * @returns {String} Caret class
+ */
 const getCaretClass = (status) => {
-  // Get caret class for tree expand
   return `caret ${status? 'down' : ''}`
 }
 
+/**
+ * Get custom id for e2e testing
+ * @param {String} itemName  Item name
+ * @param {String} action Action (fe add)
+ * @param {String} element Element (fe button)
+ * @returns {String} Custom id string for e2e testing
+ */
 const getId = (itemName, action, element) => {
-  // Get custom id for e2e testing
   const baseId = `e2e_${itemName.replaceAll(' ', '_')}`
   if (action && element) {
     return`${baseId}_${action}_${element}`

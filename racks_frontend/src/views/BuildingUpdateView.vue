@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import { putObject, getObject } from '@/api';
 import BuildingForm from '@/components/BuildingForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { putObject, getObject } from '@/api';
 
 
 export default {
@@ -40,6 +40,10 @@ export default {
     await this.getOldData();
   },
   methods: {
+    /**
+     * Submit building form
+     * @param {Object} form Building form
+     */
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
@@ -47,8 +51,10 @@ export default {
       };
       this.messageProps.message = await putObject('building', `/building/${this.$route.params.id}/update/`, formData);
     },
+    /**
+     * Fetch and set building old data
+     */
     async getOldData() {
-      // Get building old data
       const response = await getObject('building', '/building/', this.$route.params.id);
       this.messageProps.message = response;
       this.formProps.oldName = response.name;

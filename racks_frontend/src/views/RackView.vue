@@ -250,8 +250,8 @@
 </template>
 
 <script>
-import { getObject, deleteObject } from '@/api';
 import TheMessage from '@/components/TheMessage.vue';
+import { getObject, deleteObject } from '@/api';
 
 
 export default {
@@ -310,7 +310,9 @@ export default {
     this.getRackLocation();
   },
   methods: {
-    // Get rack data
+    /**
+     * Fetch and set rack data
+     */
     async getRack() {
       const response = await getObject('rack', '/rack/', this.$route.params.id);
       this.message = response
@@ -345,6 +347,11 @@ export default {
       this.rack.updatedAt = response.updated_at;
       this.rack.roomId = response.room_id;
     },
+    /**
+     * Delete rack
+     * @param {Number} id Rack id
+     * @param {String} name Rack name
+     */
     async deleteRack(id, name) {
       const payload = {
         id: id,
@@ -357,6 +364,9 @@ export default {
         }
       }
     },
+    /**
+     * Fetch and set rack location
+     */
     async getRackLocation() {
       // Get rack location
       const response = await getObject('rack', '/rack/', this.$route.params.id, '/location/');

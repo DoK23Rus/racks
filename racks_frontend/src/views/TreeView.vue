@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import { getUnique, deleteObject } from '@/api';
 import TheMessage from '@/components/TheMessage.vue';
 import TreeItem from '@/components/TreeItem.vue';
+import { getUnique, deleteObject } from '@/api';
 
 
 export default {
@@ -41,9 +41,18 @@ export default {
 		this.getTreeData();
 	},
 	methods: {
+		/**
+		 * Fetch and set tree data
+		 */
 		async getTreeData() {
 			this.regions = await getUnique('tree', '/tree/')
 		},
+    /**
+     * Delete tree item
+     * @param {Number} id Item id
+     * @param {String} itemName Item name
+     * @param {String} itemType Item type
+     */
 		async deleteItem(id, itemName, itemType) {
 			const payload = {
 				id: id,

@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import { postObject } from '@/api';
 import SiteForm from '@/components/SiteForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { postObject } from '@/api';
 
 
 export default {
@@ -35,6 +35,10 @@ export default {
     };
   },
   methods: {
+    /**
+     * Submit site form
+     * @param {Object} form Site form
+     */
     async submitForm(form) {
       const formData = {
         name: form.name,

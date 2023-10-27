@@ -81,6 +81,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * Submit form
+     */
     submitForm() {
       const formData = {
         username: this.username,

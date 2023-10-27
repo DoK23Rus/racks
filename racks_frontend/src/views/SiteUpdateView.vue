@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import { putObject, getObject } from '@/api';
 import SiteForm from '@/components/SiteForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { putObject, getObject } from '@/api';
 
 
 export default {
@@ -40,6 +40,10 @@ export default {
     await this.getOldData();
   },
   methods: {
+    /**
+     * Submit site form
+     * @param {Object} form Site form 
+     */
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
@@ -50,8 +54,10 @@ export default {
         this.messageProps.message = {invalid: "Site with this name already exists."};
       }
     },
+    /**
+     * Fetch and set site old data
+     */
     async getOldData() {
-      // Get site old data
       const response = await getObject('site', '/site/', this.$route.params.id);
       this.messageProps.message = response;
       this.formProps.oldName = response.name;

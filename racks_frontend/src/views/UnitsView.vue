@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import { getObject } from '@/api';
 import RackSideItem from '@/components/RackSideItem.vue';
+import { getObject } from '@/api';
 import { getRowSpans, getFirstUnits, getStartList, getDevicesForSide } from '@/functions';
 
 
@@ -76,32 +76,59 @@ export default {
     this.setDevices();
   },
   computed: {
+    /**
+     * Devices front side
+     */
     devicesFront() {
       return this.getDevicesForSide(this.devices).front
     },
+    /**
+     * Devices back side
+     */
     devicesBack() { 
       return this.getDevicesForSide(this.devices).back
     },
+    /**
+     * Devices first units front side
+     */
     firstUnitsFront() {
       return this.getFirstUnits(this.devicesFront, this.rack.numbering_from_bottom_to_top)
     },
+    /**
+     * Devices first units back side
+     */
     firstUnitsBack() {
       return this.getFirstUnits(this.devicesBack, this.rack.numbering_from_bottom_to_top)
     },
+    /**
+     * Rowspans front side
+     */
     rowSpansFront() {
       return this.getRowSpans(this.devicesFront)
     },
+    /**
+     * Rowsspans back side
+     */
     rowSpansBack() {
       return this.getRowSpans(this.devicesBack)
     },
+    /**
+     * Starting units list
+     */
     startList() {
       return this.getStartList(this.rack);
     }
   },
   methods: {
+    /**
+     * Fetch and set rack data
+     */
     async setRack() {
       this.rack = await getObject('rack', '/rack/', this.$route.params.id);
     },
+    /**
+     * Fetch and set devices data
+     */
     async setDevices() {
       this.devices = await getObject('devices', '/rack/', this.$route.params.id, '/devices');
     },

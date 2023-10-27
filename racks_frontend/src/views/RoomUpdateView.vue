@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import { putObject, getObject } from '@/api';
 import RoomForm from '@/components/RoomForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { putObject, getObject } from '@/api';
 
 
 export default {
@@ -40,6 +40,10 @@ export default {
     await this.getOldData();
   },
   methods: {
+    /**
+     * Submit room form
+     * @param {Object} form Room form
+     */
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
@@ -47,8 +51,10 @@ export default {
       };
       this.messageProps.message = await putObject('room', `/room/${this.$route.params.id}/update/`, formData);
     },
+    /**
+     * Fetch and set room old data
+     */
     async getOldData() {
-      // Get room old data
       const response = await getObject('room', '/room/', this.$route.params.id);
       this.messageProps.message = response;
       this.formProps.oldName = response.name;

@@ -66,6 +66,11 @@ export default {
     this.label = this.getDataFromMatch(this.itemsData.item_type, this.matchLabel)
   },
   methods: {
+    /**
+     * Copy button text to input
+     * @param {String} choice Button id
+     * @param {String} id Input id
+     */
     copyOnClick(choice, id) {
       let input = document.getElementById(id)
       input.value = document.getElementById(choice).innerText

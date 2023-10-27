@@ -13,9 +13,9 @@
 </template>
 
 <script>
-import { putObject, getObject } from '@/api';
 import RackForm from '@/components/RackForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { putObject, getObject } from '@/api';
 
 
 export default {
@@ -65,6 +65,10 @@ export default {
     await this.getOldData();
   },
   methods: {
+    /**
+     * Submit rack form
+     * @param {Object} form Rack form
+     */
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
@@ -99,8 +103,10 @@ export default {
       this.messageProps.message = await putObject('rack', `/rack/${this.$route.params.id}/update/`, formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
+    /**
+     * Fetch and set rack old data
+     */
     async getOldData() {
-      // Get rack old data
       const response = await getObject('rack', '/rack/', this.$route.params.id);
       this.messageProps.message = response;
       this.formProps.oldName = response.name;

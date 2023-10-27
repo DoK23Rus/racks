@@ -55,13 +55,13 @@
 </template>
 
 <script>
-import { truncate } from '@/filters';
 import RegionTreeItem from './RegionTreeItem.vue';
 import DepartmentTreeItem from './DepartmentTreeItem.vue';
 import SiteTreeItem from './SiteTreeItem.vue';
 import BuildingTreeItem from './BuildingTreeItem.vue';
 import RoomTreeItem from './RoomTreeItem.vue';
 import RackTreeItem from './RackTreeItem.vue';
+import { truncate } from '@/filters';
 import { getCaretClass, getId } from '@/functions';
 
 
@@ -85,11 +85,17 @@ export default {
     };
   },
   computed: {
+    /**
+     * Item has children?
+     */
     hasChildren() {
       return this.item.children && this.item.children.length;
     }
   },
   methods: {
+    /**
+     * Open tree level
+     */
     toggle() {
       if (this.hasChildren) {
         this.isOpen = !this.isOpen;

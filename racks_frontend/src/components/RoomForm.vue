@@ -64,14 +64,23 @@ export default {
     }
   },
   methods: {
+    /**
+     * Set room form props
+     */
     setRoomFormProps() {
       if (this.formProps.oldName) {
         this.form.name = this.formProps.oldName;
       }
     },
+    /**
+     * Submit
+     */
     submit() {
       this.v$.$touch();
     },
+    /**
+     * Emit data
+     */
     emitData() {
       if (this.v$.$errors.length == 0) {
         this.$emit('on-submit', this.form);

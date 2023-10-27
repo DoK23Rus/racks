@@ -13,9 +13,10 @@
 </template>
 
 <script>
-import { putObject, getObject } from '@/api';
 import DeviceForm from '@/components/DeviceForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { putObject, getObject } from '@/api';
+
 
 export default {
   name: 'DeviceUpdateView',
@@ -61,6 +62,10 @@ export default {
     await this.getOldData();
   },
   methods: {
+    /**
+     * Submit device form
+     * @param {Object} form Device form
+     */
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
@@ -93,8 +98,10 @@ export default {
       this.messageProps.message = await putObject('device', `/device/${this.$route.params.id}/update/`, formData);
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
+    /**
+     * Fetch and set device old data
+     */
     async getOldData() {
-      // Get device old data
       const response = await getObject('device', '/device/', this.$route.params.id);
       this.messageProps.message = response;
       this.formProps.oldFirstUnit = response.first_unit;

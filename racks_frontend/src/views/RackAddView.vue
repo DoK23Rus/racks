@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import { postObject } from '@/api';
 import RackForm from '@/components/RackForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
+import { postObject } from '@/api';
 
 
 export default {
@@ -59,6 +59,10 @@ export default {
     };
   },
   methods: {
+    /**
+     * Submit rack form
+     * @param {Object} form Rack form
+     */
     async submitForm(form) {
       const formData = {
         name: form.name,

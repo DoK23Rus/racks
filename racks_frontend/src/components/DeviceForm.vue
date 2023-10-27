@@ -409,8 +409,8 @@
 </template>
 
 <script>
-import useVuelidate from '@vuelidate/core';
 import ChooseExistingItem from './ChooseExistingItem.vue';
+import useVuelidate from '@vuelidate/core';
 import { required, numeric, minValue, ipAddress } from '@vuelidate/validators';
 import { getUnique } from '@/api';
 import { numericGTZOrNull } from '@/validators';
@@ -485,15 +485,27 @@ export default {
     }
   },
   methods: {
+    /**
+     * Submit
+     */
     submit() {
       this.v$.$touch();
     },
+    /**
+     * Fetch and set device vendors
+     */
     async getVendors() {
       this.vendors = await getUnique('device vendors', '/device/vendors');
     },
+    /**
+     * Fetch and set device models
+     */
     async getModels() {
       this.models= await getUnique('device models', '/device/models');
     },
+    /**
+     * Set device form props
+     */
     setDeviceFormProps() {
       if (this.formProps.oldFirstUnit) { 
         this.form.firstUnit = this.formProps.oldFirstUnit;
@@ -522,6 +534,9 @@ export default {
         this.form.fixedAsset = this.formProps.oldFixedAsset;
       }
     },
+    /**
+     * Emit data
+     */
     emitData() {
       if (this.v$.$errors.length == 0) {
         //Yes, this is a crutch, but quite simple and understandable

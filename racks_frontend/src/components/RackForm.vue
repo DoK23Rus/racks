@@ -393,8 +393,8 @@
 </template>
 
 <script>
-import useVuelidate from '@vuelidate/core';
 import ChooseExistingItem from './ChooseExistingItem.vue';
+import useVuelidate from '@vuelidate/core';
 import { required, numeric, minValue } from '@vuelidate/validators';
 import { getUnique } from '@/api';
 import { numericGTZOrNull, numericOrNull } from '@/validators';
@@ -474,15 +474,27 @@ export default {
     }
   },
   methods: {
+    /**
+     * Submit
+     */
     submit() {
       this.v$.$touch();
     },
+    /**
+     * Fetch and set rack vendors
+     */
     async getRackVendors() {
       this.vendors = await getUnique('rack vendors', '/rack/vendors');
     },
+    /**
+     * Fetch and set rack models
+     */
     async getRackModels() {
       this.models = await getUnique('rack models', '/rack/models');
     },
+    /**
+     * Set rack form props
+     */
     setRackFormProps() {
       if (this.formProps.oldName) { 
         this.form.name = this.formProps.oldName;
@@ -514,6 +526,9 @@ export default {
         this.form.update = this.formProps.update;
       }
     },
+    /**
+     * Emit data
+     */
     emitData() {
       if (this.v$.$errors.length == 0) {
         // Yes, this is a crutch, but quite simple and understandable

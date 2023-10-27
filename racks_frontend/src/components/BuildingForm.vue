@@ -64,14 +64,23 @@ export default {
     }
   },
   methods: {
+    /**
+     * Set building form props
+     */
     setBuildingFormProps() {
       if (this.formProps.oldName) {
         this.form.Name = this.formProps.oldName
       }
     },
+    /**
+     * Submit
+     */
     submit() {
       this.v$.$touch();
     },
+    /**
+     * Emit data
+     */
     emitData() {
       if (this.v$.$errors.length == 0) {
         this.$emit('on-submit', this.form);
