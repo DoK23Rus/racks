@@ -43,10 +43,10 @@ export default {
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
-        site_name: form.siteName
+        name: form.siteName
       };
       this.messageProps.message = await putObject('site', `/site/${this.$route.params.id}/update/`, formData)
-      if (this.messageProps.message.site_name == "Site with this Site already exists.") {
+      if (this.messageProps.message.name == "Site with this Site already exists.") {
         this.messageProps.message = {invalid: "Site with this name already exists."};
       }
     },
@@ -54,7 +54,7 @@ export default {
       // Get site old data
       const response = await getObject('site', '/site/', this.$route.params.id);
       this.messageProps.message = response;
-      this.formProps.oldSiteName = response.site_name;
+      this.formProps.oldSiteName = response.name;
     }
   }
 };

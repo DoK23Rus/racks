@@ -15,7 +15,7 @@ const getDevicesForSide = (devices) => {
 
 const getStartList = (rack) => {
   // List of rack units
-  const arr = Array.from({length: rack.rack_amount}, (_, i) => i + 1);
+  const arr = Array.from({length: rack.amount}, (_, i) => i + 1);
   if (!rack.numbering_from_bottom_to_top) {
     return arr;
   } else {

@@ -68,25 +68,25 @@ export default {
         last_unit: parseInt(form.lastUnit),
         frontside_location: form.frontsideLocation,
         status: form.status,
-        device_type: form.deviceType,
-        device_vendor: form.deviceVendor,
-        device_model: form.deviceModel,
-        device_hostname: form.deviceHostname,
+        type: form.deviceType,
+        vendor: form.deviceVendor,
+        model: form.deviceModel,
+        hostname: form.deviceHostname,
         ip: form.ip,
-        device_stack: form.deviceStack,
+        stack: form.deviceStack,
         ports_amout: form.portsAmout,
         version: form.version,
         power_type: form.powerType,
         power_w: form.powerW,
         power_v: form.powerV,
         power_ac_dc: form.powerACDC,
-        device_serial_number: form.deviceSerialNumber,
-        device_description: form.deviceDescription,
+        serial_number: form.deviceSerialNumber,
+        description: form.deviceDescription,
         project: form.project,
         ownership: form.ownership,
         responsible: form.responsible,
         financially_responsible_person: form.financiallyResponsiblePerson,
-        device_inventory_number: form.deviceInventoryNumber,
+        inventory_number: form.deviceInventoryNumber,
         fixed_asset: form.fixedAsset,
         rack_id: this.rack_id
       };
@@ -101,25 +101,25 @@ export default {
       this.formProps.oldLastUnit = response.last_unit;
       this.formProps.oldFrontsideLocation = response.frontside_location;
       this.formProps.oldStatus = response.status;
-      this.formProps.oldDeviceType = response.device_type;
-      this.formProps.oldDeviceVendor = response.device_vendor;
-      this.formProps.oldDeviceModel = response.device_model;
-      this.formProps.oldDeviceHostname = response.device_hostname;
+      this.formProps.oldDeviceType = response.type;
+      this.formProps.oldDeviceVendor = response.vendor;
+      this.formProps.oldDeviceModel = response.model;
+      this.formProps.oldDeviceHostname = response.hostname;
       this.formProps.oldIp = response.ip;
-      this.formProps.oldDeviceStack = response.device_stack;
+      this.formProps.oldDeviceStack = response.stack;
       this.formProps.oldPortsAmout = response.ports_amout;
       this.formProps.oldVersion = response.version;
       this.formProps.oldPowerType = response.power_type;
       this.formProps.oldPowerW = response.power_w;
       this.formProps.oldPowerV = response.power_v;
       this.formProps.oldPowerACDC = response.power_ac_dc;
-      this.formProps.oldDeviceSerialNumber = response.device_serial_number;
-      this.formProps.oldDeviceDescription = response.device_description;
+      this.formProps.oldDeviceSerialNumber = response.serial_number;
+      this.formProps.oldDeviceDescription = response.description;
       this.formProps.oldProject = response.project;
       this.formProps.oldOwnership = response.ownership;
       this.formProps.oldResponsible = response.responsible;
       this.formProps.oldFinanciallyResponsiblePerson = response.financially_responsible_person;
-      this.formProps.oldDeviceInventoryNumber = response.device_inventory_number;
+      this.formProps.oldDeviceInventoryNumber = response.inventory_number;
       this.formProps.oldFixedAsset = response.fixed_asset;
       this.rackId = response.rack_id;
     }

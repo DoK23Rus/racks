@@ -75,7 +75,7 @@ class DepartmentRepository:
             (str): Department name
         """
         return Department.objects.get(id=pk) \
-            .department_name
+            .name
 
     @staticmethod
     def get_all_departments() -> QuerySet:
@@ -123,7 +123,7 @@ class SiteRepository:
         """
         return Site.objects.get_site_department(pk) \
             .department_id \
-            .department_name
+            .name
 
     @staticmethod
     def get_all_sites() -> QuerySet:
@@ -168,7 +168,7 @@ class BuildingRepository:
         return Building.objects.get_building_department(pk) \
             .site_id \
             .department_id \
-            .department_name
+            .name
 
     @staticmethod
     def get_unique_object_names_list(key: int) -> set:
@@ -181,7 +181,7 @@ class BuildingRepository:
         Returns:
             (set): Building names set
         """
-        return {building.building_name for building
+        return {building.name for building
                 in Building.objects.get_buildings_for_site(key)}
 
     @staticmethod
@@ -228,7 +228,7 @@ class RoomRepository:
             .building_id \
             .site_id \
             .department_id \
-            .department_name
+            .name
 
     @staticmethod
     def get_unique_object_names_list(key: int) -> set:
@@ -241,7 +241,7 @@ class RoomRepository:
         Returns:
             (set): room names set
         """
-        return {room.room_name for room
+        return {room.name for room
                 in Room.objects.get_rooms_for_building(key)}
 
     @staticmethod
@@ -286,7 +286,7 @@ class RackRepository:
             .building_id \
             .site_id \
             .department_id \
-            .department_name
+            .name
 
     @staticmethod
     def get_rack_amount(rack_id: int) -> int:
@@ -299,7 +299,7 @@ class RackRepository:
         Returns:
             (int): Rack amount
         """
-        return int(Rack.objects.get_rack(rack_id).rack_amount)
+        return int(Rack.objects.get_rack(rack_id).amount)
 
     @staticmethod
     def get_unique_object_names_list(key: int) -> set:
@@ -312,7 +312,7 @@ class RackRepository:
         Returns:
             (set): Set of unique rack names
         """
-        return {rack.rack_name for rack
+        return {rack.name for rack
                 in Rack.objects.get_racks_for_room(key)}
 
     @staticmethod
@@ -372,7 +372,7 @@ class RackRepository:
         """
         return Rack.objects.get_rack_room(pk) \
             .room_id \
-            .room_name
+            .name
 
     @staticmethod
     def get_all_racks_partial() -> QuerySet:
@@ -398,7 +398,7 @@ class RackRepository:
         return Rack.objects.get_rack_building(pk) \
             .room_id \
             .building_id \
-            .building_name
+            .name
 
     @staticmethod
     def get_rack_site_name(pk: int) -> str:
@@ -415,7 +415,7 @@ class RackRepository:
             .room_id \
             .building_id \
             .site_id \
-            .site_name
+            .name
 
     @staticmethod
     def get_rack_department_name(pk: int) -> str:
@@ -433,7 +433,7 @@ class RackRepository:
             .building_id \
             .site_id \
             .department_id \
-            .department_name
+            .name
 
     @staticmethod
     def get_rack_region_name(pk: int) -> str:
@@ -452,7 +452,7 @@ class RackRepository:
             .site_id \
             .department_id \
             .region_id \
-            .region_name
+            .name
 
 
 class DeviceRepository:
@@ -580,7 +580,7 @@ class DeviceRepository:
             .building_id \
             .site_id \
             .department_id \
-            .department_name
+            .name
 
     @staticmethod
     def get_devices_power_list(pk: int) -> list:
@@ -621,7 +621,7 @@ class DeviceRepository:
         """
         return Device.objects.get_device_rack(pk) \
             .rack_id \
-            .rack_name
+            .name
 
     @staticmethod
     def get_device_room_name(pk: int) -> str:
@@ -637,7 +637,7 @@ class DeviceRepository:
         return Device.objects.get_device_room(pk) \
             .rack_id \
             .room_id \
-            .room_name
+            .name
 
     @staticmethod
     def get_device_building_name(pk: int) -> str:
@@ -654,7 +654,7 @@ class DeviceRepository:
             .rack_id \
             .room_id \
             .building_id \
-            .building_name
+            .name
 
     @staticmethod
     def get_device_site_name(pk: int) -> str:
@@ -672,7 +672,7 @@ class DeviceRepository:
             .room_id \
             .building_id \
             .site_id \
-            .site_name
+            .name
 
     @staticmethod
     def get_device_department_name(pk: int) -> str:
@@ -691,7 +691,7 @@ class DeviceRepository:
             .building_id \
             .site_id \
             .department_id \
-            .department_name
+            .name
 
     @staticmethod
     def get_device_region_name(pk: int) -> str:
@@ -711,7 +711,7 @@ class DeviceRepository:
             .site_id \
             .department_id \
             .region_id \
-            .region_name
+            .name
 
 
 Repository_Type = Union[Type[DeviceRepository],

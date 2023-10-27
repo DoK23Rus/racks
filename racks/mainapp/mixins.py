@@ -278,7 +278,7 @@ class HelperMixin(AbstractMixin):
         Returns:
             static_dir (str): primary key
         """
-        if not (static_dir := os.environ.get('STATIC_DIR')):
+        if not (static_dir := os.environ.get('STATIC_PATH')):
             raise ValueError("No STATIC_DIR in .env file")
         return static_dir
 
@@ -424,8 +424,7 @@ class BaseApiAddMixin(BaseApiMixin,
             }, status=400)
         # Add username to data
         data['updated_by'] = request.user.username
-        key_name = DataProcessingService \
-            .get_key_name(data, self.model._meta.db_table)
+        key_name = DataProcessingService.get_key_name(data)
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             # Check for add possibility
@@ -485,10 +484,9 @@ class BaseApiUpdateMixin(BaseApiMixin,
         # when you call it from service layer
         old_data = self.model.objects.get(id=pk).__dict__
         # Prevent rack amount updating
-        if data.get('rack_amount'):
-            data['rack_amount'] = RackRepository.get_rack_amount(pk)
-        key_name = DataProcessingService \
-            .get_key_name(data, self.model._meta.db_table)
+        if data.get('amount'):
+            data['amount'] = RackRepository.get_rack_amount(pk)
+        key_name = DataProcessingService.get_key_name(data)
         instance_name = DataProcessingService \
             .get_instance_name(instance, self.model)
         serializer = self.serializer_class(data=data)

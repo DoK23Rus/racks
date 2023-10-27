@@ -37,11 +37,11 @@ export default {
   methods: {
     async submitForm(form) {
       const formData = {
-        site_name: form.siteName,
+        name: form.siteName,
         department_id: this.$route.params.department_id
       };
       this.messageProps.message = await postObject('site', '/site/create/', formData);
-      if (this.messageProps.message.site_name == "Site with this Site already exists.") {
+      if (this.messageProps.message.name == "Site with this Site already exists.") {
         this.messageProps.message = {invalid: "Site with this name already exists."};
       }
     },

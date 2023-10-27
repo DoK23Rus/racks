@@ -25,7 +25,7 @@
 </template>
     
 <script>
-import { getCaretClass, getId } from '@/functions'
+import { getId } from '@/functions'
 import { truncate } from '@/filters'
 
 export default {
@@ -36,7 +36,6 @@ export default {
     isOpen: Boolean
   },
   methods: {
-    getCaretClass: getCaretClass,
     getId: getId,
     truncate: truncate
   }

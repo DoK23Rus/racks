@@ -34,20 +34,20 @@
                         <template v-if="device.ownership == 'Our department'">
                           <Unit
                             :className="`text-center text-white ${classNameOur}`"
-                            :deviceVendor="device.device_vendor"
-                            :deviceModel="device.device_model"
+                            :deviceVendor="device.vendor"
+                            :deviceModel="device.model"
                             :deviceId="device.id"
-                            :deviceType="device.device_type"
+                            :deviceType="device.type"
                             :rowspan="rowspan"
                           />
                         </template>
                         <template v-else>
                           <Unit
                             :className="`text-center text-white ${classNameAlien}`"
-                            :deviceVendor="device.device_vendor"
-                            :deviceModel="device.device_model"
+                            :deviceVendor="device.vendor"
+                            :deviceModel="device.model"
                             :deviceId="device.id"
-                            :deviceType="device.device_type"
+                            :deviceType="device.type"
                             :rowspan="rowspan"
                           />
                         </template>
@@ -56,20 +56,20 @@
                         <template v-if="device.ownership == 'Our department'">
                           <Unit
                             :className="`text-center text-white ${classNameEmpty} ${classNameOur}`"
-                            :deviceVendor="device.device_vendor"
-                            :deviceModel="device.device_model"
+                            :deviceVendor="device.vendor"
+                            :deviceModel="device.model"
                             :deviceId="device.id"
-                            :deviceType="device.device_type"
+                            :deviceType="device.type"
                             :rowspan="rowspan"
                           />
                         </template>
                         <template v-else>
                           <Unit
                             :className="`text-center text-white ${classNameAlien} ${classNameEmpty}`"
-                            :deviceVendor="device.device_vendor"
-                            :deviceModel="device.device_model"
+                            :deviceVendor="device.vendor"
+                            :deviceModel="device.model"
                             :deviceId="device.id"
-                            :deviceType="device.device_type"
+                            :deviceType="device.type"
                             :rowspan="rowspan"
                           />
                         </template>

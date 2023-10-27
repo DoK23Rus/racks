@@ -37,7 +37,7 @@ export default {
   methods: {
     async submitForm(form) {
       const formData = {
-        building_name: form.buildingName,
+        name: form.buildingName,
         site_id: this.$route.params.site_id
       };
       this.messageProps.message = await postObject('building', '/building/create/', formData);

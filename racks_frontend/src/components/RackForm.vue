@@ -289,12 +289,12 @@
         </option>
       </select>
     <br>
-      <label for="rackPalceType">
+      <label for="rackPlaceType">
         Location type: 
       </label>
       <select 
         class="block" 
-        v-model="form.rackPalceType"
+        v-model="form.rackPlaceType"
       >
         <option 
           value="Floor standing" 
@@ -438,7 +438,7 @@ export default {
         rackUnitDepth: null,
         rackType: 'Rack',
         rackFrame: 'Double frame',
-        rackPalceType: 'Floor standing',
+        rackPlaceType: 'Floor standing',
         maxLoad: null,
         powerSockets: null,
         powerSocketsUps: null,
@@ -505,7 +505,7 @@ export default {
         this.form.rackUnitDepth = this.formProps.oldRackUnitDepth;
         this.form.rackType = this.formProps.oldRackType;
         this.form.rackFrame = this.formProps.oldRackFrame;
-        this.form.rackPalceType = this.formProps.oldRackPalceType;
+        this.form.rackPlaceType = this.formProps.oldRackPlaceType;
         this.form.maxLoad = this.formProps.oldMaxLoad;
         this.form.powerSockets = this.formProps.oldPowerSockets;
         this.form.powerSocketsUps = this.formProps.oldPowerSocketsUps;

@@ -43,18 +43,18 @@ class TestDeviceCheckService(TestCase):
         self.assertEqual(result, UnitsTuple(2, 5))
 
     def test_check_unit_exist(self):
-        rack1_amount = Rack.objects.get(rack_name='Test_rack1').rack_amount
+        rack1_amount = Rack.objects.get(name='Test_rack1').amount
         result = DeviceCheckService \
             .check_unit_exist(UnitsTuple(39, 40), rack1_amount)
         self.assertTrue(result)
 
-        rack2_amount = Rack.objects.get(rack_name='Test_rack2').rack_amount
+        rack2_amount = Rack.objects.get(name='Test_rack2').amount
         result = DeviceCheckService \
             .check_unit_exist(UnitsTuple(21, 22), rack2_amount)
         self.assertFalse(result)
 
     def test_get_filled_list(self):
-        rack_id = Rack.objects.get(rack_name='Test_rack1').id
+        rack_id = Rack.objects.get(name='Test_rack1').id
         devices_for_side_qs = Device.objects.filter(rack_id_id=rack_id)
         result = DeviceCheckService.get_filled_list(devices_for_side_qs)
         self.assertEqual(result, [1, 2, 5, 3, 4, 7])
@@ -114,56 +114,56 @@ class TestDataProcessingService(TestCase):
 
     def test_get_key_name(self):
         # Get key name (if model != Device)
-        data = {'rack_name': 'Test_rack1'}
-        result = DataProcessingService.get_key_name(data, 'rack')
+        data = {'name': 'Test_rack1'}
+        result = DataProcessingService.get_key_name(data)
         self.assertEqual(result, 'Test_rack1')
 
         # Get key name (if model == Device)
         data = {
-            'device_vendor': 'Test_vendor1',
-            'device_model': 'Test_model1',
+            'vendor': 'Test_vendor1',
+            'model': 'Test_model1',
         }
-        result = DataProcessingService.get_key_name(data, 'device')
+        result = DataProcessingService.get_key_name(data)
         self.assertEqual(result, 'device Test_vendor1, Test_model1')
 
         # For Device model, if vendor and model not specified
         data = {}
-        result = DataProcessingService.get_key_name(data, 'device')
+        result = DataProcessingService.get_key_name(data)
         self.assertEqual(result,
                          'device unspecified vendor, unspecified model')
 
-        data = {'device_vendor': 'Test_vendor1'}
-        result = DataProcessingService.get_key_name(data, 'device')
+        data = {'vendor': 'Test_vendor1'}
+        result = DataProcessingService.get_key_name(data)
         self.assertEqual(result,
                          'device Test_vendor1, unspecified model')
 
-        data = {'device_model': 'Test_model1'}
-        result = DataProcessingService.get_key_name(data, 'device')
+        data = {'model': 'Test_model1'}
+        result = DataProcessingService.get_key_name(data)
         self.assertEqual(result,
                          'device unspecified vendor, Test_model1')
 
     def test_get_instance_name(self):
         # Model Rack
-        rack1 = Rack.objects.get(rack_name='Test_rack1')
+        rack1 = Rack.objects.get(name='Test_rack1')
         result = DataProcessingService \
             .get_instance_name(rack1, Rack, Device)
         self.assertEqual(result, 'Test_rack1')
 
         # Model Device
-        device1 = Device.objects.get(device_vendor='Test_vendor1')
+        device1 = Device.objects.get(vendor='Test_vendor1')
         result = DataProcessingService \
             .get_instance_name(device1, Device, Device)
         self.assertEqual(result, 'device Test_vendor1, Test_model1')
 
         # Model Device, unspecified model
-        device2 = Device.objects.get(device_vendor='Test_vendor9')
+        device2 = Device.objects.get(vendor='Test_vendor9')
         result = DataProcessingService \
             .get_instance_name(device2, Device, Device)
         self.assertEqual(result,
                          'device Test_vendor9, unspecified model')
 
         # Model Device, unspecified vendor
-        device3 = Device.objects.get(device_model='Test_model10')
+        device3 = Device.objects.get(model='Test_model10')
         result = DataProcessingService \
             .get_instance_name(device3, Device, Device)
         self.assertEqual(result,

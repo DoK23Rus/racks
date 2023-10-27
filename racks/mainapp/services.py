@@ -175,24 +175,23 @@ class DataProcessingService:
         return sum(power_w for power_w in power_w_list if power_w is not None)
 
     @staticmethod
-    def get_key_name(data: dict, model_name: str) -> str:
+    def get_key_name(data: dict) -> str:
         """
         Get key name for different models
 
         Args:
             data (dict): New data set
-            model_name (str): Object model name
 
         Returns:
             key_name (str): Key name for an object
                 (devices has no name, only vendor and model)
         """
-        key_name = data.get(f"{model_name}_name")
+        key_name = data.get("name")
         if key_name is not None:
             return key_name
         key_name = f"device " \
-            f"{str(data.get('device_vendor') or 'unspecified vendor')}, " \
-            f"{str(data.get('device_model') or 'unspecified model')}"
+            f"{str(data.get('vendor') or 'unspecified vendor')}, " \
+            f"{str(data.get('model') or 'unspecified model')}"
         return key_name
 
     @staticmethod
@@ -201,11 +200,11 @@ class DataProcessingService:
                           exception: ModelBase = Device,
                           ) -> str:
         if model != exception:
-            return getattr(instance, f"{model._meta.db_table}_name")
-        device_vendor = instance.device_vendor \
-            if instance.device_vendor != '' else 'unspecified vendor'
-        device_model = instance.device_model \
-            if instance.device_model != '' else 'unspecified model'
+            return getattr(instance, "name")
+        device_vendor = instance.vendor \
+            if instance.vendor != '' else 'unspecified vendor'
+        device_model = instance.model \
+            if instance.model != '' else 'unspecified model'
         return f"device {device_vendor}, {device_model}"
 
 
@@ -227,25 +226,25 @@ class ReportService:
             devices_data.append([
                 device.id,
                 device.status,
-                device.device_vendor,
-                device.device_model,
-                device.device_serial_number,
-                device.device_description,
+                device.vendor,
+                device.model,
+                device.serial_number,
+                device.description,
                 device.project,
                 device.ownership,
                 device.financially_responsible_person,
-                device.device_inventory_number,
+                device.inventory_number,
                 device.responsible,
                 device.fixed_asset,
                 device.link,
                 device.first_unit,
                 device.last_unit,
                 'Yes' if device.frontside_location else 'No',
-                device.device_type,
-                device.device_hostname,
+                device.type,
+                device.hostname,
                 device.ip,
                 f"{os.environ.get('DEVICE_REPORT_LINK')}"
-                f"{str(device.device_stack)}" if device.device_stack
+                f"{str(device.stack)}" if device.stack
                 is not None else None,
                 device.ports_amout,
                 device.version,
@@ -277,27 +276,27 @@ class ReportService:
         for rack in racks_report_qs:
             racks_data.append([
                 rack.id,
-                rack.rack_name,
-                rack.rack_amount,
-                rack.rack_vendor,
-                rack.rack_model,
-                rack.rack_description,
+                rack.name,
+                rack.amount,
+                rack.vendor,
+                rack.model,
+                rack.description,
                 'Yes' if rack.numbering_from_bottom_to_top else 'No',
                 rack.responsible,
-                rack.rack_financially_responsible_person,
-                rack.rack_inventory_number,
+                rack.financially_responsible_person,
+                rack.inventory_number,
                 rack.fixed_asset,
                 rack.link,
                 rack.row,
                 rack.place,
-                rack.rack_height,
-                rack.rack_width,
-                rack.rack_depth,
-                rack.rack_unit_width,
-                rack.rack_unit_depth,
-                rack.rack_type,
-                rack.rack_frame,
-                rack.rack_palce_type,
+                rack.height,
+                rack.width,
+                rack.depth,
+                rack.unit_width,
+                rack.unit_depth,
+                rack.type,
+                rack.frame,
+                rack.place_type,
                 rack.max_load,
                 rack.power_sockets,
                 rack.power_sockets_ups,

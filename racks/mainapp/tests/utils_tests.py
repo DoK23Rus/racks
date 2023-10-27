@@ -48,53 +48,53 @@ class TestCheckProps(TestCase):
 
     def test_NamesList(self):
         # Names list for racks
-        pk = Room.objects.get(room_name='Test_room1').id
+        pk = Room.objects.get(name='Test_room1').id
         result = NamesList(pk, Rack).names_list
         self.assertEqual(result, {'Test_rack1', 'Test_rack3'})
 
         # Names list for rooms
-        pk = Building.objects.get(building_name='Test_building1').id
+        pk = Building.objects.get(name='Test_building1').id
         result = NamesList(pk, Room).names_list
         self.assertEqual(result, {'Test_room1'})
 
         # Names list for buildings
-        pk = Site.objects.get(site_name='Test_site1').id
+        pk = Site.objects.get(name='Test_site1').id
         result = NamesList(pk, Building).names_list
         self.assertEqual(result, {'Test_building1'})
 
     def test_DepartmentName(self):
         # Department name for department
-        pk = Region.objects.get(region_name='Test_region1').id
+        pk = Region.objects.get(name='Test_region1').id
         result = DepartmentName(pk, Department).department_name
         self.assertEqual(result, 'Test_department1')
 
         # Department name for site
-        pk = Department.objects.get(department_name='Test_department1').id
+        pk = Department.objects.get(name='Test_department1').id
         result = DepartmentName(pk, Site).department_name
         self.assertEqual(result, 'Test_department1')
 
         # Department name for building
-        pk = Site.objects.get(site_name='Test_site1').id
+        pk = Site.objects.get(name='Test_site1').id
         result = DepartmentName(pk, Building).department_name
         self.assertEqual(result, 'Test_department1')
 
         # Department name for room
-        pk = Building.objects.get(building_name='Test_building1').id
+        pk = Building.objects.get(name='Test_building1').id
         result = DepartmentName(pk, Room).department_name
         self.assertEqual(result, 'Test_department1')
 
         # Department name for rack
-        pk = Room.objects.get(room_name='Test_room1').id
+        pk = Room.objects.get(name='Test_room1').id
         result = DepartmentName(pk, Rack).department_name
         self.assertEqual(result, 'Test_department1')
 
         # Department name for device
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         result = DepartmentName(pk, Device).department_name
         self.assertEqual(result, 'Test_department1')
 
     def test_OldUnits(self):
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         result = OldUnits(pk).old_units
         self.assertEqual(result, UnitsTuple(1, 2))
 
@@ -133,7 +133,7 @@ class TestCheckProps(TestCase):
             FrontsideLocation(data).frontside_location
 
     def test_RackAmount(self):
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         result = RackAmount(pk).rack_amount
         self.assertEqual(result, 40)
 
@@ -159,7 +159,7 @@ class TestCheckProps(TestCase):
 
     def test_DevicesForSide(self):
         # Frontside
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         result = DevicesForSide(pk, True).devices_for_side
         self.assertQuerysetEqual(result,
                                  Device.objects.filter(rack_id_id=pk)
@@ -174,7 +174,7 @@ class TestCheckProps(TestCase):
                                  ordered=False)
 
     def test_FilledList(self):
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         devices_for_side = Device.objects.filter(rack_id_id=pk) \
             .filter(frontside_location=True)
         result = FilledList(devices_for_side).filled_list
@@ -211,8 +211,8 @@ class TestCheckProps(TestCase):
         self.assertTrue(result)
 
     def test_RackId(self):
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
-        rack_id = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
+        rack_id = Rack.objects.get(name='Test_rack1').id
         result = RackId(pk).rack_id
         self.assertEqual(result, rack_id)
 
@@ -253,7 +253,7 @@ class TestChecks(TestCase):
     def test_CheckUser_add(self):
         # device
         user_groups = ['some_group', 'Test_department1']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 29,
             'last_unit': 30,
@@ -283,9 +283,9 @@ class TestChecks(TestCase):
 
         # rack
         user_groups = ['some_group', 'Test_department1']
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         data = {
-            'rack_amount': 40,
+            'amount': 40,
         }
         model = Rack
         fk_model = Room
@@ -311,7 +311,7 @@ class TestChecks(TestCase):
 
         # room
         user_groups = ['some_group', 'Test_department1']
-        pk = Room.objects.get(room_name='Test_room1').id
+        pk = Room.objects.get(name='Test_room1').id
         data = {}
         model = Room
         fk_model = Building
@@ -337,7 +337,7 @@ class TestChecks(TestCase):
 
         # building
         user_groups = ['some_group', 'Test_department1']
-        pk = Building.objects.get(building_name='Test_building1').id
+        pk = Building.objects.get(name='Test_building1').id
         data = {}
         model = Building
         fk_model = Site
@@ -363,7 +363,7 @@ class TestChecks(TestCase):
 
         # site
         user_groups = ['some_group', 'Test_department1']
-        pk = Site.objects.get(site_name='Test_site1').id
+        pk = Site.objects.get(name='Test_site1').id
         data = {}
         model = Site
         fk_model = Department
@@ -390,13 +390,13 @@ class TestChecks(TestCase):
     def test_CheckUser_update(self):
         # device
         user_groups = ['Test_department1']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 1,
             'last_unit': 2,
             'frontside_location': True,
         }
-        fk = Rack.objects.get(rack_name='Test_rack1').id
+        fk = Rack.objects.get(name='Test_rack1').id
         model = Device
         fk_model = Rack
         key_name = 'device some_vendor, some_model'
@@ -426,11 +426,11 @@ class TestChecks(TestCase):
 
         # rack
         user_groups = ['some_group', 'Test_department1']
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         data = {
-            'rack_amount': 40,
+            'amount': 40,
         }
-        fk = Room.objects.get(room_name='Test_room1').id
+        fk = Room.objects.get(name='Test_room1').id
         model = Rack
         fk_model = Room
         key_name = 'some_rack'
@@ -460,9 +460,9 @@ class TestChecks(TestCase):
 
         # room
         user_groups = ['some_group', 'Test_department1']
-        pk = Room.objects.get(room_name='Test_room1').id
+        pk = Room.objects.get(name='Test_room1').id
         data = {}
-        fk = Building.objects.get(building_name='Test_building1').id
+        fk = Building.objects.get(name='Test_building1').id
         model = Room
         fk_model = Building
         key_name = 'some_room'
@@ -492,9 +492,9 @@ class TestChecks(TestCase):
 
         # building
         user_groups = ['some_group', 'Test_department1']
-        pk = Building.objects.get(building_name='Test_building1').id
+        pk = Building.objects.get(name='Test_building1').id
         data = {}
-        fk = Site.objects.get(site_name='Test_site1').id
+        fk = Site.objects.get(name='Test_site1').id
         model = Building
         fk_model = Site
         key_name = 'some_building'
@@ -524,9 +524,9 @@ class TestChecks(TestCase):
 
         # site
         user_groups = ['some_group', 'Test_department1']
-        pk = Site.objects.get(site_name='Test_site1').id
+        pk = Site.objects.get(name='Test_site1').id
         data = {}
-        fk = Department.objects.get(department_name='Test_department1').id
+        fk = Department.objects.get(name='Test_department1').id
         model = Site
         fk_model = Department
         key_name = 'some_site'
@@ -557,7 +557,7 @@ class TestChecks(TestCase):
     def test_CheckUser_delete(self):
         # device
         user_groups = ['Test_department1']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 1,
             'last_unit': 2,
@@ -581,7 +581,7 @@ class TestChecks(TestCase):
 
         # rack
         user_groups = ['some_group', 'Test_department1']
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         data = {
             'rack_amount': 40,
         }
@@ -603,7 +603,7 @@ class TestChecks(TestCase):
 
         # room
         user_groups = ['some_group', 'Test_department1']
-        pk = Room.objects.get(room_name='Test_room1').id
+        pk = Room.objects.get(name='Test_room1').id
         data = {}
         model = Room
         result = CheckUser(DeleteCheckProps(user_groups,
@@ -623,7 +623,7 @@ class TestChecks(TestCase):
 
         # building
         user_groups = ['some_group', 'Test_department1']
-        pk = Building.objects.get(building_name='Test_building1').id
+        pk = Building.objects.get(name='Test_building1').id
         data = {}
         model = Building
         result = CheckUser(DeleteCheckProps(user_groups,
@@ -643,7 +643,7 @@ class TestChecks(TestCase):
 
         # site
         user_groups = ['some_group', 'Test_department1']
-        pk = Site.objects.get(site_name='Test_site1').id
+        pk = Site.objects.get(name='Test_site1').id
         data = {}
         model = Site
         result = CheckUser(DeleteCheckProps(user_groups,
@@ -664,7 +664,7 @@ class TestChecks(TestCase):
     def test_CheckUnique_add(self):
         # rack
         user_groups = ['Test_department1']
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         data = {
             'rack_amount': 40,
         }
@@ -692,7 +692,7 @@ class TestChecks(TestCase):
 
         # room
         user_groups = ['Test_department1']
-        pk = Room.objects.get(room_name='Test_room1').id
+        pk = Room.objects.get(name='Test_room1').id
         data = {}
         model = Room
         fk_model = Building
@@ -718,7 +718,7 @@ class TestChecks(TestCase):
 
         # building
         user_groups = ['Test_department1']
-        pk = Building.objects.get(building_name='Test_building1').id
+        pk = Building.objects.get(name='Test_building1').id
         data = {}
         model = Building
         fk_model = Site
@@ -746,11 +746,11 @@ class TestChecks(TestCase):
     def test_CheckUnique_update(self):
         # rack
         user_groups = ['Test_department1']
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         data = {
-            'rack_amount': 40,
+            'amount': 40,
         }
-        fk = Room.objects.get(room_name='Test_room1').id
+        fk = Room.objects.get(name='Test_room1').id
         model = Rack
         fk_model = Room
         key_name = 'some_rack'
@@ -793,10 +793,10 @@ class TestChecks(TestCase):
 
         # room
         user_groups = ['Test_department1']
-        pk = Room.objects.get(room_name='Test_room1').id
+        pk = Room.objects.get(name='Test_room1').id
         data = {}
         model = Room
-        fk = Building.objects.get(building_name='Test_building1').id
+        fk = Building.objects.get(name='Test_building1').id
         model = Room
         fk_model = Building
         key_name = 'some_room'
@@ -839,10 +839,10 @@ class TestChecks(TestCase):
 
         # building
         user_groups = ['Test_department1']
-        pk = Building.objects.get(building_name='Test_building1').id
+        pk = Building.objects.get(name='Test_building1').id
         data = {}
         model = Building
-        fk = Site.objects.get(site_name='Test_site1').id
+        fk = Site.objects.get(name='Test_site1').id
         model = Building
         fk_model = Site
         key_name = 'some_building'
@@ -886,7 +886,7 @@ class TestChecks(TestCase):
 
     def test_CheckUnique_delete(self):
         user_groups = ['Test_department1']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 1,
             'last_unit': 2,
@@ -902,7 +902,7 @@ class TestChecks(TestCase):
     def test_CheckDeviceForAddOrUpdate_add(self):
         # Ok
         user_groups = ['Test_department1']
-        pk = Rack.objects.get(rack_name='Test_rack1').id
+        pk = Rack.objects.get(name='Test_rack1').id
         data = {
             'first_unit': 29,
             'last_unit': 30,
@@ -1021,14 +1021,14 @@ class TestChecks(TestCase):
     def test_CheckDeviceForAddOrUpdate_update(self):
         # Ok
         user_groups = ['Test_department1']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 3,
             'last_unit': 4,
             'frontside_location': True,
         }
         model = Device
-        fk = Rack.objects.get(rack_name='Test_rack1').id
+        fk = Rack.objects.get(name='Test_rack1').id
         fk_model = Rack
         key_name = 'some_device'
         instance_name = 'some_device'
@@ -1179,7 +1179,7 @@ class TestChecks(TestCase):
 
     def test_CheckDeviceForAddOrUpdate_delete(self):
         user_groups = ['Test_department1']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 1,
             'last_unit': 2,
@@ -1209,7 +1209,7 @@ class TestChecker(TestCase):
     def test_Checker(self):
         # All checks pass
         user_groups = ['Test_department1']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 29,
             'last_unit': 30,
@@ -1225,7 +1225,7 @@ class TestChecker(TestCase):
 
         # One check fail
         user_groups = ['some_group']
-        pk = Device.objects.get(device_vendor='Test_vendor1').id
+        pk = Device.objects.get(vendor='Test_vendor1').id
         data = {
             'first_unit': 29,
             'last_unit': 30,

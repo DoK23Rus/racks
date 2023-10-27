@@ -171,8 +171,8 @@ class RackManager(models.Manager):
             all_racks (QuerySet): All racks partial queryset
         """
         return Rack.objects.all().only('id',
-                                       'rack_name',
-                                       'rack_amount',
+                                       'name',
+                                       'amount',
                                        'numbering_from_bottom_to_top',
                                        'room_id')
 
@@ -207,7 +207,7 @@ class RackManager(models.Manager):
         Returns:
             rack_vendors (QuerySet): Rack vendors
         """
-        return Rack.objects.values_list('rack_vendor', flat=True)
+        return Rack.objects.values_list('vendor', flat=True)
 
     def get_rack_models(self):
         """
@@ -216,7 +216,7 @@ class RackManager(models.Manager):
         Returns:
             rack_models (QuerySet): Rack models
         """
-        return Rack.objects.values_list('rack_model', flat=True)
+        return Rack.objects.values_list('model', flat=True)
 
     def get_rack_room(self, pk):
         """
@@ -306,11 +306,11 @@ class RackManager(models.Manager):
         """
         return Rack.objects.raw("""SELECT rack.id as id,
                                 rack.*,
-                                room.room_name,
-                                building.building_name,
-                                site.site_name,
-                                department.department_name,
-                                region.region_name
+                                room.name as room_name,
+                                building.name as building_name,
+                                site.name as site_name,
+                                department.name as department_name,
+                                region.name as region_name
                                 FROM rack
                                 JOIN room ON
                                 room.id =
@@ -478,7 +478,7 @@ class DeviceManager(models.Manager):
         Returns:
             device_vendors (QuerySet): Device vendors queryset
         """
-        return Device.objects.values_list('device_vendor', flat=True)
+        return Device.objects.values_list('vendor', flat=True)
 
     def get_device_models(self):
         """
@@ -487,7 +487,7 @@ class DeviceManager(models.Manager):
         Returns:
             device_models (QuerySet): Device models queryset
         """
-        return Device.objects.values_list('device_model', flat=True)
+        return Device.objects.values_list('model', flat=True)
 
     def get_devices_report(self):
         """
@@ -498,12 +498,12 @@ class DeviceManager(models.Manager):
         """
         return Device.objects.raw("""SELECT device.id as id,
                                   device.*,
-                                  rack.rack_name,
-                                  room.room_name,
-                                  building.building_name,
-                                  site.site_name,
-                                  department.department_name,
-                                  region.region_name
+                                  rack.name as rack_name,
+                                  room.name as room_name,
+                                  building.name as building_name,
+                                  site.name as site_name,
+                                  department.name as department_name,
+                                  region.name as region_name
                                   FROM device
                                   JOIN rack ON
                                   rack.id =
@@ -529,9 +529,9 @@ class Region(models.Model):
     """
     Region model
     """
-    region_name = models.CharField(max_length=128,
-                                   unique=True,
-                                   verbose_name='Region')
+    name = models.CharField(max_length=128,
+                            unique=True,
+                            verbose_name='Region')
     objects = RegionManager()
 
     class Meta:
@@ -540,16 +540,16 @@ class Region(models.Model):
         verbose_name_plural = 'Regions'
 
     def __str__(self):
-        return self.region_name
+        return self.name
 
 
 class Department(models.Model):
     """
     Department model
     """
-    department_name = models.CharField(max_length=128,
-                                       unique=True,
-                                       verbose_name='Department')
+    name = models.CharField(max_length=128,
+                            unique=True,
+                            verbose_name='Department')
     region_id = models.ForeignKey(Region,
                                   on_delete=models.CASCADE,
                                   verbose_name='Region',
@@ -562,16 +562,16 @@ class Department(models.Model):
         verbose_name_plural = 'Departments'
 
     def __str__(self):
-        return self.department_name
+        return self.name
 
 
 class Site(models.Model):
     """
     Site model
     """
-    site_name = models.CharField(max_length=128,
-                                 unique=True,
-                                 verbose_name='Site')
+    name = models.CharField(max_length=128,
+                            unique=True,
+                            verbose_name='Site')
     updated_by = models.CharField(max_length=128,
                                   verbose_name='Updated by')
     updated_at = models.DateTimeField(auto_now=True,
@@ -588,15 +588,15 @@ class Site(models.Model):
         verbose_name_plural = 'Sites'
 
     def __str__(self):
-        return self.site_name
+        return self.name
 
 
 class Building(models.Model):
     """
     Building model
     """
-    building_name = models.CharField(max_length=128,
-                                     verbose_name='Building')
+    name = models.CharField(max_length=128,
+                            verbose_name='Building')
     updated_by = models.CharField(max_length=128,
                                   verbose_name='Updated by')
     updated_at = models.DateTimeField(auto_now=True,
@@ -613,15 +613,15 @@ class Building(models.Model):
         verbose_name_plural = 'Buildings'
 
     def __str__(self):
-        return self.building_name
+        return self.name
 
 
 class Room(models.Model):
     """
     Room model (technical rooms, server rooms, etc)
     """
-    room_name = models.CharField(max_length=128,
-                                 verbose_name='Room')
+    name = models.CharField(max_length=128,
+                            verbose_name='Room')
     updated_by = models.CharField(max_length=128,
                                   verbose_name='Updated by')
     updated_at = models.DateTimeField(auto_now=True,
@@ -638,37 +638,37 @@ class Room(models.Model):
         verbose_name_plural = 'Rooms'
 
     def __str__(self):
-        return self.room_name
+        return self.name
 
 
 class Rack(models.Model):
     """
     Rack model (racks, telecom-cabinets, etc)
     """
-    rack_name = models.CharField(max_length=128,
-                                 verbose_name='Rack name')
-    rack_amount = models.IntegerField(verbose_name='Rack amount (units)')
-    rack_vendor = models.CharField(max_length=128,
-                                   blank=True,
-                                   verbose_name='Rack vendor')
-    rack_model = models.CharField(max_length=128,
-                                  blank=True,
-                                  verbose_name='Rack model')
-    rack_description = models.TextField(blank=True,
-                                        verbose_name='Description')
+    name = models.CharField(max_length=128,
+                            verbose_name='Rack name')
+    amount = models.IntegerField(verbose_name='Rack amount (units)')
+    vendor = models.CharField(max_length=128,
+                              blank=True,
+                              verbose_name='Rack vendor')
+    model = models.CharField(max_length=128,
+                             blank=True,
+                             verbose_name='Rack model')
+    description = models.TextField(blank=True,
+                                   verbose_name='Description')
     numbering_from_bottom_to_top = models \
         .BooleanField(default=True,
                       verbose_name='Numbering from bottom to top')
     responsible = models.CharField(max_length=128,
                                    blank=True,
                                    verbose_name='Responsible')
-    rack_financially_responsible_person = models \
+    financially_responsible_person = models \
         .CharField(max_length=128,
                    blank=True,
                    verbose_name='Financially responsible')
-    rack_inventory_number = models.CharField(max_length=128,
-                                             blank=True,
-                                             verbose_name='Inventory number')
+    inventory_number = models.CharField(max_length=128,
+                                        blank=True,
+                                        verbose_name='Inventory number')
     fixed_asset = models.CharField(max_length=128,
                                    blank=True,
                                    verbose_name='Fixed asset')
@@ -681,48 +681,48 @@ class Rack(models.Model):
     place = models.CharField(max_length=128,
                              blank=True,
                              verbose_name='Place')
-    rack_height = models.IntegerField(blank=True,
-                                      null=True,
-                                      verbose_name='Rack height (mm)')
-    rack_width = models.IntegerField(blank=True,
-                                     null=True,
-                                     verbose_name='Rack width (mm)')
-    rack_depth = models.IntegerField(blank=True,
-                                     null=True,
-                                     verbose_name='Rack depth (mm)')
-    rack_unit_width = models \
+    height = models.IntegerField(blank=True,
+                                 null=True,
+                                 verbose_name='Rack height (mm)')
+    width = models.IntegerField(blank=True,
+                                null=True,
+                                verbose_name='Rack width (mm)')
+    depth = models.IntegerField(blank=True,
+                                null=True,
+                                verbose_name='Rack depth (mm)')
+    unit_width = models \
         .IntegerField(blank=True,
                       null=True,
                       default=19,
                       verbose_name='Useful rack width (inches)')
-    rack_unit_depth = models \
+    unit_depth = models \
         .IntegerField(blank=True,
                       null=True,
                       verbose_name='Useful rack depth (mm)')
-    rack_type_choices = [
+    type_choices = [
         ('Rack', 'Rack'),
         ('Protective cabinet', 'Protective cabinet'),
     ]
-    rack_type = models.CharField(max_length=32,
-                                 choices=rack_type_choices,
-                                 default='Rack',
-                                 verbose_name='Execution variant')
+    type = models.CharField(max_length=32,
+                            choices=type_choices,
+                            default='Rack',
+                            verbose_name='Execution variant')
     frame_choices = [
         ('Single frame', 'Single frame'),
         ('Double frame', 'Double frame'),
     ]
-    rack_frame = models.CharField(max_length=32,
-                                  choices=frame_choices,
-                                  default='Double frame',
-                                  verbose_name='Construction')
-    rack_palce_type_choices = [
+    frame = models.CharField(max_length=32,
+                             choices=frame_choices,
+                             default='Double frame',
+                             verbose_name='Construction')
+    place_type_choices = [
         ('Floor standing', 'Floor standing'),
         ('Wall mounted', 'Wall mounted'),
     ]
-    rack_palce_type = models.CharField(max_length=32,
-                                       choices=rack_palce_type_choices,
-                                       default='Floor standing',
-                                       verbose_name='Location type')
+    place_type = models.CharField(max_length=32,
+                                  choices=place_type_choices,
+                                  default='Floor standing',
+                                  verbose_name='Location type')
     max_load = models.IntegerField(blank=True,
                                    null=True,
                                    verbose_name='Max load (kilo)')
@@ -754,7 +754,7 @@ class Rack(models.Model):
         verbose_name_plural = 'Racks'
 
     def __str__(self):
-        return self.rack_name
+        return self.name
 
 
 class Device(models.Model):
@@ -778,7 +778,7 @@ class Device(models.Model):
                               choices=status_choices,
                               default='Device active',
                               verbose_name='Status')
-    device_type_choices = [
+    type_choices = [
         ('Switch', 'Switch'),
         ('Router', 'Router'),
         ('Firewall', 'Firewall'),
@@ -792,23 +792,23 @@ class Device(models.Model):
         ('Server', 'Server'),
         ('KVM console', 'KVM console'),
     ]
-    device_type = models.CharField(max_length=32,
-                                   choices=device_type_choices,
-                                   default='Other',
-                                   verbose_name='Device type')
-    device_vendor = models.CharField(max_length=128,
-                                     blank=True,
-                                     verbose_name='Device vendor')
-    device_model = models.CharField(max_length=128,
-                                    blank=True,
-                                    verbose_name='Device model')
-    device_hostname = models.CharField(max_length=128,
-                                       blank=True,
-                                       verbose_name='Hostname')
+    type = models.CharField(max_length=32,
+                            choices=type_choices,
+                            default='Other',
+                            verbose_name='Device type')
+    vendor = models.CharField(max_length=128,
+                              blank=True,
+                              verbose_name='Device vendor')
+    model = models.CharField(max_length=128,
+                             blank=True,
+                             verbose_name='Device model')
+    hostname = models.CharField(max_length=128,
+                                blank=True,
+                                verbose_name='Hostname')
     ip = models.GenericIPAddressField(blank=True,
                                       null=True,
                                       verbose_name='IP-address')
-    device_stack = models \
+    stack = models \
         .IntegerField(blank=True,
                       null=True,
                       verbose_name='Stack/Reserve (reserve ID)')
@@ -844,11 +844,11 @@ class Device(models.Model):
                                    choices=power_ac_dc_choices,
                                    default='AC',
                                    verbose_name='AC/DC')
-    device_serial_number = models.CharField(max_length=128,
-                                            blank=True,
-                                            verbose_name='Serial number')
-    device_description = models.TextField(blank=True,
-                                          verbose_name='Description')
+    serial_number = models.CharField(max_length=128,
+                                     blank=True,
+                                     verbose_name='Serial number')
+    description = models.TextField(blank=True,
+                                   verbose_name='Description')
     project = models.CharField(max_length=128,
                                blank=True,
                                verbose_name='Project')
@@ -862,9 +862,9 @@ class Device(models.Model):
         .CharField(max_length=128,
                    blank=True,
                    verbose_name='Financially responsible')
-    device_inventory_number = models.CharField(max_length=128,
-                                               blank=True,
-                                               verbose_name='Inventory number')
+    inventory_number = models.CharField(max_length=128,
+                                        blank=True,
+                                        verbose_name='Inventory number')
     fixed_asset = models.CharField(max_length=128,
                                    blank=True,
                                    verbose_name='Fixed asset')
@@ -878,7 +878,6 @@ class Device(models.Model):
     rack_id = models.ForeignKey(Rack,
                                 on_delete=models.CASCADE,
                                 verbose_name='Rack')
-    rack_name = True
     objects = DeviceManager()
 
     class Meta:
@@ -887,4 +886,4 @@ class Device(models.Model):
         verbose_name_plural = 'Devices'
 
     def __str__(self):
-        return f'{str(self.device_vendor)} {str(self.device_model)}'
+        return f'{str(self.vendor)} {str(self.model)}'

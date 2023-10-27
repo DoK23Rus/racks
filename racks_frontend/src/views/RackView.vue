@@ -173,7 +173,7 @@
     <br>
       Location type: 
         <text class="text-slate-500">
-          {{ rack.rackPalceType }}
+          {{ rack.rackPlaceType }}
         </text>
     <br>
       <template v-if="rack.maxLoad != null">
@@ -283,7 +283,7 @@ export default {
         rackUnitDepth: null,
         rackType: 'Rack',
         rackFrame: 'Double frame',
-        rackPalceType: 'Floor standing',
+        rackPlaceType: 'Floor standing',
         maxLoad: null,
         powerSockets: null,
         powerSocketsUps: null,
@@ -314,27 +314,27 @@ export default {
     async getRack() {
       const response = await getObject('rack', '/rack/', this.$route.params.id);
       this.message = response
-      this.rack.rackName = response.rack_name;
-      this.rack.rackAmount = response.rack_amount;
-      this.rack.rackVendor = response.rack_vendor;
-      this.rack.rackModel = response.rack_model;
-      this.rack.rackDescription = response.rack_description;
+      this.rack.rackName = response.name;
+      this.rack.rackAmount = response.amount;
+      this.rack.rackVendor = response.vendor;
+      this.rack.rackModel = response.model;
+      this.rack.rackDescription = response.description;
       this.rack.numberingFromBottomToTop = response.mumbering_from_bottom_to_top;
       this.rack.responsible = response.responsible;
-      this.rack.rackFinanciallyResponsiblePerson = response.rack_financially_responsible_person;
-      this.rack.rackInventoryNumber = response.rack_inventory_number;
+      this.rack.rackFinanciallyResponsiblePerson = response.financially_responsible_person;
+      this.rack.rackInventoryNumber = response.inventory_number;
       this.rack.fixedAsset = response.fixed_asset;
       this.rack.link = response.link;
       this.rack.row = response.row;
       this.rack.place = response.place;
-      this.rack.rackHeight = response.rack_height;
-      this.rack.rackWidth = response.rack_width;
-      this.rack.rackDepth = response.rack_depth;
-      this.rack.rackUnitWidth = response.rack_unit_width;
-      this.rack.rackUnitDepth = response.rack_unit_depth;
-      this.rack.rackType = response.rack_type;
-      this.rack.rackFrame = response.rack_frame;
-      this.rack.rackPalceType = response.rack_palce_type;
+      this.rack.rackHeight = response.height;
+      this.rack.rackWidth = response.width;
+      this.rack.rackDepth = response.depth;
+      this.rack.rackUnitWidth = response.unit_width;
+      this.rack.rackUnitDepth = response.unit_depth;
+      this.rack.rackType = response.type;
+      this.rack.rackFrame = response.frame;
+      this.rack.rackPlaceType = response.place_type;
       this.rack.maxLoad = response.max_load;
       this.rack.powerSockets = response.power_sockets;
       this.rack.powerSocketsUps = response.power_sockets_ups;

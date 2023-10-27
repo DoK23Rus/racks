@@ -43,7 +43,7 @@ export default {
     async submitForm(form) {
       const formData = {
         id: this.$route.params.id,
-        building_name: form.buildingName
+        name: form.buildingName
       };
       this.messageProps.message = await putObject('building', `/building/${this.$route.params.id}/update/`, formData);
     },
@@ -51,7 +51,7 @@ export default {
       // Get building old data
       const response = await getObject('building', '/building/', this.$route.params.id);
       this.messageProps.message = response;
-      this.formProps.oldBuildingName = response.building_name;
+      this.formProps.oldBuildingName = response.name;
     }
   }
 };

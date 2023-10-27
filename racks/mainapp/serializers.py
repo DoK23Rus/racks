@@ -25,25 +25,25 @@ class DeviceSerializer(serializers.ModelSerializer):
             'last_unit',
             'frontside_location',
             'status',
-            'device_type',
-            'device_vendor',
-            'device_model',
-            'device_hostname',
+            'type',
+            'vendor',
+            'model',
+            'hostname',
             'ip',
-            'device_stack',
+            'stack',
             'ports_amout',
             'version',
             'power_type',
             'power_w',
             'power_v',
             'power_ac_dc',
-            'device_serial_number',
-            'device_description',
+            'serial_number',
+            'description',
             'project',
             'ownership',
             'responsible',
             'financially_responsible_person',
-            'device_inventory_number',
+            'inventory_number',
             'fixed_asset',
             'link',
             'updated_by',
@@ -60,8 +60,8 @@ class RackPartialSerializer(serializers.ModelSerializer):
         model = Rack
         fields = [
             'id',
-            'rack_name',
-            'rack_amount',
+            'name',
+            'amount',
             'numbering_from_bottom_to_top',
             'room_id'
         ]
@@ -71,7 +71,7 @@ class RackSerializer(serializers.ModelSerializer):
     """
     Rack serializer
     """
-    rack_amount = serializers.IntegerField(allow_null=False)
+    amount = serializers.IntegerField(allow_null=False)
     total_power_w = serializers.SerializerMethodField('get_total_power_w')
 
     def get_total_power_w(self, obj: Rack) -> int:
@@ -91,27 +91,27 @@ class RackSerializer(serializers.ModelSerializer):
         model = Rack
         fields = [
             'id',
-            'rack_name',
-            'rack_amount',
-            'rack_vendor',
-            'rack_model',
-            'rack_description',
+            'name',
+            'amount',
+            'vendor',
+            'model',
+            'description',
             'numbering_from_bottom_to_top',
             'responsible',
-            'rack_financially_responsible_person',
-            'rack_inventory_number',
+            'financially_responsible_person',
+            'inventory_number',
             'fixed_asset',
             'link',
             'row',
             'place',
-            'rack_height',
-            'rack_width',
-            'rack_depth',
-            'rack_unit_width',
-            'rack_unit_depth',
-            'rack_type',
-            'rack_frame',
-            'rack_palce_type',
+            'height',
+            'width',
+            'depth',
+            'unit_width',
+            'unit_depth',
+            'type',
+            'frame',
+            'place_type',
             'max_load',
             'power_sockets',
             'power_sockets_ups',
@@ -133,7 +133,7 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = [
             'id',
-            'room_name',
+            'name',
             'children',
             'updated_by',
             'updated_at',
@@ -151,7 +151,7 @@ class BuildingSerializer(serializers.ModelSerializer):
         model = Building
         fields = [
             'id',
-            'building_name',
+            'name',
             'children',
             'updated_by',
             'updated_at',
@@ -169,7 +169,7 @@ class SiteSerializer(serializers.ModelSerializer):
         model = Site
         fields = [
             'id',
-            'site_name',
+            'name',
             'children',
             'updated_by',
             'updated_at',
@@ -187,7 +187,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
         model = Department
         fields = [
             'id',
-            'department_name',
+            'name',
             'children',
             'region_id',
         ]
@@ -203,7 +203,7 @@ class RegionSerializer(serializers.ModelSerializer):
         model = Region
         fields = [
             'id',
-            'region_name',
+            'name',
             'children',
         ]
         read_only_fields = ['children']
@@ -213,6 +213,7 @@ class TreeRackSerializer(serializers.ModelSerializer):
     """
     Tree rack serializer
     """
+    rack_name = serializers.CharField(source='name')
 
     class Meta:
         model = Rack
@@ -227,10 +228,16 @@ class TreeRoomSerializer(serializers.ModelSerializer):
     Tree room serializer
     """
     children = TreeRackSerializer(many=True)
+    room_name = serializers.CharField(source='name')
 
     class Meta:
         model = Room
-        fields = '__all__'
+        fields = [
+            'id',
+            'room_name',
+            'children',
+            'building_id'
+        ]
 
 
 class TreeBuildingSerializer(serializers.ModelSerializer):
@@ -238,10 +245,16 @@ class TreeBuildingSerializer(serializers.ModelSerializer):
     Tree building serializer
     """
     children = TreeRoomSerializer(many=True)
+    building_name = serializers.CharField(source='name')
 
     class Meta:
         model = Building
-        fields = '__all__'
+        fields = [
+            'id',
+            'building_name',
+            'children',
+            'site_id'
+        ]
 
 
 class TreeSiteSerializer(serializers.ModelSerializer):
@@ -249,10 +262,16 @@ class TreeSiteSerializer(serializers.ModelSerializer):
     Tree site serializer
     """
     children = TreeBuildingSerializer(many=True)
+    site_name = serializers.CharField(source='name')
 
     class Meta:
         model = Site
-        fields = '__all__'
+        fields = fields = [
+            'id',
+            'site_name',
+            'children',
+            'department_id'
+        ]
 
 
 class TreeDepartmentSerializer(serializers.ModelSerializer):
@@ -260,10 +279,16 @@ class TreeDepartmentSerializer(serializers.ModelSerializer):
     Tree department serializer
     """
     children = TreeSiteSerializer(many=True)
+    department_name = serializers.CharField(source='name')
 
     class Meta:
         model = Department
-        fields = '__all__'
+        fields = fields = [
+            'id',
+            'department_name',
+            'children',
+            'region_id'
+        ]
 
 
 class TreeRegionSerializer(serializers.ModelSerializer):
@@ -271,7 +296,12 @@ class TreeRegionSerializer(serializers.ModelSerializer):
     Tree region serializer
     """
     children = TreeDepartmentSerializer(many=True)
+    region_name = serializers.CharField(source='name')
 
     class Meta:
         model = Region
-        fields = '__all__'
+        fields = fields = [
+            'id',
+            'region_name',
+            'children'
+        ]

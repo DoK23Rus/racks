@@ -25,7 +25,7 @@
       </router-link>
       <br>
       <div class="text-base">
-          Name: {{ rack.rack_name }} 
+          Name: {{ rack.name }} 
         <br>
           Row: {{ rack.row }}
         <br>
