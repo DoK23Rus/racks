@@ -32,7 +32,7 @@ export default {
         oldVendor: '',
         oldModel: '',
         oldDescription: '',
-        oldNumberingFromBottomToTop: true,
+        oldHasNumberingFromBottomToTop: true,
         oldResponsible: '',
         oldFinanciallyResponsiblePerson: '',
         oldInventoryNumber: '',
@@ -51,8 +51,8 @@ export default {
         oldMaxLoad: null,
         oldPowerSockets: null,
         oldPowerSocketsUps: null,
-        oldExternalUps: false,
-        oldCooler: false,
+        oldHasExternalUps: false,
+        oldHasCooler: false,
         update: true
       },
       roomId: null,
@@ -77,7 +77,7 @@ export default {
         vendor: form.vendor,
         model: form.model,
         description: form.description,
-        numbering_from_bottom_to_top: form.numberingFromBottomToTop,
+        has_numbering_from_bottom_to_top: form.hasNumberingFromBottomToTop,
         responsible: form.responsible,
         financially_responsible_person: form.financiallyResponsiblePerson,
         inventory_number: form.inventoryNumber,
@@ -96,8 +96,8 @@ export default {
         max_load: form.maxLoad,
         power_sockets: form.powerSockets,
         power_sockets_ups: form.powerSocketsUps,
-        external_ups: form.externalUps,
-        cooler: form.cooler,
+        has_external_ups: form.hasExternalUps,
+        has_cooler: form.hasCooler,
         room_id: this.roomId
       };
       this.messageProps.message = await putObject('rack', `/rack/${this.$route.params.id}/update/`, formData);
@@ -114,7 +114,7 @@ export default {
       this.formProps.oldVendor = response.vendor;
       this.formProps.oldModel = response.model;
       this.formProps.oldDescription = response.description;
-      this.formProps.oldNumberingFromBottomToTop = response.mumbering_from_bottom_to_top;
+      this.formProps.oldHasNumberingFromBottomToTop = response.has_numbering_from_bottom_to_top;
       this.formProps.oldResponsible = response.responsible;
       this.formProps.oldFinanciallyResponsiblePerson = response.financially_responsible_person;
       this.formProps.oldInventoryNumber = response.inventory_number;
@@ -133,8 +133,8 @@ export default {
       this.formProps.oldMaxLoad = response.max_load;
       this.formProps.oldPowerSockets = response.power_sockets;
       this.formProps.oldPowerSocketsUps = response.power_sockets_ups;
-      this.formProps.oldCxternalUps = response.external_ups;
-      this.formProps.oldCooler = response.cooler;
+      this.formProps.oldHasExternalUps = response.has_external_ups;
+      this.formProps.oldHasCooler = response.has_cooler;
       this.roomId = response.room_id;
     }
   }

@@ -29,7 +29,7 @@ export default {
       formProps: {
         oldFirstUnit: null,
         oldLastUnit: null,
-        oldFrontsideLocation: true,
+        oldHasFrontsideLocation: true,
         oldStatus: 'Device active',
         oldType: 'Other',
         oldVendor: '',
@@ -71,7 +71,7 @@ export default {
         id: this.$route.params.id,
         first_unit: parseInt(form.firstUnit),
         last_unit: parseInt(form.lastUnit),
-        frontside_location: form.frontsideLocation,
+        has_frontside_location: form.hasFrontsideLocation,
         status: form.status,
         type: form.type,
         vendor: form.vendor,
@@ -106,7 +106,7 @@ export default {
       this.messageProps.message = response;
       this.formProps.oldFirstUnit = response.first_unit;
       this.formProps.oldLastUnit = response.last_unit;
-      this.formProps.oldFrontsideLocation = response.frontside_location;
+      this.formProps.oldHasFrontsideLocation = response.has_frontside_location;
       this.formProps.oldStatus = response.status;
       this.formProps.oldType = response.type;
       this.formProps.oldVendor = response.vendor;

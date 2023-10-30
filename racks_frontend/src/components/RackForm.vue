@@ -80,14 +80,14 @@
         v-model="form.description"
       />
     <br>
-      <label for="numberingFromBottomToTop">
+      <label for="hasNumberingFromBottomToTop">
         Numbering from bottom to top: 
       </label>
       <input 
         class="block" 
-        name="numberingFromBottomToTop"
+        name="hasNumberingFromBottomToTop"
         type="checkbox" 
-        v-model="form.numberingFromBottomToTop"
+        v-model="form.hasNumberingFromBottomToTop"
       />
     <br>
       <label for="responsible">
@@ -360,24 +360,24 @@
         {{ numericOrNullValidationError }}</div>
       </p>
     <br>
-      <label for="externalUps">
+      <label for="hasExternalUps">
         External power backup supply system: 
       </label>
       <input 
         class="block" 
-        name="externalUps" 
+        name="hasExternalUps" 
         type="checkbox" 
-        v-model="form.externalUps"
+        v-model="form.hasExternalUps"
       />
     <br>
-      <label for="cooler">
+      <label for="hasCooler">
         Active ventilation: 
       </label>
       <input 
         class="block" 
-        name="cooler" 
+        name="hasCooler" 
         type="checkbox" 
-        v-model="form.cooler"
+        v-model="form.hasCooler"
       />
     <br>
     <button 
@@ -423,7 +423,7 @@ export default {
         vendor: '',
         model: '',
         description: '',
-        numberingFromBottomToTop: true,
+        hasNumberingFromBottomToTop: true,
         responsible: '',
         financiallyResponsiblePerson: '',
         inventoryNumber: '',
@@ -442,8 +442,8 @@ export default {
         maxLoad: null,
         powerSockets: null,
         powerSocketsUps: null,
-        externalUps: false,
-        cooler: false,
+        hasExternalUps: false,
+        hasCooler: false,
         update: false
       },
       numericOrNullValidationError: 'Value must be an integer and greater than zero',
@@ -502,7 +502,7 @@ export default {
         this.form.vendor = this.formProps.oldVendor;
         this.form.model = this.formProps.oldModel;
         this.form.description = this.formProps.oldDescription;
-        this.form.numberingFromBottomToTop =this.formProps.oldNumberingFromBottomToTop;
+        this.form.hasNumberingFromBottomToTop =this.formProps.oldHasNumberingFromBottomToTop;
         this.form.responsible = this.formProps.oldResponsible;
         this.form.financiallyResponsiblePerson = this.formProps.oldFinanciallyResponsiblePerson;
         this.form.inventoryNumber = this.formProps.oldInventoryNumber;
@@ -521,8 +521,8 @@ export default {
         this.form.maxLoad = this.formProps.oldMaxLoad;
         this.form.powerSockets = this.formProps.oldPowerSockets;
         this.form.powerSocketsUps = this.formProps.oldPowerSocketsUps;
-        this.form.externalUps = this.formProps.oldExternalUps;
-        this.form.cooler = this.formProps.oldCooler;
+        this.form.hasExternalUps = this.formProps.oldHasExternalUps;
+        this.form.hasCooler = this.formProps.oldHasCooler;
         this.form.update = this.formProps.update;
       }
     },

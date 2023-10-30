@@ -27,7 +27,7 @@ export default {
       formProps: {
         firstUnit: null,
         lastUnit: null,
-        frontsideLocation: true,
+        hasFrontsideLocation: true,
         status: 'Device active',
         type: 'Other',
         vendor: '',
@@ -64,7 +64,7 @@ export default {
       const formData = {
         first_unit: parseInt(form.firstUnit),
         last_unit: parseInt(form.lastUnit),
-        frontside_location: form.frontsideLocation,
+        has_frontside_location: form.hasFrontsideLocation,
         status: form.status,
         type: form.type,
         vendor: form.vendor,

@@ -305,10 +305,11 @@ class FrontsideLocation:
             KeyError ('There is no frontside_location in data')
         """
         try:
-            first_unit = self.data['frontside_location']
+            first_unit = self.data['has_frontside_location']
             return first_unit
         except KeyError:
-            raise KeyError('There is no frontside_location in data') from None
+            raise KeyError('There is no '
+                           'has_frontside_location in data') from None
 
 
 class RackAmount:

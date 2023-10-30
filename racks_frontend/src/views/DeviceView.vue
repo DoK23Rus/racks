@@ -40,13 +40,13 @@
           {{ device.description }}
         </text>
     <br>
-      <template v-if="device.frontsideLocation">
+      <template v-if="device.hasFrontsideLocation">
         Located on the front of the rack: 
           <text class="text-slate-500">
             Yes
           </text>
       </template>
-      <template v-else="device.frontsideLocation">
+      <template v-else="device.hasFrontsideLocation">
         Located on the front of the rack: 
           <text class="text-slate-500">
             No
@@ -246,7 +246,7 @@ export default {
         id: this.$route.params.id,
         firstUnit: null,
         lastUnit: null,
-        frontsideLocation: true,
+        hasFrontsideLocation: true,
         status: 'Device active',
         type: 'Other',
         vendor: '',
@@ -299,7 +299,7 @@ export default {
       this.messageProps.message = response;
       this.device.firstUnit = response.first_unit;
       this.device.lastUnit = response.last_unit;
-      this.device.frontsideLocation = response.frontside_location;
+      this.device.hasFrontsideLocation = response.has_frontside_location;
       this.device.status = response.status;
       this.device.type = response.type;
       this.device.vendor = response.vendor;

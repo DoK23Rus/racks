@@ -15,7 +15,7 @@ class DeviceSerializer(serializers.ModelSerializer):
     """
     Device serializer
     """
-    frontside_location = serializers.BooleanField(required=True)
+    has_frontside_location = serializers.BooleanField(required=True)
 
     class Meta:
         model = Device
@@ -23,7 +23,7 @@ class DeviceSerializer(serializers.ModelSerializer):
             'id',
             'first_unit',
             'last_unit',
-            'frontside_location',
+            'has_frontside_location',
             'status',
             'type',
             'vendor',
@@ -62,7 +62,7 @@ class RackPartialSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'amount',
-            'numbering_from_bottom_to_top',
+            'has_numbering_from_bottom_to_top',
             'room_id'
         ]
 
@@ -96,7 +96,7 @@ class RackSerializer(serializers.ModelSerializer):
             'vendor',
             'model',
             'description',
-            'numbering_from_bottom_to_top',
+            'has_numbering_from_bottom_to_top',
             'responsible',
             'financially_responsible_person',
             'inventory_number',
@@ -115,8 +115,8 @@ class RackSerializer(serializers.ModelSerializer):
             'max_load',
             'power_sockets',
             'power_sockets_ups',
-            'external_ups',
-            'cooler',
+            'has_external_ups',
+            'has_cooler',
             'total_power_w',
             'updated_by',
             'updated_at',

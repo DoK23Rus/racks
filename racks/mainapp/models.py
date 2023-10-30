@@ -173,7 +173,7 @@ class RackManager(models.Manager):
         return Rack.objects.all().only('id',
                                        'name',
                                        'amount',
-                                       'numbering_from_bottom_to_top',
+                                       'has_numbering_from_bottom_to_top',
                                        'room_id')
 
     def get_rack(self, pk):
@@ -358,7 +358,7 @@ class DeviceManager(models.Manager):
             devices_for_side (QuerySet): Devices for rack on one side queryset
         """
         return Device.objects.filter(rack_id_id=pk) \
-            .filter(frontside_location=side)
+            .filter(has_frontside_location=side)
 
     def get_devices_for_rack(self, pk):
         """
@@ -656,7 +656,7 @@ class Rack(models.Model):
                              verbose_name='Rack model')
     description = models.TextField(blank=True,
                                    verbose_name='Description')
-    numbering_from_bottom_to_top = models \
+    has_numbering_from_bottom_to_top = models \
         .BooleanField(default=True,
                       verbose_name='Numbering from bottom to top')
     responsible = models.CharField(max_length=128,
@@ -733,11 +733,11 @@ class Rack(models.Model):
         .IntegerField(blank=True,
                       null=True,
                       verbose_name='Free UPS power sockets')
-    external_ups = models \
+    has_external_ups = models \
         .BooleanField(default=True,
                       verbose_name='External power backup supply system')
-    cooler = models.BooleanField(default=False,
-                                 verbose_name='Active ventilation')
+    has_cooler = models.BooleanField(default=False,
+                                     verbose_name='Active ventilation')
     updated_by = models.CharField(max_length=128,
                                   verbose_name='Updated by')
     updated_at = models.DateTimeField(auto_now=True,
@@ -763,7 +763,7 @@ class Device(models.Model):
     """
     first_unit = models.IntegerField(verbose_name='First unit')
     last_unit = models.IntegerField(verbose_name='Last unit')
-    frontside_location = models \
+    has_frontside_location = models \
         .BooleanField(default=True,
                       verbose_name='Installed on the front')
     status_choices = [

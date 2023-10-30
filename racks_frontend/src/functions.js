@@ -9,10 +9,11 @@ const getDevicesForSide = (devices) => {
     back: []
   }
   devices.forEach((device) => {
-    if (!device.frontside_location) {
+    if (!device.has_frontside_location) {
       devicesForSide.back.push(device);
+    } else {
+      devicesForSide.front.push(device);
     }
-    devicesForSide.front.push(device);
   });
   return devicesForSide
 }
@@ -24,7 +25,7 @@ const getDevicesForSide = (devices) => {
  */
 const getStartList = (rack) => {
   const arr = Array.from({length: rack.amount}, (_, i) => i + 1);
-  if (!rack.numbering_from_bottom_to_top) {
+  if (!rack.has_numbering_from_bottom_to_top) {
     return arr;
   } else {
     return arr.reverse();

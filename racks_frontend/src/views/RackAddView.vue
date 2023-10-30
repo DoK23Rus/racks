@@ -30,7 +30,7 @@ export default {
         vendor: '',
         model: '',
         description: '',
-        numberingFromBottomToTop: true,
+        hasNumberingFromBottomToTop: true,
         responsible: '',
         financiallyResponsiblePerson: '',
         inventoryNumber: '',
@@ -49,8 +49,8 @@ export default {
         maxLoad: null,
         powerSockets: null,
         powerSocketsUps: null,
-        externalUps: false,
-        cooler: false,
+        hasExternalUps: false,
+        hasCooler: false,
         update: false
       },
       messageProps: {
@@ -70,7 +70,7 @@ export default {
         vendor: form.vendor,
         model: form.model,
         description: form.description,
-        numbering_from_bottom_to_top: form.numberingFromBottomToTop,
+        has_numbering_from_bottom_to_top: form.hasNumberingFromBottomToTop,
         responsible: form.responsible,
         financially_responsible_person: form.financiallyResponsiblePerson,
         inventory_number: form.inventoryNumber,
@@ -89,8 +89,8 @@ export default {
         max_load: form.maxLoad,
         power_sockets: form.powerSockets,
         power_sockets_ups: form.powerSocketsUps,
-        external_ups: form.externalUps,
-        cooler: form.cooler,
+        has_external_ups: form.hasExternalUps,
+        has_cooler: form.hasCooler,
         room_id: parseInt(this.$route.params.room_id)
       };
       this.messageProps.message = await postObject('rack', '/rack/create/', formData);

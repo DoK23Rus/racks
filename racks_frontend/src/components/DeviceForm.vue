@@ -37,14 +37,14 @@
         {{ error.$message }}
       </p>
     <br>
-      <label for="frontsideLocation">
+      <label for="hasFrontsideLocation">
         Installed on the front: 
       </label>
       <input
         class="block"
-        name="frontsideLocation"
+        name="hasFrontsideLocation"
         type="checkbox"
-        v-model="form.frontsideLocation"
+        v-model="form.hasFrontsideLocation"
       />    
     <br>
       <label for="status">
@@ -437,7 +437,7 @@ export default {
       form: {
         firstUnit: null,
         lastUnit: null,
-        frontsideLocation: true,
+        hasFrontsideLocation: true,
         status: 'Device active',
         type: 'Other',
         vendor: '',
@@ -510,7 +510,7 @@ export default {
       if (this.formProps.oldFirstUnit) { 
         this.form.firstUnit = this.formProps.oldFirstUnit;
         this.form.lastUnit = this.formProps.oldLastUnit;
-        this.form.frontsideLocation = this.formProps.oldFrontsideLocation;
+        this.form.hasFrontsideLocation = this.formProps.oldHasFrontsideLocation;
         this.form.status = this.formProps.oldStatus;
         this.form.type = this.formProps.oldType;
         this.form.vendor = this.formProps.oldVendor;

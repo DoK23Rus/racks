@@ -98,7 +98,7 @@
           {{ rack.amount }}
         </text>
     <br>
-      <template v-if="rack.numberingFromBottomToTop == true">
+      <template v-if="rack.hasNumberingFromBottomToTop == true">
         Numbering: 
           <text class="text-slate-500">
             from bottom to top
@@ -206,7 +206,7 @@
         Free UPS power sockets:
       </template>
     <br>
-      <template v-if="rack.cooler">
+      <template v-if="rack.hasCooler">
         Active ventilation: 
           <text class="text-slate-500">
             Yes
@@ -219,7 +219,7 @@
           </text>
       </template>
     <br>
-      <template v-if="rack.externalUps">
+      <template v-if="rack.hasExternalUps">
         External power backup supply system: 
           <text class="text-slate-500">
             Yes
@@ -268,7 +268,7 @@ export default {
         vendor: '',
         model: '',
         description: '',
-        numberingFromBottomToTop: true,
+        hasNumberingFromBottomToTop: true,
         responsible: '',
         financiallyResponsiblePerson: '',
         inventoryNumber: '',
@@ -287,8 +287,8 @@ export default {
         maxLoad: null,
         powerSockets: null,
         powerSocketsUps: null,
-        externalUps: false,
-        cooler: false,
+        hasExternalUps: false,
+        hasCooler: false,
         totalPowerW: null,
         updatedBy: '',
         updatedAt: ''
@@ -321,7 +321,7 @@ export default {
       this.rack.vendor = response.vendor;
       this.rack.model = response.model;
       this.rack.description = response.description;
-      this.rack.numberingFromBottomToTop = response.mumbering_from_bottom_to_top;
+      this.rack.hasNumberingFromBottomToTop = response.has_numbering_from_bottom_to_top;
       this.rack.responsible = response.responsible;
       this.rack.financiallyResponsiblePerson = response.financially_responsible_person;
       this.rack.inventoryNumber = response.inventory_number;
@@ -340,8 +340,8 @@ export default {
       this.rack.maxLoad = response.max_load;
       this.rack.powerSockets = response.power_sockets;
       this.rack.powerSocketsUps = response.power_sockets_ups;
-      this.rack.externalUps = response.external_ups;
-      this.rack.cooler = response.cooler;
+      this.rack.hasExternalUps = response.has_external_ups;
+      this.rack.hasCooler = response.has_cooler;
       this.rack.totalPowerW = response.total_power_w;
       this.rack.updatedBy = response.updated_by;
       this.rack.updatedAt = response.updated_at;

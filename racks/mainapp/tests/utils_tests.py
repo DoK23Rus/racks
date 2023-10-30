@@ -119,11 +119,11 @@ class TestCheckProps(TestCase):
             LastUnit(data).last_unit
 
     def test_FrontsideLocation(self):
-        data = {'frontside_location': True}
+        data = {'has_frontside_location': True}
         result = FrontsideLocation(data).frontside_location
         self.assertTrue(result)
 
-        data = {'frontside_location': False}
+        data = {'has_frontside_location': False}
         result = FrontsideLocation(data).frontside_location
         self.assertFalse(result)
 
@@ -163,20 +163,20 @@ class TestCheckProps(TestCase):
         result = DevicesForSide(pk, True).devices_for_side
         self.assertQuerysetEqual(result,
                                  Device.objects.filter(rack_id_id=pk)
-                                 .filter(frontside_location=True),
+                                 .filter(has_frontside_location=True),
                                  ordered=False)
 
         # Back
         result = DevicesForSide(pk, False).devices_for_side
         self.assertQuerysetEqual(result,
                                  Device.objects.filter(rack_id_id=pk)
-                                 .filter(frontside_location=False),
+                                 .filter(has_frontside_location=False),
                                  ordered=False)
 
     def test_FilledList(self):
         pk = Rack.objects.get(name='Test_rack1').id
         devices_for_side = Device.objects.filter(rack_id_id=pk) \
-            .filter(frontside_location=True)
+            .filter(has_frontside_location=True)
         result = FilledList(devices_for_side).filled_list
         self.assertEqual(result, [1, 2, 5])
 
@@ -257,7 +257,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 29,
             'last_unit': 30,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         fk_model = Rack
@@ -394,7 +394,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 1,
             'last_unit': 2,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         fk = Rack.objects.get(name='Test_rack1').id
         model = Device
@@ -561,7 +561,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 1,
             'last_unit': 2,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         result = CheckUser(DeleteCheckProps(user_groups,
@@ -890,7 +890,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 1,
             'last_unit': 2,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         with self.assertRaises(ValueError):
@@ -906,7 +906,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 29,
             'last_unit': 30,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         fk_model = Rack
@@ -923,7 +923,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 1,
             'last_unit': 2,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(AddCheckProps(user_groups,
                                                          pk,
@@ -938,7 +938,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 2,
             'last_unit': 3,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(AddCheckProps(user_groups,
                                                          pk,
@@ -952,7 +952,7 @@ class TestChecks(TestCase):
         # Data miss first_unit
         data = {
             'last_unit': 3,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         with self.assertRaises(KeyError):
             CheckDeviceForAddOrUpdate(AddCheckProps(user_groups,
@@ -965,7 +965,7 @@ class TestChecks(TestCase):
         # Data miss last_unit
         data = {
             'first_unit': 2,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         with self.assertRaises(KeyError):
             CheckDeviceForAddOrUpdate(AddCheckProps(user_groups,
@@ -975,7 +975,7 @@ class TestChecks(TestCase):
                                                     fk_model,
                                                     key_name)).result
 
-        # Data miss frontside_location
+        # Data miss has_frontside_location
         data = {
             'first_unit': 2,
             'last_unit': 3,
@@ -992,7 +992,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 39,
             'last_unit': 42,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(AddCheckProps(user_groups,
                                                          pk,
@@ -1007,7 +1007,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 51,
             'last_unit': 53,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(AddCheckProps(user_groups,
                                                          pk,
@@ -1025,7 +1025,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 3,
             'last_unit': 4,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         fk = Rack.objects.get(name='Test_rack1').id
@@ -1047,7 +1047,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 2,
             'last_unit': 3,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(UpdateCheckProps(user_groups,
                                                             pk,
@@ -1064,7 +1064,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 1,
             'last_unit': 5,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(UpdateCheckProps(user_groups,
                                                             pk,
@@ -1082,7 +1082,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 5,
             'last_unit': 5,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(UpdateCheckProps(user_groups,
                                                             pk,
@@ -1099,7 +1099,7 @@ class TestChecks(TestCase):
         # Data miss first_unit
         data = {
             'last_unit': 3,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         with self.assertRaises(KeyError):
             CheckDeviceForAddOrUpdate(UpdateCheckProps(user_groups,
@@ -1114,7 +1114,7 @@ class TestChecks(TestCase):
         # Data miss last_unit
         data = {
             'first_unit': 2,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         with self.assertRaises(KeyError):
             CheckDeviceForAddOrUpdate(UpdateCheckProps(user_groups,
@@ -1126,7 +1126,7 @@ class TestChecks(TestCase):
                                                        key_name,
                                                        instance_name)).result
 
-        # Data miss frontside_location
+        # Data miss has_frontside_location
         data = {
             'first_unit': 2,
             'last_unit': 3,
@@ -1145,7 +1145,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 39,
             'last_unit': 42,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(UpdateCheckProps(user_groups,
                                                             pk,
@@ -1163,7 +1163,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 51,
             'last_unit': 53,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         result = CheckDeviceForAddOrUpdate(UpdateCheckProps(user_groups,
                                                             pk,
@@ -1183,7 +1183,7 @@ class TestChecks(TestCase):
         data = {
             'first_unit': 1,
             'last_unit': 2,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         with self.assertRaises(ValueError):
@@ -1213,7 +1213,7 @@ class TestChecker(TestCase):
         data = {
             'first_unit': 29,
             'last_unit': 30,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         fk_model = Rack
@@ -1229,7 +1229,7 @@ class TestChecker(TestCase):
         data = {
             'first_unit': 29,
             'last_unit': 30,
-            'frontside_location': True,
+            'has_frontside_location': True,
         }
         model = Device
         fk_model = Rack
