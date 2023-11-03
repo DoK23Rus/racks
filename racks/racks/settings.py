@@ -34,6 +34,7 @@ if DEBUG:
         f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_PORT')}",
         f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('BACKEND_PORT')}",
         f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_PORT')}",
+        f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_ALTERNATIVE_PORT')}",
         f"http://{os.environ.get('BACKEND_HOST')}:{os.environ.get('BACKEND_PORT')}",
         f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
         f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",

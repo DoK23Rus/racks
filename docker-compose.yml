@@ -22,7 +22,6 @@ services:
       - ${PORTAINER_PORT}:${PORTAINER_PORT}
     profiles: [
       'dev',
-      'test',
     ]
 
   database:
@@ -46,6 +45,7 @@ services:
       'dev',
       'test',
       'unit',
+      'dev-alt-front',
     ]
 
   logging-db:
@@ -71,6 +71,7 @@ services:
       'dev',
       'test',
       'unit',
+      'dev-alt-front',
     ]
 
   message-broker:
@@ -85,6 +86,7 @@ services:
       'dev',
       'test',
       'unit',
+      'dev-alt-front',
     ]
 
   log-cli:
@@ -104,6 +106,7 @@ services:
     profiles: [
       'dev',
       'test',
+      'dev-alt-front',
     ]
 
   backend:
@@ -144,6 +147,7 @@ services:
       'dev',
       'test',
       'unit',
+      'dev-alt-front',
     ]
 
   # Containers for linter, type check and unit tests
@@ -202,6 +206,7 @@ services:
       'dev',
       'test',
       'unit',
+      'dev-alt-front',
     ]
   
   cron:
@@ -231,6 +236,7 @@ services:
       'dev',
       'test',
       'unit',
+      'dev-alt-front',
     ]
 
   frontend:
@@ -258,6 +264,33 @@ services:
     profiles: [
       'dev', 
       'test',
+      'dev-alt-front',
+    ]
+
+  frontend-alternative:
+    container_name: vue-alternative
+    domainname: frontend-alternative
+    command: npm run serve -- --port ${FRONTEND_ALTERNATIVE_PORT}
+    build:
+      context: ./racks_frontend_alternative
+      dockerfile: Dockerfile
+    healthcheck:
+      test: curl -f http://${LOCALHOST}:${FRONTEND_ALTERNATIVE_PORT} || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
+    volumes:
+      - vue_dist:${VUE_DIST_DIR}
+    logging:
+      options:
+        max-size: 100m
+    ports:
+      - ${FRONTEND_ALTERNATIVE_PORT}:${FRONTEND_ALTERNATIVE_PORT}
+    depends_on:
+      - backend
+    profiles: [
+      'dev-alt-front', 
     ]
       
   web-server:
@@ -277,6 +310,7 @@ services:
     profiles: [
       'dev',
       'test',
+      'dev-alt-front',
     ]
 
   flower:
@@ -296,8 +330,7 @@ services:
       - worker
       - cron
     profiles: [
-      'dev',
-      'test',
+      'dev'
     ]
 
 # E2E testing containers
