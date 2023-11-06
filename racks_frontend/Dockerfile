@@ -4,9 +4,9 @@ WORKDIR /app
 
 ENV PATH /app/node_modules/.bin:$PATH
 
-COPY package.json /app/package.json
+COPY package.json package-lock.json /app/
 
-RUN npm install
+RUN npm install && npm update -g
 
 COPY . /app
 
