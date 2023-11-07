@@ -63,5 +63,3 @@ Usage of ./racks-log-cli:
 |:--:| 
 | *Device card* |
 
-###Test demo branch
-Some text for test
