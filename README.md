@@ -63,3 +63,7 @@ Usage of ./racks-log-cli:
 |:--:| 
 | *Device card* |
 
+
+###HELLO WORLD. IT'S ME YOUR BEST FRIEND
+help me ;d
+
