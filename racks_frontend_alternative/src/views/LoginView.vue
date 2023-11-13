@@ -80,9 +80,9 @@ export default {
       loginError: '' 
     }
   },
-  created() {
-    alert("Frontend alternative version | under construction");
-  },
+  // created() {
+  //   alert("Frontend alternative version | under construction");
+  // },
   methods: {
     /**
      * Submit form

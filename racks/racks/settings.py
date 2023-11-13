@@ -39,6 +39,7 @@ if DEBUG:
         f"http://{os.environ.get('FRONTEND_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
         f"http://{os.environ.get('LOCALHOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
         f"http://{os.environ.get('FRONTEND_TESTING_HOST')}:{os.environ.get('FRONTEND_TESTING_PORT')}",
+        f"http://{os.environ.get('FRONTEND_ALTERNATIVE_TESTING_HOST')}:{os.environ.get('FRONTEND_ALTERNATIVE_TESTING_PORT')}",
     ]
 
 # Application definition

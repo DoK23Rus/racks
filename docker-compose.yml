@@ -5,6 +5,9 @@ version: '3.8'
 # dev - dev build
 # test - dev build + e2e tests
 
+# dev-alt-front - dev build for alternative frontend
+# test-alt-front - dev build + e2e tests for alternative frontend
+
 services:
 # Dev containers
   portainer:
@@ -46,6 +49,7 @@ services:
       'test',
       'unit',
       'dev-alt-front',
+      'test-alt-front',
     ]
 
   logging-db:
@@ -72,6 +76,7 @@ services:
       'test',
       'unit',
       'dev-alt-front',
+      'test-alt-front',
     ]
 
   message-broker:
@@ -87,6 +92,7 @@ services:
       'test',
       'unit',
       'dev-alt-front',
+      'test-alt-front',
     ]
 
   log-cli:
@@ -107,6 +113,7 @@ services:
       'dev',
       'test',
       'dev-alt-front',
+      'test-alt-front',
     ]
 
   backend:
@@ -148,6 +155,7 @@ services:
       'test',
       'unit',
       'dev-alt-front',
+      'test-alt-front',
     ]
 
   # Containers for linter, type check and unit tests
@@ -207,6 +215,7 @@ services:
       'test',
       'unit',
       'dev-alt-front',
+      'test-alt-front',
     ]
   
   cron:
@@ -237,9 +246,11 @@ services:
       'test',
       'unit',
       'dev-alt-front',
+      'test-alt-front',
     ]
 
   frontend:
+    &vue
     container_name: vue
     domainname: frontend
     command: npm run serve
@@ -268,6 +279,7 @@ services:
     ]
 
   frontend-alternative:
+    <<: *vue
     container_name: vue-alternative
     domainname: frontend-alternative
     command: npm run serve -- --port ${FRONTEND_ALTERNATIVE_PORT}
@@ -280,17 +292,11 @@ services:
       retries: 10
       start_period: 15s
       timeout: 10s
-    volumes:
-      - vue_dist:${VUE_DIST_DIR}
-    logging:
-      options:
-        max-size: 100m
     ports:
       - ${FRONTEND_ALTERNATIVE_PORT}:${FRONTEND_ALTERNATIVE_PORT}
-    depends_on:
-      - backend
     profiles: [
-      'dev-alt-front', 
+      'dev-alt-front',
+      'test-alt-front',
     ]
       
   web-server:
@@ -309,7 +315,6 @@ services:
       - frontend
     profiles: [
       'dev',
-      'test',
       'dev-alt-front',
     ]
 
@@ -335,6 +340,7 @@ services:
 
 # E2E testing containers
   frontend-testing:
+    &vue-testing
     # Frontend for seleium grid
     container_name: vue-testing
     domainname: frontend-testing
@@ -363,6 +369,7 @@ services:
     ]
 
   hub:
+    &hub
     container_name: hub
     image: selenium/hub:4.1.3
     ports:
@@ -377,6 +384,7 @@ services:
     ]
 
   selenium:
+    &selenium
     image: selenium/node-chrome:4.1.3
     shm_size: 1gb
     # For some reasons cant work properly with env files
@@ -408,11 +416,15 @@ services:
 
   test-runner:
     # E2E tests
+    &e2e-tests
     container_name: e2e-tests
     build:
       context: ./e2e_tests
       dockerfile: Dockerfile
     command: python run_threads.py
+    environment:
+      - LOGIN_ADDRESS=http://frontend-testing:${FRONTEND_TESTING_PORT}/login
+      - COMMAND_EXECUTOR=http://${SE_HUB_CONTAINER_NAME}:${SELENIUM_HUB_PORT}/wd/hub
     env_file:
       - ./.env
       - ./e2e_tests/.test-runner.env
@@ -435,6 +447,82 @@ services:
       'test',
     ]
 
+# Containers for alternative frontend E2E testing
+  frontend-alternative-testing:
+    # Frontend for seleium grid
+    <<: *vue-testing
+    container_name: frontend-alternative-testing
+    domainname: frontend-alternative-testing
+    command: npm run serve -- --port ${FRONTEND_ALTERNATIVE_TESTING_PORT}
+    build:
+      context: ./racks_frontend_alternative
+      dockerfile: Dockerfile_test
+    healthcheck:
+      test: curl -f http://${LOCALHOST}:${FRONTEND_ALTERNATIVE_TESTING_PORT} || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
+    ports:
+      - ${FRONTEND_ALTERNATIVE_TESTING_PORT}:${FRONTEND_ALTERNATIVE_TESTING_PORT}
+    profiles: [
+      'dev',
+      'test-alt-front',
+    ]
+
+  hub-alternative:
+    <<: *hub
+    container_name: hub-alternative
+    depends_on:
+      frontend-alternative-testing: 
+        condition: service_healthy
+    profiles: [
+      'test-alt-front',
+    ]
+
+  selenium-alternative:
+    <<: *selenium
+    environment:
+      - SE_EVENT_BUS_HOST=${SE_HUB_ALT_CONTAINER_NAME}
+      - SE_EVENT_BUS_PUBLISH_PORT=${SE_EVENT_BUS_PUBLISH_PORT}
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=${SE_EVENT_BUS_SUBSCRIBE_PORT}
+      - NODE_MAX_SESSION=4
+      - NODE_MAX_INSTANCES=4
+      - VNC_NO_PASSWORD=1
+    healthcheck:
+        test: curl -f http://${SE_HUB_ALT_CONTAINER_NAME}:${SELENIUM_HUB_PORT}|| exit 1
+        interval: 5s
+        timeout: 10s
+        retries: 15
+        start_period: 10s 
+    depends_on:
+      hub-alternative:
+        condition: service_started
+      frontend-alternative-testing:
+        condition: service_healthy
+    profiles: [
+      'test-alt-front',
+    ]
+
+  test-runner-alternative:
+    # E2E tests
+    <<: *e2e-tests
+    container_name: e2e-tests-alternative
+    environment:
+      - LOGIN_ADDRESS=http://frontend-alternative-testing:${FRONTEND_ALTERNATIVE_TESTING_PORT}/login
+      - COMMAND_EXECUTOR=http://${SE_HUB_ALT_CONTAINER_NAME}:${SELENIUM_HUB_PORT}/wd/hub
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend-alternative-testing:
+        condition: service_healthy
+      hub-alternative:
+        condition: service_started
+      selenium-alternative:
+        condition: service_healthy
+    profiles: [
+      'test-alt-front',
+    ]
 
 volumes:
   postgres_data:
