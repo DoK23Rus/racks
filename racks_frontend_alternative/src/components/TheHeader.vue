@@ -24,6 +24,12 @@
               </a>
             </router-link>
           </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-primary">Test button bs5</button>
+          </li>
+          <li class="nav-item">
+            <button type="button" class="btn btn-dark">Test button bs5</button>
+          </li>
         </ul>
       </div>
     </div>
