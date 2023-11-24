@@ -15,6 +15,7 @@ import BuildingAddView from '@/views/BuildingAddView.vue';
 import BuildingUpdateView from '@/views/BuildingUpdateView.vue';
 import RoomAddView from '@/views/RoomAddView.vue';
 import RoomUpdateView from '@/views/RoomUpdateView.vue';
+import ModalView from '@/views/ModalView.vue';
 
 
 const routes = [
@@ -97,6 +98,11 @@ const routes = [
     path: '/device/:id/update',
     name: 'DeviceUpdateView',
     component: DeviceUpdateView
+  },
+  {
+    path: '/modal',
+    name: 'ModalView',
+    component: ModalView
   }
 ]
 
