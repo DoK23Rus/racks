@@ -1,0 +1,8 @@
+parameters:
+    paths:
+        - app
+    level: 5
+    excludePaths:
+        - 'app/Http/Controllers/AuthController.php'
+    ignoreErrors:
+        - '#Call to an undefined static method Illuminate\\Support\\Facades\\DB::rollback\(\)#'

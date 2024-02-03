@@ -6,17 +6,12 @@ Locators, and IDs
 class Locators():
     # locators
     first_device_loc = "//*[contains(text(), 'Cisco 2960')]"
-    unit_outside_loc = ("//*[contains(text(), "
-                        "'There are no such units in this rack')]")
+    unit_outside_loc = ("//*[contains(text(), 'No such units')]")
     unit_busy_loc = "//*[contains(text(), 'These units are busy')]"
-    violation_loc = ("//*[contains(text(), "
-                     "'Permission alert, changes are prohibited')]")
-    building_name_busy_loc = ("//*[contains(text(), 'A building "
-                              "with the same name already exists')]")
-    room_name_busy_loc = ("//*[contains(text(), "
-                          "'A room with the same name already exists')]")
-    rack_name_busy_loc = ("//*[contains(text(), "
-                          "'A rack with the same name already exists')]")
+    violation_loc = ("//*[contains(text(), 'Action not allowed for this department')]")
+    building_name_busy_loc = ("//*[contains(text(), 'Building with this name already exists in this site')]")
+    room_name_busy_loc = ("//*[contains(text(), 'Room with this name already exists in this building')]")
+    rack_name_busy_loc = ("//*[contains(text(), 'Rack with this name already exists in this room')]")
 
     # IDs
     region_name_id = "e2e_Test_region"

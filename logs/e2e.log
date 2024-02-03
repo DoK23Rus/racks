@@ -1,0 +1,116 @@
+ Container e2e-tests  Creating
+ Container e2e-tests  Created
+Attaching to backend-testing, db-testing, e2e-tests, frontend-testing, hub, phpstan, phpunit, pint, racks-selenium-1, racks-selenium-2
+e2e-tests         | 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_1_move_device_outside (e2e_tests.MoveDeviceCase) ... 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_2_move_device_to_busy_place (e2e_tests.MoveDeviceCase) ... OK (10.954393)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:10
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_2_move_device_to_busy_place_e2e_tests.MoveDeviceCase_2024-01-28_17-03-12.html
+e2e-tests         | OK (11.624820)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:11
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_1_move_device_outside_e2e_tests.MoveDeviceCase_2024-01-28_17-03-12.html
+e2e-tests         | 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_3_check_permissions (e2e_tests.PermissionsCase) ... OK (4.464383)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:04
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_3_check_permissions_e2e_tests.PermissionsCase_2024-01-28_17-03-24.html
+e2e-tests         | 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_4_add_device_outside (e2e_tests.AddDeviceCase) ... 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_5_add_device_to_busy_place (e2e_tests.AddDeviceCase) ... OK (8.933194)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:08
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_4_add_device_outside_e2e_tests.AddDeviceCase_2024-01-28_17-03-28.html
+e2e-tests         | OK (9.180226)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:09
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_5_add_device_to_busy_place_e2e_tests.AddDeviceCase_2024-01-28_17-03-28.html
+e2e-tests         | 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_6_add_same_name_building (e2e_tests.NameDuplicationCase) ... 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_7_add_same_name_room (e2e_tests.NameDuplicationCase) ... OK (6.832126)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:06
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_6_add_same_name_building_e2e_tests.NameDuplicationCase_2024-01-28_17-03-38.html
+e2e-tests         | 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_8_add_same_name_rack (e2e_tests.NameDuplicationCase) ... OK (7.181012)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:07
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_7_add_same_name_room_e2e_tests.NameDuplicationCase_2024-01-28_17-03-38.html
+e2e-tests         | OK (6.550364)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:06
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-01-28_17-03-12/test_8_add_same_name_rack_e2e_tests.NameDuplicationCase_2024-01-28_17-03-44.html
+e2e-tests exited with code 0

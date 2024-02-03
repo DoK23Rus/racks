@@ -1,0 +1,26 @@
+#5 [phpstan internal] load .dockerignore
+#8 [phpstan internal] load build definition from test.Dockerfile
+#9 [phpstan internal] load metadata for docker.io/library/php:8.1-fpm
+#18 [phpstan internal] load build context
+#19 [phpstan stage-0 4/9] COPY . .
+#19 [phpstan stage-0 4/9] COPY . .
+#25 [phpstan stage-0 5/9] RUN addgroup --gid 1000 www || :
+#26 [phpstan stage-0 6/9] RUN adduser --no-create-home --disabled-password --uid 1000 --ingroup www www || :
+#26 [phpstan stage-0 6/9] RUN adduser --no-create-home --disabled-password --uid 1000 --ingroup www www || :
+#28 [phpstan stage-0 7/9] RUN chown -R www:www /var/www
+#28 [phpstan stage-0 7/9] RUN chown -R www:www /var/www
+#28 [phpstan stage-0 7/9] RUN chown -R www:www /var/www
+#34 [phpstan stage-0 8/9] COPY --from=composer:2.6.5 /usr/bin/composer /usr/bin/composer
+#35 [phpstan stage-0 9/9] WORKDIR /var/www
+#33 [phpstan] exporting to image
+#33 naming to docker.io/library/racks-phpstan done
+ Container phpstan  Creating
+ Container phpstan  Created
+Attaching to backend-testing, db-testing, e2e-tests, frontend-testing, hub, phpstan, phpunit, pint, racks-selenium-1, racks-selenium-2
+phpstan           | Note: Using configuration file /var/www/phpstan.neon.
+phpstan           |    0/440 [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%[1G[2K  20/440 [▓░░░░░░░░░░░░░░░░░░░░░░░░░░░]   4%[1G[2K  60/440 [▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░]  13%[1G[2K 100/440 [▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░]  22%[1G[2K 140/440 [▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░]  31%[1G[2K 180/440 [▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░]  40%[1G[2K 220/440 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░]  50%[1G[2K 280/440 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░]  63%[1G[2K 320/440 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░]  72%[1G[2K 340/440 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░]  77%[1G[2K 400/440 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░]  90%[1G[2K 440/440 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+phpstan           | 
+phpstan           | 
+phpstan           |  [OK] No errors                                                                 
+phpstan           | 
+phpstan exited with code 0

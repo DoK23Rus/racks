@@ -1,0 +1,25 @@
+#6 [pint internal] load build definition from test.Dockerfile
+#7 [pint internal] load .dockerignore
+#13 [pint internal] load build context
+#15 [pint stage-0 2/9] RUN apt-get update -y
+#16 [pint stage-0 3/9] RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev &&   docker-php-ext-install pdo pdo_mysql bcmath
+#12 [pint] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
+#13 [pint internal] load build context
+#13 [pint internal] load build context
+#33 naming to docker.io/library/racks-pint done
+ Container pint  Creating
+ Container pint  Created
+Attaching to backend-testing, db-testing, e2e-tests, frontend-testing, hub, phpstan, phpunit, pint, racks-selenium-1, racks-selenium-2
+pint              | 
+pint              |   ............................................................................
+pint              |   ............................................................................
+pint              |   ............................................................................
+pint              |   ............................................................................
+pint              |   ............................................................................
+pint              |   ............................................................................
+pint              |   ..........................
+pint              | 
+pint              |   ──────────────────────────────────────────────────────────────────── Laravel  
+pint              |     PASS   ......................................................... 482 files  
+pint              | 
+pint exited with code 0

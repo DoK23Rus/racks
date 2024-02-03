@@ -45,7 +45,7 @@ class E2ETestCase(unittest.TestCase):
         login.click_login()
 
     def tearDown(self):
-        # Take screenshot when tast fails
+        # Take screenshot when test fails
         for method, error in self._outcome.errors:
             if error:
                 date = datetime.datetime.today().strftime('%Y-%m-%d_%H-%M-%S')
@@ -128,7 +128,7 @@ class PermissionsCase(E2ETestCase):
     Permissions cases
     """
 
-    def test_3_check_permitions(self):
+    def test_3_check_permissions(self):
         """
         Trying to add a new object
         in the area of responsibility of another department

@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Adapters\Presenters\RoomPresenters;
+
+use App\Adapters\ViewModels\JsonResourceViewModel;
+use App\Domain\Interfaces\ViewModel;
+use App\Http\Resources\RoomResources\NoSuchRoomResource;
+use App\Http\Resources\RoomResources\PermissionExceptionResource;
+use App\Http\Resources\RoomResources\RoomNameExceptionResource;
+use App\Http\Resources\RoomResources\RoomUpdatedResource;
+use App\Http\Resources\RoomResources\UnableToUpdateRoomResource;
+use App\UseCases\RoomUseCases\UpdateRoomUseCase\UpdateRoomOutputPort;
+use App\UseCases\RoomUseCases\UpdateRoomUseCase\UpdateRoomResponseModel;
+
+class UpdateRoomJsonPresenter implements UpdateRoomOutputPort
+{
+    public function roomUpdated(UpdateRoomResponseModel $response): ViewModel
+    {
+        return App()->makeWith(JsonResourceViewModel::class,
+            [
+                'resource' => App()->makeWith(
+                    RoomUpdatedResource::class, ['room' => $response->getRoom()]),
+                'statusCode' => 202,
+            ]
+        );
+    }
+
+    public function noSuchRoom(UpdateRoomResponseModel $response): ViewModel
+    {
+        return App()->makeWith(JsonResourceViewModel::class,
+            [
+                'resource' => App()->makeWith(
+                    NoSuchRoomResource::class, ['room' => $response->getRoom()]),
+                'statusCode' => 404,
+            ]
+        );
+    }
+
+    public function roomNameException(UpdateRoomResponseModel $response): ViewModel
+    {
+        return App()->makeWith(JsonResourceViewModel::class,
+            [
+                'resource' => App()->makeWith(
+                    RoomNameExceptionResource::class, ['room' => $response->getRoom()]),
+                'statusCode' => 403,
+            ]
+        );
+    }
+
+    public function unableToUpdateRoom(UpdateRoomResponseModel $response, \Throwable $e): ViewModel
+    {
+        if (config('app.debug')) {
+            throw $e;
+        }
+
+        return App()->makeWith(JsonResourceViewModel::class,
+            [
+                'resource' => App()->makeWith(
+                    UnableToUpdateRoomResource::class, ['e' => $e]),
+                'statusCode' => 500,
+            ]
+        );
+    }
+
+    public function permissionException(UpdateRoomResponseModel $response): ViewModel
+    {
+        return App()->makeWith(JsonResourceViewModel::class,
+            [
+                'resource' => App()->makeWith(
+                    PermissionExceptionResource::class, ['building' => $response->getRoom()]),
+                'statusCode' => 403,
+            ]
+        );
+    }
+}

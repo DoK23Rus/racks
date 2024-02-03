@@ -17,8 +17,8 @@ from test_cases_data import (MoveDevice,
 
 class Suite:
     """
-    uniitest SuiteCase class does not fit well with multithreading tasks
-    case - class containing an instance of a unittset test case
+    unittest SuiteCase class does not fit well with multithreading tasks
+    case - class containing an instance of a unittest test case
     and a list of test names
     """
 
@@ -33,7 +33,7 @@ class Suite:
         Add new case
 
         Args:
-            case (case): Class containing an instance of a unittset test case
+            case (case): Class containing an instance of a unittest test case
         and a list of test names
 
         Returns:
@@ -109,7 +109,7 @@ class Suite:
         Run thread pool and return results
 
         Args:
-            case (case): Class containing an instance of a unittset test case
+            case (case): Class containing an instance of a unittest test case
         and a list of test names
 
         Returns:

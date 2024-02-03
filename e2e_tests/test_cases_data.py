@@ -1,6 +1,6 @@
 """
 Simple abstraction for multithreading task
-Case - class containing an instance of a unittset test case
+Case - class containing an instance of a unittest test case
 and a list of test names
 """
 from e2e_tests import (MoveDeviceCase,
@@ -20,7 +20,7 @@ class MoveDevice:
 class Permissions:
     test_case_class = PermissionsCase
     test_list = [
-        'test_3_check_permitions',
+        'test_3_check_permissions',
     ]
 
 

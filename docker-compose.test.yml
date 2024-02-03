@@ -1,0 +1,194 @@
+# E2E Testing environment
+# All envs in build_and_test.sh script
+version: "3.8"
+services:
+  db-testing:
+    image: 'mysql/mysql-server:8.0'
+    container_name: db-testing
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -p${DB_PASSWORD}
+      retries: 3
+      timeout: 5s
+    profiles: ['test',]
+    networks:
+      - test
+
+  backend-testing:
+    &backend-testing
+    build:
+      args:
+        PHP_UID: ${PHP_UID:-1000}
+        PHP_GID: ${PHP_GID:-1000}
+      dockerfile: test.Dockerfile
+    container_name: backend-testing
+    domainname: backend-testing
+    command: php artisan serve --port=${BACKEND_TESTING_PORT:-81} --host=${NET:-0.0.0.0} --env=.env
+    environment:
+      - ROLE=backend
+      - APP_ENV=test
+      - DB_HOST=db-testing
+      - APP_URL=http://${NET:-0.0.0.0}
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    healthcheck:
+      test: curl -f http://${NET:-0.0.0.0}:${BACKEND_TESTING_PORT:-81} || exit 1
+      interval: 10s
+      retries: 20
+      start_period: 15s
+      timeout: 10s
+    depends_on:
+      db-testing:
+        condition: service_healthy
+    profiles: ['test',]
+    networks:
+      - test
+
+  phpstan:
+    <<: *backend-testing
+    container_name: phpstan
+    domainname: phpstan
+    command: ./vendor/bin/phpstan analyse app/ --memory-limit ${PHPSTAN_MEM_LIMIT}
+    environment:
+      - ROLE=phpstan
+
+  pint:
+    <<: *backend-testing
+    container_name: pint
+    domainname: pint
+    command: ./vendor/bin/pint --test
+    environment:
+      - ROLE=pint
+
+  phpunit:
+    <<: *backend-testing
+    container_name: phpunit
+    domainname: phpunit
+    command: ./vendor/bin/phpunit
+    environment:
+      - ROLE=phpunit
+
+  # E2E testing containers
+  frontend-testing:
+    # Frontend for selenium grid
+    container_name: frontend-testing
+    domainname: frontend-testing
+    command: npm run serve -- --port ${FRONTEND_TESTING_PORT:-8081}
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - VUE_APP_AXIOS_URL=http://backend-testing:${BACKEND_TESTING_PORT:-81}
+    healthcheck:
+      test: curl -f http://${NET:-0.0.0.0}:${FRONTEND_TESTING_PORT:-8081} || exit 1
+      interval: 5s
+      retries: 10
+      start_period: 15s
+      timeout: 10s
+    volumes:
+      - vue_dist:/app/dist/
+    ports:
+      - ${FRONTEND_TESTING_PORT:-8081}:${FRONTEND_TESTING_PORT:-8081}
+    logging:
+      options:
+        max-size: 100m
+    depends_on:
+      backend-testing:
+        condition: service_healthy
+    profiles: ['test',]
+    networks:
+      - test
+
+  hub:
+    &hub
+    container_name: hub
+    image: selenium/hub:4.1.3
+    ports:
+      - ${SE_EVENT_BUS_PUBLISH_PORT:-4442}:${SE_EVENT_BUS_PUBLISH_PORT:-4442}
+      - ${SE_EVENT_BUS_SUBSCRIBE_PORT:-4443}:${SE_EVENT_BUS_SUBSCRIBE_PORT:-4443}
+      - ${SELENIUM_HUB_PORT:-4444}:${SELENIUM_HUB_PORT:-4444}
+    depends_on:
+      frontend-testing:
+        condition: service_healthy
+    profiles: ['test',]
+    networks:
+      - test
+
+  selenium:
+    image: selenium/node-chrome:4.1.3
+    shm_size: ${SHM_SIZE}
+    environment:
+      - SE_EVENT_BUS_HOST=hub
+      - SE_EVENT_BUS_PUBLISH_PORT=${SE_EVENT_BUS_PUBLISH_PORT:-4442}
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=${SE_EVENT_BUS_SUBSCRIBE_PORT:-4443}
+      - NODE_MAX_SESSION=4
+      - NODE_MAX_INSTANCES=4
+      - VNC_NO_PASSWORD=1
+    healthcheck:
+      test: curl -f http://hub:${SELENIUM_HUB_PORT:-4444}|| exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 15
+      start_period: 10s
+    entrypoint: bash -c 'SE_OPTS="--host $$HOSTNAME" /opt/bin/entry_point.sh'
+    deploy:
+      replicas: ${NUMBER_OF_THREADS}
+    depends_on:
+      hub:
+        condition: service_started
+      frontend-testing:
+        condition: service_healthy
+    profiles: ['test',]
+    networks:
+      - test
+
+  test-runner:
+    # E2E tests
+    container_name: e2e-tests
+    build:
+      context: ./e2e_tests
+      dockerfile: Dockerfile
+    command: python run_threads.py
+    environment:
+      - LOGIN_ADDRESS=http://frontend-testing:${FRONTEND_TESTING_PORT:-8081}/login
+      - COMMAND_EXECUTOR=http://hub:${SELENIUM_HUB_PORT:-4444}/wd/hub
+      - NUMBER_OF_THREADS=${NUMBER_OF_THREADS:-2}
+      - SELENIUM_USER=${SELENIUM_USER}
+      - SELENIUM_PASS=${SELENIUM_PASS}
+      - SUITE_NAME=${SUITE_NAME}
+      - BASE_TEST_DIR=/home/app/test/
+      - TEST_RESULTS_PATH=test_results/
+      - SCREENSHOTS_PATH=screenshots/
+    logging:
+      options:
+        max-size: 100m
+    volumes:
+      - test_results:/home/app/test/test_results/
+      - screenshots:/home/app/test/screenshots/
+    depends_on:
+      backend-testing:
+        condition: service_healthy
+      frontend-testing:
+        condition: service_healthy
+      hub:
+        condition: service_started
+      selenium:
+        condition: service_healthy
+    profiles: ['test',]
+    networks:
+      - test
+
+networks:
+  test:
+volumes:
+  db:
+  test_results:
+  screenshots:
+  vue_dist:
