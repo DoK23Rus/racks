@@ -15,7 +15,7 @@
 <script>
 import DeviceForm from '@/components/DeviceForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
-import {getObject, logIfNotStatus, putObject} from '@/api';
+import {getObject, getResponseMessage, logIfNotStatus, putObject} from '@/api';
 import {getUnitsArray} from "@/functions";
 import {RESPONSE_STATUS} from "@/constants";
 
@@ -103,7 +103,8 @@ export default {
 				this.messageProps.success = true;
 				this.messageProps.message = `Device ${response.data.data.vendor} ${response.data.data.model} updated successfully`;
 			} else {
-				this.messageProps.message = response.data.data.message;
+				this.messageProps.success = false;
+				this.messageProps.message = getResponseMessage(response);
 			}
       window.scrollTo({top: 0, behavior: 'smooth'});
     },

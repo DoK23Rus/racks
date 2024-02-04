@@ -236,7 +236,7 @@
 
 <script>
 import TheMessage from '@/components/TheMessage.vue';
-import {deleteObject, getObject, getObjectLocation, logIfNotStatus} from '@/api';
+import {deleteObject, getObject, getObjectLocation, getResponseMessage, logIfNotStatus} from '@/api';
 import {DEVICES_WITH_OS, DEVICES_WITH_PORTS, RESPONSE_STATUS} from "@/constants";
 
 
@@ -350,7 +350,8 @@ export default {
 					alert(this.messageProps.message);
 					this.$router.push('/units/' + this.device.rackId);
 				} else {
-					this.messageProps.message = response.data.data.message;
+					this.messageProps.success = false;
+					this.messageProps.message = getResponseMessage(response);
 				}
       }
     },

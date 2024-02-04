@@ -251,7 +251,7 @@
 
 <script>
 import TheMessage from '@/components/TheMessage.vue';
-import {deleteObject, getObject, getObjectLocation, logIfNotStatus} from '@/api';
+import {deleteObject, getObject, getObjectLocation, getResponseMessage, logIfNotStatus} from '@/api';
 import {RESPONSE_STATUS} from "@/constants";
 
 
@@ -366,7 +366,8 @@ export default {
 					alert(this.messageProps.message);
 					this.$router.push('/tree');
 				} else {
-					this.messageProps.message = response.data.data.message;
+					this.messageProps.success = false;
+					this.messageProps.message = getResponseMessage(response);
 				}
       }
     },

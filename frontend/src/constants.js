@@ -8,7 +8,8 @@ export const RESPONSE_STATUS = Object.freeze({
   ACCEPTED: 202, // PUT
   NO_CONTENT: 204, //DELETE
   UNAUTHORIZED: 401,
-  NOT_FOUND: 404
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500
 });
 
 // List of device types with OS

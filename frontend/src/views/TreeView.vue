@@ -18,7 +18,7 @@
 <script>
 import TheMessage from '@/components/TheMessage.vue';
 import TreeItem from '@/components/TreeItem.vue';
-import {deleteObject, getUnique, logIfNotStatus} from '@/api';
+import {deleteObject, getResponseMessage, getUnique, logIfNotStatus} from '@/api';
 import {RESPONSE_STATUS} from "@/constants";
 
 
@@ -61,8 +61,9 @@ export default {
 				if (response.status === RESPONSE_STATUS.NO_CONTENT) {
 					this.messageProps.success = true;
 					this.messageProps.message = `${itemType} ${itemName} deleted successfully`;
-				} else {
-					this.messageProps.message = response.data.data.message;
+				}  else {
+					this.messageProps.success = false;
+					this.messageProps.message = getResponseMessage(response);
 				}
         await this.getTreeData();
       }

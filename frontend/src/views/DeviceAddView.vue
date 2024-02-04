@@ -13,7 +13,7 @@
 <script>
 import DeviceForm from '@/components/DeviceForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
-import {postObject} from '@/api';
+import {getResponseMessage, postObject} from '@/api';
 import {getUnitsArray} from "@/functions";
 import {RESPONSE_STATUS} from "@/constants";
 
@@ -98,9 +98,10 @@ export default {
       if (response.status === RESPONSE_STATUS.CREATED) {
 				this.messageProps.success = true;
 				this.messageProps.message = `Device ${response.data.data.vendor} ${response.data.data.model} added successfully`;
-      } else {
-				this.messageProps.message = response.data.data.message;
-      }
+			} else {
+				this.messageProps.success = false;
+				this.messageProps.message = getResponseMessage(response);
+			}
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }

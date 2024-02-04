@@ -4,8 +4,3 @@
 
 Runs parallel on grid
 
-### Project setup (from docker-compose dir)
-```
-docker-compose --profile test up
-```
-

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {BASE_PATH} from "@/constants";
+import {BASE_PATH, RESPONSE_STATUS} from "@/constants";
 
 /**
  * Log error
@@ -23,6 +23,18 @@ export function logIfNotStatus(response, status, message) {
     console.log(message);
     console.log(response);
   }
+}
+
+/**
+ * Get return message
+ * @param {Object} response Response
+ * @returns {String} message
+ */
+export function getResponseMessage(response) {
+  if (response.status === RESPONSE_STATUS.INTERNAL_SERVER_ERROR) {
+    return response.data.message;
+  }
+  return response.data.data.message;
 }
 
 /**
@@ -64,7 +76,7 @@ export async function postObject(objName, formData) {
  */
 export async function putObject(objName, id, formData) {
   try {
-    return await axios.put(`${BASE_PATH}/${objName}/${id}`, formData);
+    return await axios.patch(`${BASE_PATH}/${objName}/${id}`, formData);
   } catch (error) {
     logError(error, objName, 'put');
     return error.response;

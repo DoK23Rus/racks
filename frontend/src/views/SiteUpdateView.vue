@@ -17,7 +17,7 @@
 <script>
 import SiteForm from '@/components/SiteForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
-import {getObject, logIfNotStatus, putObject} from '@/api';
+import {getObject, getResponseMessage, logIfNotStatus, putObject} from '@/api';
 import {RESPONSE_STATUS} from "@/constants";
 
 export default {
@@ -54,7 +54,8 @@ export default {
 				this.messageProps.success = true;
 				this.messageProps.message = `Site ${response.data.data.name} updated successfully`;
 			} else {
-				this.messageProps.message = response.data.data.message;
+				this.messageProps.success = false;
+				this.messageProps.message = getResponseMessage(response);
 			}
 			window.scrollTo({top: 0, behavior: 'smooth'});
     },

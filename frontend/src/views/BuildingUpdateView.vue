@@ -17,7 +17,7 @@
 <script>
 import BuildingForm from '@/components/BuildingForm.vue';
 import TheMessage from '@/components/TheMessage.vue';
-import {getObject, logIfNotStatus, putObject} from '@/api';
+import {getObject, getResponseMessage, logIfNotStatus, putObject} from '@/api';
 import {RESPONSE_STATUS} from "@/constants";
 
 
@@ -54,9 +54,10 @@ export default {
         if (response.status === RESPONSE_STATUS.ACCEPTED) {
 					this.messageProps.success = true;
 					this.messageProps.message = `Building ${response.data.data.name} updated successfully`;
-        } else {
-					this.messageProps.message = response.data.data.message;
-        }
+				} else {
+					this.messageProps.success = false;
+					this.messageProps.message = getResponseMessage(response);
+				}
         window.scrollTo({top: 0, behavior: 'smooth'});
     },
     /**
