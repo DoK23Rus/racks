@@ -50,11 +50,11 @@ import {TRUNCATION_LENGTH} from "@/constants";
 
 export default {
   name: 'BuildingTreeItem',
-	data () {
-		return {
-			truncationLength: TRUNCATION_LENGTH
-		}
-	},
+  data () {
+    return {
+      truncationLength: TRUNCATION_LENGTH
+    }
+  },
   props: {
     id: Number,
     name: String,

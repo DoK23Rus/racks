@@ -1,11 +1,11 @@
 <template>
   <div v-bind="{
-    	id: id,
-    	name: name,
-    	isOpen: isOpen,
-    	deleteItem: deleteItem
-  	}"
-	>
+      id: id,
+      name: name,
+      isOpen: isOpen,
+      deleteItem: deleteItem
+    }"
+  >
     <span
       :class="getCaretClass(isOpen)"
       :id="getId(name)"
@@ -51,16 +51,16 @@ import {TRUNCATION_LENGTH} from "@/constants";
 
 export default {
   name: 'SiteTreeItem',
-	data () {
-		return {
-			truncationLength: TRUNCATION_LENGTH
-		}
-	},
+  data () {
+    return {
+      truncationLength: TRUNCATION_LENGTH
+    }
+  },
   props: {
     id: Number,
     name: String,
     isOpen: Boolean,
-		deleteItem: Function
+    deleteItem: Function
   },
   methods: {
     getCaretClass: getCaretClass,

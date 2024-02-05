@@ -26,16 +26,16 @@ export default {
     TheMessage
   },
   data() {
-		return {
-			formProps: {
+    return {
+      formProps: {
         oldName: ''
       },
-			messageProps: {
-				message: '',
-				success: false,
-			}
-		}
-	},
+      messageProps: {
+        message: '',
+        success: false,
+      }
+    }
+  },
   methods: {
     /**
      * Submit building form
@@ -48,12 +48,12 @@ export default {
       };
         const response = await postObject('building', formData);
         if (response.status === RESPONSE_STATUS.CREATED) {
-					this.messageProps.success = true;
-					this.messageProps.message = `Building ${response.data.data.name} added successfully`;
-				} else {
-					this.messageProps.success = false;
-					this.messageProps.message = getResponseMessage(response);
-				}
+          this.messageProps.success = true;
+          this.messageProps.message = `Building ${response.data.data.name} added successfully`;
+        } else {
+          this.messageProps.success = false;
+          this.messageProps.message = getResponseMessage(response);
+        }
         window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }

@@ -25,31 +25,31 @@
       </router-link>
       <br>
       <div class="text-base">
-				Name: {{rack.name}}
+        Name: {{rack.name}}
         <br>
-				Row: {{rack.row}}
+        Row: {{rack.row}}
         <br>
-				Place: {{rack.place}}
+        Place: {{rack.place}}
       </div>
-			<br>
-			<div class="rack">
-				<RackSideItem
-					:side="`front side`"
-					:devices="devicesFront"
-					:firstUnits="firstUnitsFront"
-					:rowSpans="rowSpansFront"
-					:startList="startList"
-				/>
-				<RackSideItem
-					:side="`back side`"
-					:devices="devicesBack"
-					:firstUnits="firstUnitsBack"
-					:rowSpans="rowSpansBack"
-					:startList="startList"
-				/>
-			</div>
+      <br>
+      <div class="rack">
+        <RackSideItem
+          :side="`front side`"
+          :devices="devicesFront"
+          :firstUnits="firstUnitsFront"
+          :rowSpans="rowSpansFront"
+          :startList="startList"
+        />
+        <RackSideItem
+          :side="`back side`"
+          :devices="devicesBack"
+          :firstUnits="firstUnitsBack"
+          :rowSpans="rowSpansBack"
+          :startList="startList"
+        />
+      </div>
     </div>
-		<br>
+    <br>
   </div>
 </template>
 
@@ -67,14 +67,14 @@ export default {
   },
   data() {
     return {
-			objectExist: true,
+      objectExist: true,
       devices: [],
-			rack: {}
+      rack: {}
     }
   },
   created() {
     this.setDevices();
-		this.setRack();
+    this.setRack();
   },
   computed: {
     /**
@@ -126,10 +126,10 @@ export default {
      */
     async setRack() {
       const response = await getObject('rack', this.$route.params.id);
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			if (response.status === RESPONSE_STATUS.NOT_FOUND) {
-				this.$router.push('/404');
-			}
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      if (response.status === RESPONSE_STATUS.NOT_FOUND) {
+        this.$router.push('/404');
+      }
       this.rack = response.data.data
     },
     /**
@@ -137,8 +137,8 @@ export default {
      */
     async setDevices() {
       const response = await getObjectsForParent('devices', 'rack', this.$route.params.id);
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			this.devices = response.data.data
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      this.devices = response.data.data
     },
     getRowSpans: getRowSpans,
     getFirstUnits: getFirstUnits,
@@ -150,15 +150,15 @@ export default {
 
 <style>
 .rack {
-	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 @media screen and (max-width: 600px) {
-	.rack {
-		flex-direction: column;
-		align-items: center;
-	}
+  .rack {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

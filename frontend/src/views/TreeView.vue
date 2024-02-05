@@ -31,10 +31,10 @@ export default {
   data() {
     return {
       regions: {},
-			messageProps: {
-				message: '',
-				success: false,
-			}
+      messageProps: {
+        message: '',
+        success: false,
+      }
     }
   },
   created() {
@@ -45,9 +45,9 @@ export default {
      * Fetch and set tree data
      */
     async getTreeData() {
-			const response = await getUnique('tree', 'tree');
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			this.regions = response.data.data
+      const response = await getUnique('tree', 'tree');
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      this.regions = response.data.data
     },
     /**
      * Delete tree item
@@ -57,14 +57,14 @@ export default {
      */
     async deleteItem(id, itemName, itemType) {
       if (confirm(`Do you really want to delete ${itemType} ${itemName} and all related items?`)) {
-				const response = await deleteObject(itemType, id);
-				if (response.status === RESPONSE_STATUS.NO_CONTENT) {
-					this.messageProps.success = true;
-					this.messageProps.message = `${itemType} ${itemName} deleted successfully`;
-				}  else {
-					this.messageProps.success = false;
-					this.messageProps.message = getResponseMessage(response);
-				}
+        const response = await deleteObject(itemType, id);
+        if (response.status === RESPONSE_STATUS.NO_CONTENT) {
+          this.messageProps.success = true;
+          this.messageProps.message = `${itemType} ${itemName} deleted successfully`;
+        }  else {
+          this.messageProps.success = false;
+          this.messageProps.message = getResponseMessage(response);
+        }
         await this.getTreeData();
       }
     },

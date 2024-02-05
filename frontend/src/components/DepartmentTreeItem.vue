@@ -33,11 +33,11 @@ import {TRUNCATION_LENGTH} from "@/constants";
 
 export default {
   name: 'DepartmentTreeItem',
-	data () {
-		return {
-			truncationLength: TRUNCATION_LENGTH
-		}
-	},
+  data () {
+    return {
+      truncationLength: TRUNCATION_LENGTH
+    }
+  },
   props: {
     id: Number,
     name: String,

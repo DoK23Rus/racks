@@ -2,9 +2,9 @@
   <div class="min-h-screen">
     <div class="text-lg font-sans font-light my-auto items-center flex flex-col pt-8">
       <br>
-			<text class="text-4xl pb-8 font-thin">
-				Welcome {{user.full_name}} !
-			</text>
+      <text class="text-4xl pb-8 font-thin">
+        Welcome {{user.full_name}} !
+      </text>
       <br>
       <div class="pb-4 text-base">
         <button
@@ -63,11 +63,11 @@ import {RESPONSE_STATUS} from "@/constants";
 export default {
   name: 'HomeView',
   data() {
-		return {
-			data: {},
-			user: {},
-			mySVG: require('@/assets/logo-svg.svg')
-		}
+    return {
+      data: {},
+      user: {},
+      mySVG: require('@/assets/logo-svg.svg')
+    }
   },
   created() {
     this.setUser();
@@ -92,24 +92,24 @@ export default {
         method: 'GET',
         responseType: 'blob',
       })
-			.then(response => {
-				const data = new Blob([response.data]);
-				const downloadUrl = window.URL.createObjectURL(data);
-				const link = document.createElement('a');
-				link.href = downloadUrl;
-				link.setAttribute('download', fileName);
-				document.body.appendChild(link);
-				link.click();
-				link.remove();
-			});
+        .then(response => {
+          const data = new Blob([response.data]);
+          const downloadUrl = window.URL.createObjectURL(data);
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.setAttribute('download', fileName);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        });
     },
     /**
      * Fetch and set user
      */
     async setUser() {
       const response = await getUnique('user', 'user');
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			this.user = response.data.data
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      this.user = response.data.data
     },
   }
 }

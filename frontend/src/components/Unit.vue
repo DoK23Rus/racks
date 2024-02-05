@@ -50,11 +50,11 @@ import {TRUNCATION_LENGTH} from "@/constants";
 
 export default {
   name: 'Unit',
-	data () {
-		return {
-			truncationLength: TRUNCATION_LENGTH
-		}
-	},
+  data () {
+    return {
+      truncationLength: TRUNCATION_LENGTH
+    }
+  },
   inheritAttrs: false,
   props: {
     vendor: {

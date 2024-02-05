@@ -57,10 +57,10 @@ export default {
         update: true
       },
       roomId: null,
-			messageProps: {
-				message: '',
-				success: false,
-			}
+      messageProps: {
+        message: '',
+        success: false,
+      }
     };
   },
   async created() {
@@ -101,26 +101,26 @@ export default {
         has_cooler: form.hasCooler,
         room_id: this.roomId
       };
-			const response = await putObject('rack', this.$route.params.id, formData);
-			if (response.status === RESPONSE_STATUS.ACCEPTED) {
-				this.messageProps.success =true;
-				this.messageProps.message = `Rack ${response.data.data.name} updated successfully`;
-			} else {
-				this.messageProps.success = false;
-				this.messageProps.message = getResponseMessage(response);
-			}
-			window.scrollTo({top: 0, behavior: 'smooth'});
+      const response = await putObject('rack', this.$route.params.id, formData);
+      if (response.status === RESPONSE_STATUS.ACCEPTED) {
+        this.messageProps.success =true;
+        this.messageProps.message = `Rack ${response.data.data.name} updated successfully`;
+      } else {
+        this.messageProps.success = false;
+        this.messageProps.message = getResponseMessage(response);
+      }
+      window.scrollTo({top: 0, behavior: 'smooth'});
     },
     /**
      * Fetch and set rack old data
      */
     async setOldData() {
-			const response = await getObject('rack', this.$route.params.id);
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			if (response.status === RESPONSE_STATUS.NOT_FOUND) {
-				this.$router.push('/404');
-			}
-			const rack = response.data.data;
+      const response = await getObject('rack', this.$route.params.id);
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      if (response.status === RESPONSE_STATUS.NOT_FOUND) {
+        this.$router.push('/404');
+      }
+      const rack = response.data.data;
       this.formProps.oldName = rack.name;
       this.formProps.oldAmount = rack.amount;
       this.formProps.oldVendor = rack.vendor;

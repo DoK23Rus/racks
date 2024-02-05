@@ -30,10 +30,10 @@ export default {
       formProps: {
         oldName: ''
       },
-			messageProps: {
-				message: '',
-				success: false,
-			}
+      messageProps: {
+        message: '',
+        success: false,
+      }
     };
   },
   methods: {
@@ -46,15 +46,15 @@ export default {
         name: form.name,
         department_id: this.$route.params.department_id
       };
-			const response = await postObject('site', formData);
-			if (response.status === RESPONSE_STATUS.CREATED) {
-				this.messageProps.success = true;
-				this.messageProps.message = `Site ${response.data.data.name} added successfully`;
-			} else {
-				this.messageProps.success = false;
-				this.messageProps.message = getResponseMessage(response);
-			}
-			window.scrollTo({top: 0, behavior: 'smooth'});
+      const response = await postObject('site', formData);
+      if (response.status === RESPONSE_STATUS.CREATED) {
+        this.messageProps.success = true;
+        this.messageProps.message = `Site ${response.data.data.name} added successfully`;
+      } else {
+        this.messageProps.success = false;
+        this.messageProps.message = getResponseMessage(response);
+      }
+      window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }
 };

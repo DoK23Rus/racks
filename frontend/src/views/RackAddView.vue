@@ -54,10 +54,10 @@ export default {
         hasCooler: false,
         update: false
       },
-			messageProps: {
-				message: '',
-				success: false,
-			}
+      messageProps: {
+        message: '',
+        success: false,
+      }
     };
   },
   methods: {
@@ -95,14 +95,14 @@ export default {
         has_cooler: form.hasCooler,
         room_id: parseInt(this.$route.params.room_id)
       };
-			const response = await postObject('rack', formData);
-			if (response.status === RESPONSE_STATUS.CREATED) {
-				this.messageProps.success = true;
-				this.messageProps.message = `Rack ${response.data.data.name} added successfully`;
-			} else {
-				this.messageProps.success = false;
-				this.messageProps.message = getResponseMessage(response);
-			}
+      const response = await postObject('rack', formData);
+      if (response.status === RESPONSE_STATUS.CREATED) {
+        this.messageProps.success = true;
+        this.messageProps.message = `Rack ${response.data.data.name} added successfully`;
+      } else {
+        this.messageProps.success = false;
+        this.messageProps.message = getResponseMessage(response);
+      }
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }

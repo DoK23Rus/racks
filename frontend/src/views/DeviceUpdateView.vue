@@ -55,10 +55,10 @@ export default {
         oldFixedAsset: ''
       },
       rackId: null,
-			messageProps: {
-				message: '',
-				success: false,
-			}
+      messageProps: {
+        message: '',
+        success: false,
+      }
     };
   },
   async created() {
@@ -70,10 +70,10 @@ export default {
      * @param {Object} form Device form
      */
     async submitForm(form) {
-			const firstUnit = parseInt(form.firstUnit);
-			const lastUnit = parseInt(form.lastUnit);
+      const firstUnit = parseInt(form.firstUnit);
+      const lastUnit = parseInt(form.lastUnit);
       const formData = {
-				units: getUnitsArray(firstUnit, lastUnit),
+        units: getUnitsArray(firstUnit, lastUnit),
         has_backside_location: form.hasBacksideLocation,
         status: form.status,
         type: form.type,
@@ -98,14 +98,14 @@ export default {
         fixed_asset: form.fixedAsset,
         rack_id: this.rack_id
       };
-			const response = await putObject('device', this.$route.params.id, formData);
-			if (response.status === RESPONSE_STATUS.ACCEPTED) {
-				this.messageProps.success = true;
-				this.messageProps.message = `Device ${response.data.data.vendor} ${response.data.data.model} updated successfully`;
-			} else {
-				this.messageProps.success = false;
-				this.messageProps.message = getResponseMessage(response);
-			}
+      const response = await putObject('device', this.$route.params.id, formData);
+      if (response.status === RESPONSE_STATUS.ACCEPTED) {
+        this.messageProps.success = true;
+        this.messageProps.message = `Device ${response.data.data.vendor} ${response.data.data.model} updated successfully`;
+      } else {
+        this.messageProps.success = false;
+        this.messageProps.message = getResponseMessage(response);
+      }
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
     /**
@@ -113,11 +113,11 @@ export default {
      */
     async setOldData() {
       const response = await getObject('device', this.$route.params.id);
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			if (response.status === RESPONSE_STATUS.NOT_FOUND) {
-				this.$router.push('/404');
-			}
-			const device = response.data.data;
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      if (response.status === RESPONSE_STATUS.NOT_FOUND) {
+        this.$router.push('/404');
+      }
+      const device = response.data.data;
       this.formProps.oldFirstUnit = device.units[0];
       this.formProps.oldLastUnit = device.units[device.units.length - 1];
       this.formProps.oldHasBacksideLocation = device.has_backside_location;

@@ -92,12 +92,12 @@ import {DEVICE_OWNERSHIP, DEVICE_STATUS} from "@/constants";
 
 export default {
   name: 'RackSideItem',
-	data () {
-		return {
-			deviceOwnership: DEVICE_OWNERSHIP,
-			deviceStatus: DEVICE_STATUS
-		}
-	},
+  data () {
+    return {
+      deviceOwnership: DEVICE_OWNERSHIP,
+      deviceStatus: DEVICE_STATUS
+    }
+  },
   components: {
     Unit
   },
@@ -136,16 +136,16 @@ export default {
       default: 'line-through'
     },
   },
-	methods: {
-		keyToInt(value) {
-			return parseInt(value)
-		}
-	}
+  methods: {
+    keyToInt(value) {
+      return parseInt(value)
+    }
+  }
 }
 </script>
 
 <style>
 .side {
-	margin: 1rem;
+  margin: 1rem;
 }
 </style>

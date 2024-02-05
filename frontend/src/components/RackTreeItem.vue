@@ -1,10 +1,10 @@
 <template>
   <div v-bind="{
-    	id: id,
-    	name: name,
-    	isOpen: isOpen
-  	}"
-	>
+      id: id,
+      name: name,
+      isOpen: isOpen
+    }"
+  >
     <span>
       <router-link
         :to="{path: `/units/${id}`}"
@@ -32,11 +32,11 @@ import {TRUNCATION_LENGTH} from "@/constants";
 
 export default {
   name: 'RackTreeItem',
-	data () {
-		return {
-			truncationLength: TRUNCATION_LENGTH
-		}
-	},
+  data () {
+    return {
+      truncationLength: TRUNCATION_LENGTH
+    }
+  },
   props: {
     id: Number,
     name: String,

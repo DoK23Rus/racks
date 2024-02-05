@@ -1,6 +1,6 @@
 <template>
   <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
-		<div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-xl">
+    <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-xl">
       <TheMessage :messageProps="messageProps"/>
     </div>
     Rack №{{rack.id}}
@@ -25,47 +25,47 @@
         {{location.regionName}} &#9002; {{location.departmentName}} &#9002;
         {{location.siteName}} &#9002; {{location.buildingName}} &#9002; {{location.roomName}}
       </div>
-  	<div class="text-base">
+    <div class="text-base">
       Rack name:
-			<text class="text-slate-500">
-				{{rack.name}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.name}}
+      </text>
+      <br>
       Responsible:
-			<text class="text-slate-500">
-				{{rack.responsible}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.responsible}}
+      </text>
+      <br>
       Row:
-			<text class="text-slate-500">
-				{{rack.row}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.row}}
+      </text>
+      <br>
       Place:
-			<text class="text-slate-500">
-				{{rack.place}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.place}}
+      </text>
+      <br>
       Description:
-			<text class="text-slate-500">
-				{{rack.description}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.description}}
+      </text>
+      <br>
       Inventory number:
-			<text class="text-slate-500">
-				{{rack.inventoryNumber}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.inventoryNumber}}
+      </text>
+      <br>
       Financially responsible:
-			<text class="text-slate-500">
-				{{rack.financiallyResponsiblePerson}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.financiallyResponsiblePerson}}
+      </text>
+      <br>
       Fixed asset:
-			<text class="text-slate-500">
-				{{rack.fixedAsset}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.fixedAsset}}
+      </text>
+      <br>
       <template v-if="rack.link_to_docs">
         Link to docs:
         <a
@@ -81,171 +81,171 @@
       <template v-else>
         Link to docs:
       </template>
-    	<br>
-    	<br>
+      <br>
+      <br>
       Vendor:
-			<text class="text-slate-500">
-				{{rack.vendor}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.vendor}}
+      </text>
+      <br>
       Model:
-			<text class="text-slate-500">
-				{{rack.model}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.model}}
+      </text>
+      <br>
       Rack amount (units):
-			<text class="text-slate-500">
-				{{rack.amount}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.amount}}
+      </text>
+      <br>
       <template v-if="rack.hasNumberingFromTopToBottom">
         Numbering:
-				<text class="text-slate-500">
-					from top to bottom
-				</text>
+        <text class="text-slate-500">
+          from top to bottom
+        </text>
       </template>
       <template v-else>
         Numbering:
-				<text class="text-slate-500">
-					from bottom to top
-				</text>
+        <text class="text-slate-500">
+          from bottom to top
+        </text>
       </template>
-    	<br>
+      <br>
       <template v-if="rack.height">
         Rack height (mm):
-				<text class="text-slate-500">
-					{{rack.height}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.height}}
+        </text>
       </template>
       <template v-else>
         Rack height (mm):
       </template>
-    	<br>
+      <br>
       <template v-if="rack.width">
         Rack width (mm):
-				<text class="text-slate-500">
-					{{rack.width}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.width}}
+        </text>
       </template>
       <template v-else>
         Rack width (mm):
       </template>
-    	<br>
+      <br>
       <template v-if="rack.depth">
         Rack depth (mm):
-				<text class="text-slate-500">
-					{{rack.depth}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.depth}}
+        </text>
       </template>
       <template v-else>
         Rack depth (mm):
       </template>
-    	<br>
+      <br>
       <template v-if="rack.unitWidth">
         Useful rack width (inches):
-				<text class="text-slate-500">
-					{{rack.unitWidth}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.unitWidth}}
+        </text>
       </template>
       <template v-else>
         Useful rack width (inches):
       </template>
-    	<br>
+      <br>
       <template v-if="rack.unitDepth">
         Useful rack depth (mm):
-				<text class="text-slate-500">
-					{{rack.unitDepth}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.unitDepth}}
+        </text>
       </template>
       <template v-else>
         Useful rack depth (mm):
       </template>
-    	<br>
+      <br>
       Execution variant:
-			<text class="text-slate-500">
-				{{rack.type}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.type}}
+      </text>
+      <br>
       Construction:
-			<text class="text-slate-500">
-				{{rack.frame}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.frame}}
+      </text>
+      <br>
       Location type:
-			<text class="text-slate-500">
-				{{rack.placeType}}
-			</text>
-    	<br>
+      <text class="text-slate-500">
+        {{rack.placeType}}
+      </text>
+      <br>
       <template v-if="rack.maxLoad">
         Max load (kilo):
-				<text class="text-slate-500">
-					{{rack.maxLoad}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.maxLoad}}
+        </text>
       </template>
       <template v-else>
         Max load (kilo):
       </template>
-    	<br>
+      <br>
       <template v-if="rack.powerSockets">
         Free power sockets:
-				<text class="text-slate-500">
-					{{rack.powerSockets}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.powerSockets}}
+        </text>
       </template>
       <template v-else>
         Free power sockets:
       </template>
-    	<br>
+      <br>
       <template v-if="rack.powerSocketsUps">
         Free UPS power sockets:
-				<text class="text-slate-500">
-					{{rack.powerSocketsUps}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.powerSocketsUps}}
+        </text>
       </template>
       <template v-else>
         Free UPS power sockets:
       </template>
-    	<br>
+      <br>
       <template v-if="rack.hasCooler">
         Active ventilation:
-				<text class="text-slate-500">
-					Yes
-				</text>
+        <text class="text-slate-500">
+          Yes
+        </text>
       </template>
       <template v-else>
         Active ventilation:
-				<text class="text-slate-500">
-					No
-				</text>
+        <text class="text-slate-500">
+          No
+        </text>
       </template>
-    	<br>
+      <br>
       <template v-if="rack.hasExternalUps">
         External power backup supply system:
-				<text class="text-slate-500">
-					Yes
-				</text>
+        <text class="text-slate-500">
+          Yes
+        </text>
       </template>
       <template v-else>
         External power backup supply system:
-				<text class="text-slate-500">
-					No
-				</text>
+        <text class="text-slate-500">
+          No
+        </text>
       </template>
-    	<br>
-    	<br>
-    	<div class="text-xs">
+      <br>
+      <br>
+      <div class="text-xs">
         Updated by:
-				<text class="text-slate-500">
-					{{rack.updatedBy}}
-				</text>
+        <text class="text-slate-500">
+          {{rack.updatedBy}}
+        </text>
       <br>
         Updated at:
-				<text class="text-slate-500">
-					{{rack.updatedAt}}
-				</text>
-    	</div>
-    	<br>
-  	</div>
+        <text class="text-slate-500">
+          {{rack.updatedAt}}
+        </text>
+      </div>
+      <br>
+    </div>
   </div>
 </template>
 
@@ -294,10 +294,10 @@ export default {
         updatedBy: '',
         updatedAt: ''
       },
-			messageProps: {
-				message: '',
-				success: false,
-			},
+      messageProps: {
+        message: '',
+        success: false,
+      },
       location: {
         roomName: '',
         buildingName: '',
@@ -316,12 +316,12 @@ export default {
      * Fetch and set rack data
      */
     async setRack() {
-			const response = await getObject('rack', this.$route.params.id);
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			if (response.status === RESPONSE_STATUS.NOT_FOUND) {
-				this.$router.push('/404');
-			}
-			const rack = response.data.data;
+      const response = await getObject('rack', this.$route.params.id);
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      if (response.status === RESPONSE_STATUS.NOT_FOUND) {
+        this.$router.push('/404');
+      }
+      const rack = response.data.data;
       this.rack.name = rack.name;
       this.rack.amount = rack.amount;
       this.rack.vendor = rack.vendor;
@@ -359,25 +359,25 @@ export default {
      */
     async deleteRack(id, name) {
       if (confirm(`Do you really want to delete rack ${name} and all related items?`)) {
-				const response = await deleteObject('rack', this.$route.params.id);
-				if (response.status === RESPONSE_STATUS.NO_CONTENT) {
-					this.messageProps.success = true;
-					this.messageProps.message = `Rack ${id} deleted successfully`;
-					alert(this.messageProps.message);
-					this.$router.push('/tree');
-				} else {
-					this.messageProps.success = false;
-					this.messageProps.message = getResponseMessage(response);
-				}
+        const response = await deleteObject('rack', this.$route.params.id);
+        if (response.status === RESPONSE_STATUS.NO_CONTENT) {
+          this.messageProps.success = true;
+          this.messageProps.message = `Rack ${id} deleted successfully`;
+          alert(this.messageProps.message);
+          this.$router.push('/tree');
+        } else {
+          this.messageProps.success = false;
+          this.messageProps.message = getResponseMessage(response);
+        }
       }
     },
     /**
      * Fetch and set rack location
      */
     async setRackLocation() {
-			const response = await getObjectLocation('rack', this.$route.params.id);
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			const location = response.data.data;
+      const response = await getObjectLocation('rack', this.$route.params.id);
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      const location = response.data.data;
       this.location.roomName = location.room_name;
       this.location.buildingName = location.building_name;
       this.location.siteName = location.site_name;

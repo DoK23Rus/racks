@@ -28,16 +28,16 @@ export default {
     TheMessage
   },
   data() {
-		return {
-			formProps: {
+    return {
+      formProps: {
         oldName: ''
       },
-			messageProps: {
-				message: '',
-				success: false,
-			}
-		}
-	},
+      messageProps: {
+        message: '',
+        success: false,
+      }
+    }
+  },
   async created() {
     await this.setOldData();
   },
@@ -52,24 +52,24 @@ export default {
       };
         const response = await putObject('building', this.$route.params.id, formData);
         if (response.status === RESPONSE_STATUS.ACCEPTED) {
-					this.messageProps.success = true;
-					this.messageProps.message = `Building ${response.data.data.name} updated successfully`;
-				} else {
-					this.messageProps.success = false;
-					this.messageProps.message = getResponseMessage(response);
-				}
+          this.messageProps.success = true;
+          this.messageProps.message = `Building ${response.data.data.name} updated successfully`;
+        } else {
+          this.messageProps.success = false;
+          this.messageProps.message = getResponseMessage(response);
+        }
         window.scrollTo({top: 0, behavior: 'smooth'});
     },
     /**
      * Fetch and set building old data
      */
     async setOldData() {
-			const response = await getObject('building', this.$route.params.id);
-			logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
-			if (response.status === RESPONSE_STATUS.NOT_FOUND) {
-				this.$router.push('/404');
-			}
-			this.formProps.oldName = response.data.data.name
+      const response = await getObject('building', this.$route.params.id);
+      logIfNotStatus(response, RESPONSE_STATUS.OK, 'Unexpected response!');
+      if (response.status === RESPONSE_STATUS.NOT_FOUND) {
+        this.$router.push('/404');
+      }
+      this.formProps.oldName = response.data.data.name
     }
   }
 };

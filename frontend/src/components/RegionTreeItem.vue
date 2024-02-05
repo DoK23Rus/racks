@@ -1,9 +1,9 @@
 <template>
   <div v-bind="{
-    	name: name,
-    	isOpen: isOpen
-  	}"
-	>
+      name: name,
+      isOpen: isOpen
+    }"
+  >
     <span 
       :class="getCaretClass(isOpen)" 
       :id="getId(name)"
@@ -20,11 +20,11 @@ import {TRUNCATION_LENGTH} from "@/constants";
 
 export default {
   name: 'RegionTreeItem',
-	data () {
-		return {
-			truncationLength: TRUNCATION_LENGTH
-		}
-	},
+  data () {
+    return {
+      truncationLength: TRUNCATION_LENGTH
+    }
+  },
   props: {
     name: String,
     isOpen: Boolean

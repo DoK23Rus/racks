@@ -83,10 +83,10 @@ export default {
      */
     emitData() {
       if (this.v$.$errors.length) {
-				confirm('Form not valid, please check the fields');
-				window.scrollTo({top: 0, behavior: 'smooth'});
+        confirm('Form not valid, please check the fields');
+        window.scrollTo({top: 0, behavior: 'smooth'});
       } else {
-				this.$emit('on-submit', this.form);
+        this.$emit('on-submit', this.form);
       }
     },
   }

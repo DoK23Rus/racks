@@ -84,29 +84,29 @@ export default {
     /**
      * Submit form
      */
-		submitForm() {
-			const formData = {
-				name: this.name,
-				password: this.password
-			};
-			// Get and store token
-			axios
-				.post('/api/auth/login', formData)
-				.then(response => {
-					const token = response.data.access_token;
-					this.$store.commit('setToken', token);
-					axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-					localStorage.setItem('token', token);
-					this.$router.push('/');
-				})
-				.catch(error => {
-					if (error.response.status === RESPONSE_STATUS.UNAUTHORIZED) {
-						this.loginError = "We couldn't verify your account details";
-					} else {
-						this.loginError = "Something went wrong, please refresh and try again";
-					}
-				});
-		}
+    submitForm() {
+      const formData = {
+        name: this.name,
+        password: this.password
+      };
+      // Get and store token
+      axios
+        .post('/api/auth/login', formData)
+        .then(response => {
+          const token = response.data.access_token;
+          this.$store.commit('setToken', token);
+          axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+          localStorage.setItem('token', token);
+          this.$router.push('/');
+        })
+        .catch(error => {
+          if (error.response.status === RESPONSE_STATUS.UNAUTHORIZED) {
+            this.loginError = "We couldn't verify your account details";
+          } else {
+            this.loginError = "Something went wrong, please refresh and try again";
+          }
+        });
+    }
   }
 }
 </script>

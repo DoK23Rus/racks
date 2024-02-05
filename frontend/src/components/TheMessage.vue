@@ -19,8 +19,8 @@ export default {
   name: 'TheMessage',
   props: {
     messageProps: {
-			message: String,
-			success: false,
+      message: String,
+      success: false,
     }
   }
 }

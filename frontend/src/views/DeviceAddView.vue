@@ -45,7 +45,7 @@ export default {
         powerACDC: 'AC',
         serialNumber: '',
         description: '',
-				linkToDocs: '',
+        linkToDocs: '',
         project: '',
         ownership: 'Our department',
         responsible: '',
@@ -53,10 +53,10 @@ export default {
         inventoryNumber: '',
         fixedAsset: ''
       },
-			messageProps: {
-				message: '',
-				success: false,
-			}
+      messageProps: {
+        message: '',
+        success: false,
+      }
     };
   },
   methods: {
@@ -65,8 +65,8 @@ export default {
      * @param {Object} form Device form
      */
     async submitForm(form) {
-			const firstUnit = parseInt(form.firstUnit);
-			const lastUnit = parseInt(form.lastUnit);
+      const firstUnit = parseInt(form.firstUnit);
+      const lastUnit = parseInt(form.lastUnit);
       const formData = {
         units: getUnitsArray(firstUnit, lastUnit),
         has_backside_location: form.hasBacksideLocation,
@@ -85,7 +85,7 @@ export default {
         power_ac_dc: form.powerACDC,
         serial_number: form.serialNumber,
         description: form.description,
-				link_to_docs: form.linkToDocs,
+        link_to_docs: form.linkToDocs,
         project: form.project,
         ownership: form.ownership,
         responsible: form.responsible,
@@ -96,12 +96,12 @@ export default {
       };
       const response = await postObject('device', formData);
       if (response.status === RESPONSE_STATUS.CREATED) {
-				this.messageProps.success = true;
-				this.messageProps.message = `Device ${response.data.data.vendor} ${response.data.data.model} added successfully`;
-			} else {
-				this.messageProps.success = false;
-				this.messageProps.message = getResponseMessage(response);
-			}
+        this.messageProps.success = true;
+        this.messageProps.message = `Device ${response.data.data.vendor} ${response.data.data.model} added successfully`;
+      } else {
+        this.messageProps.success = false;
+        this.messageProps.message = getResponseMessage(response);
+      }
       window.scrollTo({top: 0, behavior: 'smooth'});
     },
   }
