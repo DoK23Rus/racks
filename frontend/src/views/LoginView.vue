@@ -68,7 +68,7 @@
 
 <script>
 import axios from 'axios'
-import {RESPONSE_STATUS} from "@/constants";
+import {BASE_PATH, RESPONSE_STATUS} from "@/constants";
 
 
 export default {
@@ -91,7 +91,7 @@ export default {
       };
       // Get and store token
       axios
-        .post('/api/auth/login', formData)
+        .post(`${BASE_PATH}/login`, formData)
         .then(response => {
           const token = response.data.access_token;
           this.$store.commit('setToken', token);

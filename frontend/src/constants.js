@@ -1,5 +1,5 @@
 // Base path for API
-export const BASE_PATH = '/api/auth';
+export const BASE_PATH = `/api/${process.env.VUE_APP_API_VERSION}/auth`;
 
 // Status codes
 export const RESPONSE_STATUS = Object.freeze({

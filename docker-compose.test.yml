@@ -86,6 +86,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - VUE_APP_AXIOS_URL=http://backend-testing:${BACKEND_TESTING_PORT:-81}
+      - VUE_APP_API_VERSION=${API_VERSION}
     healthcheck:
       test: curl -f http://${NET:-0.0.0.0}:${FRONTEND_TESTING_PORT:-8081} || exit 1
       interval: 5s

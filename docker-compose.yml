@@ -70,6 +70,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - VUE_APP_AXIOS_URL=http://127.0.0.1:80
+      - VUE_APP_API_VERSION=${API_VERSION}
     ports:
       - ${FORWARD_FRONTEND_PORT:-8080}:8080
     volumes:
