@@ -27,7 +27,7 @@ class GetBuildingJsonPresenter implements GetBuildingOutputPort
         return App()->makeWith(JsonResourceViewModel::class,
             [
                 'resource' => App()->makeWith(
-                    NoSuchBuildingResource::class),
+                    NoSuchBuildingResource::class, ['building' => $response->getBuilding()]),
                 'statusCode' => 404,
             ]
         );
