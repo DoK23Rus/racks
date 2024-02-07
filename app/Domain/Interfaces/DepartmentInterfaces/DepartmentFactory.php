@@ -7,9 +7,7 @@ use App\UseCases\DepartmentUseCases\UpdateDepartmentUseCase\UpdateDepartmentRequ
 
 interface DepartmentFactory
 {
-    public function makeFromId(int $id): DepartmentEntity;
-
     public function makeFromCreateRequest(CreateDepartmentRequestModel $request): DepartmentEntity;
 
-    public function makeFromPutRequest(UpdateDepartmentRequestModel $request): DepartmentEntity;
+    public function makeFromPatchRequest(UpdateDepartmentRequestModel $request): DepartmentEntity;
 }

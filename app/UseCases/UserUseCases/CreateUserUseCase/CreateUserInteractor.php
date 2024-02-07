@@ -2,7 +2,6 @@
 
 namespace App\UseCases\UserUseCases\CreateUserUseCase;
 
-use App\Domain\Interfaces\DepartmentInterfaces\DepartmentFactory;
 use App\Domain\Interfaces\DepartmentInterfaces\DepartmentRepository;
 use App\Domain\Interfaces\UserInterfaces\UserFactory;
 use App\Domain\Interfaces\UserInterfaces\UserRepository;
@@ -14,8 +13,7 @@ class CreateUserInteractor implements CreateUserInputPort
         private readonly CreateUserOutputPort $output,
         private readonly UserRepository $userRepository,
         private readonly DepartmentRepository $departmentRepository,
-        private readonly DepartmentFactory $departmentFactory,
-        private readonly UserFactory $userFactory,
+        private readonly UserFactory $userFactory
     ) {
     }
 
@@ -29,10 +27,8 @@ class CreateUserInteractor implements CreateUserInputPort
             );
         }
 
-        $department = $this->departmentFactory->makeFromId($user->getDepartmentId());
-
         try {
-            $department = $this->departmentRepository->getById($department->getId());
+            $department = $this->departmentRepository->getById($user->getDepartmentId());
         } catch (\Exception $e) {
             return $this->output->noSuchDepartment(
                 App()->makeWith(CreateUserResponseModel::class, ['user' => $user])

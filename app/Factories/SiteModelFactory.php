@@ -10,13 +10,6 @@ use App\UseCases\SiteUseCases\UpdateSiteUseCase\UpdateSiteRequestModel;
 
 class SiteModelFactory implements SiteFactory
 {
-    public function makeFromId(int $id): SiteEntity
-    {
-        return new Site([
-            'id' => $id,
-        ]);
-    }
-
     public function makeFromCreateRequest(CreateSiteRequestModel $request): SiteEntity
     {
         return new Site([
@@ -25,7 +18,7 @@ class SiteModelFactory implements SiteFactory
         ]);
     }
 
-    public function makeFromPutRequest(UpdateSiteRequestModel $request): SiteEntity
+    public function makeFromPatchRequest(UpdateSiteRequestModel $request): SiteEntity
     {
         return new Site([
             'id' => $request->getId(),

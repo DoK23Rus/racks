@@ -10,13 +10,6 @@ use App\UseCases\DepartmentUseCases\UpdateDepartmentUseCase\UpdateDepartmentRequ
 
 class DepartmentModelFactory implements DepartmentFactory
 {
-    public function makeFromId(int $id): DepartmentEntity
-    {
-        return new Department([
-            'id' => $id,
-        ]);
-    }
-
     public function makeFromCreateRequest(CreateDepartmentRequestModel $request): DepartmentEntity
     {
         return new Department([
@@ -25,7 +18,7 @@ class DepartmentModelFactory implements DepartmentFactory
         ]);
     }
 
-    public function makeFromPutRequest(UpdateDepartmentRequestModel $request): DepartmentEntity
+    public function makeFromPatchRequest(UpdateDepartmentRequestModel $request): DepartmentEntity
     {
         return new Department([
             'id' => $request->getId(),

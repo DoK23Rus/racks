@@ -2,7 +2,6 @@
 
 namespace App\UseCases\DeviceUseCases\DeleteDeviceUseCase;
 
-use App\Domain\Interfaces\DeviceInterfaces\DeviceFactory;
 use App\Domain\Interfaces\DeviceInterfaces\DeviceRepository;
 use App\Domain\Interfaces\RackInterfaces\RackRepository;
 use App\Domain\Interfaces\ViewModel;
@@ -15,20 +14,17 @@ class DeleteDeviceInteractor implements DeleteDeviceInputPort
     public function __construct(
         private readonly DeleteDeviceOutputPort $output,
         private readonly DeviceRepository $deviceRepository,
-        private readonly RackRepository $rackRepository,
-        private readonly DeviceFactory $deviceFactory
+        private readonly RackRepository $rackRepository
     ) {
     }
 
     public function deleteDevice(DeleteDeviceRequestModel $request): ViewModel
     {
-        $device = $this->deviceFactory->makeFromId($request->getId());
-
         try {
-            $device = $this->deviceRepository->getById($device->getId());
+            $device = $this->deviceRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchDevice(
-                App()->makeWith(DeleteDeviceResponseModel::class, ['device' => $device])
+                App()->makeWith(DeleteDeviceResponseModel::class, ['device' => null])
             );
         }
 

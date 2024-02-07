@@ -19,7 +19,7 @@ class UpdateSiteInteractor implements UpdateSiteInputPort
 
     public function updateSite(UpdateSiteRequestModel $request): ViewModel
     {
-        $siteUpdating = $this->siteFactory->makeFromId($request->getId());
+        $siteUpdating = $this->siteFactory->makeFromPatchRequest($request);
 
         try {
             $site = $this->siteRepository->getById($siteUpdating->getId());
@@ -28,8 +28,6 @@ class UpdateSiteInteractor implements UpdateSiteInputPort
                 App()->makeWith(UpdateSiteResponseModel::class, ['site' => $siteUpdating])
             );
         }
-
-        $siteUpdating = $this->siteFactory->makeFromPutRequest($request);
 
         if (! Gate::allows('departmentCheck', $site->getDepartmentId())) {
             return $this->output->permissionException(

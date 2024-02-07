@@ -7,9 +7,7 @@ use App\UseCases\BuildingUseCases\UpdateBuildingUseCase\UpdateBuildingRequestMod
 
 interface BuildingFactory
 {
-    public function makeFromId(int $id): BuildingEntity;
-
     public function makeFromCreateRequest(CreateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules;
 
-    public function makeFromPutRequest(UpdateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules;
+    public function makeFromPatchRequest(UpdateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules;
 }

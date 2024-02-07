@@ -22,7 +22,7 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
 
     public function updateDevice(UpdateDeviceRequestModel $request): ViewModel
     {
-        $deviceUpdating = $this->deviceFactory->makeFromId($request->getId());
+        $deviceUpdating = $this->deviceFactory->makeFromPatchRequest($request);
 
         try {
             $device = $this->deviceRepository->getById($deviceUpdating->getId());
@@ -37,8 +37,6 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
                 App()->makeWith(UpdateDeviceResponseModel::class, ['device' => $deviceUpdating])
             );
         }
-
-        $deviceUpdating = $this->deviceFactory->makeFromPutRequest($request);
 
         $deviceUpdating->setUpdatedBy($request->getUserName());
 

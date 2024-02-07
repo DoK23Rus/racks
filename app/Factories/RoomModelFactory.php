@@ -11,13 +11,6 @@ use App\UseCases\RoomUseCases\UpdateRoomUseCase\UpdateRoomRequestModel;
 
 class RoomModelFactory implements RoomFactory
 {
-    public function makeFromId(int $id): RoomEntity
-    {
-        return new Room([
-            'id' => $id,
-        ]);
-    }
-
     public function makeFromCreateRequest(CreateRoomRequestModel $request): RoomEntity|RoomBusinessRules
     {
         return new Room([

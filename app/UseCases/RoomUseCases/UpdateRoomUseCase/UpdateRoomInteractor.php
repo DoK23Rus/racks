@@ -22,7 +22,7 @@ class UpdateRoomInteractor implements UpdateRoomInputPort
 
     public function updateRoom(UpdateRoomRequestModel $request): ViewModel
     {
-        $roomUpdating = $this->roomFactory->makeFromId($request->getId());
+        $roomUpdating = $this->roomFactory->makeFromPutRequest($request);
 
         try {
             $room = $this->roomRepository->getById($roomUpdating->getId());

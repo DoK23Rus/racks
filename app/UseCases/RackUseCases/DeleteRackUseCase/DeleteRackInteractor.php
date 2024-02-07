@@ -2,7 +2,6 @@
 
 namespace App\UseCases\RackUseCases\DeleteRackUseCase;
 
-use App\Domain\Interfaces\RackInterfaces\RackFactory;
 use App\Domain\Interfaces\RackInterfaces\RackRepository;
 use App\Domain\Interfaces\ViewModel;
 use Illuminate\Support\Facades\Gate;
@@ -12,20 +11,17 @@ class DeleteRackInteractor implements DeleteRackInputPort
 {
     public function __construct(
         private readonly DeleteRackOutputPort $output,
-        private readonly RackRepository $rackRepository,
-        private readonly RackFactory $rackFactory
+        private readonly RackRepository $rackRepository
     ) {
     }
 
     public function deleteRack(DeleteRackRequestModel $request): ViewModel
     {
-        $rack = $this->rackFactory->makeFromId($request->getId());
-
         try {
-            $rack = $this->rackRepository->getById($rack->getId());
+            $rack = $this->rackRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchRack(
-                App()->makeWith(DeleteRackResponseModel::class, ['rack' => $rack])
+                App()->makeWith(DeleteRackResponseModel::class, ['rack' => null])
             );
         }
 

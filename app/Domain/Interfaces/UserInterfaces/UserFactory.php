@@ -13,6 +13,4 @@ interface UserFactory
     public function makeFromResetPasswordRequest(ResetUserPasswordRequestModel $request): UserEntity;
 
     public function makeFromUpdateRequest(UpdateUserRequestModel $request): UserEntity;
-
-    public function makeFromId(int $id): UserEntity;
 }

@@ -2,7 +2,6 @@
 
 namespace App\UseCases\RoomUseCases\CreateRoomUseCase;
 
-use App\Domain\Interfaces\BuildingInterfaces\BuildingFactory;
 use App\Domain\Interfaces\BuildingInterfaces\BuildingRepository;
 use App\Domain\Interfaces\RoomInterfaces\RoomFactory;
 use App\Domain\Interfaces\RoomInterfaces\RoomRepository;
@@ -17,7 +16,6 @@ class CreateRoomInteractor implements CreateRoomInputPort
         private readonly CreateRoomOutputPort $output,
         private readonly BuildingRepository $buildingRepository,
         private readonly RoomRepository $roomRepository,
-        private readonly BuildingFactory $buildingFactory,
         private readonly RoomFactory $roomFactory
     ) {
     }
@@ -26,10 +24,8 @@ class CreateRoomInteractor implements CreateRoomInputPort
     {
         $room = $this->roomFactory->makeFromCreateRequest($request);
 
-        $building = $this->buildingFactory->makeFromId($request->getBuildingId());
-
         try {
-            $building = $this->buildingRepository->getById($building->getId());
+            $building = $this->buildingRepository->getById($request->getBuildingId());
         } catch (\Exception $e) {
             return $this->output->noSuchBuilding(
                 App()->makeWith(CreateRoomResponseModel::class, ['room' => $room])

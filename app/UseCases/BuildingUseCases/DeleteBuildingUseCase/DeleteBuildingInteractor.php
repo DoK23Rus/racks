@@ -2,7 +2,6 @@
 
 namespace App\UseCases\BuildingUseCases\DeleteBuildingUseCase;
 
-use App\Domain\Interfaces\BuildingInterfaces\BuildingFactory;
 use App\Domain\Interfaces\BuildingInterfaces\BuildingRepository;
 use App\Domain\Interfaces\ViewModel;
 use Illuminate\Support\Facades\Gate;
@@ -12,20 +11,17 @@ class DeleteBuildingInteractor implements DeleteBuildingInputPort
 {
     public function __construct(
         private readonly DeleteBuildingOutputPort $output,
-        private readonly BuildingRepository $buildingRepository,
-        private readonly BuildingFactory $buildingFactory
+        private readonly BuildingRepository $buildingRepository
     ) {
     }
 
     public function deleteBuilding(DeleteBuildingRequestModel $request): ViewModel
     {
-        $building = $this->buildingFactory->makeFromId($request->getId());
-
         try {
-            $building = $this->buildingRepository->getById($building->getId());
+            $building = $this->buildingRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchBuilding(
-                App()->makeWith(DeleteBuildingResponseModel::class, ['building' => $building])
+                App()->makeWith(DeleteBuildingResponseModel::class, ['building' => null])
             );
         }
 

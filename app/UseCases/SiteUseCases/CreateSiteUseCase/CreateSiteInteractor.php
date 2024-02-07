@@ -2,7 +2,6 @@
 
 namespace App\UseCases\SiteUseCases\CreateSiteUseCase;
 
-use App\Domain\Interfaces\DepartmentInterfaces\DepartmentFactory;
 use App\Domain\Interfaces\DepartmentInterfaces\DepartmentRepository;
 use App\Domain\Interfaces\SiteInterfaces\SiteFactory;
 use App\Domain\Interfaces\SiteInterfaces\SiteRepository;
@@ -16,7 +15,6 @@ class CreateSiteInteractor implements CreateSiteInputPort
         private readonly CreateSiteOutputPort $output,
         private readonly SiteRepository $siteRepository,
         private readonly DepartmentRepository $departmentRepository,
-        private readonly DepartmentFactory $departmentFactory,
         private readonly SiteFactory $siteFactory
     ) {
     }
@@ -25,10 +23,8 @@ class CreateSiteInteractor implements CreateSiteInputPort
     {
         $site = $this->siteFactory->makeFromCreateRequest($request);
 
-        $department = $this->departmentFactory->makeFromId($request->getDepartmentId());
-
         try {
-            $department = $this->departmentRepository->getById($department->getId());
+            $department = $this->departmentRepository->getById($request->getDepartmentId());
         } catch (\Exception $e) {
             return $this->output->noSuchDepartment(
                 App()->makeWith(CreateSiteResponseModel::class, ['site' => $site])

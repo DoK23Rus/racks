@@ -17,7 +17,7 @@ class UpdateRegionInteractor implements UpdateRegionInputPort
 
     public function updateRegion(UpdateRegionRequestModel $request): ViewModel
     {
-        $regionUpdating = $this->regionFactory->makeFromPutRequest($request);
+        $regionUpdating = $this->regionFactory->makeFromPatchRequest($request);
 
         try {
             $region = $this->regionRepository->getById($regionUpdating->getId());

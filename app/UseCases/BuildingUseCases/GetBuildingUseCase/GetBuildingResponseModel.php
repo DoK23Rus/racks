@@ -7,11 +7,11 @@ use App\Domain\Interfaces\BuildingInterfaces\BuildingEntity;
 class GetBuildingResponseModel
 {
     public function __construct(
-        private readonly BuildingEntity $building
+        private readonly ?BuildingEntity $building
     ) {
     }
 
-    public function getBuilding(): BuildingEntity
+    public function getBuilding(): ?BuildingEntity
     {
         return $this->building;
     }

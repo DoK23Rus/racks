@@ -10,13 +10,6 @@ use App\UseCases\RegionUseCases\UpdateRegionUseCase\UpdateRegionRequestModel;
 
 class RegionModelFactory implements RegionFactory
 {
-    public function makeFromId(int $id): RegionEntity
-    {
-        return new Region([
-            'id' => $id,
-        ]);
-    }
-
     public function makeFromCreateRequest(CreateRegionRequestModel $request): RegionEntity
     {
         return new Region([
@@ -24,7 +17,7 @@ class RegionModelFactory implements RegionFactory
         ]);
     }
 
-    public function makeFromPutRequest(UpdateRegionRequestModel $request): RegionEntity
+    public function makeFromPatchRequest(UpdateRegionRequestModel $request): RegionEntity
     {
         return new Region([
             'id' => $request->getId(),

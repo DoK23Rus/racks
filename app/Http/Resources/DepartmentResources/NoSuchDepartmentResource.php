@@ -22,9 +22,9 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchDepartmentResource extends JsonResource
 {
-    protected DepartmentEntity $department;
+    protected ?DepartmentEntity $department;
 
-    public function __construct(DepartmentEntity $department)
+    public function __construct(?DepartmentEntity $department)
     {
         parent::__construct($department);
         $this->department = $department;

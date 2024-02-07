@@ -7,9 +7,7 @@ use App\UseCases\SiteUseCases\UpdateSiteUseCase\UpdateSiteRequestModel;
 
 interface SiteFactory
 {
-    public function makeFromId(int $id): SiteEntity;
-
     public function makeFromCreateRequest(CreateSiteRequestModel $request): SiteEntity;
 
-    public function makeFromPutRequest(UpdateSiteRequestModel $request): SiteEntity;
+    public function makeFromPatchRequest(UpdateSiteRequestModel $request): SiteEntity;
 }

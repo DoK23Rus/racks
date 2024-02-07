@@ -2,7 +2,6 @@
 
 namespace App\UseCases\RoomUseCases\DeleteRoomUseCase;
 
-use App\Domain\Interfaces\RoomInterfaces\RoomFactory;
 use App\Domain\Interfaces\RoomInterfaces\RoomRepository;
 use App\Domain\Interfaces\ViewModel;
 use Illuminate\Support\Facades\Gate;
@@ -12,20 +11,17 @@ class DeleteRoomInteractor implements DeleteRoomInputPort
 {
     public function __construct(
         private readonly DeleteRoomOutputPort $output,
-        private readonly RoomRepository $roomRepository,
-        private readonly RoomFactory $roomFactory
+        private readonly RoomRepository $roomRepository
     ) {
     }
 
     public function deleteRoom(DeleteRoomRequestModel $request): ViewModel
     {
-        $room = $this->roomFactory->makeFromId($request->getId());
-
         try {
-            $room = $this->roomRepository->getById($room->getId());
+            $room = $this->roomRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchRoom(
-                App()->makeWith(DeleteRoomResponseModel::class, ['room' => $room])
+                App()->makeWith(DeleteRoomResponseModel::class, ['room' => null])
             );
         }
 

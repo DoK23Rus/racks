@@ -22,7 +22,7 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
 
     public function updateBuilding(UpdateBuildingRequestModel $request): ViewModel
     {
-        $buildingUpdating = $this->buildingFactory->makeFromId($request->getId());
+        $buildingUpdating = $this->buildingFactory->makeFromPatchRequest($request);
 
         try {
             $building = $this->buildingRepository->getById($buildingUpdating->getId());
@@ -33,8 +33,6 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
         }
 
         $site = $this->siteRepository->getById($buildingUpdating->getSiteId());
-
-        $buildingUpdating = $this->buildingFactory->makeFromPutRequest($request);
 
         if (! Gate::allows('departmentCheck', $building->getDepartmentId())) {
             return $this->output->permissionException(

@@ -11,13 +11,6 @@ use App\UseCases\DeviceUseCases\UpdateDeviceUseCase\UpdateDeviceRequestModel;
 
 class DeviceModelFactory implements DeviceFactory
 {
-    public function makeFromId(int $id): DeviceEntity
-    {
-        return new Device([
-            'id' => $id,
-        ]);
-    }
-
     public function makeFromPostRequest(CreateDeviceRequestModel $request): DeviceEntity
     {
         return new Device([
@@ -49,7 +42,7 @@ class DeviceModelFactory implements DeviceFactory
         ]);
     }
 
-    public function makeFromPutRequest(UpdateDeviceRequestModel $request): DeviceEntity
+    public function makeFromPatchRequest(UpdateDeviceRequestModel $request): DeviceEntity
     {
         return new Device([
             'id' => $request->getId(),

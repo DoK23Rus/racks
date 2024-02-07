@@ -22,7 +22,7 @@ class UpdateRackInteractor implements UpdateRackInputPort
 
     public function updateRack(UpdateRackRequestModel $request): ViewModel
     {
-        $rackUpdating = $this->rackFactory->makeFromId($request->getId());
+        $rackUpdating = $this->rackFactory->makeFromPatchRequest($request);
 
         try {
             $rack = $this->rackRepository->getById($rackUpdating->getId());
@@ -37,8 +37,6 @@ class UpdateRackInteractor implements UpdateRackInputPort
                 App()->makeWith(UpdateRackResponseModel::class, ['rack' => $rackUpdating])
             );
         }
-
-        $rackUpdating = $this->rackFactory->makeFromPutRequest($request);
 
         $rackUpdating->setUpdatedBy($request->getUserName());
 

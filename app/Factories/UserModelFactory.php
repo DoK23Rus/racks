@@ -42,11 +42,4 @@ class UserModelFactory implements UserFactory
             'department_id' => $request->getDepartmentId(),
         ]);
     }
-
-    public function makeFromId(int $id): UserEntity
-    {
-        return new User([
-            'id' => $id,
-        ]);
-    }
 }

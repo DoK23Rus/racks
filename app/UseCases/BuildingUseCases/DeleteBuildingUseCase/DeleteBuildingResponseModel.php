@@ -7,7 +7,7 @@ use App\Domain\Interfaces\BuildingInterfaces\BuildingEntity;
 class DeleteBuildingResponseModel
 {
     public function __construct(
-        private readonly BuildingEntity $building
+        private readonly ?BuildingEntity $building
     ) {
     }
 

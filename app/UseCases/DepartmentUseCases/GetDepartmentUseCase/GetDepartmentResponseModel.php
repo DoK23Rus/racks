@@ -7,11 +7,11 @@ use App\Domain\Interfaces\DepartmentInterfaces\DepartmentEntity;
 class GetDepartmentResponseModel
 {
     public function __construct(
-        private readonly DepartmentEntity $department
+        private readonly ?DepartmentEntity $department
     ) {
     }
 
-    public function getDepartment(): DepartmentEntity
+    public function getDepartment(): ?DepartmentEntity
     {
         return $this->department;
     }

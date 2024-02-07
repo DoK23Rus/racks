@@ -2,7 +2,6 @@
 
 namespace App\UseCases\UserUseCases\UpdateUserUseCase;
 
-use App\Domain\Interfaces\DepartmentInterfaces\DepartmentFactory;
 use App\Domain\Interfaces\DepartmentInterfaces\DepartmentRepository;
 use App\Domain\Interfaces\UserInterfaces\UserFactory;
 use App\Domain\Interfaces\UserInterfaces\UserRepository;
@@ -14,8 +13,7 @@ class UpdateUserInteractor implements UpdateUserInputPort
         private UpdateUserOutputPort $output,
         private UserRepository $userRepository,
         private DepartmentRepository $departmentRepository,
-        private DepartmentFactory $departmentFactory,
-        private UserFactory $userFactory,
+        private UserFactory $userFactory
     ) {
     }
 
@@ -31,10 +29,8 @@ class UpdateUserInteractor implements UpdateUserInputPort
             );
         }
 
-        $department = $this->departmentFactory->makeFromId($userUpdated->getDepartmentId());
-
         try {
-            $department = $this->departmentRepository->getById($department->getId());
+            $department = $this->departmentRepository->getById($userUpdated->getDepartmentId());
         } catch (\Exception $e) {
             return $this->output->noSuchDepartment(
                 App()->makeWith(UpdateUserResponseModel::class, ['user' => $userUpdated])

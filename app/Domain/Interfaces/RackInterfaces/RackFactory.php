@@ -9,7 +9,5 @@ interface RackFactory
 {
     public function makeFromCreateRequest(CreateRackRequestModel $request): RackEntity|RackBusinessRules;
 
-    public function makeFromId(int $id): RackEntity|RackBusinessRules;
-
-    public function makeFromPutRequest(UpdateRackRequestModel $request): RackEntity;
+    public function makeFromPatchRequest(UpdateRackRequestModel $request): RackEntity;
 }

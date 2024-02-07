@@ -22,9 +22,9 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchDeviceResource extends JsonResource
 {
-    protected DeviceEntity $device;
+    protected ?DeviceEntity $device;
 
-    public function __construct(DeviceEntity $device)
+    public function __construct(?DeviceEntity $device)
     {
         parent::__construct($device);
         $this->device = $device;

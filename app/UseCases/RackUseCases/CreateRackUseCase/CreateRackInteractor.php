@@ -4,7 +4,6 @@ namespace App\UseCases\RackUseCases\CreateRackUseCase;
 
 use App\Domain\Interfaces\RackInterfaces\RackFactory;
 use App\Domain\Interfaces\RackInterfaces\RackRepository;
-use App\Domain\Interfaces\RoomInterfaces\RoomFactory;
 use App\Domain\Interfaces\RoomInterfaces\RoomRepository;
 use App\Domain\Interfaces\ViewModel;
 use Illuminate\Support\Facades\DB;
@@ -17,8 +16,7 @@ class CreateRackInteractor implements CreateRackInputPort
         private readonly CreateRackOutputPort $output,
         private readonly RackRepository $rackRepository,
         private readonly RoomRepository $roomRepository,
-        private readonly RackFactory $rackFactory,
-        private readonly RoomFactory $roomFactory
+        private readonly RackFactory $rackFactory
     ) {
     }
 
@@ -26,10 +24,8 @@ class CreateRackInteractor implements CreateRackInputPort
     {
         $rack = $this->rackFactory->makeFromCreateRequest($request);
 
-        $room = $this->roomFactory->makeFromId($request->getRoomId());
-
         try {
-            $room = $this->roomRepository->getById($room->getId());
+            $room = $this->roomRepository->getById($request->getRoomId());
         } catch (\Exception $e) {
             return $this->output->noSuchRoom(
                 App()->makeWith(CreateRackResponseModel::class, ['rack' => $rack])

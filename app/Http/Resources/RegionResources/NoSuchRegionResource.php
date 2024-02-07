@@ -22,9 +22,9 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchRegionResource extends JsonResource
 {
-    protected RegionEntity $region;
+    protected ?RegionEntity $region;
 
-    public function __construct(RegionEntity $region)
+    public function __construct(?RegionEntity $region)
     {
         parent::__construct($region);
         $this->region = $region;

@@ -2,7 +2,6 @@
 
 namespace App\UseCases\UserUseCases\DeleteUserUseCase;
 
-use App\Domain\Interfaces\UserInterfaces\UserFactory;
 use App\Domain\Interfaces\UserInterfaces\UserRepository;
 use App\Domain\Interfaces\ViewModel;
 
@@ -10,20 +9,17 @@ class DeleteUserInteractor implements DeleteUserInputPort
 {
     public function __construct(
         private DeleteUserOutputPort $output,
-        private UserRepository $userRepository,
-        private UserFactory $userFactory,
+        private UserRepository $userRepository
     ) {
     }
 
     public function deleteUser(DeleteUserRequestModel $request): ViewModel
     {
-        $user = $this->userFactory->makeFromId($request->getId());
-
         try {
-            $user = $this->userRepository->getById($user->getId());
+            $user = $this->userRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchUser(
-                App()->makeWith(DeleteUserResponseModel::class, ['user' => $user])
+                App()->makeWith(DeleteUserResponseModel::class, ['user' => null])
             );
         }
 

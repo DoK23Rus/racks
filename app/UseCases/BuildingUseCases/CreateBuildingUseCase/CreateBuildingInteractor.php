@@ -4,7 +4,6 @@ namespace App\UseCases\BuildingUseCases\CreateBuildingUseCase;
 
 use App\Domain\Interfaces\BuildingInterfaces\BuildingFactory;
 use App\Domain\Interfaces\BuildingInterfaces\BuildingRepository;
-use App\Domain\Interfaces\SiteInterfaces\SiteFactory;
 use App\Domain\Interfaces\SiteInterfaces\SiteRepository;
 use App\Domain\Interfaces\ViewModel;
 use Illuminate\Support\Facades\DB;
@@ -17,8 +16,7 @@ class CreateBuildingInteractor implements CreateBuildingInputPort
         private readonly CreateBuildingOutputPort $output,
         private readonly BuildingRepository $buildingRepository,
         private readonly SiteRepository $siteRepository,
-        private readonly BuildingFactory $buildingFactory,
-        private readonly SiteFactory $siteFactory
+        private readonly BuildingFactory $buildingFactory
     ) {
     }
 
@@ -26,10 +24,8 @@ class CreateBuildingInteractor implements CreateBuildingInputPort
     {
         $building = $this->buildingFactory->makeFromCreateRequest($request);
 
-        $site = $this->siteFactory->makeFromId($request->getSiteId());
-
         try {
-            $site = $this->siteRepository->getById($site->getId());
+            $site = $this->siteRepository->getById($request->getSiteId());
         } catch (\Exception $e) {
             return $this->output->noSuchSite(
                 App()->makeWith(CreateBuildingResponseModel::class, ['building' => $building])

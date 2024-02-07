@@ -7,11 +7,11 @@ use App\Domain\Interfaces\DeviceInterfaces\DeviceEntity;
 class GetDeviceResponseModel
 {
     public function __construct(
-        private readonly DeviceEntity $device
+        private readonly ?DeviceEntity $device
     ) {
     }
 
-    public function getDevice(): DeviceEntity
+    public function getDevice(): ?DeviceEntity
     {
         return $this->device;
     }

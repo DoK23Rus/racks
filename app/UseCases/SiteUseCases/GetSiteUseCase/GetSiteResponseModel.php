@@ -3,16 +3,15 @@
 namespace App\UseCases\SiteUseCases\GetSiteUseCase;
 
 use App\Domain\Interfaces\SiteInterfaces\SiteEntity;
-use Illuminate\Http\Response;
 
-class GetSiteResponseModel extends Response
+class GetSiteResponseModel
 {
     public function __construct(
-        private readonly SiteEntity $site,
+        private readonly ?SiteEntity $site,
     ) {
     }
 
-    public function getSite(): SiteEntity
+    public function getSite(): ?SiteEntity
     {
         return $this->site;
     }

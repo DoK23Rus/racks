@@ -7,11 +7,11 @@ use App\Domain\Interfaces\RoomInterfaces\RoomEntity;
 class GetRoomResponseModel
 {
     public function __construct(
-        private readonly RoomEntity $room
+        private readonly ?RoomEntity $room
     ) {
     }
 
-    public function getRoom(): RoomEntity
+    public function getRoom(): ?RoomEntity
     {
         return $this->room;
     }

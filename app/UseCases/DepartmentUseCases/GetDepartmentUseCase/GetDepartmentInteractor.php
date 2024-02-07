@@ -2,7 +2,6 @@
 
 namespace App\UseCases\DepartmentUseCases\GetDepartmentUseCase;
 
-use App\Domain\Interfaces\DepartmentInterfaces\DepartmentFactory;
 use App\Domain\Interfaces\DepartmentInterfaces\DepartmentRepository;
 use App\Domain\Interfaces\ViewModel;
 
@@ -10,20 +9,17 @@ class GetDepartmentInteractor implements GetDepartmentInputPort
 {
     public function __construct(
         private readonly GetDepartmentOutputPort $output,
-        private readonly DepartmentRepository $departmentRepository,
-        private readonly DepartmentFactory $departmentFactory
+        private readonly DepartmentRepository $departmentRepository
     ) {
     }
 
     public function getDepartment(GetDepartmentRequestModel $request): ViewModel
     {
-        $department = $this->departmentFactory->makeFromId($request->getId());
-
         try {
-            $department = $this->departmentRepository->getById($department->getId());
+            $department = $this->departmentRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchDepartment(
-                App()->makeWith(GetDepartmentResponseModel::class, ['department' => $department])
+                App()->makeWith(GetDepartmentResponseModel::class, ['department' => null])
             );
         }
 

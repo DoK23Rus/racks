@@ -11,13 +11,6 @@ use App\UseCases\BuildingUseCases\UpdateBuildingUseCase\UpdateBuildingRequestMod
 
 class BuildingModelFactory implements BuildingFactory
 {
-    public function makeFromId(int $id): BuildingEntity
-    {
-        return new Building([
-            'id' => $id,
-        ]);
-    }
-
     public function makeFromCreateRequest(CreateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules
     {
         return new Building([
@@ -26,7 +19,7 @@ class BuildingModelFactory implements BuildingFactory
         ]);
     }
 
-    public function makeFromPutRequest(UpdateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules
+    public function makeFromPatchRequest(UpdateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules
     {
         return new Building([
             'id' => $request->getId(),

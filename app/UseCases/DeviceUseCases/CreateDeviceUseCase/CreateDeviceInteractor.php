@@ -4,7 +4,6 @@ namespace App\UseCases\DeviceUseCases\CreateDeviceUseCase;
 
 use App\Domain\Interfaces\DeviceInterfaces\DeviceFactory;
 use App\Domain\Interfaces\DeviceInterfaces\DeviceRepository;
-use App\Domain\Interfaces\RackInterfaces\RackFactory;
 use App\Domain\Interfaces\RackInterfaces\RackRepository;
 use App\Domain\Interfaces\ViewModel;
 use Illuminate\Support\Facades\DB;
@@ -17,8 +16,7 @@ class CreateDeviceInteractor implements CreateDeviceInputPort
         private readonly CreateDeviceOutputPort $output,
         private readonly DeviceRepository $deviceRepository,
         private readonly RackRepository $rackRepository,
-        private readonly DeviceFactory $deviceFactory,
-        private readonly RackFactory $rackFactory
+        private readonly DeviceFactory $deviceFactory
     ) {
     }
 
@@ -26,10 +24,8 @@ class CreateDeviceInteractor implements CreateDeviceInputPort
     {
         $device = $this->deviceFactory->makeFromPostRequest($request);
 
-        $rack = $this->rackFactory->makeFromId($request->getRackId());
-
         try {
-            $rack = $this->rackRepository->getById($rack->getId());
+            $rack = $this->rackRepository->getById($request->getRackId());
         } catch (\Exception $e) {
             return $this->output->noSuchRack(
                 App()->makeWith(CreateDeviceResponseModel::class, ['device' => $device])

@@ -22,9 +22,9 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchSiteResource extends JsonResource
 {
-    protected SiteEntity $site;
+    protected ?SiteEntity $site;
 
-    public function __construct(SiteEntity $site)
+    public function __construct(?SiteEntity $site)
     {
         parent::__construct($site);
         $this->site = $site;

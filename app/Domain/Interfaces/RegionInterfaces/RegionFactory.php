@@ -7,9 +7,7 @@ use App\UseCases\RegionUseCases\UpdateRegionUseCase\UpdateRegionRequestModel;
 
 interface RegionFactory
 {
-    public function makeFromId(int $id): RegionEntity;
-
     public function makeFromCreateRequest(CreateRegionRequestModel $request): RegionEntity;
 
-    public function makeFromPutRequest(UpdateRegionRequestModel $request): RegionEntity;
+    public function makeFromPatchRequest(UpdateRegionRequestModel $request): RegionEntity;
 }

@@ -17,7 +17,7 @@ class UpdateDepartmentInteractor implements UpdateDepartmentInputPort
 
     public function updateDepartment(UpdateDepartmentRequestModel $request): ViewModel
     {
-        $departmentUpdating = $this->departmentFactory->makeFromPutRequest($request);
+        $departmentUpdating = $this->departmentFactory->makeFromPatchRequest($request);
 
         try {
             $department = $this->departmentRepository->getById($departmentUpdating->getId());

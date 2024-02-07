@@ -22,9 +22,9 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchRackResource extends JsonResource
 {
-    protected RackEntity $rack;
+    protected ?RackEntity $rack;
 
-    public function __construct(RackEntity $rack)
+    public function __construct(?RackEntity $rack)
     {
         parent::__construct($rack);
         $this->rack = $rack;

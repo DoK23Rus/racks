@@ -2,7 +2,6 @@
 
 namespace App\UseCases\SiteUseCases\DeleteSiteUseCase;
 
-use App\Domain\Interfaces\SiteInterfaces\SiteFactory;
 use App\Domain\Interfaces\SiteInterfaces\SiteRepository;
 use App\Domain\Interfaces\ViewModel;
 use Illuminate\Support\Facades\Gate;
@@ -12,20 +11,17 @@ class DeleteSiteInteractor implements DeleteSiteInputPort
 {
     public function __construct(
         private readonly DeleteSiteOutputPort $output,
-        private readonly SiteRepository $siteRepository,
-        private readonly SiteFactory $siteFactory
+        private readonly SiteRepository $siteRepository
     ) {
     }
 
     public function deleteSite(DeleteSiteRequestModel $request): ViewModel
     {
-        $site = $this->siteFactory->makeFromId($request->getId());
-
         try {
-            $site = $this->siteRepository->getById($site->getId());
+            $site = $this->siteRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchSite(
-                App()->makeWith(DeleteSiteResponseModel::class, ['site' => $site])
+                App()->makeWith(DeleteSiteResponseModel::class, ['site' => null])
             );
         }
 

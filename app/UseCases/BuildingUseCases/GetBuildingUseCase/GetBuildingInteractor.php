@@ -2,7 +2,6 @@
 
 namespace App\UseCases\BuildingUseCases\GetBuildingUseCase;
 
-use App\Domain\Interfaces\BuildingInterfaces\BuildingFactory;
 use App\Domain\Interfaces\BuildingInterfaces\BuildingRepository;
 use App\Domain\Interfaces\ViewModel;
 
@@ -10,20 +9,17 @@ class GetBuildingInteractor implements GetBuildingInputPort
 {
     public function __construct(
         private readonly GetBuildingOutputPort $output,
-        private readonly BuildingRepository $buildingRepository,
-        private readonly BuildingFactory $buildingFactory
+        private readonly BuildingRepository $buildingRepository
     ) {
     }
 
     public function getBuilding(GetBuildingRequestModel $request): ViewModel
     {
-        $building = $this->buildingFactory->makeFromId($request->getId());
-
         try {
-            $building = $this->buildingRepository->getById($building->getId());
+            $building = $this->buildingRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchBuilding(
-                App()->makeWith(GetBuildingResponseModel::class, ['building' => $building])
+                App()->makeWith(GetBuildingResponseModel::class, ['building' => null])
             );
         }
 
