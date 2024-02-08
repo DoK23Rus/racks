@@ -22,9 +22,9 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchBuildingResource extends JsonResource
 {
-    protected ?RoomEntity $room;
+    protected RoomEntity $room;
 
-    public function __construct(?RoomEntity $room)
+    public function __construct(RoomEntity $room)
     {
         parent::__construct($room);
         $this->room = $room;
