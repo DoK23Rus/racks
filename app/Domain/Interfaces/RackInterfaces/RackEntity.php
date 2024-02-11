@@ -118,9 +118,9 @@ interface RackEntity
 
     public function setRoomId(?int $roomId): void;
 
-    public function getDepartmentId(): int;
+    public function getDepartmentId(): ?int;
 
-    public function setDepartmentId(int $departmentId): void;
+    public function setDepartmentId(?int $departmentId): void;
 
     public function room(): BelongsTo;
 
@@ -130,23 +130,17 @@ interface RackEntity
 
     public function getAttributeSet(): RackAttributesValueObject;
 
-    public function addNewBusyUnits(array $newUnits, bool $side): void;
-
-    public function deleteOldBusyUnits(array $oldUnits, bool $side): void;
-
-    public function updateBusyUnits(array $updatedBusyUnitsForSide, bool $side): void;
-
     public function getCreatedAt(): string;
 
     public function getUpdatedAt(): string;
 
-    public function getUpdatedBy(): string;
+    public function getUpdatedBy(): ?string;
 
-    public function setUpdatedBy(string $updatedBy);
+    public function setUpdatedBy(?string $updatedBy);
 
-    public function setOldName(string $oldName): void;
+    public function setOldName(?string $oldName): void;
 
-    public function getOldName(): string;
+    public function getOldName(): ?string;
 
     public function toArray(): array;
 }

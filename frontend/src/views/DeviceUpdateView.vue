@@ -95,8 +95,7 @@ export default {
         responsible: form.responsible,
         financially_responsible_person: form.financiallyResponsiblePerson,
         inventory_number: form.inventoryNumber,
-        fixed_asset: form.fixedAsset,
-        rack_id: this.rack_id
+        fixed_asset: form.fixedAsset
       };
       const response = await putObject('device', this.$route.params.id, formData);
       if (response.status === RESPONSE_STATUS.ACCEPTED) {

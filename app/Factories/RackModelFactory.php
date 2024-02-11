@@ -73,6 +73,8 @@ class RackModelFactory implements RackFactory
             'power_sockets_ups' => $request->getPowerSocketsUps(),
             'has_external_ups' => $request->getHasExternalUps(),
             'has_cooler' => $request->getHasCooler(),
+            'room_id' => $request->getRoomId(),
+            'department_id' => $request->getDepartmentId(),
         ]);
     }
 }

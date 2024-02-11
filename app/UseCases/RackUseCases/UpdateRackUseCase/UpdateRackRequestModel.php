@@ -155,4 +155,14 @@ class UpdateRackRequestModel
     {
         return $this->attributes['has_cooler'] ?? null;
     }
+
+    public function getRoomId(): ?int
+    {
+        return null;
+    }
+
+    public function getDepartmentId(): ?int
+    {
+        return null;
+    }
 }

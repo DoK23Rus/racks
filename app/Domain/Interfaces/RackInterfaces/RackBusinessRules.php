@@ -15,4 +15,10 @@ interface RackBusinessRules
     public function isNameValid(array $namesList): bool;
 
     public function isNameChanging(string $rackOldName): bool;
+
+    public function addNewBusyUnits(array $newUnits, bool $side): void;
+
+    public function deleteOldBusyUnits(array $oldUnits, bool $side): void;
+
+    public function updateBusyUnits(array $updatedBusyUnitsForSide, bool $side): void;
 }

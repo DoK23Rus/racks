@@ -192,5 +192,21 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@mail.com',
             'department_id' => 1,
         ]);
+
+        User::create([
+            'name' => 'first_user',
+            'password' => Hash::make('first_testing'),
+            'full_name' => 'First Testing',
+            'email' => 'firsttest@mail.com',
+            'department_id' => 1,
+        ]);
+
+        User::create([
+            'name' => 'second_user',
+            'password' => Hash::make('second_testing'),
+            'full_name' => 'Second Testing',
+            'email' => 'secondtest@mail.com',
+            'department_id' => 2,
+        ]);
     }
 }

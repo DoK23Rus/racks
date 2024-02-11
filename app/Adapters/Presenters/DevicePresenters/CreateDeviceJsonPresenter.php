@@ -92,7 +92,7 @@ class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
         return App()->makeWith(JsonResourceViewModel::class,
             [
                 'resource' => App()->makeWith(
-                    PermissionExceptionResource::class, ['building' => $response->getDevice()]),
+                    PermissionExceptionResource::class, ['device' => $response->getDevice()]),
                 'statusCode' => 403,
             ]
         );

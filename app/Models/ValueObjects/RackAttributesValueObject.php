@@ -6,7 +6,7 @@ use App\Domain\Interfaces\RackInterfaces\RackEntity;
 
 class RackAttributesValueObject
 {
-    private array $attributesForRackUpdate = [];
+    private array $attributesForRack = [];
 
     private RackEntity $rack;
 
@@ -38,13 +38,15 @@ class RackAttributesValueObject
         $this->setUnitDepth();
         $this->setWidth();
         $this->setResponsible();
+        $this->setDepartmentId();
+        $this->setRoomId();
     }
 
     public function setName(): void
     {
         $name = $this->rack->getName();
         if ($name) {
-            $this->attributesForRackUpdate += ['name' => $name];
+            $this->attributesForRack += ['name' => $name];
         }
     }
 
@@ -52,7 +54,7 @@ class RackAttributesValueObject
     {
         $vendor = $this->rack->getVendor();
         if ($vendor) {
-            $this->attributesForRackUpdate += ['vendor' => $vendor];
+            $this->attributesForRack += ['vendor' => $vendor];
         }
     }
 
@@ -60,7 +62,7 @@ class RackAttributesValueObject
     {
         $updatedBy = $this->rack->getUpdatedBy();
         if ($updatedBy) {
-            $this->attributesForRackUpdate += ['updated_by' => $updatedBy];
+            $this->attributesForRack += ['updated_by' => $updatedBy];
         }
     }
 
@@ -68,7 +70,7 @@ class RackAttributesValueObject
     {
         $model = $this->rack->getModel();
         if ($model) {
-            $this->attributesForRackUpdate += ['model' => $model];
+            $this->attributesForRack += ['model' => $model];
         }
     }
 
@@ -76,7 +78,7 @@ class RackAttributesValueObject
     {
         $description = $this->rack->getDescription();
         if ($description) {
-            $this->attributesForRackUpdate += ['description' => $description];
+            $this->attributesForRack += ['description' => $description];
         }
     }
 
@@ -84,7 +86,7 @@ class RackAttributesValueObject
     {
         $hasNumberingFromTopToBottom = $this->rack->getHasNumberingFromTopToBottom();
         if (! is_null($hasNumberingFromTopToBottom)) {
-            $this->attributesForRackUpdate += ['has_numbering_from_top_to_bottom' => $hasNumberingFromTopToBottom];
+            $this->attributesForRack += ['has_numbering_from_top_to_bottom' => $hasNumberingFromTopToBottom];
         }
     }
 
@@ -92,7 +94,7 @@ class RackAttributesValueObject
     {
         $responsible = $this->rack->getResponsible();
         if ($responsible) {
-            $this->attributesForRackUpdate += ['responsible' => $responsible];
+            $this->attributesForRack += ['responsible' => $responsible];
         }
     }
 
@@ -100,7 +102,7 @@ class RackAttributesValueObject
     {
         $financiallyResponsiblePerson = $this->rack->getFinanciallyResponsiblePerson();
         if ($financiallyResponsiblePerson) {
-            $this->attributesForRackUpdate += ['financially_responsible_person' => $financiallyResponsiblePerson];
+            $this->attributesForRack += ['financially_responsible_person' => $financiallyResponsiblePerson];
         }
     }
 
@@ -108,7 +110,7 @@ class RackAttributesValueObject
     {
         $inventoryNumber = $this->rack->getInventoryNumber();
         if ($inventoryNumber) {
-            $this->attributesForRackUpdate += ['inventory_number' => $inventoryNumber];
+            $this->attributesForRack += ['inventory_number' => $inventoryNumber];
         }
     }
 
@@ -116,7 +118,7 @@ class RackAttributesValueObject
     {
         $fixedAsset = $this->rack->getFixedAsset();
         if ($fixedAsset) {
-            $this->attributesForRackUpdate += ['fixed_asset' => $fixedAsset];
+            $this->attributesForRack += ['fixed_asset' => $fixedAsset];
         }
     }
 
@@ -124,7 +126,7 @@ class RackAttributesValueObject
     {
         $linkToDocs = $this->rack->getLinkToDocs();
         if ($linkToDocs) {
-            $this->attributesForRackUpdate += ['link_to_docs' => $linkToDocs];
+            $this->attributesForRack += ['link_to_docs' => $linkToDocs];
         }
     }
 
@@ -132,7 +134,7 @@ class RackAttributesValueObject
     {
         $row = $this->rack->getRow();
         if ($row) {
-            $this->attributesForRackUpdate += ['row' => $row];
+            $this->attributesForRack += ['row' => $row];
         }
     }
 
@@ -140,7 +142,7 @@ class RackAttributesValueObject
     {
         $place = $this->rack->getPlace();
         if ($place) {
-            $this->attributesForRackUpdate += ['place' => $place];
+            $this->attributesForRack += ['place' => $place];
         }
     }
 
@@ -148,7 +150,7 @@ class RackAttributesValueObject
     {
         $height = $this->rack->getHeight();
         if ($height) {
-            $this->attributesForRackUpdate += ['height' => $height];
+            $this->attributesForRack += ['height' => $height];
         }
     }
 
@@ -156,7 +158,7 @@ class RackAttributesValueObject
     {
         $width = $this->rack->getWidth();
         if ($width) {
-            $this->attributesForRackUpdate += ['width' => $width];
+            $this->attributesForRack += ['width' => $width];
         }
     }
 
@@ -164,7 +166,7 @@ class RackAttributesValueObject
     {
         $depth = $this->rack->getDepth();
         if ($depth) {
-            $this->attributesForRackUpdate += ['depth' => $depth];
+            $this->attributesForRack += ['depth' => $depth];
         }
     }
 
@@ -172,7 +174,7 @@ class RackAttributesValueObject
     {
         $unitWidth = $this->rack->getUnitWidth();
         if ($unitWidth) {
-            $this->attributesForRackUpdate += ['unit_width' => $unitWidth];
+            $this->attributesForRack += ['unit_width' => $unitWidth];
         }
     }
 
@@ -180,7 +182,7 @@ class RackAttributesValueObject
     {
         $unitDepth = $this->rack->getUnitDepth();
         if ($unitDepth) {
-            $this->attributesForRackUpdate += ['unit_depth' => $unitDepth];
+            $this->attributesForRack += ['unit_depth' => $unitDepth];
         }
     }
 
@@ -188,7 +190,7 @@ class RackAttributesValueObject
     {
         $type = $this->rack->getType();
         if ($type) {
-            $this->attributesForRackUpdate += ['type' => $type];
+            $this->attributesForRack += ['type' => $type];
         }
     }
 
@@ -196,7 +198,7 @@ class RackAttributesValueObject
     {
         $frame = $this->rack->getFrame();
         if ($frame) {
-            $this->attributesForRackUpdate += ['frame' => $frame];
+            $this->attributesForRack += ['frame' => $frame];
         }
     }
 
@@ -204,7 +206,7 @@ class RackAttributesValueObject
     {
         $placeType = $this->rack->getPlaceType();
         if ($placeType) {
-            $this->attributesForRackUpdate += ['place_type' => $placeType];
+            $this->attributesForRack += ['place_type' => $placeType];
         }
     }
 
@@ -212,7 +214,7 @@ class RackAttributesValueObject
     {
         $maxLoad = $this->rack->getMaxLoad();
         if ($maxLoad) {
-            $this->attributesForRackUpdate += ['max_load' => $maxLoad];
+            $this->attributesForRack += ['max_load' => $maxLoad];
         }
     }
 
@@ -220,7 +222,7 @@ class RackAttributesValueObject
     {
         $powerSockets = $this->rack->getPowerSockets();
         if ($powerSockets) {
-            $this->attributesForRackUpdate += ['power_sockets' => $powerSockets];
+            $this->attributesForRack += ['power_sockets' => $powerSockets];
         }
     }
 
@@ -228,7 +230,7 @@ class RackAttributesValueObject
     {
         $powerSocketsUps = $this->rack->getPowerSocketsUps();
         if ($powerSocketsUps) {
-            $this->attributesForRackUpdate += ['power_sockets_ups' => $powerSocketsUps];
+            $this->attributesForRack += ['power_sockets_ups' => $powerSocketsUps];
         }
     }
 
@@ -236,7 +238,7 @@ class RackAttributesValueObject
     {
         $hasExternalUps = $this->rack->getHasExternalUps();
         if ($hasExternalUps) {
-            $this->attributesForRackUpdate += ['has_external_ups' => $hasExternalUps];
+            $this->attributesForRack += ['has_external_ups' => $hasExternalUps];
         }
     }
 
@@ -244,12 +246,28 @@ class RackAttributesValueObject
     {
         $hasCooler = $this->rack->getHasCooler();
         if ($hasCooler) {
-            $this->attributesForRackUpdate += ['has_cooler' => $hasCooler];
+            $this->attributesForRack += ['has_cooler' => $hasCooler];
+        }
+    }
+
+    public function setDepartmentId(): void
+    {
+        $departmentId = $this->rack->getDepartmentId();
+        if ($departmentId) {
+            $this->attributesForRack += ['department_id' => $departmentId];
+        }
+    }
+
+    public function setRoomId(): void
+    {
+        $roomId = $this->rack->getRoomId();
+        if ($roomId) {
+            $this->attributesForRack += ['room_id' => $roomId];
         }
     }
 
     public function getArray(): array
     {
-        return $this->attributesForRackUpdate;
+        return $this->attributesForRack;
     }
 }

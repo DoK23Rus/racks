@@ -106,9 +106,9 @@ interface DeviceEntity
 
     public function setRackId(?int $rackId): void;
 
-    public function getDepartmentId(): int;
+    public function getDepartmentId(): ?int;
 
-    public function setDepartmentId(int $departmentId): void;
+    public function setDepartmentId(?int $departmentId): void;
 
     public function getLocation(): ?bool;
 

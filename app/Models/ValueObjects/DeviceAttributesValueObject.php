@@ -43,7 +43,10 @@ class DeviceAttributesValueObject
 
     public function setRackId(): void
     {
-        $this->attributesForDevice += ['rack_id' => $this->device->getRackId()];
+        $rackId = $this->device->getRackId();
+        if ($rackId !== null) {
+            $this->attributesForDevice += ['rack_id' => $this->device->getRackId()];
+        }
     }
 
     public function setUnits(): void

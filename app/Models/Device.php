@@ -315,12 +315,12 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
         $this->attributes['rack_id'] = $rackId;
     }
 
-    public function getDepartmentId(): int
+    public function getDepartmentId(): ?int
     {
         return $this->attributes['department_id'];
     }
 
-    public function setDepartmentId(int $departmentId): void
+    public function setDepartmentId(?int $departmentId): void
     {
         $this->attributes['department_id'] = $departmentId;
     }

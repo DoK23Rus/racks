@@ -98,8 +98,7 @@ export default {
         power_sockets: form.powerSockets,
         power_sockets_ups: form.powerSocketsUps,
         has_external_ups: form.hasExternalUps,
-        has_cooler: form.hasCooler,
-        room_id: this.roomId
+        has_cooler: form.hasCooler
       };
       const response = await putObject('rack', this.$route.params.id, formData);
       if (response.status === RESPONSE_STATUS.ACCEPTED) {

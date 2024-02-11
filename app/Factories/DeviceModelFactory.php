@@ -70,6 +70,9 @@ class DeviceModelFactory implements DeviceFactory
             'inventory_number' => $request->getInventoryNumber(),
             'fixed_asset' => $request->getFixedAsset(),
             'link_to_docs' => $request->getLinkToDocs(),
+            'rack_id' => $request->getRackId(),
+            'department_id' => $request->getDepartmentId(),
+            'updated_by' => $request->getUpdatedBy(),
         ]);
     }
 }

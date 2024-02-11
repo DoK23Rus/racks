@@ -28,6 +28,23 @@ class Room extends Model implements RoomBusinessRules, RoomEntity
         'updated_at',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Business rules
+    |--------------------------------------------------------------------------
+    */
+    public function isNameValid(array $namesList): bool
+    {
+        if (in_array($this->getName(), $namesList)) {
+            return false;
+        }
+
+        return true;
+    }
+    /*
+    |--------------------------------------------------------------------------
+    */
+
     public function getId(): int
     {
         return $this->attributes['id'];
@@ -96,14 +113,5 @@ class Room extends Model implements RoomBusinessRules, RoomEntity
     public function toArray(): array
     {
         return parent::toArray();
-    }
-
-    public function isNameValid(array $namesList): bool
-    {
-        if (in_array($this->getName(), $namesList)) {
-            return false;
-        }
-
-        return true;
     }
 }

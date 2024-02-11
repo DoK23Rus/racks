@@ -57,4 +57,9 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         sort($back);
         $this->back = $back;
     }
+
+    public function test(): int
+    {
+        return 123;
+    }
 }

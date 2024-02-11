@@ -145,4 +145,19 @@ class UpdateDeviceRequestModel
     {
         return $this->attributes['link_to_docs'] ?? null;
     }
+
+    public function getRackId(): ?int
+    {
+        return null;
+    }
+
+    public function getDepartmentId(): ?int
+    {
+        return null;
+    }
+
+    public function getUpdatedBy(): ?string
+    {
+        return null;
+    }
 }

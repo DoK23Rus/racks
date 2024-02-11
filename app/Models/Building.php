@@ -25,6 +25,23 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
         'updated_at',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Business rules
+    |--------------------------------------------------------------------------
+    */
+    public function isNameValid(array $namesList): bool
+    {
+        if (in_array($this->getName(), $namesList)) {
+            return false;
+        }
+
+        return true;
+    }
+    /*
+    |--------------------------------------------------------------------------
+    */
+
     public function getId(): int
     {
         return $this->attributes['id'];
@@ -88,15 +105,6 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     public function children(): HasMany
     {
         return $this->hasMany(Room::class, 'building_id');
-    }
-
-    public function isNameValid(array $namesList): bool
-    {
-        if (in_array($this->getName(), $namesList)) {
-            return false;
-        }
-
-        return true;
     }
 
     public function toArray(): array

@@ -57,6 +57,113 @@ class Rack extends Model implements RackBusinessRules, RackEntity
         'updated_at',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Business rules
+    |--------------------------------------------------------------------------
+    */
+    public function updateBusyUnits(array $updatedBusyUnitsForSide, bool $side): void
+    {
+        if (! $side) {
+            $busyUnitsArray = [
+                'front' => $updatedBusyUnitsForSide,
+                'back' => $this->getBusyUnits()->getArray(true),
+            ];
+        } else {
+            $busyUnitsArray = [
+                'front' => $this->getBusyUnits()->getArray(false),
+                'back' => $updatedBusyUnitsForSide,
+            ];
+        }
+        $this->attributes['busy_units'] = App()->makeWith(
+            RackBusyUnitsValueObject::class,
+            ['busyUnits' => $busyUnitsArray]
+        );
+    }
+
+    public function addNewBusyUnits(array $newUnits, bool $side): void
+    {
+        $updatedBusyUnitsForSide = array_merge(
+            $this->getBusyUnits()->getArray($side),
+            $newUnits
+        );
+        sort($updatedBusyUnitsForSide);
+        $this->updateBusyUnits($updatedBusyUnitsForSide, $side);
+    }
+
+    public function deleteOldBusyUnits(array $oldUnits, bool $side): void
+    {
+        $updatedBusyUnitsForSide = array_diff(
+            $this->getBusyUnits()->getArray($side),
+            $oldUnits
+        );
+        sort($updatedBusyUnitsForSide);
+        $this->updateBusyUnits($updatedBusyUnitsForSide, $side);
+    }
+
+    public function isDeviceAddable(DeviceEntity $device): bool
+    {
+        $unitsIntersect = array_intersect(
+            $device->getUnits()->getArray(),
+            $this->getBusyUnits()->getArray(
+                $device->getLocation()
+            )
+        );
+        if (count($unitsIntersect) > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function hasDeviceUnits(DeviceEntity $device): bool
+    {
+        $deviceUnits = $device->getUnits()->getArray();
+        if (end($deviceUnits) > $this->getAmount()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isDeviceMovingValid(DeviceEntity $device, DeviceEntity $deviceUpdating): bool
+    {
+        $busyUnitsForMove = array_diff(
+            $this->getBusyUnits()->getArray($device->getLocation()),
+            $device->getUnits()->getArray()
+        );
+        $unitsIntersect = array_intersect(
+            $deviceUpdating->getUnits()->getArray(),
+            $busyUnitsForMove
+        );
+        if (count($unitsIntersect) > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isNameValid(array $namesList): bool
+    {
+        if (in_array($this->getName(), $namesList)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isNameChanging(string $rackOldName): bool
+    {
+        if ($this->getName() !== $rackOldName) {
+            return true;
+        }
+
+        return false;
+    }
+    /*
+    |--------------------------------------------------------------------------
+    */
+
     public function getId(): int
     {
         return $this->attributes['id'];
@@ -337,12 +444,12 @@ class Rack extends Model implements RackBusinessRules, RackEntity
         $this->attributes['room_id'] = $roomId;
     }
 
-    public function getDepartmentId(): int
+    public function getDepartmentId(): ?int
     {
         return $this->attributes['department_id'];
     }
 
-    public function setDepartmentId(int $departmentId): void
+    public function setDepartmentId(?int $departmentId): void
     {
         $this->attributes['department_id'] = $departmentId;
     }
@@ -357,12 +464,12 @@ class Rack extends Model implements RackBusinessRules, RackEntity
         return $this->attributes['updated_at'];
     }
 
-    public function setOldName(string $oldName): void
+    public function setOldName(?string $oldName): void
     {
         $this->attributes['old_name'] = $oldName;
     }
 
-    public function getOldName(): string
+    public function getOldName(): ?string
     {
         return $this->attributes['old_name'];
     }
@@ -415,12 +522,12 @@ class Rack extends Model implements RackBusinessRules, RackEntity
         );
     }
 
-    public function getUpdatedBy(): string
+    public function getUpdatedBy(): ?string
     {
         return $this->attributes['updated_by'];
     }
 
-    public function setUpdatedBy(string $updatedBy): void
+    public function setUpdatedBy(?string $updatedBy): void
     {
         $this->attributes['updated_by'] = $updatedBy;
     }
@@ -433,104 +540,5 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     public function toArray(): array
     {
         return parent::toArray();
-    }
-
-    public function updateBusyUnits(array $updatedBusyUnitsForSide, bool $side): void
-    {
-        if (! $side) {
-            $busyUnitsArray = [
-                'front' => $updatedBusyUnitsForSide,
-                'back' => $this->getBusyUnits()->getArray(false),
-            ];
-        } else {
-            $busyUnitsArray = [
-                'front' => $this->getBusyUnits()->getArray(true),
-                'back' => $updatedBusyUnitsForSide,
-            ];
-        }
-        $this->attributes['busy_units'] = App()->makeWith(
-            RackBusyUnitsValueObject::class,
-            ['busyUnits' => $busyUnitsArray]
-        );
-    }
-
-    public function addNewBusyUnits(array $newUnits, bool $side): void
-    {
-        $updatedBusyUnitsForSide = array_merge(
-            $this->getBusyUnits()->getArray($side),
-            $newUnits
-        );
-        sort($updatedBusyUnitsForSide);
-        $this->updateBusyUnits($updatedBusyUnitsForSide, $side);
-    }
-
-    public function deleteOldBusyUnits(array $oldUnits, bool $side): void
-    {
-        $updatedBusyUnitsForSide = array_diff(
-            $this->getBusyUnits()->getArray($side),
-            $oldUnits
-        );
-        sort($updatedBusyUnitsForSide);
-        $this->updateBusyUnits($updatedBusyUnitsForSide, $side);
-    }
-
-    public function isDeviceAddable(DeviceEntity $device): bool
-    {
-        $unitsIntersect = array_intersect(
-            $device->getUnits()->getArray(),
-            $this->getBusyUnits()->getArray(
-                $device->getLocation()
-            )
-        );
-        if (count($unitsIntersect) > 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function hasDeviceUnits(DeviceEntity $device): bool
-    {
-        $deviceUnits = $device->getUnits()->getArray();
-        if (end($deviceUnits) > $this->getAmount()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isDeviceMovingValid(DeviceEntity $device, DeviceEntity $deviceUpdating): bool
-    {
-        $busyUnitsForMove = array_diff(
-            $this->getBusyUnits()->getArray($device->getLocation()),
-            $device->getUnits()->getArray()
-        );
-        $unitsIntersect = array_intersect(
-            $deviceUpdating->getUnits()->getArray(),
-            $busyUnitsForMove
-        );
-        if (count($unitsIntersect) > 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isNameValid(array $namesList): bool
-    {
-        if (in_array($this->getName(), $namesList)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function isNameChanging(string $rackOldName): bool
-    {
-        if ($this->getName() !== $rackOldName) {
-            return true;
-        }
-
-        return false;
     }
 }
