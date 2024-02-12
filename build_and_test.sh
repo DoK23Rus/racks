@@ -4,6 +4,7 @@
 PHP_UID="$(id -u)"
 PHP_GID="$(id -g)"
 NET=0.0.0.0
+PHPUNIT_MEM_LIMIT="128M"
 PHPSTAN_MEM_LIMIT="512M"
 BACKEND_TESTING_PORT=81
 FRONTEND_TESTING_PORT=8081
@@ -20,6 +21,7 @@ SUITE_NAME="Smoke_tests"
 export PHP_UID
 export PHP_GID
 export NET
+export PHPUNIT_MEM_LIMIT
 export PHPSTAN_MEM_LIMIT
 export BACKEND_TESTING_PORT
 export FRONTEND_TESTING_PORT
@@ -34,12 +36,47 @@ export SUITE_NAME
 export SHM_SIZE
 export API_VERSION
 
+# Locals
 TEST_CONTAINER="e2e-tests"
+DB_CONTAINER="db-testing"
+DB_USER="racks"
+DB_PASS="racks"
 
 # Before running, make sure $USER is a member of the docker group
 docker compose -f docker-compose.test.yml -p racks down
 docker compose -f docker-compose.test.yml -p racks --profile test build --progress=plain 2>&1 | tee ./logs/run.log &&
 docker compose -f docker-compose.test.yml -p racks --profile test up 2>&1 | tee -a ./logs/run.log &
+
+# Wait for DB
+docker inspect $DB_CONTAINER > /dev/null 2>/dev/null
+while [ $? -eq 1 ]
+do
+    sleep 1
+    docker inspect $DB_CONTAINER > /dev/null 2>/dev/null
+done
+
+until [[ $(docker inspect $DB_CONTAINER --format='{{.State.Health.Status}}') == 'healthy' ]]
+do
+    sleep 1
+done
+
+# Test db for laravel feature tests
+docker compose exec -T $DB_CONTAINER mysql --user=root --password="$DB_PASS" <<-EOSQL
+    CREATE DATABASE IF NOT EXISTS testing;
+    GRANT ALL PRIVILEGES ON \`testing%\`.* TO '$DB_USER'@'%';
+    USE testing; CREATE TABLE IF NOT EXISTS healthcheck (Dummy varchar(255));
+EOSQL
+
+TEST_DB_HEALTHCHECK="CALL sys.table_exists('testing', 'healthcheck',  @exists);"
+
+docker compose exec -T $DB_CONTAINER mysql --user=root --password="$DB_PASS" -e \
+    "$TEST_DB_HEALTHCHECK" > /dev/null 2>/dev/null
+while [ $? -eq 1 ]
+do
+    sleep 1
+    docker compose exec -T $DB_CONTAINER mysql --user=root --password="$DB_PASS" -e \
+        "$TEST_DB_HEALTHCHECK" > /dev/null 2>/dev/null
+done
 
 # Wait for build
 docker inspect "$TEST_CONTAINER" > /dev/null 2>/dev/null
@@ -52,13 +89,13 @@ done
 # Wait for the last service to start
 while [[ $(docker inspect "$TEST_CONTAINER" --format='{{.State.Running}}') == 'false' ]]
 do
-	sleep 1
+    sleep 1
 done
 
 # Wait for last service to stop
 while [[ $(docker inspect "$TEST_CONTAINER" --format='{{.State.Running}}') == 'true' ]]
 do
-	sleep 1
+    sleep 1
 done
 
 PINT=$(docker inspect pint --format='{{.State.ExitCode}}')

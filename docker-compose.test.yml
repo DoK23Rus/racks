@@ -5,15 +5,20 @@ services:
   db-testing:
     image: 'mysql/mysql-server:8.0'
     container_name: db-testing
+    domainname: db-testing
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
-      - db:/var/lib/mysql
+      - 'db:/var/lib/mysql'
+    tmpfs:
+      - /var/lib/mysql
     healthcheck:
-      test: mysqladmin ping -p${DB_PASSWORD}
+      test: mysqladmin ping -p${DB_USERNAME}
       retries: 3
       timeout: 5s
     profiles: ['test',]
@@ -71,9 +76,10 @@ services:
     <<: *backend-testing
     container_name: phpunit
     domainname: phpunit
-    command: ./vendor/bin/phpunit
+    command: ./vendor/bin/phpunit -d memory_limit=${PHPUNIT_MEM_LIMIT}
     environment:
       - ROLE=phpunit
+      - DB_HOST=db-testing
 
   # E2E testing containers
   frontend-testing:
