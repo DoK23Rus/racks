@@ -10,7 +10,7 @@
 ![](https://img.shields.io/badge/sail-%23c6302b) ![](https://img.shields.io/badge/larastan-%23c6302b) ![](https://img.shields.io/badge/telescope-%23c6302b) ![](https://img.shields.io/badge/pint-%23c6302b)  
 ![](https://img.shields.io/badge/phpunit-%23625c98) ![](https://img.shields.io/badge/phpMyAdmin-%23625c98) ![](https://img.shields.io/badge/tymon/jwt--auth-%23625c98) ![](https://img.shields.io/badge/darkaonline/l5--swagger-%23625c98)  
 ![](https://img.shields.io/badge/unittest-blue) ![](https://img.shields.io/badge/selenium-blue) ![](https://img.shields.io/badge/concurrent.futures-blue) ![](https://img.shields.io/badge/html--testRunner-blue) ![](https://img.shields.io/badge/selenium%20grid-blue)    
-![](https://img.shields.io/badge/vuelidate-%2342b883) ![](https://img.shields.io/badge/axios-%2342b883) ![](https://img.shields.io/badge/vuex-%2342b883) ![](https://img.shields.io/badge/vue--svg--loader-%2342b883)
+![](https://img.shields.io/badge/vuelidate-%2342b883) ![](https://img.shields.io/badge/axios-%2342b883) ![](https://img.shields.io/badge/vuex-%2342b883) 
 
 ### For dev environment:
 Needs `docker` and `laravel/sail` to be installed.
