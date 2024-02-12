@@ -26,6 +26,7 @@ class GetRoomControllerTest extends TestCase
 
     public function tearDown(): void
     {
+        parent::tearDown();
         Carbon::setTestNow(null);
     }
 
