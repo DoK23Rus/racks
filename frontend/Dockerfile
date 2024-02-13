@@ -9,5 +9,3 @@ COPY package.json package-lock.json /app/
 RUN npm install && npm update -g
 
 COPY . /app
-
-#RUN mv .env.frontend .env

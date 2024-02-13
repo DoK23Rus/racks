@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
@@ -19,7 +18,6 @@ return new class extends Migration
             $table->string('type', 255)->default(\App\Models\Enums\DeviceTypeEnum::OTHER);
             $table->string('status', 255)->default(\App\Models\Enums\DeviceStatusEnum::ACTIVE);
             $table->boolean('has_backside_location')->default(false);
-            //$table->json('units')->default(new Expression('(JSON_ARRAY())'));
             $table->json('units');
             $table->string('hostname', 255)->nullable();
             $table->ipAddress('ip')->nullable();
