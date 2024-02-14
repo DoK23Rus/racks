@@ -58,7 +58,7 @@ services:
       context: ./frontend_alternative
       dockerfile: Dockerfile
     environment:
-      - VUE_APP_AXIOS_URL=http://0.0.0.0:9000
+      - VUE_APP_AXIOS_URL=http://127.0.0.1:9000
       - VUE_APP_API_VERSION=${API_VERSION}
     volumes:
       - ./frontend_alternative:/usr/src/app
