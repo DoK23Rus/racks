@@ -1,0 +1,32 @@
+#3 [phpunit internal] load build definition from test.Dockerfile
+#4 [phpunit internal] load .dockerignore
+#10 [phpunit internal] load metadata for docker.io/library/composer:2.6.5
+#13 [phpunit internal] load build context
+#14 [phpunit] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
+#16 [phpunit stage-0 1/9] FROM docker.io/library/php:8.1-fpm@sha256:a00e69234cca6a1dcdc017a58718038764c1851d49ed43f19896adeefceca2a6
+#13 [phpunit internal] load build context
+#13 [phpunit internal] load build context
+#13 [phpunit internal] load build context
+#13 [phpunit internal] load build context
+#19 [phpunit stage-0 4/9] COPY . .
+#20 [phpunit stage-0 5/9] RUN addgroup --gid 1000 www || :
+#21 [phpunit stage-0 6/9] RUN adduser --no-create-home --disabled-password --uid 1000 --ingroup www www || :
+#22 [phpunit stage-0 7/9] RUN chown -R www:www /var/www
+#23 [phpunit stage-0 8/9] COPY --from=composer:2.6.5 /usr/bin/composer /usr/bin/composer
+#24 [phpunit stage-0 9/9] WORKDIR /var/www
+#25 naming to docker.io/library/racks-phpunit 0.0s done
+ Container phpunit  Creating
+ Container phpunit  Created
+Attaching to backend-testing, db-testing, e2e-tests, frontend-testing, hub, phpstan, phpunit, pint, racks-selenium-1, racks-selenium-2
+phpunit           | PHPUnit 10.5.10 by Sebastian Bergmann and contributors.
+phpunit           | 
+phpunit           | Runtime:       PHP 8.1.27
+phpunit           | Configuration: /var/www/phpunit.xml
+phpunit           | 
+phpunit           | ................................................................. 65 / 95 ( 68%)
+phpunit           | ..............................                                    95 / 95 (100%)
+phpunit           | 
+phpunit           | Time: 00:19.420, Memory: 48.50 MB
+phpunit           | 
+phpunit           | OK (95 tests, 188 assertions)
+phpunit exited with code 0
