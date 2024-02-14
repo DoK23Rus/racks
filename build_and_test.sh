@@ -44,8 +44,8 @@ DB_PASS="racks"
 
 # Before running, make sure $USER is a member of the docker group
 docker compose -f docker-compose.test.yml -p racks down
-docker compose -f docker-compose.test.yml -p racks --profile test build --progress=plain 2>&1 | tee ./logs/run.log &&
-docker compose -f docker-compose.test.yml -p racks --profile test up 2>&1 | tee -a ./logs/run.log &
+docker compose -f docker-compose.test.yml -p racks --profile test build --progress=plain 2>&1 | tee ./build_logs/run.log &&
+docker compose -f docker-compose.test.yml -p racks --profile test up 2>&1 | tee -a ./build_logs/run.log &
 
 # Wait for DB
 docker inspect $DB_CONTAINER > /dev/null 2>/dev/null
@@ -113,10 +113,10 @@ do
 done
 
 # Sorting logs
-grep "pint" ./logs/run.log > ./logs/pint.log
-grep "phpstan" ./logs/run.log > ./logs/phpstan.log
-grep "phpunit" ./logs/run.log > ./logs/phpunit.log
-grep "$TEST_CONTAINER" ./logs/run.log > ./logs/e2e.log
+grep "pint" ./build_logs/run.log > ./build_logs/pint.log
+grep "phpstan" ./build_logs/run.log > ./build_logs/phpstan.log
+grep "phpunit" ./build_logs/run.log > ./build_logs/phpunit.log
+grep "$TEST_CONTAINER" ./build_logs/run.log > ./build_logs/e2e.log
 
 CODE_ARR=("$E2E" "$PHPSTAN" "$PINT" "$PHPUNIT")
 

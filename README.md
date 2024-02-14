@@ -21,7 +21,7 @@ Needs `docker` and `laravel/sail` to be installed.
 ### build_and_test.sh:
 
 Check `NUMBER_OF_THREADS` and `SHM_SIZE` envs before start!  
-HTML-reports and screenshots are stored in relevant docker volumes. Each run logs stored in `./logs` directory.
+HTML-reports and screenshots are stored in relevant docker volumes. Each run logs stored in `./build_logs` directory.
 
 ### CLI:
 Administrative purpose commands for artisan via sail:
