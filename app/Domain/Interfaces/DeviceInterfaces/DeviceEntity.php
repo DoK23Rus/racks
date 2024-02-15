@@ -124,7 +124,14 @@ interface DeviceEntity
 
     public function getUpdatedAt(): string;
 
+    /**
+     * @param  array<mixed>  $with  Reload param
+     * @return Model|null ?Model
+     */
     public function fresh(array $with): ?Model;
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array;
 }

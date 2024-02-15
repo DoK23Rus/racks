@@ -8,6 +8,10 @@ interface BuildingRepository
 {
     public function getById(int $id): BuildingEntity;
 
+    /**
+     * @param  int  $siteId  Site id
+     * @return array<string> Building names list for site
+     */
     public function getNamesListBySiteId(int $siteId): array;
 
     public function create(BuildingEntity $building): BuildingEntity;

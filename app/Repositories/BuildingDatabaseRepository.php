@@ -18,7 +18,7 @@ class BuildingDatabaseRepository implements BuildingRepository
     }
 
     /**
-     * @return array<mixed> $items
+     * @return array<string> $items
      */
     public function getNamesListBySiteId(int $siteId): array
     {

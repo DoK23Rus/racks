@@ -29,6 +29,9 @@ interface BuildingEntity
 
     public function getUpdatedAt(): string;
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array;
 
     public function site(): BelongsTo;
