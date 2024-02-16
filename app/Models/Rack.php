@@ -537,6 +537,9 @@ class Rack extends Model implements RackBusinessRules, RackEntity
         return $this->belongsTo(Room::class, 'room_id');
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return parent::toArray();
