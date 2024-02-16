@@ -25,6 +25,9 @@ interface SiteEntity
 
     public function getUpdatedAt(): string;
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array;
 
     public function department(): BelongsTo;

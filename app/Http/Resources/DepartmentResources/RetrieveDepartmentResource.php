@@ -12,16 +12,16 @@ use OpenApi\Annotations as OA;
  *     schema="RetrieveDepartmentResponse",
  *     title="Get department",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Department name"
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="region_id",
  *         type="integer",
@@ -51,6 +51,8 @@ class RetrieveDepartmentResource extends JsonResource
 
     /**
      * Transform the resource into an array.
+     *
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

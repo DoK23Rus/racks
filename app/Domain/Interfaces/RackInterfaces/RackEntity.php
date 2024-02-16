@@ -136,11 +136,14 @@ interface RackEntity
 
     public function getUpdatedBy(): ?string;
 
-    public function setUpdatedBy(?string $updatedBy);
+    public function setUpdatedBy(?string $updatedBy): void;
 
     public function setOldName(?string $oldName): void;
 
     public function getOldName(): ?string;
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array;
 }

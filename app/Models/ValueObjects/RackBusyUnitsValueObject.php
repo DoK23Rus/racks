@@ -6,12 +6,30 @@ use App\Domain\Interfaces\RackInterfaces\RackBusyUnitsInterface;
 
 class RackBusyUnitsValueObject implements RackBusyUnitsInterface
 {
+    /**
+     * @var array{
+     *      front: array<int>,
+     *      back: array<int>
+     *  }
+     */
     private array $busyUnits;
 
+    /**
+     * @var array<int>
+     */
     private array $front;
 
+    /**
+     * @var array<int>
+     */
     private array $back;
 
+    /**
+     * @param  array{
+     *     front: array<int>,
+     *     back: array<int>
+     * }  $busyUnits Busy units array
+     */
     public function __construct(array $busyUnits)
     {
         $this->busyUnits = $busyUnits;

@@ -51,6 +51,9 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
         'updated_at',
     ];
 
+    /**
+     * @var array<mixed>
+     */
     protected $attributes = [
         'units' => [],
     ];
@@ -362,6 +365,9 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
         return $this->attributes['updated_at'];
     }
 
+    /**
+     * @param  array<mixed>|string  $with
+     */
     public function fresh($with = []): ?Model
     {
         return parent::fresh($with);
@@ -372,6 +378,9 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
         return App()->makeWith(DeviceAttributesValueObject::class, ['device' => $this]);
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return parent::toArray();

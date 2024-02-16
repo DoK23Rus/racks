@@ -110,6 +110,9 @@ class Room extends Model implements RoomBusinessRules, RoomEntity
         return $this->hasMany(Rack::class, 'room_id');
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return parent::toArray();

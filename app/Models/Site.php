@@ -75,6 +75,9 @@ class Site extends Model implements SiteBusinessRules, SiteEntity
         return $this->attributes['updated_at'];
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return parent::toArray();

@@ -36,6 +36,8 @@ class DeviceDeletionFailedResource extends JsonResource
 
     /**
      * Transform the resource into an array.
+     *
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

@@ -125,10 +125,10 @@ interface DeviceEntity
     public function getUpdatedAt(): string;
 
     /**
-     * @param  array<mixed>  $with  Reload param
+     * @param  array<mixed>|string  $with  Reload param
      * @return Model|null ?Model
      */
-    public function fresh(array $with): ?Model;
+    public function fresh(array|string $with): ?Model;
 
     /**
      * @return array<mixed>

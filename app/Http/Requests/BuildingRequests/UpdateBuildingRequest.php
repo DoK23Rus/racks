@@ -21,6 +21,9 @@ use OpenApi\Annotations as OA;
  */
 class UpdateBuildingRequest extends FormRequest
 {
+    /**
+     * @return array<array<mixed>>
+     */
     public function rules(): array
     {
         return [

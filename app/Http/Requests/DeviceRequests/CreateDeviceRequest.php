@@ -235,7 +235,7 @@ class CreateDeviceRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<array>
+     * @return array<array<mixed>>
      */
     public function rules(): array
     {
@@ -268,7 +268,10 @@ class CreateDeviceRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    /**
+     * @return array<array<mixed>>
+     */
+    public function messages(): array
     {
         return [
             'type' => [

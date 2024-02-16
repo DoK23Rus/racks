@@ -27,13 +27,13 @@ interface RackRepository
     public function lockTable(): void;
 
     /**
-     * @return array{
+     * @return array<array{
      *     region_name: string,
      *     department_name: string,
      *     site_name: string,
      *     building_name: string,
      *     room_name: string,
-     * } Rack location
+     * }> Rack location
      */
     public function getLocation(?string $id): array;
 

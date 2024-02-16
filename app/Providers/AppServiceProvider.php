@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array|string[]
+     */
     public array $bindings = [
         \App\Domain\Interfaces\UserInterfaces\UserFactory::class => \App\Factories\UserModelFactory::class,
         \App\Domain\Interfaces\UserInterfaces\UserRepository::class => \App\Repositories\UserDatabaseRepository::class,

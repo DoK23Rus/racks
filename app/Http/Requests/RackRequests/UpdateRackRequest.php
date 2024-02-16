@@ -14,13 +14,13 @@ use OpenApi\Annotations as OA;
  *     schema="UpdateRackRequest",
  *     title="Update rack request",
  *
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         nullable=true,
  *         description="Rack name",
  *         example="Rack name",
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="vendor",
  *         type="string",
@@ -205,6 +205,9 @@ use OpenApi\Annotations as OA;
  */
 class UpdateRackRequest extends FormRequest
 {
+    /**
+     * @return array<array<mixed>>
+     */
     public function rules(): array
     {
         /**
@@ -245,6 +248,9 @@ class UpdateRackRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function messages()
     {
         return [

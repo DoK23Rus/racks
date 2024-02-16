@@ -107,6 +107,9 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
         return $this->hasMany(Room::class, 'building_id');
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array
     {
         return parent::toArray();

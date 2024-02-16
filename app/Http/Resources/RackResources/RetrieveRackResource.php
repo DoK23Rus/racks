@@ -12,16 +12,16 @@ use OpenApi\Annotations as OA;
  *     schema="RetrieveRackResponse",
  *     title="Get rack",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1,
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Rack name"
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="room_id",
  *         type="integer",
@@ -222,6 +222,8 @@ class RetrieveRackResource extends JsonResource
 
     /**
      * Transform the resource into an array.
+     *
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

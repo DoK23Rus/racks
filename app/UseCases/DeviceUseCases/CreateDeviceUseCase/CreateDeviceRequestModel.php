@@ -30,6 +30,9 @@ class CreateDeviceRequestModel
         return $this->attributes['has_backside_location'];
     }
 
+    /**
+     * @return array<int>
+     */
     public function getUnits(): array
     {
         return $this->attributes['units'];

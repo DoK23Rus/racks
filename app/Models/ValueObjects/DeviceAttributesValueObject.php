@@ -6,6 +6,9 @@ use App\Domain\Interfaces\DeviceInterfaces\DeviceEntity;
 
 class DeviceAttributesValueObject
 {
+    /**
+     * @var array<mixed>
+     */
     private array $attributesForDevice = [];
 
     private DeviceEntity $device;
@@ -249,6 +252,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return array<mixed> Get attributes array
+     */
     public function getArray(): array
     {
         return $this->attributesForDevice;

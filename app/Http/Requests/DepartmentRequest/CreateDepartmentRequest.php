@@ -9,7 +9,7 @@ class CreateDepartmentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<array>
+     * @return array<array<mixed>>
      */
     public function rules()
     {

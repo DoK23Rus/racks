@@ -6,6 +6,9 @@ use App\Domain\Interfaces\RackInterfaces\RackEntity;
 
 class RackAttributesValueObject
 {
+    /**
+     * @var array<mixed>
+     */
     private array $attributesForRack = [];
 
     private RackEntity $rack;
@@ -266,6 +269,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return array<mixed> Get attributes array
+     */
     public function getArray(): array
     {
         return $this->attributesForRack;

@@ -12,16 +12,16 @@ use OpenApi\Annotations as OA;
  *     schema="CreateSiteResponse",
  *     title="Site created",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Site name"
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="department_id",
  *         type="integer",
@@ -51,6 +51,8 @@ class SiteCreatedResource extends JsonResource
 
     /**
      * Transform the resource into an array.
+     *
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

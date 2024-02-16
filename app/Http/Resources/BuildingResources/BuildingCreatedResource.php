@@ -12,16 +12,16 @@ use OpenApi\Annotations as OA;
  *     schema="CreateBuildingResponse",
  *     title="Building created",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Building name"
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="site_id",
  *         type="integer",
@@ -56,6 +56,8 @@ class BuildingCreatedResource extends JsonResource
 
     /**
      * Transform the resource into an array.
+     *
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

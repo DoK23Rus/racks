@@ -29,6 +29,9 @@ interface RoomEntity
 
     public function getUpdatedAt(): string;
 
+    /**
+     * @return array<mixed>
+     */
     public function toArray(): array;
 
     public function building(): BelongsTo;

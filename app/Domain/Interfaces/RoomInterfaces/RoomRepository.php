@@ -8,6 +8,10 @@ interface RoomRepository
 {
     public function getById(int $id): RoomEntity;
 
+    /**
+     * @param  int  $buildingId  Building ID
+     * @return array<string> Room names list for building
+     */
     public function getNamesListByBuildingId(int $buildingId): array;
 
     public function create(RoomEntity $room): RoomEntity;

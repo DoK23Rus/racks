@@ -1,7 +1,7 @@
 parameters:
     paths:
         - app
-    level: 5
+    level: 6
     excludePaths:
         - 'app/Http/Controllers/AuthController.php'
     ignoreErrors:

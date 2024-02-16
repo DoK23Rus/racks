@@ -12,16 +12,16 @@ use OpenApi\Annotations as OA;
  *     schema="RoomUpdatedResponse",
  *     title="Update room",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Room name"
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="building_id",
  *         type="integer",
@@ -61,6 +61,8 @@ class RoomUpdatedResource extends JsonResource
 
     /**
      * Transform the resource into an array.
+     *
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

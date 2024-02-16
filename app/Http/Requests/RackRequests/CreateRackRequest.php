@@ -222,7 +222,7 @@ class CreateRackRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<array>
+     * @return array<array<mixed>>
      */
     public function rules(): array
     {
@@ -259,6 +259,9 @@ class CreateRackRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array<array<mixed>>
+     */
     public function messages()
     {
         return [

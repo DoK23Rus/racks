@@ -22,14 +22,14 @@ interface DeviceRepository
 
     /**
      * @param  string|null  $id  Rack ID
-     * @return array{
+     * @return array<array{
      *     region_name: string,
      *     department_name: string,
      *     site_name: string,
      *     building_name: string,
      *     room_name: string,
      *     rack_name: string
-     * } Device location array
+     * }> Device location array
      */
     public function getLocation(?string $id): array;
 

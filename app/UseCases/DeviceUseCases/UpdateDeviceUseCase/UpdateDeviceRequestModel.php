@@ -26,6 +26,9 @@ class UpdateDeviceRequestModel
         return $this->id;
     }
 
+    /**
+     * @return array<int>|array<void>
+     */
     public function getUnits(): array
     {
         return $this->attributes['units'] ?? [];
