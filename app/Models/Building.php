@@ -5,13 +5,40 @@ namespace App\Models;
 use App\Domain\Interfaces\BuildingInterfaces\BuildingBusinessRules;
 use App\Domain\Interfaces\BuildingInterfaces\BuildingEntity;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
+ * App\Models\Building
+ *
+ * @mixin Eloquent
+ *
  * @method static \Illuminate\Database\Query\Builder where($column, $operator = null, $value = null, $boolean = 'and')
  * @method static \App\Models\Building create(array $attributes = [])
  * @method static \Illuminate\Pagination\LengthAwarePaginator paginate(?string $perPage)
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $updated_by
+ * @property int $department_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $site_id
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Room> $children
+ * @property-read int|null $children_count
+ * @property-read \App\Models\Site $site
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Building newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereDepartmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereSiteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereUpdatedBy($value)
  */
 class Building extends Model implements BuildingBusinessRules, BuildingEntity
 {
@@ -30,6 +57,10 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     | Business rules
     |--------------------------------------------------------------------------
     */
+    /**
+     * @param  array<string>  $namesList
+     * @return bool Is name valid
+     */
     public function isNameValid(array $namesList): bool
     {
         if (in_array($this->getName(), $namesList)) {

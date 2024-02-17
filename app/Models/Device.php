@@ -9,10 +9,80 @@ use App\Models\ValueObjects\DeviceUnitsValueObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
 /**
+ * App\Models\Device
+ *
+ * @mixin Eloquent
+ *
  * @method static \Illuminate\Database\Query\Builder where($column, $operator = null, $value = null, $boolean = 'and')
  * @method static \App\Models\Device create(array $attributes = [])
+ *
+ * @property int $id
+ * @property string|null $vendor
+ * @property string|null $model
+ * @property string $type
+ * @property string $status
+ * @property-read int $has_backside_location
+ * @property mixed $units
+ * @property string|null $hostname
+ * @property string|null $ip
+ * @property int|null $stack
+ * @property int|null $ports_amount
+ * @property string|null $software_version
+ * @property string $power_type
+ * @property int|null $power_w
+ * @property int|null $power_v
+ * @property string $power_ac_dc
+ * @property string|null $serial_number
+ * @property string|null $description
+ * @property string|null $project
+ * @property string $ownership
+ * @property string|null $responsible
+ * @property string|null $financially_responsible_person
+ * @property string|null $inventory_number
+ * @property string|null $fixed_asset
+ * @property string|null $link_to_docs
+ * @property string $updated_by
+ * @property int $department_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $rack_id
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|Device newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Device newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Device query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereDepartmentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereFinanciallyResponsiblePerson($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereFixedAsset($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereHasBacksideLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereHostname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereInventoryNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereIp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereLinkToDocs($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereModel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereOwnership($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device wherePortsAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device wherePowerAcDc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device wherePowerType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device wherePowerV($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device wherePowerW($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereProject($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereRackId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereResponsible($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereSerialNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereSoftwareVersion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereStack($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereUnits($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Device whereVendor($value)
  */
 class Device extends Model implements DeviceBusinessRules, DeviceEntity
 {

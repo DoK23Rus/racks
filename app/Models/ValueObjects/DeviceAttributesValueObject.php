@@ -4,6 +4,9 @@ namespace App\Models\ValueObjects;
 
 use App\Domain\Interfaces\DeviceInterfaces\DeviceEntity;
 
+/**
+ * Value object for device PATCHing (reverse DTO)
+ */
 class DeviceAttributesValueObject
 {
     /**
@@ -11,8 +14,14 @@ class DeviceAttributesValueObject
      */
     private array $attributesForDevice = [];
 
+    /**
+     * @var DeviceEntity
+     */
     private DeviceEntity $device;
 
+    /**
+     * @param  DeviceEntity  $device
+     */
     public function __construct(DeviceEntity $device)
     {
         $this->device = $device;
@@ -44,6 +53,9 @@ class DeviceAttributesValueObject
         $this->setLinkToDocs();
     }
 
+    /**
+     * @return void
+     */
     public function setRackId(): void
     {
         $rackId = $this->device->getRackId();
@@ -52,6 +64,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setUnits(): void
     {
         $units = $this->device->getUnits()->getArray();
@@ -60,6 +75,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setLocation(): void
     {
         $location = $this->device->getLocation();
@@ -68,6 +86,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setModel(): void
     {
         $model = $this->device->getModel();
@@ -76,6 +97,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setVendor(): void
     {
         $vendor = $this->device->getVendor();
@@ -84,6 +108,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setUpdatedBy(): void
     {
         $updatedBy = $this->device->getUpdatedBy();
@@ -92,6 +119,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setType(): void
     {
         $type = $this->device->getType();
@@ -100,6 +130,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setStatus(): void
     {
         $status = $this->device->getStatus();
@@ -108,6 +141,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setHostname(): void
     {
         $hostname = $this->device->getHostname();
@@ -116,6 +152,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setIp(): void
     {
         $ip = $this->device->getIp();
@@ -124,6 +163,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPortsAmount(): void
     {
         $portsAmount = $this->device->getPortsAmount();
@@ -132,6 +174,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setSoftwareVersion(): void
     {
         $softwareVersion = $this->device->getSoftwareVersion();
@@ -140,6 +185,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPowerType(): void
     {
         $powerType = $this->device->getPowerType();
@@ -148,6 +196,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPowerW(): void
     {
         $powerW = $this->device->getPowerW();
@@ -156,6 +207,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPowerV(): void
     {
         $powerV = $this->device->getPowerV();
@@ -164,6 +218,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPowerACDC(): void
     {
         $powerACDC = $this->device->getPowerACDC();
@@ -172,6 +229,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setSerialNumber(): void
     {
         $serialNumber = $this->device->getSerialNumber();
@@ -180,6 +240,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setDescription(): void
     {
         $description = $this->device->getDescription();
@@ -188,6 +251,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setProject(): void
     {
         $project = $this->device->getProject();
@@ -196,6 +262,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setOwnership(): void
     {
         $ownership = $this->device->getOwnership();
@@ -204,6 +273,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setResponsible(): void
     {
         $responsible = $this->device->getResponsible();
@@ -212,6 +284,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setFinanciallyResponsiblePerson(): void
     {
         $financiallyResponsiblePerson = $this->device->getFinanciallyResponsiblePerson();
@@ -220,6 +295,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setInventoryNumber(): void
     {
         $inventoryNumber = $this->device->getInventoryNumber();
@@ -228,6 +306,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setFixedAsset(): void
     {
         $fixedAsset = $this->device->getFixedAsset();
@@ -236,6 +317,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setLinkToDocs(): void
     {
         $linkToDocs = $this->device->getResponsible();
@@ -244,6 +328,9 @@ class DeviceAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setDepartmentId(): void
     {
         $departmentId = $this->device->getDepartmentId();

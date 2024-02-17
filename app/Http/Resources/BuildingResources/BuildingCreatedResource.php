@@ -46,8 +46,14 @@ use OpenApi\Annotations as OA;
  */
 class BuildingCreatedResource extends JsonResource
 {
+    /**
+     * @var BuildingEntity
+     */
     protected BuildingEntity $building;
 
+    /**
+     * @param  BuildingEntity  $building
+     */
     public function __construct(BuildingEntity $building)
     {
         parent::__construct($building);
