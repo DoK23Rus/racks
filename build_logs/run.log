@@ -1,175 +1,171 @@
 --progress is a global compose flag, better use `docker compose --progress xx build ...#0 building with "default" instance using docker driver
 
 #1 [pint internal] load build definition from test.Dockerfile
-#1 transferring dockerfile: 35B 0.0s
 #1 transferring dockerfile: 537B 0.1s done
-#1 DONE 0.2s
+#1 DONE 0.3s
 
 #2 [pint internal] load .dockerignore
-#2 transferring context: 44B 0.1s done
-#2 DONE 0.2s
+#2 transferring context: 44B 0.0s done
+#2 DONE 0.3s
 
-#3 [phpunit internal] load build definition from test.Dockerfile
-#3 transferring dockerfile: 537B 0.0s done
-#3 DONE 0.3s
+#3 [backend-testing internal] load .dockerignore
+#3 transferring context: 44B done
+#3 DONE 0.4s
 
-#4 [phpunit internal] load .dockerignore
-#4 transferring context: 44B done
-#4 DONE 0.2s
+#4 [backend-testing internal] load build definition from test.Dockerfile
+#4 transferring dockerfile: 537B done
+#4 DONE 0.4s
 
-#5 [phpstan internal] load build definition from test.Dockerfile
-#5 transferring dockerfile: 537B 0.0s done
-#5 DONE 0.3s
+#5 [phpunit internal] load .dockerignore
+#5 transferring context: 44B 0.0s done
+#5 DONE 0.5s
 
-#6 [backend-testing internal] load .dockerignore
-#6 transferring context: 44B done
-#6 DONE 0.2s
+#6 [phpunit internal] load build definition from test.Dockerfile
+#6 transferring dockerfile: 537B done
+#6 DONE 0.5s
 
-#7 [phpstan internal] load .dockerignore
-#7 transferring context: 44B done
-#7 DONE 0.4s
+#7 [phpunit internal] load metadata for docker.io/library/php:8.1-fpm
+#7 ...
 
-#8 [backend-testing internal] load build definition from test.Dockerfile
-#8 transferring dockerfile: 537B done
-#8 DONE 0.3s
+#8 [phpstan internal] load .dockerignore
+#8 transferring context: 44B 0.0s done
+#8 DONE 0.6s
 
-#9 [backend-testing internal] load metadata for docker.io/library/php:8.1-fpm
-#9 ...
+#9 [phpstan internal] load build definition from test.Dockerfile
+#9 transferring dockerfile: 537B done
+#9 DONE 0.7s
 
-#10 [phpunit internal] load metadata for docker.io/library/composer:2.6.5
-#10 DONE 3.3s
+#7 [phpstan internal] load metadata for docker.io/library/php:8.1-fpm
+#7 ...
 
-#11 [backend-testing internal] load build context
+#10 [backend-testing internal] load metadata for docker.io/library/composer:2.6.5
+#10 DONE 6.6s
+
+#7 [phpstan internal] load metadata for docker.io/library/php:8.1-fpm
+#7 DONE 6.9s
+
+#11 [phpunit] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
 #11 DONE 0.0s
 
-#12 [phpstan internal] load build context
-#12 DONE 0.0s
-
-#9 [pint internal] load metadata for docker.io/library/php:8.1-fpm
-#9 DONE 3.4s
+#12 [pint stage-0 1/9] FROM docker.io/library/php:8.1-fpm@sha256:a00e69234cca6a1dcdc017a58718038764c1851d49ed43f19896adeefceca2a6
+#12 resolve docker.io/library/php:8.1-fpm@sha256:a00e69234cca6a1dcdc017a58718038764c1851d49ed43f19896adeefceca2a6 0.1s done
+#12 DONE 0.2s
 
 #13 [phpunit internal] load build context
-#13 DONE 0.0s
+#13 transferring context: 32B 0.0s
+#13 transferring context: 390.56kB 5.0s
+#13 ...
 
-#14 [phpunit] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
-#14 DONE 0.0s
+#14 [pint internal] load build context
+#14 ...
 
-#15 [pint internal] load build context
-#15 DONE 0.0s
+#13 [phpunit internal] load build context
+#13 ...
 
-#16 [phpunit stage-0 1/9] FROM docker.io/library/php:8.1-fpm@sha256:a00e69234cca6a1dcdc017a58718038764c1851d49ed43f19896adeefceca2a6
-#16 resolve docker.io/library/php:8.1-fpm@sha256:a00e69234cca6a1dcdc017a58718038764c1851d49ed43f19896adeefceca2a6
-#16 resolve docker.io/library/php:8.1-fpm@sha256:a00e69234cca6a1dcdc017a58718038764c1851d49ed43f19896adeefceca2a6 0.2s done
-#16 DONE 0.3s
-
-#15 [pint internal] load build context
-#15 transferring context: 32B 0.0s
+#15 [phpstan internal] load build context
+#15 transferring context: 809.18kB 10.0s
 #15 ...
 
-#12 [phpstan internal] load build context
-#12 ...
+#16 [backend-testing internal] load build context
+#16 ...
 
-#15 [pint internal] load build context
-#15 transferring context: 3.53MB 5.1s
+#15 [phpstan internal] load build context
+#15 transferring context: 1.34MB 15.2s
 #15 ...
 
-#13 [phpunit internal] load build context
-#13 ...
+#16 [backend-testing internal] load build context
+#16 ...
 
-#11 [backend-testing internal] load build context
-#11 ...
+#14 [pint internal] load build context
+#14 ...
 
-#13 [phpunit internal] load build context
-#13 transferring context: 4.24MB 10.4s
-#13 ...
+#16 [backend-testing internal] load build context
+#16 ...
 
-#11 [backend-testing internal] load build context
-#11 ...
+#15 [phpstan internal] load build context
+#15 transferring context: 1.53MB 17.4s done
+#15 DONE 17.6s
 
-#13 [phpunit internal] load build context
-#13 ...
+#16 [backend-testing internal] load build context
+#16 ...
 
-#12 [phpstan internal] load build context
-#12 ...
-
-#13 [phpunit internal] load build context
-#13 transferring context: 4.56MB 13.5s done
-#13 DONE 17.4s
-
-#11 [backend-testing internal] load build context
-#11 ...
-
-#17 [pint stage-0 2/9] RUN apt-get update -y
+#17 [phpstan stage-0 2/9] RUN apt-get update -y
 #17 CACHED
 
-#18 [pint stage-0 3/9] RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev &&   docker-php-ext-install pdo pdo_mysql bcmath
+#18 [phpstan stage-0 3/9] RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev &&   docker-php-ext-install pdo pdo_mysql bcmath
 #18 CACHED
 
-#14 [backend-testing] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
-#14 CACHED
+#11 [phpstan] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
+#11 CACHED
 
-#12 [phpstan internal] load build context
-#12 transferring context: 4.56MB 14.0s done
-#12 ...
+#16 [backend-testing internal] load build context
+#16 transferring context: 1.53MB 18.0s done
+#16 DONE 18.6s
 
-#15 [pint internal] load build context
-#15 transferring context: 4.56MB 13.5s done
-#15 DONE 17.7s
+#13 [phpunit internal] load build context
+#13 transferring context: 1.53MB 18.3s done
+#13 ...
 
-#11 [backend-testing internal] load build context
-#11 transferring context: 4.56MB 14.2s done
-#11 DONE 18.1s
+#14 [pint internal] load build context
+#14 transferring context: 1.53MB 17.9s done
+#14 DONE 18.8s
 
-#12 [phpstan internal] load build context
-#12 DONE 18.0s
+#19 [phpstan stage-0 4/9] COPY . .
+#19 ...
 
-#19 [phpunit stage-0 4/9] COPY . .
-#19 DONE 38.6s
+#13 [phpunit internal] load build context
+#13 DONE 19.1s
 
-#20 [phpunit stage-0 5/9] RUN addgroup --gid 1000 www || :
-#20 1.443 Adding group `www' (GID 1000) ...
-#20 1.531 Done.
-#20 DONE 1.7s
+#19 [phpstan stage-0 4/9] COPY . .
+#19 DONE 37.9s
 
-#21 [phpunit stage-0 6/9] RUN adduser --no-create-home --disabled-password --uid 1000 --ingroup www www || :
-#21 0.868 Adding user `www' ...
-#21 0.868 Adding new user `www' (1000) with group `www (1000)' ...
-#21 1.114 Not creating home directory `/home/www'.
-#21 1.154 Changing the user information for www
-#21 1.154 Enter the new value, or press ENTER for the default
-#21 1.154 	Full Name []: 	Room Number []: 	Work Phone []: 	Home Phone []: 	Other []: Use of uninitialized value $answer in chop at /usr/sbin/adduser line 766.
-#21 1.193 Use of uninitialized value $answer in pattern match (m//) at /usr/sbin/adduser line 767.
-#21 1.193 Use of uninitialized value $answer in pattern match (m//) at /usr/sbin/adduser line 768.
-#21 1.194 Is the information correct? [Y/n] Adding new user `www' to supplemental / extra groups `users' ...
-#21 1.194 Adding user `www' to group `users' ...
-#21 DONE 1.6s
+#20 [phpstan stage-0 5/9] RUN addgroup --gid 1000 www || :
+#20 0.902 Adding group `www' (GID 1000) ...
+#20 0.992 Done.
+#20 DONE 1.2s
 
-#22 [phpunit stage-0 7/9] RUN chown -R www:www /var/www
-#22 DONE 136.1s
+#21 [phpstan stage-0 6/9] RUN adduser --no-create-home --disabled-password --uid 1000 --ingroup www www || :
+#21 0.964 Adding user `www' ...
+#21 0.964 Adding new user `www' (1000) with group `www (1000)' ...
+#21 1.166 Not creating home directory `/home/www'.
+#21 1.192 Changing the user information for www
+#21 1.192 Enter the new value, or press ENTER for the default
+#21 1.192 	Full Name []: 	Room Number []: 	Work Phone []: 	Home Phone []: 	Other []: Use of uninitialized value $answer in chop at /usr/sbin/adduser line 766.
+#21 1.234 Use of uninitialized value $answer in pattern match (m//) at /usr/sbin/adduser line 767.
+#21 1.234 Use of uninitialized value $answer in pattern match (m//) at /usr/sbin/adduser line 768.
+#21 1.234 Is the information correct? [Y/n] Adding new user `www' to supplemental / extra groups `users' ...
+#21 1.234 Adding user `www' to group `users' ...
+#21 DONE 1.4s
 
-#23 [phpunit stage-0 8/9] COPY --from=composer:2.6.5 /usr/bin/composer /usr/bin/composer
-#23 DONE 0.5s
+#22 [phpstan stage-0 7/9] RUN chown -R www:www /var/www
+#22 DONE 117.3s
 
-#24 [phpunit stage-0 9/9] WORKDIR /var/www
+#23 [phpstan stage-0 8/9] COPY --from=composer:2.6.5 /usr/bin/composer /usr/bin/composer
+#23 DONE 0.4s
+
+#24 [phpstan stage-0 9/9] WORKDIR /var/www
 #24 DONE 0.2s
 
-#25 [pint] exporting to image
+#25 [phpunit] exporting to image
 #25 exporting layers
-#25 exporting layers 12.0s done
-#25 writing image sha256:7a3179f78f378c48c8a69e5f6ba81d15a261e6d641118f96806077565e37b88c 0.0s done
-#25 naming to docker.io/library/racks-phpstan done
-#25 exporting layers 12.3s done
-#25 writing image sha256:5b9cc65f0efba41bbdc1b8cf32d1c262dfcb03b5b1db881c686ebd0976462b8b
-#25 exporting layers 12.4s done
-#25 writing image sha256:5b9cc65f0efba41bbdc1b8cf32d1c262dfcb03b5b1db881c686ebd0976462b8b 0.0s done
-#25 naming to docker.io/library/racks-phpunit 0.0s done
-#25 writing image sha256:340eaa7b0fa50b69ccff3731e1f093c443d62f924c80ebbc59e097ca5e266dd2 done
-#25 writing image sha256:ad34c1a028f65ce004d341481729ec79b07fc8256d8c4af6b9eb1f6cdad543de 0.0s done
-#25 naming to docker.io/library/racks-backend-testing done
+#25 exporting layers 6.5s done
+#25 writing image sha256:f4ee4f0c334e09132ca22bfc758def494378b1bd8bd04252b48457946d5f73f8 0.0s done
+#25 naming to docker.io/library/racks-phpunit
+#25 exporting layers 6.7s done
+#25 naming to docker.io/library/racks-phpunit done
+#25 writing image sha256:6d500daacf6fb55b9da37e54fbcdd8b8220a8d80b19cf6b82ff597642e8988e7
+#25 exporting layers 6.7s done
+#25 writing image sha256:6d500daacf6fb55b9da37e54fbcdd8b8220a8d80b19cf6b82ff597642e8988e7 0.0s done
+#25 naming to docker.io/library/racks-phpstan 0.0s done
+#25 writing image sha256:1e0dd834b09154b6372c2c8bc8df314a23eaa3b0ae9124afe341981533b1b724 done
 #25 naming to docker.io/library/racks-pint done
-#25 DONE 12.6s
+#25 exporting layers 6.9s done
+#25 writing image sha256:3c027204d1cade2fe46dd716e57164cdd55f288ce9cba731378a2168a6cadd28 done
+#25 naming to docker.io/library/racks-backend-testing done
+#25 DONE 7.0s
 
 #26 [frontend-testing internal] load build definition from Dockerfile
+#26 transferring dockerfile: 30B
 #26 transferring dockerfile: 199B 0.0s done
 #26 DONE 0.1s
 
@@ -178,32 +174,32 @@
 #27 DONE 0.1s
 
 #28 [frontend-testing internal] load metadata for docker.io/library/node:12.16.1
-#28 DONE 1.4s
+#28 DONE 6.9s
 
 #29 [frontend-testing 1/5] FROM docker.io/library/node:12.16.1@sha256:46f4c17e1edbde36d60a9f6362db7912cfe301bac89afef7cc92421ab3e7ca18
 #29 DONE 0.0s
 
 #30 [frontend-testing internal] load build context
-#30 transferring context: 3.25kB 0.1s done
+#30 transferring context: 2.81kB 0.0s done
 #30 DONE 0.1s
 
-#31 [frontend-testing 2/5] WORKDIR /app
+#31 [frontend-testing 3/5] COPY package.json package-lock.json /app/
 #31 CACHED
 
-#32 [frontend-testing 3/5] COPY package.json package-lock.json /app/
+#32 [frontend-testing 4/5] RUN npm install && npm update -g
 #32 CACHED
 
-#33 [frontend-testing 4/5] RUN npm install && npm update -g
+#33 [frontend-testing 2/5] WORKDIR /app
 #33 CACHED
 
 #34 [frontend-testing 5/5] COPY . /app
-#34 DONE 0.5s
+#34 CACHED
 
 #25 [frontend-testing] exporting to image
-#25 exporting layers 0.2s done
-#25 writing image sha256:9436667e510501fe6df7d53bc59c0a8e3a6edbcad456940b22380ae97e72c1fd done
+#25 exporting layers done
+#25 writing image sha256:9436667e510501fe6df7d53bc59c0a8e3a6edbcad456940b22380ae97e72c1fd 0.0s done
 #25 naming to docker.io/library/racks-frontend-testing done
-#25 DONE 12.8s
+#25 DONE 7.0s
 
 #35 [test-runner internal] load .dockerignore
 #35 transferring context: 2B 0.0s done
@@ -214,301 +210,66 @@
 #36 DONE 0.1s
 
 #37 [test-runner internal] load metadata for docker.io/library/python:3.10
-#37 DONE 1.9s
+#37 DONE 1.1s
 
 #38 [test-runner  1/12] FROM docker.io/library/python:3.10@sha256:b54e76c629a98430ac9c92e4f6bddeb672396a895b44a85022d12ee2f7239144
-#38 resolve docker.io/library/python:3.10@sha256:b54e76c629a98430ac9c92e4f6bddeb672396a895b44a85022d12ee2f7239144
-#38 resolve docker.io/library/python:3.10@sha256:b54e76c629a98430ac9c92e4f6bddeb672396a895b44a85022d12ee2f7239144 0.1s done
-#38 DONE 0.1s
+#38 DONE 0.0s
 
 #39 [test-runner internal] load build context
-#39 transferring context: 539B 0.0s done
+#39 transferring context: 539B done
 #39 DONE 0.1s
 
-#38 [test-runner  1/12] FROM docker.io/library/python:3.10@sha256:b54e76c629a98430ac9c92e4f6bddeb672396a895b44a85022d12ee2f7239144
-#38 sha256:b54e76c629a98430ac9c92e4f6bddeb672396a895b44a85022d12ee2f7239144 1.65kB / 1.65kB done
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 0B / 64.14MB 0.2s
-#38 sha256:c970ff53939772f47b0672e380328afb50d8fd1c0568ed4f82c22effc54244fc 2.01kB / 2.01kB done
-#38 sha256:22546fe66182be0806cd35d8fd3b211c7a386f0b0621288099d60e2abe8eb416 7.34kB / 7.34kB done
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 0B / 49.55MB 0.2s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 0B / 24.05MB 0.2s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 2.10MB / 24.05MB 1.2s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 4.19MB / 24.05MB 1.5s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 6.29MB / 24.05MB 2.0s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 8.39MB / 24.05MB 2.4s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 10.49MB / 24.05MB 2.8s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 12.58MB / 24.05MB 3.2s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 14.68MB / 24.05MB 3.7s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 16.78MB / 24.05MB 4.2s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 18.87MB / 24.05MB 4.6s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 20.97MB / 24.05MB 4.9s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 1.05MB / 64.14MB 5.2s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 2.10MB / 49.55MB 5.2s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 24.05MB / 24.05MB 5.4s
-#38 sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 24.05MB / 24.05MB 5.7s done
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 0B / 211.12MB 5.9s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 5.24MB / 64.14MB 6.7s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 5.24MB / 49.55MB 8.1s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 11.53MB / 211.12MB 9.0s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 23.07MB / 211.12MB 11.3s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 7.34MB / 64.14MB 11.7s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 6.29MB / 49.55MB 13.3s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 34.60MB / 211.12MB 13.7s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 46.14MB / 211.12MB 15.4s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 9.44MB / 64.14MB 16.7s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 9.44MB / 49.55MB 17.4s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 57.67MB / 211.12MB 18.0s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 12.58MB / 49.55MB 19.3s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 13.63MB / 64.14MB 19.7s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 17.83MB / 64.14MB 21.3s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 15.73MB / 49.55MB 21.4s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 69.21MB / 211.12MB 22.2s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 22.02MB / 64.14MB 23.3s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 18.87MB / 49.55MB 23.5s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 22.02MB / 49.55MB 25.2s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 26.21MB / 64.14MB 25.3s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 25.17MB / 49.55MB 26.5s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 80.74MB / 211.12MB 27.1s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 28.31MB / 49.55MB 27.6s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 30.41MB / 64.14MB 28.3s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 31.46MB / 49.55MB 28.8s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 34.60MB / 49.55MB 29.9s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 34.60MB / 64.14MB 31.0s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 37.75MB / 49.55MB 31.7s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 89.13MB / 211.12MB 32.1s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 38.80MB / 64.14MB 33.4s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 40.89MB / 49.55MB 34.2s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 42.99MB / 64.14MB 35.3s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 44.04MB / 49.55MB 35.8s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 100.66MB / 211.12MB 36.3s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 47.19MB / 64.14MB 37.2s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 47.19MB / 49.55MB 37.3s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 51.38MB / 64.14MB 38.9s
-#38 sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 49.55MB / 49.55MB 39.2s done
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 0B / 6.39MB 39.3s
-#38 extracting sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 55.57MB / 64.14MB 40.7s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 112.20MB / 211.12MB 41.1s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 59.77MB / 64.14MB 42.0s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 63.96MB / 64.14MB 42.9s
-#38 sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 64.14MB / 64.14MB 43.2s done
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 0B / 17.15MB 43.3s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 123.73MB / 211.12MB 44.0s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 0B / 6.39MB 44.4s
-#38 extracting sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 5.0s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 1.05MB / 17.15MB 45.6s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 1.05MB / 6.39MB 45.9s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 2.10MB / 17.15MB 46.1s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 3.15MB / 17.15MB 46.3s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 2.10MB / 6.39MB 46.5s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 4.19MB / 17.15MB 46.7s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 135.27MB / 211.12MB 46.8s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 3.15MB / 6.39MB 46.9s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 5.24MB / 17.15MB 47.1s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 4.19MB / 6.39MB 47.4s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 6.29MB / 17.15MB 47.7s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 5.24MB / 6.39MB 48.0s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 6.39MB / 6.39MB 48.4s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 7.34MB / 17.15MB 48.4s
-#38 sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 6.39MB / 6.39MB 48.5s done
-#38 sha256:833a11e16f36c23366129c918ae1d86fc298983b90732aef008d82ab00de6233 0B / 244B 48.6s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 8.39MB / 17.15MB 48.9s
-#38 sha256:833a11e16f36c23366129c918ae1d86fc298983b90732aef008d82ab00de6233 244B / 244B 48.8s done
-#38 sha256:e81a4b56efff3a2dc20e84f5e6397ab525bfb41f93037c8462a02812fd2bb2b8 0B / 3.08MB 49.0s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 9.44MB / 17.15MB 49.4s
-#38 sha256:e81a4b56efff3a2dc20e84f5e6397ab525bfb41f93037c8462a02812fd2bb2b8 1.05MB / 3.08MB 49.7s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 10.49MB / 17.15MB 50.1s
-#38 sha256:e81a4b56efff3a2dc20e84f5e6397ab525bfb41f93037c8462a02812fd2bb2b8 2.10MB / 3.08MB 50.1s
-#38 extracting sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 10.2s
-#38 sha256:e81a4b56efff3a2dc20e84f5e6397ab525bfb41f93037c8462a02812fd2bb2b8 3.08MB / 3.08MB 50.4s
-#38 sha256:e81a4b56efff3a2dc20e84f5e6397ab525bfb41f93037c8462a02812fd2bb2b8 3.08MB / 3.08MB 50.5s done
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 11.53MB / 17.15MB 50.9s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 146.58MB / 211.12MB 51.1s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 12.58MB / 17.15MB 51.1s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 13.63MB / 17.15MB 51.4s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 14.68MB / 17.15MB 51.8s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 16.78MB / 17.15MB 52.2s
-#38 sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 17.15MB / 17.15MB 52.5s done
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 157.29MB / 211.12MB 54.1s
-#38 extracting sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 15.3s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 168.82MB / 211.12MB 55.8s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 180.36MB / 211.12MB 57.8s
-#38 extracting sha256:7bb465c2914923b08ae03b7fc67b92a1ef9b09c4c1eb9d6711b22ee6bbb46a00 17.9s done
-#38 extracting sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 0.1s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 191.89MB / 211.12MB 59.7s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 203.42MB / 211.12MB 61.6s
-#38 sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 211.12MB / 211.12MB 63.7s done
-#38 extracting sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 5.3s
-#38 extracting sha256:2b9b41aaa3c52ab268b47da303015b94ced04a1eb02e58860e58b283404974f4 5.5s done
-#38 extracting sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234
-#38 extracting sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 5.0s
-#38 extracting sha256:49b40be4436eff6fe463f6977159dc727df37cabe65ade75c75c1caa3cb0a234 9.7s done
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 5.4s
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 10.5s
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 15.5s
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 20.5s
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 25.7s
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 31.4s
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 36.4s
-#38 extracting sha256:c558fac597f8ecbb7a66712e14912ce1d83b23a92ca8b6ff14eef209ab01aff2 37.0s done
-#38 extracting sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d
-#38 extracting sha256:11402150a57e537c64dc69a28bba37f13acdedd50d8788894398a7b774786e7d 1.1s done
-#38 extracting sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65
-#38 extracting sha256:78d5a34402079647b3f5d1b4a135d37cb6167a23b4f15a6c8d416f2f5cf2aa65 2.4s done
-#38 extracting sha256:833a11e16f36c23366129c918ae1d86fc298983b90732aef008d82ab00de6233 done
-#38 extracting sha256:e81a4b56efff3a2dc20e84f5e6397ab525bfb41f93037c8462a02812fd2bb2b8
-#38 extracting sha256:e81a4b56efff3a2dc20e84f5e6397ab525bfb41f93037c8462a02812fd2bb2b8 0.8s done
-#38 DONE 117.8s
+#40 [test-runner  3/12] RUN apt-get install curl wget tar -y
+#40 CACHED
 
-#40 [test-runner  2/12] WORKDIR /usr/src/app
-#40 DONE 2.8s
+#41 [test-runner 11/12] RUN mkdir test_results &&     mkdir screenshots
+#41 CACHED
 
-#41 [test-runner  3/12] RUN apt-get install curl wget tar -y
-#41 1.198 Reading package lists...
-#41 1.238 Building dependency tree...
-#41 1.240 Reading state information...
-#41 1.270 curl is already the newest version (7.88.1-10+deb12u5).
-#41 1.270 wget is already the newest version (1.21.3-1+b2).
-#41 1.270 tar is already the newest version (1.34+dfsg-1.2+deb12u1).
-#41 1.270 tar set to manually installed.
-#41 1.270 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-#41 DONE 1.5s
+#42 [test-runner  9/12] WORKDIR /home/app/test
+#42 CACHED
 
-#42 [test-runner  4/12] RUN apt-get upgrade -y
-#42 0.790 Reading package lists...
-#42 0.825 Building dependency tree...
-#42 0.829 Reading state information...
-#42 0.833 Calculating upgrade...
-#42 0.842 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-#42 DONE 1.0s
+#43 [test-runner  6/12] RUN mkdir -p /home/app &&     groupadd test &&     useradd -m -g test test -p test &&     usermod -aG test test
+#43 CACHED
 
-#43 [test-runner  5/12] RUN pip install --upgrade pip
-#43 2.595 Requirement already satisfied: pip in /usr/local/lib/python3.10/site-packages (23.0.1)
-#43 3.013 Collecting pip
-#43 3.436   Downloading pip-24.0-py3-none-any.whl (2.1 MB)
-#43 4.026      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 3.7 MB/s eta 0:00:00
-#43 4.103 Installing collected packages: pip
-#43 4.103   Attempting uninstall: pip
-#43 4.104     Found existing installation: pip 23.0.1
-#43 4.283     Uninstalling pip-23.0.1:
-#43 4.497       Successfully uninstalled pip-23.0.1
-#43 6.100 Successfully installed pip-24.0
-#43 6.100 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
-#43 DONE 6.9s
+#44 [test-runner 10/12] RUN pip install -r requirements.txt
+#44 CACHED
 
-#44 [test-runner  6/12] RUN mkdir -p /home/app &&     groupadd test &&     useradd -m -g test test -p test &&     usermod -aG test test
-#44 DONE 1.4s
+#45 [test-runner  8/12] COPY ./requirements.txt /home/app/test
+#45 CACHED
 
-#45 [test-runner  7/12] RUN mkdir /home/app/test &&     chown -R test:test /home/app/test
-#45 DONE 1.0s
+#46 [test-runner  5/12] RUN pip install --upgrade pip
+#46 CACHED
 
-#46 [test-runner  8/12] COPY ./requirements.txt /home/app/test
-#46 DONE 0.3s
+#47 [test-runner  4/12] RUN apt-get upgrade -y
+#47 CACHED
 
-#47 [test-runner  9/12] WORKDIR /home/app/test
-#47 DONE 0.2s
+#48 [test-runner  7/12] RUN mkdir /home/app/test &&     chown -R test:test /home/app/test
+#48 CACHED
 
-#48 [test-runner 10/12] RUN pip install -r requirements.txt
-#48 2.131 Collecting selenium==4.2.0 (from -r requirements.txt (line 1))
-#48 2.427   Downloading selenium-4.2.0-py3-none-any.whl (983 kB)
-#48 2.874      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 983.2/983.2 kB 2.3 MB/s eta 0:00:00
-#48 2.996 Collecting html-testRunner==1.2.1 (from -r requirements.txt (line 2))
-#48 3.185   Downloading html_testRunner-1.2.1-py2.py3-none-any.whl (11 kB)
-#48 3.375 Collecting urllib3~=1.26 (from urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 3.461   Downloading urllib3-1.26.18-py2.py3-none-any.whl.metadata (48 kB)
-#48 3.492      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 48.9/48.9 kB 1.7 MB/s eta 0:00:00
-#48 3.624 Collecting trio~=0.17 (from selenium==4.2.0->-r requirements.txt (line 1))
-#48 3.711   Downloading trio-0.24.0-py3-none-any.whl.metadata (4.9 kB)
-#48 3.848 Collecting trio-websocket~=0.9 (from selenium==4.2.0->-r requirements.txt (line 1))
-#48 3.933   Downloading trio_websocket-0.11.1-py3-none-any.whl.metadata (4.7 kB)
-#48 4.095 Collecting Jinja2>=2.10.1 (from html-testRunner==1.2.1->-r requirements.txt (line 2))
-#48 4.175   Downloading Jinja2-3.1.3-py3-none-any.whl.metadata (3.3 kB)
-#48 4.408 Collecting MarkupSafe>=2.0 (from Jinja2>=2.10.1->html-testRunner==1.2.1->-r requirements.txt (line 2))
-#48 4.493   Downloading MarkupSafe-2.1.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (3.0 kB)
-#48 4.630 Collecting attrs>=20.1.0 (from trio~=0.17->selenium==4.2.0->-r requirements.txt (line 1))
-#48 4.714   Downloading attrs-23.2.0-py3-none-any.whl.metadata (9.5 kB)
-#48 4.848 Collecting sortedcontainers (from trio~=0.17->selenium==4.2.0->-r requirements.txt (line 1))
-#48 4.943   Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
-#48 5.083 Collecting idna (from trio~=0.17->selenium==4.2.0->-r requirements.txt (line 1))
-#48 5.166   Downloading idna-3.6-py3-none-any.whl.metadata (9.9 kB)
-#48 5.298 Collecting outcome (from trio~=0.17->selenium==4.2.0->-r requirements.txt (line 1))
-#48 5.395   Downloading outcome-1.3.0.post0-py2.py3-none-any.whl.metadata (2.6 kB)
-#48 5.532 Collecting sniffio>=1.3.0 (from trio~=0.17->selenium==4.2.0->-r requirements.txt (line 1))
-#48 5.623   Downloading sniffio-1.3.0-py3-none-any.whl (10 kB)
-#48 5.780 Collecting exceptiongroup (from trio~=0.17->selenium==4.2.0->-r requirements.txt (line 1))
-#48 5.870   Downloading exceptiongroup-1.2.0-py3-none-any.whl.metadata (6.6 kB)
-#48 6.004 Collecting wsproto>=0.14 (from trio-websocket~=0.9->selenium==4.2.0->-r requirements.txt (line 1))
-#48 6.096   Downloading wsproto-1.2.0-py3-none-any.whl (24 kB)
-#48 6.255 Collecting PySocks!=1.5.7,<2.0,>=1.5.6 (from urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 6.342   Downloading PySocks-1.7.1-py3-none-any.whl (16 kB)
-#48 6.487 Collecting pyOpenSSL>=0.14 (from urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 6.574   Downloading pyOpenSSL-24.0.0-py3-none-any.whl.metadata (12 kB)
-#48 7.059 Collecting cryptography>=1.3.4 (from urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 7.146   Downloading cryptography-42.0.2-cp39-abi3-manylinux_2_28_x86_64.whl.metadata (5.3 kB)
-#48 7.296 Collecting certifi (from urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 7.388   Downloading certifi-2024.2.2-py3-none-any.whl.metadata (2.2 kB)
-#48 7.527 Collecting urllib3-secure-extra (from urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 7.618   Downloading urllib3_secure_extra-0.1.0-py2.py3-none-any.whl (1.4 kB)
-#48 8.027 Collecting cffi>=1.12 (from cryptography>=1.3.4->urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 8.112   Downloading cffi-1.16.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (1.5 kB)
-#48 8.310 Collecting h11<1,>=0.9.0 (from wsproto>=0.14->trio-websocket~=0.9->selenium==4.2.0->-r requirements.txt (line 1))
-#48 8.402   Downloading h11-0.14.0-py3-none-any.whl (58 kB)
-#48 8.452      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.3/58.3 kB 1.2 MB/s eta 0:00:00
-#48 8.621 Collecting pycparser (from cffi>=1.12->cryptography>=1.3.4->urllib3[secure,socks]~=1.26->selenium==4.2.0->-r requirements.txt (line 1))
-#48 8.714   Downloading pycparser-2.21-py2.py3-none-any.whl (118 kB)
-#48 8.751      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 118.7/118.7 kB 4.9 MB/s eta 0:00:00
-#48 8.860 Downloading Jinja2-3.1.3-py3-none-any.whl (133 kB)
-#48 8.894    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.2/133.2 kB 8.2 MB/s eta 0:00:00
-#48 8.979 Downloading trio-0.24.0-py3-none-any.whl (460 kB)
-#48 9.117    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 460.2/460.2 kB 4.1 MB/s eta 0:00:00
-#48 9.202 Downloading trio_websocket-0.11.1-py3-none-any.whl (17 kB)
-#48 9.344 Downloading urllib3-1.26.18-py2.py3-none-any.whl (143 kB)
-#48 9.396    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 143.8/143.8 kB 2.8 MB/s eta 0:00:00
-#48 9.485 Downloading attrs-23.2.0-py3-none-any.whl (60 kB)
-#48 9.534    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.8/60.8 kB 1.2 MB/s eta 0:00:00
-#48 9.639 Downloading cryptography-42.0.2-cp39-abi3-manylinux_2_28_x86_64.whl (4.7 MB)
-#48 10.63    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 4.7 MB/s eta 0:00:00
-#48 10.72 Downloading idna-3.6-py3-none-any.whl (61 kB)
-#48 10.80    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 61.6/61.6 kB 791.7 kB/s eta 0:00:00
-#48 10.89 Downloading MarkupSafe-2.1.5-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (25 kB)
-#48 11.03 Downloading pyOpenSSL-24.0.0-py3-none-any.whl (58 kB)
-#48 11.05    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.6/58.6 kB 2.1 MB/s eta 0:00:00
-#48 11.15 Downloading certifi-2024.2.2-py3-none-any.whl (163 kB)
-#48 11.21    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 163.8/163.8 kB 2.7 MB/s eta 0:00:00
-#48 11.30 Downloading exceptiongroup-1.2.0-py3-none-any.whl (16 kB)
-#48 11.42 Downloading outcome-1.3.0.post0-py2.py3-none-any.whl (10 kB)
-#48 11.54 Downloading cffi-1.16.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (443 kB)
-#48 11.67    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 443.9/443.9 kB 4.0 MB/s eta 0:00:00
-#48 11.89 Installing collected packages: urllib3-secure-extra, sortedcontainers, urllib3, sniffio, PySocks, pycparser, MarkupSafe, idna, h11, exceptiongroup, certifi, attrs, wsproto, outcome, Jinja2, cffi, trio, html-testRunner, cryptography, trio-websocket, pyOpenSSL, selenium
-#48 14.49 Successfully installed Jinja2-3.1.3 MarkupSafe-2.1.5 PySocks-1.7.1 attrs-23.2.0 certifi-2024.2.2 cffi-1.16.0 cryptography-42.0.2 exceptiongroup-1.2.0 h11-0.14.0 html-testRunner-1.2.1 idna-3.6 outcome-1.3.0.post0 pyOpenSSL-24.0.0 pycparser-2.21 selenium-4.2.0 sniffio-1.3.0 sortedcontainers-2.4.0 trio-0.24.0 trio-websocket-0.11.1 urllib3-1.26.18 urllib3-secure-extra-0.1.0 wsproto-1.2.0
-#48 14.49 WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
-#48 DONE 17.8s
-
-#49 [test-runner 11/12] RUN mkdir test_results &&     mkdir screenshots
-#49 DONE 1.1s
+#49 [test-runner  2/12] WORKDIR /usr/src/app
+#49 CACHED
 
 #50 [test-runner 12/12] COPY ./ /home/app/test
-#50 DONE 0.4s
+#50 CACHED
 
 #25 [test-runner] exporting to image
-#25 exporting layers
-#25 exporting layers 1.1s done
-#25 writing image sha256:f73cf20874d2bd75cde7e650d9c3140ec8d836f62e71eb367e243e6a3eee9cc2 0.0s done
+#25 exporting layers done
+#25 writing image sha256:f73cf20874d2bd75cde7e650d9c3140ec8d836f62e71eb367e243e6a3eee9cc2 done
 #25 naming to docker.io/library/racks-test-runner done
-#25 DONE 13.9s
+#25 DONE 7.0s
  Network racks_test  Creating
  Network racks_test  Created
+time="2024-02-15T21:00:49+04:00" level=warning msg="Found orphan containers ([frontend racks-phpmyadmin-1 racks-racks-1 racks-mysql-1]) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up."
  Container db-testing  Creating
  Container db-testing  Created
- Container phpunit  Creating
  Container pint  Creating
  Container phpstan  Creating
+ Container phpunit  Creating
  Container backend-testing  Creating
  Container phpunit  Created
- Container backend-testing  Created
- Container pint  Created
  Container phpstan  Created
+ Container pint  Created
+ Container backend-testing  Created
  Container frontend-testing  Creating
  Container frontend-testing  Created
  Container hub  Creating
@@ -522,20 +283,20 @@
 Attaching to backend-testing, db-testing, e2e-tests, frontend-testing, hub, phpstan, phpunit, pint, racks-selenium-1, racks-selenium-2
 db-testing        | [Entrypoint] MySQL Docker Image 8.0.32-1.2.11-server
 db-testing        | [Entrypoint] Initializing database
-db-testing        | 2024-02-14T12:28:38.829390Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
-db-testing        | 2024-02-14T12:28:38.855487Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.32) initializing of server in progress as process 17
-db-testing        | 2024-02-14T12:28:38.899628Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
-db-testing        | 2024-02-14T12:28:41.029165Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
-db-testing        | 2024-02-14T12:28:43.057049Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+db-testing        | 2024-02-15T17:00:51.734026Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+db-testing        | 2024-02-15T17:00:51.734530Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.0.32) initializing of server in progress as process 18
+db-testing        | 2024-02-15T17:00:51.741779Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+db-testing        | 2024-02-15T17:00:52.207579Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+db-testing        | 2024-02-15T17:00:53.780623Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
 db-testing        | [Entrypoint] Database initialized
-db-testing        | 2024-02-14T12:28:46.171507Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
-db-testing        | 2024-02-14T12:28:46.173962Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.32) starting as process 60
-db-testing        | 2024-02-14T12:28:46.217126Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
-db-testing        | 2024-02-14T12:28:46.490235Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
-db-testing        | 2024-02-14T12:28:46.910764Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
-db-testing        | 2024-02-14T12:28:46.910993Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
-db-testing        | 2024-02-14T12:28:47.002755Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
-db-testing        | 2024-02-14T12:28:47.003975Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.32'  socket: '/var/lib/mysql/mysql.sock'  port: 0  MySQL Community Server - GPL.
+db-testing        | 2024-02-15T17:00:56.740997Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+db-testing        | 2024-02-15T17:00:56.746661Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.32) starting as process 61
+db-testing        | 2024-02-15T17:00:56.779725Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+db-testing        | 2024-02-15T17:00:57.141876Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+db-testing        | 2024-02-15T17:00:57.477060Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+db-testing        | 2024-02-15T17:00:57.477206Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+db-testing        | 2024-02-15T17:00:57.509947Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
+db-testing        | 2024-02-15T17:00:57.510516Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.32'  socket: '/var/lib/mysql/mysql.sock'  port: 0  MySQL Community Server - GPL.
 db-testing        | Warning: Unable to load '/usr/share/zoneinfo/iso3166.tab' as time zone. Skipping it.
 db-testing        | Warning: Unable to load '/usr/share/zoneinfo/leapseconds' as time zone. Skipping it.
 db-testing        | Warning: Unable to load '/usr/share/zoneinfo/tzdata.zi' as time zone. Skipping it.
@@ -544,106 +305,106 @@ db-testing        | Warning: Unable to load '/usr/share/zoneinfo/zone1970.tab' a
 db-testing        | 
 db-testing        | [Entrypoint] ignoring /docker-entrypoint-initdb.d/*
 db-testing        | 
-db-testing        | 2024-02-14T12:28:53.356536Z 14 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.0.32).
-db-testing        | 2024-02-14T12:28:54.316013Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.0.32)  MySQL Community Server - GPL.
+db-testing        | 2024-02-15T17:01:02.353766Z 14 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.0.32).
+db-testing        | 2024-02-15T17:01:03.999306Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.0.32)  MySQL Community Server - GPL.
 db-testing        | [Entrypoint] Server shut down
 db-testing        | 
 db-testing        | [Entrypoint] MySQL init process done. Ready for start up.
 db-testing        | 
 db-testing        | [Entrypoint] Starting MySQL 8.0.32-1.2.11-server
-db-testing        | 2024-02-14T12:28:54.771919Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
-db-testing        | 2024-02-14T12:28:54.773727Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.32) starting as process 1
-db-testing        | 2024-02-14T12:28:54.785584Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
-db-testing        | 2024-02-14T12:28:55.036753Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
-db-testing        | 2024-02-14T12:28:55.430829Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
-db-testing        | 2024-02-14T12:28:55.430988Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
-db-testing        | 2024-02-14T12:28:55.487155Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.32'  socket: '/var/lib/mysql/mysql.sock'  port: 3306  MySQL Community Server - GPL.
-db-testing        | 2024-02-14T12:28:55.488727Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
-phpstan           | Note: Using configuration file /var/www/phpstan.neon.
-pint              | 
-phpunit           | PHPUnit 10.5.10 by Sebastian Bergmann and contributors.
-phpunit           | 
-phpunit           | Runtime:       PHP 8.1.27
-phpunit           | Configuration: /var/www/phpunit.xml
-phpunit           | 
-pint              |   ............................................................................
+db-testing        | 2024-02-15T17:01:04.656544Z 0 [Warning] [MY-011068] [Server] The syntax '--skip-host-cache' is deprecated and will be removed in a future release. Please use SET GLOBAL host_cache_size=0 instead.
+db-testing        | 2024-02-15T17:01:04.658322Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.0.32) starting as process 1
+db-testing        | 2024-02-15T17:01:04.666203Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+db-testing        | 2024-02-15T17:01:04.924197Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+db-testing        | 2024-02-15T17:01:05.183746Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+db-testing        | 2024-02-15T17:01:05.183868Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+db-testing        | 2024-02-15T17:01:05.208859Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.0.32'  socket: '/var/lib/mysql/mysql.sock'  port: 3306  MySQL Community Server - GPL.
+db-testing        | 2024-02-15T17:01:05.222475Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
 backend-testing   | 
 backend-testing   |    INFO  Configuration cached successfully.  
 backend-testing   | 
 backend-testing   | 
 backend-testing   |    INFO  Configuration cache cleared successfully.  
 backend-testing   | 
+phpstan           | Note: Using configuration file /var/www/phpstan.neon.
+phpunit           | PHPUnit 10.5.10 by Sebastian Bergmann and contributors.
+phpunit           | 
+phpunit           | Runtime:       PHP 8.1.27
+phpunit           | Configuration: /var/www/phpunit.xml
+phpunit           | 
 backend-testing   | 
 backend-testing   |    INFO  Application cache cleared successfully.  
 backend-testing   | 
-phpunit           | ................................................................. 65 / 95 ( 68%)
 backend-testing   | 
 backend-testing   |    INFO  Route cache cleared successfully.  
 backend-testing   | 
+pint              | 
 backend-testing   | 
-backend-testing   |   Dropping all tables ............................................. 187ms DONE
+backend-testing   |   Dropping all tables ............................................. 101ms DONE
 backend-testing   | 
 backend-testing   |    INFO  Preparing database.  
 backend-testing   | 
 backend-testing   |   Creating migration table ......................................... 14ms DONE
 backend-testing   | 
-pint              |   ............................................................................
 backend-testing   |    INFO  Running migrations.  
 backend-testing   | 
-backend-testing   |   2013_12_05_052558_create_regions_table ........................... 88ms DONE
+backend-testing   |   2013_12_05_052558_create_regions_table ........................... 32ms DONE
+phpunit           | ................................................................. 65 / 95 ( 68%)
+backend-testing   |   2013_12_05_052621_create_departments_table ....................... 55ms DONE
+backend-testing   |   2014_10_12_000000_create_users_table ............................ 105ms DONE
+backend-testing   |   2014_10_12_100000_create_password_reset_tokens_table ............. 64ms DONE
+backend-testing   |   2018_08_08_100000_create_telescope_entries_table ................ 343ms DONE
 pint              |   ............................................................................
-backend-testing   |   2013_12_05_052621_create_departments_table ....................... 71ms DONE
-backend-testing   |   2014_10_12_000000_create_users_table ............................ 162ms DONE
-backend-testing   |   2014_10_12_100000_create_password_reset_tokens_table ............. 18ms DONE
-backend-testing   |   2018_08_08_100000_create_telescope_entries_table ................ 516ms DONE
-backend-testing   |   2019_08_19_000000_create_failed_jobs_table ....................... 47ms DONE
-pint              |   ............................................................................
-backend-testing   |   2019_12_14_000001_create_personal_access_tokens_table ........... 162ms DONE
-backend-testing   |   2023_12_05_052646_create_sites_table ............................ 773ms DONE
-backend-testing   |   2023_12_05_052757_create_buildings_table ......................... 36ms DONE
-backend-testing   |   2023_12_05_052806_create_rooms_table ............................. 22ms DONE
-backend-testing   |   2023_12_05_055344_create_racks_table ............................ 221ms DONE
-backend-testing   |   2023_12_05_055355_create_devices_table .......................... 110ms DONE
-backend-testing   |   2023_12_27_124638_action_log ..................................... 94ms DONE
+backend-testing   |   2019_08_19_000000_create_failed_jobs_table ....................... 16ms DONE
+backend-testing   |   2019_12_14_000001_create_personal_access_tokens_table ............ 51ms DONE
+backend-testing   |   2023_12_05_052646_create_sites_table ............................. 41ms DONE
+backend-testing   |   2023_12_05_052757_create_buildings_table ......................... 24ms DONE
+backend-testing   |   2023_12_05_052806_create_rooms_table ............................. 37ms DONE
+backend-testing   |   2023_12_05_055344_create_racks_table ............................. 48ms DONE
+backend-testing   |   2023_12_05_055355_create_devices_table ........................... 48ms DONE
+backend-testing   |   2023_12_27_124638_action_log .................................... 276ms DONE
 backend-testing   | 
 backend-testing   | 
 backend-testing   |    INFO  Seeding database.  
 backend-testing   | 
-pint              |   ............................................................................
 pint              |   ............................................................................
 backend-testing   | 
 backend-testing   |    INFO  Server running on [http://0.0.0.0:81].  
 backend-testing   | 
 backend-testing   |   Press Ctrl+C to stop the server
 backend-testing   | 
+pint              |   ............................................................................
+pint              |   ............................................................................
+pint              |   ............................................................................
+pint              |   ............................................................................
 pint              |   ......................................................................
 pint              | 
 pint              |   ──────────────────────────────────────────────────────────────────── Laravel  
 pint              |     PASS   ......................................................... 526 files  
 pint              | 
+backend-testing   |   2024-02-15 17:01:34 ................................................... ~ 0s
 pint exited with code 0
-phpunit           | ..............................                                    95 / 95 (100%)
-phpunit           | 
-phpunit           | Time: 00:19.420, Memory: 48.50 MB
-phpunit           | 
-phpunit           | OK (95 tests, 188 assertions)
-backend-testing   |   2024-02-14 12:29:33 ................................................... ~ 0s
-phpstan           |    0/478 [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%[1G[2K  20/478 [▓░░░░░░░░░░░░░░░░░░░░░░░░░░░]   4%[1G[2K  60/478 [▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░]  12%[1G[2K 100/478 [▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░]  20%[1G[2K 160/478 [▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░]  33%[1G[2K 200/478 [▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░]  41%[1G[2K 240/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░]  50%[1G[2K 300/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░]  62%[1G[2K 340/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░]  71%[1G[2K 400/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░]  83%[1G[2K 440/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░]  92%[1G[2K 478/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+phpstan           |    0/478 [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%[1G[2K  20/478 [▓░░░░░░░░░░░░░░░░░░░░░░░░░░░]   4%[1G[2K  40/478 [▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░]   8%[1G[2K  60/478 [▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░]  12%[1G[2K 100/478 [▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░]  20%[1G[2K 160/478 [▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░]  33%[1G[2K 200/478 [▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░]  41%[1G[2K 240/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░]  50%[1G[2K 300/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░]  62%[1G[2K 340/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░]  71%[1G[2K 400/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░]  83%[1G[2K 440/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░]  92%[1G[2K 478/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
 phpstan           | 
 phpstan           | 
 phpstan           |  [OK] No errors                                                                 
 phpstan           | 
-phpunit exited with code 0
 phpstan exited with code 0
 frontend-testing  | 
 frontend-testing  | > racks_frontend@0.1.0 serve /app
 frontend-testing  | > vue-cli-service serve "--port" "8081"
 frontend-testing  | 
+phpunit           | ..............................                                    95 / 95 (100%)
+phpunit           | 
+phpunit           | Time: 00:14.190, Memory: 48.50 MB
+phpunit           | 
+phpunit           | OK (95 tests, 188 assertions)
+phpunit exited with code 0
 frontend-testing  | Browserslist: caniuse-lite is outdated. Please run:
 frontend-testing  |   npx update-browserslist-db@latest
 frontend-testing  |   Why you should do it regularly: https://github.com/browserslist/update-db#readme
 frontend-testing  |  INFO  Starting development server...
-backend-testing   |   2024-02-14 12:29:43 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:01:44 ................................................... ~ 1s
 frontend-testing  | [3%] setup (watch run)
 frontend-testing  | [2K[1A[2K[G[3%] setup (watch run webpack-dev-middleware)
 frontend-testing  | [2K[1A[2K[G[3%] setup (watch run)
@@ -730,34 +491,33 @@ frontend-testing  | [2K[1A[2K[G[10%] building
 frontend-testing  | [2K[1A[2K[G[10%] building (0/0 modules)
 frontend-testing  | [2K[1A[2K[G[10%] building (import loader babel-loader/lib/index.js)
 frontend-testing  | [2K[1A[2K[G[10%] building (0/1 modules)
-frontend-testing  | [2K[1A[2K[G[10%] building (0/3 modules)
-frontend-testing  | [2K[1A[2K[G[24%] building (3/9 modules)
+frontend-testing  | [2K[1A[2K[G[10%] building (1/7 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (1/7 modules)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader vue-loader/dist/index.js)
 frontend-testing  | [2K[1A[2K[G[24%] building (3/16 modules)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader vue-style-loader/index.js)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader css-loader/dist/cjs.js)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader postcss-loader/dist/cjs.js)
-frontend-testing  | [2K[1A[2K[G[24%] building (3/21 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (5/22 modules)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader vue-loader/dist/pitcher.js)
-frontend-testing  | [2K[1A[2K[G[24%] building (6/26 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (7/28 modules)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader vue-loader/dist/templateLoader.js)
-frontend-testing  | [2K[1A[2K[G[24%] building (6/26 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (7/28 modules)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader sass-loader/dist/cjs.js)
-frontend-testing  | [2K[1A[2K[G[24%] building (8/33 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (10/40 modules)
 frontend-testing  | [2K[1A[2K[G[24%] building (import loader vue-loader/dist/stylePostLoader.js)
-frontend-testing  | [2K[1A[2K[G[24%] building (12/41 modules)
-frontend-testing  | [2K[1A[2K[G[24%] building (13/44 modules)
-frontend-testing  | [2K[1A[2K[G[24%] building (18/74 modules)
-frontend-testing  | [2K[1A[2K[G[24%] building (23/168 modules)
-backend-testing   |   2024-02-14 12:29:54 ................................................... ~ 0s
-frontend-testing  | [2K[1A[2K[G[24%] building (69/200 modules)
-frontend-testing  | [2K[1A[2K[G[24%] building (80/205 modules)
-frontend-testing  | [2K[1A[2K[G[24%] building (98/235 modules)
-frontend-testing  | [2K[1A[2K[G[24%] building (124/279 modules)
-frontend-testing  | [2K[1A[2K[G[38%] building (138/279 modules)
-frontend-testing  | [2K[1A[2K[G[38%] building (173/300 modules)
-frontend-testing  | [2K[1A[2K[G[51%] building (236/372 modules)
-frontend-testing  | [2K[1A[2K[G[51%] building (292/400 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (15/41 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (15/45 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (22/119 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (27/182 modules)
+frontend-testing  | [2K[1A[2K[G[24%] building (30/201 modules)
+backend-testing   |   2024-02-15 17:01:55 ................................................... ~ 0s
+frontend-testing  | [2K[1A[2K[G[24%] building (97/221 modules)
+frontend-testing  | [2K[1A[2K[G[38%] building (126/252 modules)
+frontend-testing  | [2K[1A[2K[G[38%] building (163/300 modules)
+frontend-testing  | [2K[1A[2K[G[51%] building (219/358 modules)
+frontend-testing  | [2K[1A[2K[G[51%] building (246/381 modules)
+frontend-testing  | [2K[1A[2K[G[51%] building (297/400 modules)
 frontend-testing  | [2K[1A[2K[G[65%] building (408/408 modules)
 frontend-testing  | [2K[1A[2K[G[65%] building 
 frontend-testing  | [2K[1A[2K[G[69%] building (finish)
@@ -838,29 +598,29 @@ frontend-testing  | [2K[1A[2K[G[94%] sealing (recording)
 frontend-testing  | [2K[1A[2K[G[94%] sealing (after seal)
 frontend-testing  | [2K[1A[2K[G[95%] emitting (emit)
 frontend-testing  | [2K[1A[2K[G[98%] emitting (after emit)
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[G DONE  Compiled successfully in 15040ms12:30:03 PM
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[G DONE  Compiled successfully in 13411ms5:01:59 PM
 frontend-testing  | 
-frontend-testing  | Build finished at 12:30:03 by 0.000s
+frontend-testing  | Build finished at 17:01:59 by 0.000s
 frontend-testing  | [2K[1A[2K[G
 frontend-testing  |   App running at:
 frontend-testing  |   - Local:   http://localhost:8081/ 
-frontend-testing  |   - Network: http://172.18.0.6:8081/
+frontend-testing  |   - Network: http://172.22.0.6:8081/
 frontend-testing  | 
 frontend-testing  |   Note that the development build is not optimized.
 frontend-testing  |   To create a production build, run npm run build.
 frontend-testing  | 
-frontend-testing  | Build finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:03 by 0.000s
-frontend-testing  | [2K[1A[2K[G WAIT  Compiling...12:30:03 PM
+frontend-testing  | Build finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:01:59 by 0.000s
+frontend-testing  | [2K[1A[2K[G WAIT  Compiling...5:01:59 PM
 frontend-testing  | 
 frontend-testing  | Compiling...
 frontend-testing  | 
@@ -950,11 +710,11 @@ frontend-testing  | [2K[1A[2K[G[9%] setup (compilation)
 frontend-testing  | [2K[1A[2K[G[10%] building 
 frontend-testing  | [2K[1A[2K[G[10%] building (0/0 modules)
 frontend-testing  | [2K[1A[2K[G[24%] building (1/4 modules)
-frontend-testing  | [2K[1A[2K[G[38%] building (40/64 modules)
+frontend-testing  | [2K[1A[2K[G[38%] building (45/64 modules)
 frontend-testing  | [2K[1A[2K[G[38%] building (import loader css-loader/dist/cjs.js)
 frontend-testing  | [2K[1A[2K[G[38%] building (import loader postcss-loader/dist/cjs.js)
-frontend-testing  | [2K[1A[2K[G[38%] building (40/66 modules)
-frontend-testing  | [2K[1A[2K[G[51%] building (78/66 modules)
+frontend-testing  | [2K[1A[2K[G[38%] building (45/66 modules)
+frontend-testing  | [2K[1A[2K[G[51%] building (90/66 modules)
 frontend-testing  | [2K[1A[2K[G[65%] building (408/227 modules)
 frontend-testing  | [2K[1A[2K[G[65%] building 
 frontend-testing  | [2K[1A[2K[G[69%] building (finish)
@@ -1035,68 +795,50 @@ frontend-testing  | [2K[1A[2K[G[94%] sealing (recording)
 frontend-testing  | [2K[1A[2K[G[94%] sealing (after seal)
 frontend-testing  | [2K[1A[2K[G[95%] emitting (emit)
 frontend-testing  | [2K[1A[2K[G[98%] emitting (after emit)
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[G DONE  Compiled successfully in 571ms12:30:04 PM
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[G DONE  Compiled successfully in 583ms5:02:00 PM
 frontend-testing  | 
-frontend-testing  | Build finished at 12:30:04 by 0.000s
+frontend-testing  | Build finished at 17:02:00 by 0.000s
 frontend-testing  | [2K[1A[2K[G
 frontend-testing  |   App running at:
 frontend-testing  |   - Local:   http://localhost:8081/ 
-frontend-testing  |   - Network: http://172.18.0.6:8081/
+frontend-testing  |   - Network: http://172.22.0.6:8081/
 frontend-testing  | 
-frontend-testing  | Build finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-frontend-testing  | [2K[1A[2K[GBuild finished at 12:30:04 by 0.000s
-backend-testing   |   2024-02-14 12:30:04 ................................................... ~ 0s
-hub               | 2024-02-14 12:30:11,183 INFO Included extra file "/etc/supervisor/conf.d/selenium-grid-hub.conf" during parsing
-hub               | 2024-02-14 12:30:11,197 INFO supervisord started with pid 8
-hub               | 2024-02-14 12:30:12,210 INFO spawned: 'selenium-grid-hub' with pid 10
-racks-selenium-2  | 2024-02-14 12:30:12,615 INFO Included extra file "/etc/supervisor/conf.d/selenium.conf" during parsing
-racks-selenium-2  | 2024-02-14 12:30:12,621 INFO supervisord started with pid 8
-hub               | 2024-02-14 12:30:13,225 INFO success: selenium-grid-hub entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-2  | 2024-02-14 12:30:13,673 INFO spawned: 'xvfb' with pid 10
-racks-selenium-2  | 2024-02-14 12:30:13,680 INFO spawned: 'vnc' with pid 11
-racks-selenium-2  | 2024-02-14 12:30:13,683 INFO spawned: 'novnc' with pid 12
-racks-selenium-2  | 2024-02-14 12:30:13,686 INFO spawned: 'selenium-node' with pid 13
-racks-selenium-1  | 2024-02-14 12:30:13,721 INFO Included extra file "/etc/supervisor/conf.d/selenium.conf" during parsing
-racks-selenium-1  | 2024-02-14 12:30:13,725 INFO supervisord started with pid 8
-racks-selenium-2  | 2024-02-14 12:30:13,931 INFO success: xvfb entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-2  | 2024-02-14 12:30:13,931 INFO success: vnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-2  | 2024-02-14 12:30:13,932 INFO success: novnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-2  | 2024-02-14 12:30:13,932 INFO success: selenium-node entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-1  | 2024-02-14 12:30:14,733 INFO spawned: 'xvfb' with pid 10
-racks-selenium-1  | 2024-02-14 12:30:14,740 INFO spawned: 'vnc' with pid 11
-racks-selenium-1  | 2024-02-14 12:30:14,746 INFO spawned: 'novnc' with pid 12
-racks-selenium-1  | 2024-02-14 12:30:14,773 INFO spawned: 'selenium-node' with pid 14
-hub               | 12:30:14.886 INFO [LoggingOptions.configureLogEncoding] - Using the system default encoding
-hub               | 12:30:14.948 INFO [OpenTelemetryTracer.createTracer] - Using OpenTelemetry for tracing
-racks-selenium-1  | 2024-02-14 12:30:15,012 INFO success: xvfb entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-1  | 2024-02-14 12:30:15,013 INFO success: vnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-1  | 2024-02-14 12:30:15,013 INFO success: novnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-1  | 2024-02-14 12:30:15,013 INFO success: selenium-node entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
-racks-selenium-2  | Appending Selenium options: --host 2c98a63c1e00
+frontend-testing  | Build finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+frontend-testing  | [2K[1A[2K[GBuild finished at 17:02:00 by 0.000s
+hub               | 2024-02-15 17:02:04,223 INFO Included extra file "/etc/supervisor/conf.d/selenium-grid-hub.conf" during parsing
+hub               | 2024-02-15 17:02:04,242 INFO supervisord started with pid 8
+hub               | 2024-02-15 17:02:05,253 INFO spawned: 'selenium-grid-hub' with pid 10
+racks-selenium-2  | 2024-02-15 17:02:05,454 INFO Included extra file "/etc/supervisor/conf.d/selenium.conf" during parsing
+racks-selenium-2  | 2024-02-15 17:02:05,456 INFO supervisord started with pid 8
+backend-testing   |   2024-02-15 17:02:05 ................................................... ~ 0s
+hub               | 2024-02-15 17:02:06,260 INFO success: selenium-grid-hub entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-2  | 2024-02-15 17:02:06,466 INFO spawned: 'xvfb' with pid 10
+racks-selenium-2  | 2024-02-15 17:02:06,472 INFO spawned: 'vnc' with pid 11
+racks-selenium-2  | 2024-02-15 17:02:06,475 INFO spawned: 'novnc' with pid 12
+racks-selenium-2  | 2024-02-15 17:02:06,544 INFO spawned: 'selenium-node' with pid 35
+racks-selenium-2  | 2024-02-15 17:02:06,551 INFO success: xvfb entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-2  | 2024-02-15 17:02:06,552 INFO success: vnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-2  | 2024-02-15 17:02:06,553 INFO success: novnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-2  | 2024-02-15 17:02:06,553 INFO success: selenium-node entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-1  | 2024-02-15 17:02:07,045 INFO Included extra file "/etc/supervisor/conf.d/selenium.conf" during parsing
+racks-selenium-1  | 2024-02-15 17:02:07,067 INFO supervisord started with pid 8
+racks-selenium-2  | Appending Selenium options: --host 56aeaba3c07d
 racks-selenium-2  | Generating Selenium Config
 racks-selenium-2  | Configuring server...
 racks-selenium-2  | Setting up SE_NODE_HOST...
 racks-selenium-2  | Setting up SE_NODE_PORT...
 racks-selenium-2  | Setting up SE_NODE_GRID_URL...
-racks-selenium-1  | Appending Selenium options: --host c1d957ef2647
-racks-selenium-1  | Generating Selenium Config
-racks-selenium-1  | Configuring server...
-racks-selenium-1  | Setting up SE_NODE_HOST...
-racks-selenium-1  | Setting up SE_NODE_PORT...
-racks-selenium-1  | Setting up SE_NODE_GRID_URL...
-backend-testing   |   2024-02-14 12:30:15 ................................................... ~ 0s
-hub               | 12:30:16.351 INFO [BoundZmqEventBus.<init>] - XPUB binding to [binding to tcp://*:4442, advertising as tcp://172.18.0.3:4442], XSUB binding to [binding to tcp://*:4443, advertising as tcp://172.18.0.3:4443]
-hub               | 12:30:16.965 INFO [UnboundZmqEventBus.<init>] - Connecting to tcp://172.18.0.3:4442 and tcp://172.18.0.3:4443
-racks-selenium-1  | Selenium Grid Node configuration: 
+hub               | 17:02:07.212 INFO [LoggingOptions.configureLogEncoding] - Using the system default encoding
+hub               | 17:02:07.255 INFO [OpenTelemetryTracer.createTracer] - Using OpenTelemetry for tracing
 racks-selenium-2  | Selenium Grid Node configuration: 
 racks-selenium-2  | [events]
 racks-selenium-2  | publish = "tcp://hub:4442"
@@ -1114,6 +856,26 @@ racks-selenium-2  | stereotype = '{"browserName": "chrome", "browserVersion": "1
 racks-selenium-2  | max-sessions = 1
 racks-selenium-2  | 
 racks-selenium-2  | Starting Selenium Grid Node...
+hub               | 17:02:07.845 INFO [BoundZmqEventBus.<init>] - XPUB binding to [binding to tcp://*:4442, advertising as tcp://172.22.0.4:4442], XSUB binding to [binding to tcp://*:4443, advertising as tcp://172.22.0.4:4443]
+racks-selenium-1  | 2024-02-15 17:02:08,078 INFO spawned: 'xvfb' with pid 10
+racks-selenium-1  | 2024-02-15 17:02:08,082 INFO spawned: 'vnc' with pid 11
+racks-selenium-1  | 2024-02-15 17:02:08,086 INFO spawned: 'novnc' with pid 12
+racks-selenium-1  | 2024-02-15 17:02:08,098 INFO spawned: 'selenium-node' with pid 16
+racks-selenium-1  | 2024-02-15 17:02:08,171 INFO success: xvfb entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-1  | 2024-02-15 17:02:08,177 INFO success: vnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-1  | 2024-02-15 17:02:08,177 INFO success: novnc entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+racks-selenium-1  | 2024-02-15 17:02:08,180 INFO success: selenium-node entered RUNNING state, process has stayed up for > than 0 seconds (startsecs)
+hub               | 17:02:08.234 INFO [UnboundZmqEventBus.<init>] - Connecting to tcp://172.22.0.4:4442 and tcp://172.22.0.4:4443
+hub               | 17:02:08.589 INFO [UnboundZmqEventBus.<init>] - Sockets created
+racks-selenium-2  | 17:02:08.639 INFO [LoggingOptions.configureLogEncoding] - Using the system default encoding
+racks-selenium-2  | 17:02:08.655 INFO [OpenTelemetryTracer.createTracer] - Using OpenTelemetry for tracing
+racks-selenium-1  | Appending Selenium options: --host 38cf0891cf48
+racks-selenium-1  | Generating Selenium Config
+racks-selenium-1  | Configuring server...
+racks-selenium-1  | Setting up SE_NODE_HOST...
+racks-selenium-1  | Setting up SE_NODE_PORT...
+racks-selenium-1  | Setting up SE_NODE_GRID_URL...
+racks-selenium-1  | Selenium Grid Node configuration: 
 racks-selenium-1  | [events]
 racks-selenium-1  | publish = "tcp://hub:4442"
 racks-selenium-1  | subscribe = "tcp://hub:4443"
@@ -1130,157 +892,153 @@ racks-selenium-1  | stereotype = '{"browserName": "chrome", "browserVersion": "1
 racks-selenium-1  | max-sessions = 1
 racks-selenium-1  | 
 racks-selenium-1  | Starting Selenium Grid Node...
-hub               | 12:30:17.298 INFO [UnboundZmqEventBus.<init>] - Sockets created
-hub               | 12:30:18.312 INFO [UnboundZmqEventBus.<init>] - Event bus ready
-racks-selenium-2  | 12:30:18.502 INFO [LoggingOptions.configureLogEncoding] - Using the system default encoding
-racks-selenium-1  | 12:30:18.516 INFO [LoggingOptions.configureLogEncoding] - Using the system default encoding
-racks-selenium-1  | 12:30:18.568 INFO [OpenTelemetryTracer.createTracer] - Using OpenTelemetry for tracing
-racks-selenium-2  | 12:30:18.570 INFO [OpenTelemetryTracer.createTracer] - Using OpenTelemetry for tracing
-racks-selenium-2  | 12:30:19.700 INFO [UnboundZmqEventBus.<init>] - Connecting to tcp://hub:4442 and tcp://hub:4443
-racks-selenium-1  | 12:30:19.697 INFO [UnboundZmqEventBus.<init>] - Connecting to tcp://hub:4442 and tcp://hub:4443
-racks-selenium-1  | 12:30:20.009 INFO [UnboundZmqEventBus.<init>] - Sockets created
-racks-selenium-2  | 12:30:20.024 INFO [UnboundZmqEventBus.<init>] - Sockets created
-racks-selenium-1  | 12:30:21.020 INFO [UnboundZmqEventBus.<init>] - Event bus ready
-racks-selenium-2  | 12:30:21.109 INFO [UnboundZmqEventBus.<init>] - Event bus ready
-racks-selenium-1  | 12:30:21.244 INFO [NodeServer.createHandlers] - Reporting self as: http://c1d957ef2647:5555
-racks-selenium-2  | 12:30:21.411 INFO [NodeServer.createHandlers] - Reporting self as: http://2c98a63c1e00:5555
-racks-selenium-2  | 12:30:21.445 INFO [NodeOptions.getSessionFactories] - Detected 4 available processors
-racks-selenium-1  | 12:30:21.447 INFO [NodeOptions.getSessionFactories] - Detected 4 available processors
-hub               | 12:30:21.524 INFO [Hub.execute] - Started Selenium Hub 4.1.3 (revision 7b1ebf28ef): http://172.18.0.3:4444
-racks-selenium-2  | 12:30:21.717 INFO [NodeOptions.report] - Adding chrome for {"browserVersion": "101.0","se:noVncPort": 7900,"browserName": "chrome","platformName": "Linux","se:vncEnabled": true} 1 times
-racks-selenium-1  | 12:30:21.714 INFO [NodeOptions.report] - Adding chrome for {"browserVersion": "101.0","se:noVncPort": 7900,"browserName": "chrome","platformName": "Linux","se:vncEnabled": true} 1 times
-racks-selenium-2  | 12:30:21.779 INFO [Node.<init>] - Binding additional locator mechanisms: relative, name, id
-racks-selenium-1  | 12:30:21.784 INFO [Node.<init>] - Binding additional locator mechanisms: relative, id, name
-racks-selenium-1  | 12:30:22.158 INFO [NodeServer$1.start] - Starting registration process for Node http://c1d957ef2647:5555
-racks-selenium-1  | 12:30:22.165 INFO [NodeServer.execute] - Started Selenium node 4.1.3 (revision 7b1ebf28ef): http://c1d957ef2647:5555
-racks-selenium-2  | 12:30:22.285 INFO [NodeServer$1.start] - Starting registration process for Node http://2c98a63c1e00:5555
-racks-selenium-2  | 12:30:22.292 INFO [NodeServer.execute] - Started Selenium node 4.1.3 (revision 7b1ebf28ef): http://2c98a63c1e00:5555
-racks-selenium-1  | 12:30:22.297 INFO [NodeServer$1.lambda$start$1] - Sending registration event...
-racks-selenium-2  | 12:30:22.309 INFO [NodeServer$1.lambda$start$1] - Sending registration event...
-hub               | 12:30:22.634 INFO [Node.<init>] - Binding additional locator mechanisms: id, name, relative
-hub               | 12:30:25.212 INFO [GridModel.setAvailability] - Switching node 8a84a311-48d9-4770-9876-7b744cdcd9ff (uri: http://c1d957ef2647:5555) from DOWN to UP
-hub               | 12:30:25.219 INFO [LocalDistributor.add] - Added node 8a84a311-48d9-4770-9876-7b744cdcd9ff at http://c1d957ef2647:5555. Health check every 120s
-hub               | 12:30:25.233 INFO [Node.<init>] - Binding additional locator mechanisms: relative, name, id
-racks-selenium-1  | 12:30:25.250 INFO [NodeServer.lambda$createHandlers$2] - Node has been added
-hub               | 12:30:25.537 INFO [GridModel.setAvailability] - Switching node bed10490-e17a-466b-a2e4-9445f6ecae6e (uri: http://2c98a63c1e00:5555) from DOWN to UP
-hub               | 12:30:25.538 INFO [LocalDistributor.add] - Added node bed10490-e17a-466b-a2e4-9445f6ecae6e at http://2c98a63c1e00:5555. Health check every 120s
-racks-selenium-2  | 12:30:25.556 INFO [NodeServer.lambda$createHandlers$2] - Node has been added
-backend-testing   |   2024-02-14 12:30:25 ................................................... ~ 2s
+racks-selenium-2  | 17:02:09.141 INFO [UnboundZmqEventBus.<init>] - Connecting to tcp://hub:4442 and tcp://hub:4443
+racks-selenium-2  | 17:02:09.262 INFO [UnboundZmqEventBus.<init>] - Sockets created
+hub               | 17:02:09.599 INFO [UnboundZmqEventBus.<init>] - Event bus ready
+racks-selenium-1  | 17:02:09.947 INFO [LoggingOptions.configureLogEncoding] - Using the system default encoding
+racks-selenium-1  | 17:02:09.955 INFO [OpenTelemetryTracer.createTracer] - Using OpenTelemetry for tracing
+racks-selenium-2  | 17:02:10.295 INFO [UnboundZmqEventBus.<init>] - Event bus ready
+racks-selenium-1  | 17:02:10.420 INFO [UnboundZmqEventBus.<init>] - Connecting to tcp://hub:4442 and tcp://hub:4443
+racks-selenium-1  | 17:02:10.659 INFO [UnboundZmqEventBus.<init>] - Sockets created
+racks-selenium-2  | 17:02:10.697 INFO [NodeServer.createHandlers] - Reporting self as: http://56aeaba3c07d:5555
+racks-selenium-2  | 17:02:10.841 INFO [NodeOptions.getSessionFactories] - Detected 4 available processors
+racks-selenium-2  | 17:02:11.076 INFO [NodeOptions.report] - Adding chrome for {"browserVersion": "101.0","se:noVncPort": 7900,"browserName": "chrome","platformName": "Linux","se:vncEnabled": true} 1 times
+racks-selenium-2  | 17:02:11.130 INFO [Node.<init>] - Binding additional locator mechanisms: name, id, relative
+racks-selenium-1  | 17:02:11.678 INFO [UnboundZmqEventBus.<init>] - Event bus ready
+racks-selenium-2  | 17:02:11.882 INFO [NodeServer$1.start] - Starting registration process for Node http://56aeaba3c07d:5555
+racks-selenium-2  | 17:02:11.894 INFO [NodeServer.execute] - Started Selenium node 4.1.3 (revision 7b1ebf28ef): http://56aeaba3c07d:5555
+racks-selenium-2  | 17:02:12.003 INFO [NodeServer$1.lambda$start$1] - Sending registration event...
+racks-selenium-1  | 17:02:12.196 INFO [NodeServer.createHandlers] - Reporting self as: http://38cf0891cf48:5555
+racks-selenium-1  | 17:02:12.243 INFO [NodeOptions.getSessionFactories] - Detected 4 available processors
+hub               | 17:02:12.280 INFO [Node.<init>] - Binding additional locator mechanisms: name, id, relative
+racks-selenium-1  | 17:02:12.324 INFO [NodeOptions.report] - Adding chrome for {"browserVersion": "101.0","se:noVncPort": 7900,"browserName": "chrome","platformName": "Linux","se:vncEnabled": true} 1 times
+racks-selenium-1  | 17:02:12.341 INFO [Node.<init>] - Binding additional locator mechanisms: id, relative, name
+hub               | 17:02:12.453 INFO [Hub.execute] - Started Selenium Hub 4.1.3 (revision 7b1ebf28ef): http://172.22.0.4:4444
+racks-selenium-1  | 17:02:12.880 INFO [NodeServer$1.start] - Starting registration process for Node http://38cf0891cf48:5555
+racks-selenium-1  | 17:02:12.897 INFO [NodeServer.execute] - Started Selenium node 4.1.3 (revision 7b1ebf28ef): http://38cf0891cf48:5555
+racks-selenium-1  | 17:02:12.945 INFO [NodeServer$1.lambda$start$1] - Sending registration event...
+hub               | 17:02:13.990 INFO [GridModel.setAvailability] - Switching node ff8bbc2e-8802-4293-99b6-6b2251663e3a (uri: http://56aeaba3c07d:5555) from DOWN to UP
+hub               | 17:02:13.992 INFO [LocalDistributor.add] - Added node ff8bbc2e-8802-4293-99b6-6b2251663e3a at http://56aeaba3c07d:5555. Health check every 120s
+hub               | 17:02:14.022 INFO [Node.<init>] - Binding additional locator mechanisms: relative, id, name
+racks-selenium-2  | 17:02:14.044 INFO [NodeServer.lambda$createHandlers$2] - Node has been added
+hub               | 17:02:14.317 INFO [GridModel.setAvailability] - Switching node 78ee4b5f-b81b-4942-aed1-6f568c9e9643 (uri: http://38cf0891cf48:5555) from DOWN to UP
+hub               | 17:02:14.319 INFO [LocalDistributor.add] - Added node 78ee4b5f-b81b-4942-aed1-6f568c9e9643 at http://38cf0891cf48:5555. Health check every 120s
+racks-selenium-1  | 17:02:14.328 INFO [NodeServer.lambda$createHandlers$2] - Node has been added
+backend-testing   |   2024-02-15 17:02:16 ................................................... ~ 0s
 e2e-tests         | 
 e2e-tests         | Running tests... 
 e2e-tests         | ----------------------------------------------------------------------
 e2e-tests         |  test_1_move_device_outside (e2e_tests.MoveDeviceCase) ... 
 e2e-tests         | Running tests... 
 e2e-tests         | ----------------------------------------------------------------------
-hub               | 12:30:28.425 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+hub               | 17:02:20.674 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
 hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-hub               | 12:30:28.426 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+hub               | 17:02:20.676 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
 hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 54166
-racks-selenium-1  | Only local connections are allowed.
-racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-racks-selenium-2  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 41140
+racks-selenium-2  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 39921
 racks-selenium-2  | Only local connections are allowed.
-racks-selenium-2  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 43651
+racks-selenium-1  | Only local connections are allowed.
+racks-selenium-2  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping[ ChromeDriver safe.
 racks-selenium-2  | ChromeDriver was started successfully.
-racks-selenium-1  | [1707913829.034][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-2  | 1708016541.051][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
 racks-selenium-1  | ChromeDriver was started successfully.
-racks-selenium-2  | [1707913829.033][SEVERE]: bind() failed: Cannot assign requested address (99)
-racks-selenium-2  | 12:30:35.807 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-racks-selenium-1  | 12:30:35.958 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-hub               | 12:30:35.975 WARN [GridModel.setSession] - Grid model and reality have diverged. Slot is not reserved. SlotId{nodeId=bed10490-e17a-466b-a2e4-9445f6ecae6e, id=00e43555-14dd-4a5d-89e5-1758aa762c0a}
-hub               | 12:30:35.978 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: edb33d6af3e9843f182e97c3a461d772, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.poqqNa}, goog:chromeOptions: {debuggerAddress: localhost:41045}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.5:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.5:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.5:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-hub               | 12:30:36.046 WARN [GridModel.setSession] - Grid model and reality have diverged. Slot is not reserved. SlotId{nodeId=8a84a311-48d9-4770-9876-7b744cdcd9ff, id=a2e36055-bdc7-401d-8b8c-a8ffd47d10a7}
-hub               | 12:30:36.083 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 67948818016dc8a16326f0ede61e1e25, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.xDiypa}, goog:chromeOptions: {debuggerAddress: localhost:39913}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-backend-testing   |   2024-02-14 12:30:37 ................................................... ~ 2s
-backend-testing   |   2024-02-14 12:30:40 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:40 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:41 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:41 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:41 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:42 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:42 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:42 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:42 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:42 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:43 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:43 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:48 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:48 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:48 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:48 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:48 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:49 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:49 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:49 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:50 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:51 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:52 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:52 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:52 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:53 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:53 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:53 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:53 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:53 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:54 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:54 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:54 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:54 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:54 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:55 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:55 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:55 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:30:56 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:57 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:30:58 ................................................... ~ 0s
-e2e-tests         |  test_2_move_device_to_busy_place (e2e_tests.MoveDeviceCase) ... OK (30.535920)s
+racks-selenium-1  | [1708016541.060][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-2  | 17:02:23.869 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+racks-selenium-1  | 17:02:24.005 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+hub               | 17:02:24.016 WARN [GridModel.setSession] - Grid model and reality have diverged. Slot is not reserved. SlotId{nodeId=ff8bbc2e-8802-4293-99b6-6b2251663e3a, id=1915e0f8-b916-4da7-9941-4fe0b26be8f4}
+hub               | 17:02:24.061 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: be49d53c8833da01632ca2f5b501651c, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.5t2FWA}, goog:chromeOptions: {debuggerAddress: localhost:35001}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.5:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.5:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.5:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+hub               | 17:02:24.119 WARN [GridModel.setSession] - Grid model and reality have diverged. Slot is not reserved. SlotId{nodeId=78ee4b5f-b81b-4942-aed1-6f568c9e9643, id=dbae8684-2e75-40e9-8818-fae99c1b8916}
+hub               | 17:02:24.123 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 505102c49ebd80e4744cb1328761d50a, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.NjoHH0}, goog:chromeOptions: {debuggerAddress: localhost:38219}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+backend-testing   |   2024-02-15 17:02:26 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:26 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:26 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:26 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:27 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:28 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:33 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:33 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:34 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:34 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:34 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:34 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:35 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:35 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:36 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:37 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:38 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:38 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:38 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:38 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:38 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:38 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:39 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:39 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:39 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:39 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:40 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:41 ................................................... ~ 0s
+e2e-tests         |  test_2_move_device_to_busy_place (e2e_tests.MoveDeviceCase) ... OK (21.811007)s
 e2e-tests         | 
 e2e-tests         | ----------------------------------------------------------------------
-e2e-tests         | Ran 1 test in 0:00:30
+e2e-tests         | Ran 1 test in 0:00:21
 e2e-tests         | 
 e2e-tests         | OK
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | Generating HTML reports... 
-hub               | 12:30:58.644 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: edb33d6af3e9843f182e97c3a461d772
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_2_move_device_to_busy_place_e2e_tests.MoveDeviceCase_2024-02-14_12-30-28.html
-hub               | 12:30:59.233 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 67948818016dc8a16326f0ede61e1e25
-e2e-tests         | OK (31.132627)s
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_1_move_device_outside_e2e_tests.MoveDeviceCase_2024-02-15_17-02-20.html
+hub               | 17:02:41.965 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 505102c49ebd80e4744cb1328761d50a
+e2e-tests         | OK (21.987486)s
 e2e-tests         | 
 e2e-tests         | ----------------------------------------------------------------------
-e2e-tests         | Ran 1 test in 0:00:31
+e2e-tests         | Ran 1 test in 0:00:21
 e2e-tests         | 
 e2e-tests         | OK
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | Generating HTML reports... 
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_1_move_device_outside_e2e_tests.MoveDeviceCase_2024-02-14_12-30-28.html
+hub               | 17:02:42.174 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: be49d53c8833da01632ca2f5b501651c
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_2_move_device_to_busy_place_e2e_tests.MoveDeviceCase_2024-02-15_17-02-20.html
 e2e-tests         | 
 e2e-tests         | Running tests... 
 e2e-tests         | ----------------------------------------------------------------------
-hub               | 12:30:59.298 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+hub               | 17:02:42.273 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
 hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 59571
-racks-selenium-1  | Only local connections are allowed.
-racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-racks-selenium-1  | ChromeDriver was started successfully.
-racks-selenium-1  | [1707913859.356][SEVERE]: bind() failed: Cannot assign requested address (99)
-racks-selenium-1  | 12:31:00.783 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-hub               | 12:31:00.879 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 19c411a5040c99bb8f48484fb6ebf984, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.eSFQ8C}, goog:chromeOptions: {debuggerAddress: localhost:45267}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-backend-testing   |   2024-02-14 12:31:01 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:02 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:03 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:03 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:03 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:03 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:04 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:06 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:06 ................................................... ~ 0s
-hub               | 12:31:07.180 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 19c411a5040c99bb8f48484fb6ebf984
-e2e-tests         |  test_3_check_permissions (e2e_tests.PermissionsCase) ... OK (7.922369)s
+racks-selenium-2  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 43191
+racks-selenium-2  | Only local connections are allowed.
+racks-selenium-2  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+racks-selenium-2  | ChromeDriver was started successfully.
+racks-selenium-2  | [1708016562.373][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-2  | 17:02:43.594 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+hub               | 17:02:43.624 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: fe19c86d7a04cbe907a09d6a1ff9cde2, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.9WhU9z}, goog:chromeOptions: {debuggerAddress: localhost:42087}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.5:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.5:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.5:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+backend-testing   |   2024-02-15 17:02:45 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:45 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:46 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:46 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:46 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:46 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:47 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:49 ................................................... ~ 0s
+hub               | 17:02:49.698 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: fe19c86d7a04cbe907a09d6a1ff9cde2
+e2e-tests         |  test_3_check_permissions (e2e_tests.PermissionsCase) ... OK (7.453878)s
 e2e-tests         | 
 e2e-tests         | ----------------------------------------------------------------------
 e2e-tests         | Ran 1 test in 0:00:07
@@ -1290,64 +1048,132 @@ e2e-tests         |
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | Generating HTML reports... 
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_3_check_permissions_e2e_tests.PermissionsCase_2024-02-14_12-30-59.html
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_3_check_permissions_e2e_tests.PermissionsCase_2024-02-15_17-02-42.html
 e2e-tests         | 
 e2e-tests         | Running tests... 
 e2e-tests         | ----------------------------------------------------------------------
 e2e-tests         |  test_4_add_device_outside (e2e_tests.AddDeviceCase) ... 
 e2e-tests         | Running tests... 
 e2e-tests         | ----------------------------------------------------------------------
-hub               | 12:31:07.303 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+backend-testing   |   2024-02-15 17:02:49 ................................................... ~ 0s
+hub               | 17:02:49.805 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
 hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-hub               | 12:31:07.305 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+hub               | 17:02:49.805 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
 hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-racks-selenium-2  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 35614
+racks-selenium-2  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 50821
+racks-selenium-2  | Only local connections are allowed.
+racks-selenium-2  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+racks-selenium-2  | [1708016569.868][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-2  | ChromeDriver was started successfully.
+racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 33370
+racks-selenium-1  | Only local connections are allowed.
+racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+racks-selenium-1  | [1708016569.881][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-1  | ChromeDriver was started successfully.
+racks-selenium-1  | 17:02:51.276 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+hub               | 17:02:51.321 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 87d5156888c93a9047200d714793f7f3, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.2F3SS8}, goog:chromeOptions: {debuggerAddress: localhost:35599}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+racks-selenium-2  | 17:02:51.342 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+hub               | 17:02:51.439 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 11d2b79d1d937238f1691b55c6ee5f11, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.jwD9eZ}, goog:chromeOptions: {debuggerAddress: localhost:44745}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.5:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.5:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.5:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+backend-testing   |   2024-02-15 17:02:53 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:53 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:54 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:54 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:54 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:55 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:55 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:55 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:55 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:55 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:55 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:56 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:02:57 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:02:59 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:00 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:00 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:00 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:00 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:00 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:00 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:00 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:01 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:01 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:01 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:01 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:02 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:02 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:02 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:02 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:03 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:03 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:04 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:04 ................................................... ~ 0s
+hub               | 17:03:05.207 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 87d5156888c93a9047200d714793f7f3
+e2e-tests         |  test_5_add_device_to_busy_place (e2e_tests.AddDeviceCase) ... OK (15.499811)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:15
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_5_add_device_to_busy_place_e2e_tests.AddDeviceCase_2024-02-15_17-02-49.html
+hub               | 17:03:05.416 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 11d2b79d1d937238f1691b55c6ee5f11
+e2e-tests         | OK (15.701030)s
+e2e-tests         | 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         | Ran 1 test in 0:00:15
+e2e-tests         | 
+e2e-tests         | OK
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | 
+e2e-tests         | Generating HTML reports... 
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_4_add_device_outside_e2e_tests.AddDeviceCase_2024-02-15_17-02-49.html
+e2e-tests         | 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+e2e-tests         |  test_6_add_same_name_building (e2e_tests.NameDuplicationCase) ... 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+hub               | 17:03:05.500 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
+hub               | 17:03:05.500 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
+racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 47323
+racks-selenium-1  | Only local connections are allowed.
+racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+racks-selenium-1  | [1708016585.581][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-1  | ChromeDriver was started successfully.
+racks-selenium-2  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 40167
 racks-selenium-2  | Only local connections are allowed.
 racks-selenium-2  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
 racks-selenium-2  | ChromeDriver was started successfully.
-racks-selenium-2  | [1707913867.401][SEVERE]: bind() failed: Cannot assign requested address (99)
-racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 46734
-racks-selenium-1  | Only local connections are allowed.
-racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-racks-selenium-1  | ChromeDriver was started successfully.
-racks-selenium-1  | [1707913867.444][SEVERE]: bind() failed: Cannot assign requested address (99)
-racks-selenium-2  | 12:31:08.866 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-hub               | 12:31:08.913 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: b0b44c5dd6439b99340b946b5a854493, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.3XQRSM}, goog:chromeOptions: {debuggerAddress: localhost:35439}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.5:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.5:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.5:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-racks-selenium-1  | 12:31:09.126 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-hub               | 12:31:09.149 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: da13644a879e3ecb3c420961c262062a, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.FChU1n}, goog:chromeOptions: {debuggerAddress: localhost:46291}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-backend-testing   |   2024-02-14 12:31:11 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:11 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:11 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:11 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:11 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:12 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:12 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:12 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:12 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:13 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:13 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:14 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:14 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:18 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:18 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:18 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:18 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:19 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:19 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:19 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:20 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:21 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:21 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:21 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:21 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:21 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:21 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:22 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:22 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:22 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:23 ................................................... ~ 1s
-hub               | 12:31:24.603 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: b0b44c5dd6439b99340b946b5a854493
-e2e-tests         |  test_5_add_device_to_busy_place (e2e_tests.AddDeviceCase) ... OK (17.357710)s
+racks-selenium-2  | [1708016585.653][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-2  | 17:03:07.644 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+hub               | 17:03:07.754 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 7f9a809da74fb737fdd24cc718f4ae31, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.nAWZwm}, goog:chromeOptions: {debuggerAddress: localhost:41629}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.5:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.5:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.5:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+racks-selenium-1  | 17:03:08.305 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+hub               | 17:03:08.366 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: d06d6d386b0e9c893ba0c50e338e106c, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.sEm8iu}, goog:chromeOptions: {debuggerAddress: localhost:39887}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+backend-testing   |   2024-02-15 17:03:08 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:11 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:11 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:11 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:12 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:13 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:13 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:13 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:13 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:13 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:14 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:14 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:15 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:19 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:20 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:21 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:21 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:21 ................................................... ~ 1s
+e2e-tests         |  test_7_add_same_name_room (e2e_tests.NameDuplicationCase) ... OK (17.062939)s
 e2e-tests         | 
 e2e-tests         | ----------------------------------------------------------------------
 e2e-tests         | Ran 1 test in 0:00:17
@@ -1357,11 +1183,19 @@ e2e-tests         |
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | Generating HTML reports... 
-backend-testing   |   2024-02-14 12:31:24 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:24 ................................................... ~ 0s
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_5_add_device_to_busy_place_e2e_tests.AddDeviceCase_2024-02-14_12-31-07.html
-backend-testing   |   2024-02-14 12:31:24 ................................................... ~ 0s
-e2e-tests         | OK (18.213968)s
+hub               | 17:03:22.539 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: d06d6d386b0e9c893ba0c50e338e106c
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_6_add_same_name_building_e2e_tests.NameDuplicationCase_2024-02-15_17-03-05.html
+e2e-tests         | 
+e2e-tests         | Running tests... 
+e2e-tests         | ----------------------------------------------------------------------
+hub               | 17:03:22.714 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
+hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
+racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 50764
+racks-selenium-1  | Only local connections are allowed.
+racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+racks-selenium-1  | [1708016602.870][SEVERE]: bind() failed: Cannot assign requested address (99)
+racks-selenium-1  | ChromeDriver was started successfully.
+e2e-tests         |  test_8_add_same_name_rack (e2e_tests.NameDuplicationCase) ... OK (18.015053)s
 e2e-tests         | 
 e2e-tests         | ----------------------------------------------------------------------
 e2e-tests         | Ran 1 test in 0:00:18
@@ -1371,145 +1205,70 @@ e2e-tests         |
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | Generating HTML reports... 
-hub               | 12:31:25.461 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: da13644a879e3ecb3c420961c262062a
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_4_add_device_outside_e2e_tests.AddDeviceCase_2024-02-14_12-31-07.html
-e2e-tests         | 
-e2e-tests         | Running tests... 
-e2e-tests         | ----------------------------------------------------------------------
-e2e-tests         |  test_6_add_same_name_building (e2e_tests.NameDuplicationCase) ... 
-e2e-tests         | Running tests... 
-e2e-tests         | ----------------------------------------------------------------------
-hub               | 12:31:25.529 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
-hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-hub               | 12:31:25.530 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
-hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 57545
-racks-selenium-1  | Only local connections are allowed.
-racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-racks-selenium-1  | ChromeDriver was started successfully.
-racks-selenium-1  | [1707913885.582][SEVERE]: bind() failed: Cannot assign requested address (99)
-racks-selenium-2  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 58323
-racks-selenium-2  | Only local connections are allowed.
-racks-selenium-2  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-racks-selenium-2  | ChromeDriver was started successfully.
-racks-selenium-2  | [1707913885.653][SEVERE]: bind() failed: Cannot assign requested address (99)
-racks-selenium-1  | 12:31:27.043 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-hub               | 12:31:27.067 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 04b1aeab2d348bf2c5a9b0e19a2316ae, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.KbA4p0}, goog:chromeOptions: {debuggerAddress: localhost:41401}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-racks-selenium-2  | 12:31:27.131 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-hub               | 12:31:27.144 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: b63a1f41f416f1fa30c407ed2b946924, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.FO6Hx1}, goog:chromeOptions: {debuggerAddress: localhost:41963}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.5:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.5:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.5:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-backend-testing   |   2024-02-14 12:31:29 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:29 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:29 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:29 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:29 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:29 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:30 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:30 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:30 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:31 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:31 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:31 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:33 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:34 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:35 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:35 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:35 ................................................... ~ 0s
-hub               | 12:31:36.406 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 04b1aeab2d348bf2c5a9b0e19a2316ae
-e2e-tests         |  test_7_add_same_name_room (e2e_tests.NameDuplicationCase) ... OK (10.914209)s
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_7_add_same_name_room_e2e_tests.NameDuplicationCase_2024-02-15_17-03-05.html
+hub               | 17:03:23.547 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 7f9a809da74fb737fdd24cc718f4ae31
+racks-selenium-1  | 17:03:25.403 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+hub               | 17:03:25.449 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 1cfdd171482949995b3b76ca03386323, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.QLYHF2}, goog:chromeOptions: {debuggerAddress: localhost:34953}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.22.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.22.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.22.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
+backend-testing   |   2024-02-15 17:03:30 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:31 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:31 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:32 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:32 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:33 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:33 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:38 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:38 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:39 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:39 ................................................... ~ 1s
+backend-testing   |   2024-02-15 17:03:41 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:41 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:03:41 ................................................... ~ 1s
+e2e-tests         | OK (21.492097)s
 e2e-tests         | 
 e2e-tests         | ----------------------------------------------------------------------
-e2e-tests         | Ran 1 test in 0:00:10
+e2e-tests         | Ran 1 test in 0:00:21
 e2e-tests         | 
 e2e-tests         | OK
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | 
 e2e-tests         | Generating HTML reports... 
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_7_add_same_name_room_e2e_tests.NameDuplicationCase_2024-02-14_12-31-25.html
-e2e-tests         | 
-e2e-tests         | Running tests... 
-e2e-tests         | ----------------------------------------------------------------------
-hub               | 12:31:36.478 INFO [LocalDistributor.newSession] - Session request received by the distributor: 
-hub               |  [Capabilities {browserName: chrome, goog:chromeOptions: {args: [--ignore-ssl-errors=yes, --ignore-certificate-errors], extensions: []}, pageLoadStrategy: normal}]
-racks-selenium-1  | Starting ChromeDriver 101.0.4951.41 (93c720db8323b3ec10d056025ab95c23a31997c9-refs/branch-heads/4951@{#904}) on port 41758
-racks-selenium-1  | Only local connections are allowed.
-racks-selenium-1  | Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-racks-selenium-1  | ChromeDriver was started successfully.
-racks-selenium-1  | [1707913896.565][SEVERE]: bind() failed: Cannot assign requested address (99)
-e2e-tests         |  test_8_add_same_name_rack (e2e_tests.NameDuplicationCase) ... OK (11.156177)s
-e2e-tests         | 
-e2e-tests         | ----------------------------------------------------------------------
-e2e-tests         | Ran 1 test in 0:00:11
-e2e-tests         | 
-e2e-tests         | OK
-e2e-tests         | 
-e2e-tests         | 
-e2e-tests         | 
-e2e-tests         | Generating HTML reports... 
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_6_add_same_name_building_e2e_tests.NameDuplicationCase_2024-02-14_12-31-25.html
-hub               | 12:31:36.689 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: b63a1f41f416f1fa30c407ed2b946924
-racks-selenium-1  | 12:31:37.941 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
-hub               | 12:31:37.958 INFO [LocalDistributor.newSession] - Session created by the distributor. Id: 5da86cf8c936397efa295647d66eba6a, Caps: Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 101.0.4951.41, chrome: {chromedriverVersion: 101.0.4951.41 (93c720db8323..., userDataDir: /tmp/.com.google.Chrome.a3WfND}, goog:chromeOptions: {debuggerAddress: localhost:33207}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: linux, proxy: {}, se:cdp: ws://172.18.0.7:4444/sessio..., se:cdpVersion: 101.0.4951.41, se:vnc: ws://172.18.0.7:4444/sessio..., se:vncEnabled: true, se:vncLocalAddress: ws://172.18.0.7:7900, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:virtualAuthenticators: true}
-backend-testing   |   2024-02-14 12:31:39 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:39 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:40 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:40 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:40 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:40 ................................................... ~ 1s
-backend-testing   |   2024-02-14 12:31:43 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:44 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:44 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:44 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:44 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:45 ................................................... ~ 0s
-backend-testing   |   2024-02-14 12:31:45 ................................................... ~ 1s
-hub               | 12:31:46.862 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 5da86cf8c936397efa295647d66eba6a
-e2e-tests         | OK (10.419421)s
-e2e-tests         | 
-e2e-tests         | ----------------------------------------------------------------------
-e2e-tests         | Ran 1 test in 0:00:10
-e2e-tests         | 
-e2e-tests         | OK
-e2e-tests         | 
-e2e-tests         | 
-e2e-tests         | 
-e2e-tests         | Generating HTML reports... 
-e2e-tests         | test_results/Smoke_tests_2024-02-14_12-30-28/test_8_add_same_name_rack_e2e_tests.NameDuplicationCase_2024-02-14_12-31-36.html
+hub               | 17:03:44.118 INFO [LocalSessionMap.lambda$new$0] - Deleted session from local session map, Id: 1cfdd171482949995b3b76ca03386323
+e2e-tests         | test_results/Smoke_tests_2024-02-15_17-02-20/test_8_add_same_name_rack_e2e_tests.NameDuplicationCase_2024-02-15_17-03-22.html
 e2e-tests exited with code 0
-racks-selenium-2  | Trapped SIGTERM/SIGINT/x so shutting down supervisord...
 racks-selenium-1  | Trapped SIGTERM/SIGINT/x so shutting down supervisord...
-racks-selenium-1  | 2024-02-14 12:31:50,002 WARN received SIGTERM indicating exit request
-racks-selenium-1  | 2024-02-14 12:31:50,004 INFO waiting for xvfb, vnc, novnc, selenium-node to die
-racks-selenium-2  | 2024-02-14 12:31:50,410 WARN received SIGTERM indicating exit request
-racks-selenium-2  | 2024-02-14 12:31:50,416 INFO waiting for xvfb, vnc, novnc, selenium-node to die
-racks-selenium-1  | 2024-02-14 12:31:50,628 INFO stopped: selenium-node (terminated by SIGTERM)
-racks-selenium-2  | 2024-02-14 12:31:50,975 INFO stopped: selenium-node (terminated by SIGTERM)
-racks-selenium-1  | 2024-02-14 12:31:51,634 INFO stopped: novnc (terminated by SIGTERM)
-racks-selenium-2  | 2024-02-14 12:31:51,984 INFO stopped: novnc (terminated by SIGTERM)
-racks-selenium-1  | 2024-02-14 12:31:52,638 INFO stopped: vnc (terminated by SIGTERM)
-racks-selenium-1  | 2024-02-14 12:31:52,644 INFO stopped: xvfb (terminated by SIGTERM)
+racks-selenium-2  | Trapped SIGTERM/SIGINT/x so shutting down supervisord...
+racks-selenium-2  | 2024-02-15 17:03:53,565 WARN received SIGTERM indicating exit request
+racks-selenium-2  | 2024-02-15 17:03:53,566 INFO waiting for xvfb, vnc, novnc, selenium-node to die
+racks-selenium-1  | 2024-02-15 17:03:53,987 WARN received SIGTERM indicating exit request
+racks-selenium-1  | 2024-02-15 17:03:53,990 INFO waiting for xvfb, vnc, novnc, selenium-node to die
+racks-selenium-2  | 2024-02-15 17:03:54,333 INFO stopped: selenium-node (terminated by SIGTERM)
+racks-selenium-1  | 2024-02-15 17:03:54,837 INFO stopped: selenium-node (terminated by SIGTERM)
+backend-testing   |   2024-02-15 17:03:51 ................................................... ~ 3s
+racks-selenium-2  | 2024-02-15 17:03:55,371 INFO stopped: novnc (terminated by SIGTERM)
+racks-selenium-1  | 2024-02-15 17:03:55,838 INFO stopped: novnc (terminated by SIGTERM)
+racks-selenium-2  | 2024-02-15 17:03:56,398 INFO stopped: vnc (terminated by SIGTERM)
+racks-selenium-1  | 2024-02-15 17:03:56,859 INFO stopped: vnc (terminated by SIGTERM)
+racks-selenium-1  | 2024-02-15 17:03:56,860 INFO stopped: xvfb (terminated by SIGTERM)
 racks-selenium-1  | Shutdown complete
-racks-selenium-2  | 2024-02-14 12:31:52,986 INFO stopped: vnc (terminated by SIGTERM)
-racks-selenium-1 exited with code 0
-racks-selenium-1 exited with code 143
-racks-selenium-2  | 2024-02-14 12:31:53,993 INFO stopped: xvfb (terminated by SIGTERM)
+racks-selenium-2  | 2024-02-15 17:03:57,404 INFO stopped: xvfb (terminated by SIGTERM)
 racks-selenium-2  | Shutdown complete
-backend-testing   |   2024-02-14 12:31:53 ................................................... ~ 1s
+racks-selenium-1 exited with code 0
 racks-selenium-2 exited with code 0
-racks-selenium-2 exited with code 143
+racks-selenium-1 exited with code 143
 hub               | Trapped SIGTERM/SIGINT/x so shutting down supervisord...
-hub               | 2024-02-14 12:31:54,905 WARN received SIGTERM indicating exit request
-hub               | 2024-02-14 12:31:54,908 INFO waiting for selenium-grid-hub to die
-hub               | 2024-02-14 12:31:55,919 INFO stopped: selenium-grid-hub (terminated by SIGTERM)
+hub               | 2024-02-15 17:04:00,717 WARN received SIGTERM indicating exit request
+hub               | 2024-02-15 17:04:00,723 INFO waiting for selenium-grid-hub to die
+hub               | 2024-02-15 17:04:01,765 INFO stopped: selenium-grid-hub (terminated by SIGTERM)
 hub               | Shutdown complete
 hub exited with code 0
 hub exited with code 143
 frontend-testing  | [2K[1A[2K[G
 frontend-testing exited with code 0
 frontend-testing exited with code 0
-backend-testing   |   2024-02-14 12:32:04 ................................................... ~ 0s
+backend-testing   |   2024-02-15 17:04:05 ................................................... ~ 0s
 backend-testing exited with code 0
 backend-testing exited with code 137
-db-testing        | 2024-02-14T12:32:09.611270Z 0 [System] [MY-013172] [Server] Received SHUTDOWN from user <via user signal>. Shutting down mysqld (Version: 8.0.32).
-db-testing        | 2024-02-14T12:32:11.192864Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.0.32)  MySQL Community Server - GPL.
+db-testing        | 2024-02-15T17:04:16.704638Z 0 [System] [MY-013172] [Server] Received SHUTDOWN from user <via user signal>. Shutting down mysqld (Version: 8.0.32).
+db-testing        | 2024-02-15T17:04:17.696716Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.0.32)  MySQL Community Server - GPL.
 db-testing exited with code 0
