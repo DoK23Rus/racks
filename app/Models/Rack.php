@@ -926,6 +926,8 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     }
 
     /**
+     * Belongs to room
+     *
      * @return BelongsTo
      */
     public function room(): BelongsTo

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * Department as a location for sites
  * For properties @see Department
+ * For business rules @see DepartmentBusinessRules
  */
 interface DepartmentEntity
 {

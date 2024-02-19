@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * Building as a location for rooms with racks
  * For properties @see Building
+ * For business rules @see BuildingBusinessRules
  */
 interface BuildingEntity
 {

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * Region as a location for departments
  * For properties @see Region
+ * For business rules @see RegionBusinessRules
  */
 interface RegionEntity
 {
