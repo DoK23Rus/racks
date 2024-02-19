@@ -28,7 +28,7 @@ class DeviceDatabaseRepository implements DeviceRepository
         return Device::where('id', $device->getId())
             ->first()
             ->update([
-                'units' => $device->getUnits()->getArray(),
+                'units' => $device->getUnits()->toArray(),
             ]);
     }
 
@@ -44,13 +44,13 @@ class DeviceDatabaseRepository implements DeviceRepository
         return tap(Device::where('id', $device->getId())
             ->first())
             ->update(
-                $device->getAttributeSet()->getArray()
+                $device->getAttributeSet()->toArray()
             );
     }
 
     public function create(DeviceEntity $device): DeviceEntity
     {
-        return Device::create($device->getAttributeSet()->getArray());
+        return Device::create($device->getAttributeSet()->toArray());
     }
 
     public function getLocation(?string $id): array

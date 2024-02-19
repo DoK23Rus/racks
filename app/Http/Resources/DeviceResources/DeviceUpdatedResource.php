@@ -245,7 +245,7 @@ class DeviceUpdatedResource extends JsonResource
             'type' => $this->device->getType(),
             'status' => $this->device->getStatus(),
             'has_backside_location' => $this->device->getLocation(),
-            'units' => $this->device->getUnits()->getArray(),
+            'units' => $this->device->getUnits()->toArray(),
             'hostname' => $this->device->getHostname(),
             'ip' => $this->device->getIp(),
             'stack' => $this->device->getStack(),

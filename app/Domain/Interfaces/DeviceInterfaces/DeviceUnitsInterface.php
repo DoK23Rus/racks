@@ -7,5 +7,5 @@ interface DeviceUnitsInterface
     /**
      * @return array<int> Units array
      */
-    public function getArray(): array;
+    public function toArray(): array;
 }

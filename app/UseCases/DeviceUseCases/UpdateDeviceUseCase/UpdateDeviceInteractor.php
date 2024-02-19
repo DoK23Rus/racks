@@ -40,7 +40,7 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
 
         $deviceUpdating->setUpdatedBy($request->getUserName());
 
-        if (! count($deviceUpdating->getUnits()->getArray())) {
+        if (! count($deviceUpdating->getUnits()->toArray())) {
             $deviceUpdating->setUnits($device->getUnits());
         }
 
@@ -60,7 +60,7 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
             $rack = $this->rackRepository->getById($device->getRackId());
 
             $rack->deleteOldBusyUnits(
-                $device->getUnits()->getArray(),
+                $device->getUnits()->toArray(),
                 $device->getLocation()
             );
 

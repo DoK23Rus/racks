@@ -20,7 +20,7 @@ class RackDatabaseRepository implements RackRepository
 
     public function create(RackEntity $rack): RackEntity
     {
-        return Rack::create($rack->getAttributeSet()->getArray());
+        return Rack::create($rack->getAttributeSet()->toArray());
     }
 
     public function updateBusyUnits(RackEntity $rack): int
@@ -28,7 +28,7 @@ class RackDatabaseRepository implements RackRepository
         return Rack::where('id', $rack->getId())
             ->first()
             ->update([
-                'busy_units' => $rack->getBusyUnits()->getBusyUnits(),
+                'busy_units' => $rack->getBusyUnits()->toArray(),
             ]);
     }
 
@@ -52,7 +52,7 @@ class RackDatabaseRepository implements RackRepository
         return tap(Rack::where('id', $rack->getId())
             ->first())
             ->update(
-                $rack->getAttributeSet()->getArray()
+                $rack->getAttributeSet()->toArray()
             );
     }
 

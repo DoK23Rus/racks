@@ -11,7 +11,7 @@ interface RackBusyUnitsInterface
      * @param  bool  $side  Rack side (back - true)
      * @return array<int> Busy units for side
      */
-    public function getArray(bool $side): array;
+    public function getUnitsForSide(bool $side): array;
 
     /**
      * @return array{
@@ -19,7 +19,7 @@ interface RackBusyUnitsInterface
      *     back: array<int>
      * } Busy units array
      */
-    public function getBusyUnits(): array;
+    public function toArray(): array;
 
     /**
      * @return void

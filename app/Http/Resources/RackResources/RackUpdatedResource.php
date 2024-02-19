@@ -231,7 +231,7 @@ class RackUpdatedResource extends JsonResource
             'id' => $this->rack->getId(),
             'name' => $this->rack->getName(),
             'amount' => $this->rack->getAmount(),
-            'busy_units' => $this->rack->getBusyUnits()->getBusyUnits(),
+            'busy_units' => $this->rack->getBusyUnits()->toArray(),
             'vendor' => $this->rack->getVendor(),
             'model' => $this->rack->getModel(),
             'description' => $this->rack->getDescription(),

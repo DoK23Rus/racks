@@ -533,7 +533,7 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
                 $unitsArray = $units;
                 break;
             case $units instanceof DeviceUnitsValueObject:
-                $unitsArray = $units->getArray();
+                $unitsArray = $units->toArray();
                 break;
             default:
                 $unitsArray = [];

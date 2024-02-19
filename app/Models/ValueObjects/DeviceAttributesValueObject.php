@@ -69,7 +69,7 @@ class DeviceAttributesValueObject
      */
     public function setUnits(): void
     {
-        $units = $this->device->getUnits()->getArray();
+        $units = $this->device->getUnits()->toArray();
         if (count($units)) {
             $this->attributesForDevice += ['units' => json_encode($units)];
         }
@@ -342,7 +342,7 @@ class DeviceAttributesValueObject
     /**
      * @return array<mixed> Get attributes array
      */
-    public function getArray(): array
+    public function toArray(): array
     {
         return $this->attributesForDevice;
     }

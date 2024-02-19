@@ -42,10 +42,10 @@ class RackTest extends TestCase
         $this->rack->updateBusyUnits([21, 22, 23], true);
 
         $busyUnitsMock = $this->getMockBuilder(RackBusyUnitsValueObject::class)
-            ->onlyMethods(['getBusyUnits'])
+            ->onlyMethods(['toArray'])
             ->setConstructorArgs([['front' => [1, 2, 3], 'back' => [3, 4, 5]]])
             ->getMock();
-        $busyUnitsMock->method('getBusyUnits')
+        $busyUnitsMock->method('toArray')
             ->willReturn(['front' => [1, 2, 3], 'back' => [3, 4, 5]]);
         $this->app->bind(RackBusyUnitsValueObject::class, function () use ($busyUnitsMock) {
             return $busyUnitsMock;
@@ -53,7 +53,7 @@ class RackTest extends TestCase
 
         $this->assertEquals(
             ['front' => [1, 2, 3], 'back' => [3, 4, 5]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
 
         // Unbind mock
@@ -66,7 +66,7 @@ class RackTest extends TestCase
         $this->rack->updateBusyUnits([1, 2, 3], true);
         $this->assertEquals(
             ['front' => [11, 12, 13], 'back' => [1, 2, 3]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
 
         // Frontside
@@ -76,7 +76,7 @@ class RackTest extends TestCase
         $this->rack->updateBusyUnits([1, 2, 3], false);
         $this->assertEquals(
             ['front' => [1, 2, 3], 'back' => [23, 24, 25]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
     }
 
@@ -89,7 +89,7 @@ class RackTest extends TestCase
         $this->rack->addNewBusyUnits([10, 11], false);
         $this->assertEquals(
             ['front' => [1, 2, 3, 10, 11], 'back' => [3, 4, 5]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
 
         // Backside
@@ -99,7 +99,7 @@ class RackTest extends TestCase
         $this->rack->addNewBusyUnits([10, 11], true);
         $this->assertEquals(
             ['front' => [1, 2, 3], 'back' => [3, 4, 5, 10, 11]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
     }
 
@@ -112,7 +112,7 @@ class RackTest extends TestCase
         $this->rack->deleteOldBusyUnits([1, 2], false);
         $this->assertEquals(
             ['front' => [3], 'back' => [3, 4, 5]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
 
         // Backside
@@ -122,7 +122,7 @@ class RackTest extends TestCase
         $this->rack->deleteOldBusyUnits([3, 4], true);
         $this->assertEquals(
             ['front' => [1, 2, 3], 'back' => [5]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
     }
 
@@ -133,10 +133,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([9, 10]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -156,10 +156,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([9, 10]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -179,10 +179,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([3, 4]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -202,10 +202,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([3, 4]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -228,10 +228,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([2, 3]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -243,10 +243,10 @@ class RackTest extends TestCase
             ->willReturn(false);
 
         $updateDeviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $updateDeviceUnitsMock->method('getArray')
+        $updateDeviceUnitsMock->method('toArray')
             ->willReturn([4, 5]);
         $updateDeviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -264,10 +264,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([2, 3]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -279,10 +279,10 @@ class RackTest extends TestCase
             ->willReturn(false);
 
         $updateDeviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $updateDeviceUnitsMock->method('getArray')
+        $updateDeviceUnitsMock->method('toArray')
             ->willReturn([3, 4]);
         $updateDeviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -300,10 +300,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([2, 3]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -315,10 +315,10 @@ class RackTest extends TestCase
             ->willReturn(false);
 
         $updateDeviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $updateDeviceUnitsMock->method('getArray')
+        $updateDeviceUnitsMock->method('toArray')
             ->willReturn([1, 2]);
         $updateDeviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -336,10 +336,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([7, 8]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -351,10 +351,10 @@ class RackTest extends TestCase
             ->willReturn(true);
 
         $updateDeviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $updateDeviceUnitsMock->method('getArray')
+        $updateDeviceUnitsMock->method('toArray')
             ->willReturn([4, 5, 6]);
         $updateDeviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -372,10 +372,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([7, 8]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -387,10 +387,10 @@ class RackTest extends TestCase
             ->willReturn(true);
 
         $updateDeviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $updateDeviceUnitsMock->method('getArray')
+        $updateDeviceUnitsMock->method('toArray')
             ->willReturn([6, 7]);
         $updateDeviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -408,10 +408,10 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [1, 2, 3], "back": [7, 8, 9]}']
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([7, 8]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits', 'getLocation'])
@@ -423,10 +423,10 @@ class RackTest extends TestCase
             ->willReturn(true);
 
         $updateDeviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $updateDeviceUnitsMock->method('getArray')
+        $updateDeviceUnitsMock->method('toArray')
             ->willReturn([8, 9, 10]);
         $updateDeviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -447,10 +447,10 @@ class RackTest extends TestCase
             $this->rack, ['amount' => 22]
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([19, 20]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -467,10 +467,10 @@ class RackTest extends TestCase
             $this->rack, ['amount' => 22]
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([21, 22, 23]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -487,10 +487,10 @@ class RackTest extends TestCase
             $this->rack, ['amount' => 22]
         );
         $deviceUnitsMock = $this->getMockBuilder(DeviceUnitsValueObject::class)
-            ->onlyMethods(['getArray'])
+            ->onlyMethods(['toArray'])
             ->disableOriginalConstructor()
             ->getMock();
-        $deviceUnitsMock->method('getArray')
+        $deviceUnitsMock->method('toArray')
             ->willReturn([24, 25, 26]);
         $deviceMock = $this->getMockBuilder(Device::class)
             ->onlyMethods(['getUnits'])
@@ -534,17 +534,17 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [], "back": []}']
         );
         $busyUnitsMock = $this->getMockBuilder(RackBusyUnitsValueObject::class)
-            ->onlyMethods(['getBusyUnits'])
+            ->onlyMethods(['toArray'])
             ->setConstructorArgs([['front' => [1, 2, 3], 'back' => [3, 4, 5]]])
             ->getMock();
-        $busyUnitsMock->method('getBusyUnits')
+        $busyUnitsMock->method('toArray')
             ->willReturn(['front' => [1, 2, 3], 'back' => [3, 4, 5]]);
         $this->app->bind(RackBusyUnitsValueObject::class, function () use ($busyUnitsMock) {
             return $busyUnitsMock;
         });
         $this->assertEquals(
             ['front' => [1, 2, 3], 'back' => [3, 4, 5]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
 
         // $busyUnits instanceof RackBusyUnitsValueObject
@@ -553,7 +553,7 @@ class RackTest extends TestCase
         );
         $this->assertEquals(
             ['front' => [1, 2, 3], 'back' => [3, 4, 5]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
 
         // Unbind mock
@@ -565,7 +565,7 @@ class RackTest extends TestCase
         );
         $this->assertEquals(
             ['front' => [1, 2, 3], 'back' => [3, 4, 5, 6]],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
 
         // default
@@ -574,7 +574,7 @@ class RackTest extends TestCase
         );
         $this->assertEquals(
             ['front' => [], 'back' => []],
-            $this->rack->getBusyUnits()->getBusyUnits(),
+            $this->rack->getBusyUnits()->toArray(),
         );
     }
 
@@ -929,16 +929,16 @@ class RackTest extends TestCase
             $this->rack, ['busy_units' => '{"front": [], "back": []}']
         );
         $busyUnitsMock = $this->getMockBuilder(RackBusyUnitsValueObject::class)
-            ->onlyMethods(['getBusyUnits'])
+            ->onlyMethods(['toArray'])
             ->setConstructorArgs([['front' => [1, 2, 3], 'back' => [3, 4, 5]]])
             ->getMock();
-        $busyUnitsMock->method('getBusyUnits')
+        $busyUnitsMock->method('toArray')
             ->willReturn(['front' => [1, 2, 3], 'back' => [3, 4, 5]]);
 
         $this->rack->setBusyUnits($busyUnitsMock);
         $this->assertEquals(
-            $busyUnitsMock->getBusyUnits(),
-            $this->attributes->getValue($this->rack)['busy_units']->getBusyUnits()
+            $busyUnitsMock->toArray(),
+            $this->attributes->getValue($this->rack)['busy_units']->toArray()
         );
     }
 

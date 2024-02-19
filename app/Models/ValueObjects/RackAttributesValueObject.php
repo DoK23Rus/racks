@@ -365,7 +365,7 @@ class RackAttributesValueObject
     /**
      * @return array<mixed> Get attributes array
      */
-    public function getArray(): array
+    public function toArray(): array
     {
         return $this->attributesForRack;
     }

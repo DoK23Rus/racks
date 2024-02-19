@@ -27,7 +27,7 @@ class DeviceUnitsValueObject implements DeviceUnitsInterface
     /**
      * @return array<int>
      */
-    public function getArray(): array
+    public function toArray(): array
     {
         return $this->units;
     }

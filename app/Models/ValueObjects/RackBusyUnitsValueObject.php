@@ -46,7 +46,7 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
      *      back: array<int>
      *  }
      */
-    public function getBusyUnits(): array
+    public function toArray(): array
     {
         return $this->busyUnits;
     }
@@ -55,7 +55,7 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
      * @param  bool  $side
      * @return int[]
      */
-    public function getArray(bool $side): array
+    public function getUnitsForSide(bool $side): array
     {
         if (! $side) {
             return $this->front;

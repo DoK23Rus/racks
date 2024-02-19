@@ -367,6 +367,17 @@ interface RackEntity
     public function setOldName(?string $oldName): void;
 
     /**
+     * @return int|null
+     */
+    public function getDepartmentId(): ?int;
+
+    /**
+     * @param  int|null  $departmentId
+     * @return void
+     */
+    public function setDepartmentId(?int $departmentId): void;
+
+    /**
      * @return string|null
      */
     public function getOldName(): ?string;

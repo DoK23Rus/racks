@@ -161,11 +161,11 @@ class Rack extends Model implements RackBusinessRules, RackEntity
         if (! $side) {
             $busyUnitsArray = [
                 'front' => $updatedBusyUnitsForSide,
-                'back' => $this->getBusyUnits()->getArray(true),
+                'back' => $this->getBusyUnits()->getUnitsForSide(true),
             ];
         } else {
             $busyUnitsArray = [
-                'front' => $this->getBusyUnits()->getArray(false),
+                'front' => $this->getBusyUnits()->getUnitsForSide(false),
                 'back' => $updatedBusyUnitsForSide,
             ];
         }
@@ -187,7 +187,7 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     public function addNewBusyUnits(array $newUnits, bool $side): void
     {
         $updatedBusyUnitsForSide = array_merge(
-            $this->getBusyUnits()->getArray($side),
+            $this->getBusyUnits()->getUnitsForSide($side),
             $newUnits
         );
         sort($updatedBusyUnitsForSide);
@@ -206,7 +206,7 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     public function deleteOldBusyUnits(array $oldUnits, bool $side): void
     {
         $updatedBusyUnitsForSide = array_diff(
-            $this->getBusyUnits()->getArray($side),
+            $this->getBusyUnits()->getUnitsForSide($side),
             $oldUnits
         );
         sort($updatedBusyUnitsForSide);
@@ -224,8 +224,8 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     public function isDeviceAddable(DeviceEntity $device): bool
     {
         $unitsIntersect = array_intersect(
-            $device->getUnits()->getArray(),
-            $this->getBusyUnits()->getArray(
+            $device->getUnits()->toArray(),
+            $this->getBusyUnits()->getUnitsForSide(
                 $device->getLocation()
             )
         );
@@ -244,7 +244,7 @@ class Rack extends Model implements RackBusinessRules, RackEntity
      */
     public function hasDeviceUnits(DeviceEntity $device): bool
     {
-        $deviceUnits = $device->getUnits()->getArray();
+        $deviceUnits = $device->getUnits()->toArray();
         if (end($deviceUnits) > $this->getAmount()) {
             return false;
         }
@@ -264,11 +264,11 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     public function isDeviceMovingValid(DeviceEntity $device, DeviceEntity $deviceUpdating): bool
     {
         $busyUnitsForMove = array_diff(
-            $this->getBusyUnits()->getArray($device->getLocation()),
-            $device->getUnits()->getArray()
+            $this->getBusyUnits()->getUnitsForSide($device->getLocation()),
+            $device->getUnits()->toArray()
         );
         $unitsIntersect = array_intersect(
-            $deviceUpdating->getUnits()->getArray(),
+            $deviceUpdating->getUnits()->toArray(),
             $busyUnitsForMove
         );
         if (count($unitsIntersect) > 0) {
@@ -850,7 +850,7 @@ class Rack extends Model implements RackBusinessRules, RackEntity
                 $busyUnitsArray = json_decode($busyUnits, true);
                 break;
             case $busyUnits instanceof RackBusyUnitsValueObject:
-                $busyUnitsArray = $busyUnits->getBusyUnits();
+                $busyUnitsArray = $busyUnits->toArray();
                 break;
             default:
                 $busyUnitsArray = [];
