@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * Rack or cabinet with devices
  * For properties @see Rack
+ * For business rules @see RackBusinessRules
  */
 interface RackEntity
 {
@@ -316,17 +317,6 @@ interface RackEntity
      * @return void
      */
     public function setRoomId(?int $roomId): void;
-
-    /**
-     * @return int|null
-     */
-    public function getDepartmentId(): ?int;
-
-    /**
-     * @param  int|null  $departmentId
-     * @return void
-     */
-    public function setDepartmentId(?int $departmentId): void;
 
     /**
      * @return BelongsTo

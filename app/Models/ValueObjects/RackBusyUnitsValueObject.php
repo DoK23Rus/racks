@@ -4,6 +4,9 @@ namespace App\Models\ValueObjects;
 
 use App\Domain\Interfaces\RackInterfaces\RackBusyUnitsInterface;
 
+/**
+ * Value object for rack busy units data
+ */
 class RackBusyUnitsValueObject implements RackBusyUnitsInterface
 {
     /**
@@ -37,16 +40,21 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         $this->setBack();
     }
 
+    /**
+     * @return array{
+     *      front: array<int>,
+     *      back: array<int>
+     *  }
+     */
     public function getBusyUnits(): array
     {
         return $this->busyUnits;
     }
 
-    public function getBusyUnitsJson(): string
-    {
-        return json_encode($this->busyUnits);
-    }
-
+    /**
+     * @param  bool  $side
+     * @return int[]
+     */
     public function getArray(bool $side): array
     {
         if (! $side) {
@@ -56,6 +64,9 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         return $this->back;
     }
 
+    /**
+     * @return void
+     */
     public function setFront(): void
     {
         if (! array_key_exists('front', $this->busyUnits)) {
@@ -66,6 +77,9 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         $this->front = $front;
     }
 
+    /**
+     * @return void
+     */
     public function setBack(): void
     {
         if (! array_key_exists('back', $this->busyUnits)) {
@@ -74,10 +88,5 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         $back = $this->busyUnits['back'];
         sort($back);
         $this->back = $back;
-    }
-
-    public function test(): int
-    {
-        return 123;
     }
 }

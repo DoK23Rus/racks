@@ -6,16 +6,40 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface RackRepository
 {
+    /**
+     * @param  RackEntity  $rack
+     * @return RackEntity
+     */
     public function create(RackEntity $rack): RackEntity;
 
+    /**
+     * @param  int  $id
+     * @return RackEntity|RackBusinessRules
+     */
     public function getById(int $id): RackEntity|RackBusinessRules;
 
+    /**
+     * @param  int  $id
+     * @return void
+     */
     public function lockById(int $id): void;
 
+    /**
+     * @param  RackEntity  $rack
+     * @return int
+     */
     public function updateBusyUnits(RackEntity $rack): int;
 
+    /**
+     * @param  RackEntity  $rack
+     * @return int
+     */
     public function delete(RackEntity $rack): int;
 
+    /**
+     * @param  RackEntity  $rack
+     * @return RackEntity
+     */
     public function update(RackEntity $rack): RackEntity;
 
     /**
@@ -24,9 +48,15 @@ interface RackRepository
      */
     public function getNamesListByRoomId(int $roomId): array;
 
+    /**
+     * @return void
+     */
     public function lockTable(): void;
 
     /**
+     * Rack location
+     * Region>Department>Site>Building>Room
+     *
      * @return array<array{
      *     region_name: string,
      *     department_name: string,
@@ -38,6 +68,8 @@ interface RackRepository
     public function getLocation(?string $id): array;
 
     /**
+     * All rack vendors
+     *
      * @return array{
      *     item_type: string,
      *     array<string>
@@ -46,6 +78,8 @@ interface RackRepository
     public function getVendors(): array;
 
     /**
+     * All rack models
+     *
      * @return array{
      *     item_type: string,
      *     array<string>

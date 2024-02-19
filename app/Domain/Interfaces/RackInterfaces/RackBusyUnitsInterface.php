@@ -2,6 +2,9 @@
 
 namespace App\Domain\Interfaces\RackInterfaces;
 
+/**
+ * Rack busy units
+ */
 interface RackBusyUnitsInterface
 {
     /**
@@ -18,7 +21,13 @@ interface RackBusyUnitsInterface
      */
     public function getBusyUnits(): array;
 
+    /**
+     * @return void
+     */
     public function setFront(): void;
 
+    /**
+     * @return void
+     */
     public function setBack(): void;
 }

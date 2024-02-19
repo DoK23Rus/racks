@@ -5,8 +5,12 @@ namespace App\Models;
 use App\Domain\Interfaces\DeviceInterfaces\DeviceEntity;
 use App\Domain\Interfaces\RackInterfaces\RackBusinessRules;
 use App\Domain\Interfaces\RackInterfaces\RackEntity;
+use App\Models\Enums\RackFrameEnum;
+use App\Models\Enums\RackPlaceTypeEnum;
+use App\Models\Enums\RackTypeEnum;
 use App\Models\ValueObjects\RackAttributesValueObject;
 use App\Models\ValueObjects\RackBusyUnitsValueObject;
+use App\Providers\AuthServiceProvider;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,39 +26,39 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \App\Models\Rack create(array $attributes = [])
  * @method static \Illuminate\Pagination\LengthAwarePaginator paginate(?string $perPage, array $columns)
  *
- * @property int $id
- * @property string $name
- * @property string|null $vendor
- * @property string|null $model
- * @property int $amount
- * @property string|null $description
- * @property mixed $busy_units
- * @property-read int $has_numbering_from_top_to_bottom
- * @property string|null $responsible
- * @property string|null $financially_responsible_person
- * @property string|null $inventory_number
- * @property string|null $fixed_asset
- * @property string|null $link_to_docs
- * @property string|null $row
- * @property string|null $place
- * @property int|null $height
- * @property int|null $width
- * @property int|null $depth
- * @property int|null $unit_width
- * @property int|null $unit_depth
- * @property string $type
- * @property string $frame
- * @property string $place_type
- * @property int|null $max_load
- * @property int|null $power_sockets
- * @property int|null $power_sockets_ups
- * @property-read int $has_external_ups
- * @property-read int $has_cooler
- * @property string $updated_by
- * @property int $department_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $room_id
+ * @property int $id PK
+ * @property string $name Name, number or other identifier
+ * @property string|null $vendor Vendor
+ * @property string|null $model Model
+ * @property int $amount Amount of units
+ * @property string|null $description Description text
+ * @property mixed $busy_units Busy units {@see RackBusyUnitsValueObject}
+ * @property-read int $has_numbering_from_top_to_bottom Has numbering from top to bottom (non-standard)
+ * @property string|null $responsible Responsible person
+ * @property string|null $financially_responsible_person Financially responsible person
+ * @property string|null $inventory_number Inventory number (usually contains letters)
+ * @property string|null $fixed_asset Fixed asset (usually contains letters)
+ * @property string|null $link_to_docs Link to documentation
+ * @property string|null $row Row (some time contains letters)
+ * @property string|null $place Place (some time contains letters)
+ * @property int|null $height Height im mm
+ * @property int|null $width Width in mm
+ * @property int|null $depth Depth in mm
+ * @property int|null $unit_width Unit width in mm
+ * @property int|null $unit_depth Unit depth in mm
+ * @property string $type Rack type {@see RackTypeEnum}
+ * @property string $frame Rack frame type {@see RackFrameEnum}
+ * @property string $place_type Rack place type {@see RackPlaceTypeEnum}
+ * @property int|null $max_load Max load in kg
+ * @property int|null $power_sockets Unused power sockets
+ * @property int|null $power_sockets_ups Unused power UPS sockets
+ * @property-read int $has_external_ups Has external UPS
+ * @property-read int $has_cooler Has cooler
+ * @property string $updated_by Updated by user (username)
+ * @property int $department_id Department ID {@see AuthServiceProvider}
+ * @property \Illuminate\Support\Carbon|null $created_at Created at
+ * @property \Illuminate\Support\Carbon|null $updated_at Updated at
+ * @property int $room_id Foreign key
  * @property-read \App\Models\Room $room
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Rack newModelQuery()
