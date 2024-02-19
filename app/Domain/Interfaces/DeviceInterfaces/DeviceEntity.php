@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  *
  * Device or reserved units
  * For properties @see Device
- * For business rules @see DeviceBusinessRules
  */
 interface DeviceEntity
 {
