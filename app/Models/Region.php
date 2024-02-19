@@ -18,10 +18,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \App\Models\Region create(array $attributes = [])
  * @method static \Illuminate\Pagination\LengthAwarePaginator paginate(?string $perPage)
  *
- * @property int $id
- * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $id PK
+ * @property string $name Name
+ * @property \Illuminate\Support\Carbon|null $created_at Created at
+ * @property \Illuminate\Support\Carbon|null $updated_at Updated at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Department> $children
  * @property-read int|null $children_count
  *
@@ -37,36 +37,60 @@ class Region extends Model implements RegionBusinessRules, RegionEntity
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'id',
         'name',
     ];
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->attributes['id'];
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];
     }
 
+    /**
+     * @param  string  $name
+     * @return void
+     */
     public function setName(string $name): void
     {
         $this->attributes['name'] = $name;
     }
 
+    /**
+     * @return string
+     */
     public function getCreatedAt(): string
     {
         return $this->attributes['created_at'];
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedAt(): string
     {
         return $this->attributes['updated_at'];
     }
 
+    /**
+     * Has many departments
+     *
+     * @return HasMany
+     */
     public function children(): HasMany
     {
         return $this->hasMany(Department::class, 'region_id');
