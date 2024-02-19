@@ -4,6 +4,10 @@ namespace App\Models;
 
 use App\Domain\Interfaces\DeviceInterfaces\DeviceBusinessRules;
 use App\Domain\Interfaces\DeviceInterfaces\DeviceEntity;
+use App\Models\Enums\DevicePowerACDCEnum;
+use App\Models\Enums\DevicePowerTypeEnum;
+use App\Models\Enums\DeviceStatusEnum;
+use App\Models\Enums\DeviceTypeEnum;
 use App\Models\ValueObjects\DeviceAttributesValueObject;
 use App\Models\ValueObjects\DeviceUnitsValueObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -19,36 +23,36 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
  * @method static \Illuminate\Database\Query\Builder where($column, $operator = null, $value = null, $boolean = 'and')
  * @method static \App\Models\Device create(array $attributes = [])
  *
- * @property int $id
- * @property string|null $vendor
- * @property string|null $model
- * @property string $type
- * @property string $status
- * @property-read int $has_backside_location
- * @property mixed $units
- * @property string|null $hostname
- * @property string|null $ip
- * @property int|null $stack
- * @property int|null $ports_amount
- * @property string|null $software_version
- * @property string $power_type
- * @property int|null $power_w
- * @property int|null $power_v
- * @property string $power_ac_dc
- * @property string|null $serial_number
- * @property string|null $description
- * @property string|null $project
- * @property string $ownership
- * @property string|null $responsible
- * @property string|null $financially_responsible_person
- * @property string|null $inventory_number
- * @property string|null $fixed_asset
- * @property string|null $link_to_docs
- * @property string $updated_by
- * @property int $department_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $rack_id
+ * @property int $id PK
+ * @property string|null $vendor Vendor
+ * @property string|null $model Model
+ * @property string $type Device type {@see DeviceTypeEnum}
+ * @property string $status Device status {@see DeviceStatusEnum}
+ * @property-read int $has_backside_location Backside location (non-standard)
+ * @property mixed $units Units {@see DeviceUnitsValueObject}
+ * @property string|null $hostname Hostname (if available)
+ * @property string|null $ip IP-address (if available)
+ * @property int|null $stack Stack or reserve
+ * @property int|null $ports_amount Ports amount (if available)
+ * @property string|null $software_version Software version or OS (if available)
+ * @property string $power_type Power type {@see DevicePowerTypeEnum}
+ * @property int|null $power_w Power W
+ * @property int|null $power_v Power V
+ * @property string $power_ac_dc AC/DC {@see DevicePowerACDCEnum}
+ * @property string|null $serial_number Serial number
+ * @property string|null $description Description text
+ * @property string|null $project Project identifier
+ * @property string $ownership Ownership
+ * @property string|null $responsible Responsible person
+ * @property string|null $financially_responsible_person Financially responsible person
+ * @property string|null $inventory_number Inventory number (usually contains letters)
+ * @property string|null $fixed_asset Fixed asset (usually contains letters)
+ * @property string|null $link_to_docs Link to documentation
+ * @property string $updated_by Updated by user (username)
+ * @property int $department_id Department ID {@see AuthServiceProvider}
+ * @property \Illuminate\Support\Carbon|null $created_at Created at
+ * @property \Illuminate\Support\Carbon|null $updated_at Updated at
+ * @property int $rack_id Foreign key
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Device newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Device newQuery()
@@ -88,6 +92,9 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'id',
         'vendor',
@@ -128,231 +135,393 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
         'units' => [],
     ];
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->attributes['id'];
     }
 
+    /**
+     * @return string|null
+     */
     public function getVendor(): ?string
     {
         return $this->attributes['vendor'];
     }
 
+    /**
+     * @param  string|null  $vendor
+     * @return void
+     */
     public function setVendor(?string $vendor): void
     {
         $this->attributes['vendor'] = $vendor;
     }
 
+    /**
+     * @return string|null
+     */
     public function getModel(): ?string
     {
         return $this->attributes['model'];
     }
 
+    /**
+     * @param  string|null  $model
+     * @return void
+     */
     public function setModel(?string $model): void
     {
         $this->attributes['model'] = $model;
     }
 
+    /**
+     * @return string|null
+     */
     public function getType(): ?string
     {
         return $this->attributes['type'];
     }
 
+    /**
+     * @param  string|null  $type
+     * @return void
+     */
     public function setType(?string $type): void
     {
         $this->attributes['type'] = $type;
     }
 
+    /**
+     * @return string|null
+     */
     public function getStatus(): ?string
     {
         return $this->attributes['status'];
     }
 
+    /**
+     * @param  string|null  $status
+     * @return void
+     */
     public function setStatus(?string $status): void
     {
         $this->attributes['status'] = $status;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHostname(): ?string
     {
         return $this->attributes['hostname'];
     }
 
+    /**
+     * @param  string|null  $hostname
+     * @return void
+     */
     public function setHostname(?string $hostname): void
     {
         $this->attributes['hostname'] = $hostname;
     }
 
+    /**
+     * @return string|null
+     */
     public function getIp(): ?string
     {
         return $this->attributes['ip'];
     }
 
+    /**
+     * @param  string|null  $ip
+     * @return void
+     */
     public function setIp(?string $ip): void
     {
         $this->attributes['ip'] = $ip;
     }
 
+    /**
+     * @return int|null
+     */
     public function getStack(): ?int
     {
         return $this->attributes['stack'];
     }
 
+    /**
+     * @param  int|null  $stack
+     * @return void
+     */
     public function setStack(?int $stack): void
     {
         $this->attributes['stack'] = $stack;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPortsAmount(): ?int
     {
         return $this->attributes['ports_amount'];
     }
 
+    /**
+     * @param  int|null  $portsAmount
+     * @return void
+     */
     public function setPortsAmount(?int $portsAmount): void
     {
         $this->attributes['ports_amount'] = $portsAmount;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSoftwareVersion(): ?string
     {
         return $this->attributes['software_version'];
     }
 
+    /**
+     * @param  string|null  $softwareVersion
+     * @return void
+     */
     public function setSoftwareVersion(?string $softwareVersion): void
     {
         $this->attributes['software_version'] = $softwareVersion;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPowerType(): ?string
     {
         return $this->attributes['power_type'];
     }
 
+    /**
+     * @param  string|null  $powerType
+     * @return void
+     */
     public function setPowerType(?string $powerType): void
     {
         $this->attributes['power_type'] = $powerType;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPowerW(): ?int
     {
         return $this->attributes['power_w'];
     }
 
+    /**
+     * @param  int|null  $powerW
+     * @return void
+     */
     public function setPowerW(?int $powerW): void
     {
         $this->attributes['power_w'] = $powerW;
     }
 
+    /**
+     * @return int|null
+     */
     public function getPowerV(): ?int
     {
         return $this->attributes['power_v'];
     }
 
+    /**
+     * @param  int|null  $powerV
+     * @return void
+     */
     public function setPowerV(?int $powerV): void
     {
         $this->attributes['power_v'] = $powerV;
     }
 
+    /**
+     * @return string|null
+     */
     public function getPowerACDC(): ?string
     {
         return $this->attributes['power_ac_dc'];
     }
 
+    /**
+     * @param  string|null  $powerACDC
+     * @return void
+     */
     public function setPowerACDC(?string $powerACDC): void
     {
         $this->attributes['power_ac_dc'] = $powerACDC;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSerialNumber(): ?string
     {
         return $this->attributes['serial_number'];
     }
 
+    /**
+     * @param  string|null  $serialNumber
+     * @return void
+     */
     public function setSerialNumber(?string $serialNumber): void
     {
         $this->attributes['serial_number'] = $serialNumber;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDescription(): ?string
     {
         return $this->attributes['description'];
     }
 
+    /**
+     * @param  string|null  $description
+     * @return void
+     */
     public function setDescription(?string $description): void
     {
         $this->attributes['description'] = $description;
     }
 
+    /**
+     * @return string|null
+     */
     public function getProject(): ?string
     {
         return $this->attributes['project'];
     }
 
+    /**
+     * @param  string|null  $project
+     * @return void
+     */
     public function setProject(?string $project): void
     {
         $this->attributes['project'] = $project;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOwnership(): ?string
     {
         return $this->attributes['ownership'];
     }
 
+    /**
+     * @param  string|null  $ownership
+     * @return void
+     */
     public function setOwnership(?string $ownership): void
     {
         $this->attributes['ownership'] = $ownership;
     }
 
+    /**
+     * @return string|null
+     */
     public function getResponsible(): ?string
     {
         return $this->attributes['responsible'];
     }
 
+    /**
+     * @param  string|null  $responsible
+     * @return void
+     */
     public function setResponsible(?string $responsible): void
     {
         $this->attributes['responsible'] = $responsible;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFinanciallyResponsiblePerson(): ?string
     {
         return $this->attributes['financially_responsible_person'];
     }
 
+    /**
+     * @param  string|null  $financiallyResponsiblePerson
+     * @return void
+     */
     public function setFinanciallyResponsiblePerson(?string $financiallyResponsiblePerson): void
     {
         $this->attributes['financially_responsible_person'] = $financiallyResponsiblePerson;
     }
 
+    /**
+     * @return string|null
+     */
     public function getInventoryNumber(): ?string
     {
         return $this->attributes['inventory_number'];
     }
 
+    /**
+     * @param  string|null  $inventoryNumber
+     * @return void
+     */
     public function setInventoryNumber(?string $inventoryNumber): void
     {
         $this->attributes['inventory_number'] = $inventoryNumber;
     }
 
+    /**
+     * @return string|null
+     */
     public function getFixedAsset(): ?string
     {
         return $this->attributes['fixed_asset'];
     }
 
+    /**
+     * @param  string|null  $fixedAsset
+     * @return void
+     */
     public function setFixedAsset(?string $fixedAsset): void
     {
         $this->attributes['fixed_asset'] = $fixedAsset;
     }
 
+    /**
+     * @return string|null
+     */
     public function getLinkToDocs(): ?string
     {
         return $this->attributes['link_to_docs'];
     }
 
+    /**
+     * @param  string|null  $linkToDocs
+     * @return void
+     */
     public function setLinkToDocs(?string $linkToDocs): void
     {
         $this->attributes['link_to_docs'] = $linkToDocs;
     }
 
+    /**
+     * @return DeviceUnitsValueObject
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function getUnits(): DeviceUnitsValueObject
     {
         $units = $this->attributes['units'];
@@ -373,41 +542,69 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
         return App()->makeWith(DeviceUnitsValueObject::class, ['units' => $unitsArray]);
     }
 
+    /**
+     * @param  DeviceUnitsValueObject  $units
+     * @return void
+     */
     public function setUnits(DeviceUnitsValueObject $units): void
     {
         $this->attributes['units'] = $units;
     }
 
+    /**
+     * @return int|null
+     */
     public function getRackId(): ?int
     {
         return $this->attributes['rack_id'];
     }
 
+    /**
+     * @param  int|null  $rackId
+     * @return void
+     */
     public function setRackId(?int $rackId): void
     {
         $this->attributes['rack_id'] = $rackId;
     }
 
+    /**
+     * @return int|null
+     */
     public function getDepartmentId(): ?int
     {
         return $this->attributes['department_id'];
     }
 
+    /**
+     * @param  int|null  $departmentId
+     * @return void
+     */
     public function setDepartmentId(?int $departmentId): void
     {
         $this->attributes['department_id'] = $departmentId;
     }
 
+    /**
+     * @return bool|null
+     */
     public function getLocation(): ?bool
     {
         return $this->attributes['has_backside_location'];
     }
 
+    /**
+     * @param  bool|null  $location
+     * @return void
+     */
     public function setLocation(?bool $location): void
     {
         $this->attributes['has_backside_location'] = $location;
     }
 
+    /**
+     * @return Attribute
+     */
     protected function hasBacksideLocation(): Attribute
     {
         return Attribute::make(
@@ -415,21 +612,34 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
         );
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedBy(): string
     {
         return $this->attributes['updated_by'];
     }
 
+    /**
+     * @param  string  $updatedBy
+     * @return void
+     */
     public function setUpdatedBy(string $updatedBy): void
     {
         $this->attributes['updated_by'] = $updatedBy;
     }
 
+    /**
+     * @return string
+     */
     public function getCreatedAt(): string
     {
         return $this->attributes['created_at'];
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedAt(): string
     {
         return $this->attributes['updated_at'];
@@ -437,12 +647,20 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
 
     /**
      * @param  array<mixed>|string  $with
+     * @return Model|null
      */
     public function fresh($with = []): ?Model
     {
         return parent::fresh($with);
     }
 
+    /**
+     * Get attributes for patch method
+     *
+     * @return DeviceAttributesValueObject
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function getAttributeSet(): DeviceAttributesValueObject
     {
         return App()->makeWith(DeviceAttributesValueObject::class, ['device' => $this]);

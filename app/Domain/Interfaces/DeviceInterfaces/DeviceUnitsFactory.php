@@ -8,6 +8,7 @@ interface DeviceUnitsFactory
 {
     /**
      * @param  array<int>  $attributes
+     * @return DeviceUnitsValueObject
      */
     public function make(array $attributes = []): DeviceUnitsValueObject;
 }

@@ -4,8 +4,16 @@ namespace App\Domain\Interfaces\DeviceInterfaces;
 
 interface DeviceRepository
 {
+    /**
+     * @param  DeviceEntity  $device
+     * @return DeviceEntity
+     */
     public function create(DeviceEntity $device): DeviceEntity;
 
+    /**
+     * @param  int  $id
+     * @return DeviceEntity
+     */
     public function getById(int $id): DeviceEntity;
 
     /**
@@ -14,10 +22,22 @@ interface DeviceRepository
      */
     public function getByRackId(?string $rackId): array;
 
+    /**
+     * @param  DeviceEntity  $device
+     * @return int
+     */
     public function delete(DeviceEntity $device): int;
 
+    /**
+     * @param  DeviceEntity  $device
+     * @return DeviceEntity
+     */
     public function update(DeviceEntity $device): DeviceEntity;
 
+    /**
+     * @param  DeviceEntity  $device
+     * @return int
+     */
     public function updateUnits(DeviceEntity $device): int;
 
     /**
