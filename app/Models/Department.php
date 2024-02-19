@@ -19,11 +19,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \App\Models\Department create(array $attributes = [])
  * @method static \Illuminate\Pagination\LengthAwarePaginator paginate(?string $perPage)
  *
- * @property int $id
- * @property string $name
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $region_id
+ * @property int $id PK
+ * @property string $name Name
+ * @property \Illuminate\Support\Carbon|null $created_at Created at
+ * @property \Illuminate\Support\Carbon|null $updated_at Updated at
+ * @property int $region_id Foreign key
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Site> $children
  * @property-read int|null $children_count
  * @property-read \App\Models\Region $region
@@ -41,6 +41,9 @@ class Department extends Model implements DepartmentEntity, DeviceBusinessRules
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'id',
         'name',
@@ -49,46 +52,79 @@ class Department extends Model implements DepartmentEntity, DeviceBusinessRules
         'updated_at',
     ];
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->attributes['id'];
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];
     }
 
+    /**
+     * @param  string  $name
+     * @return void
+     */
     public function setName(string $name): void
     {
         $this->attributes['name'] = $name;
     }
 
+    /**
+     * @return int
+     */
     public function getRegionId(): int
     {
         return $this->attributes['region_id'];
     }
 
+    /**
+     * @param  int  $regionId
+     * @return void
+     */
     public function setRegionId(int $regionId): void
     {
         $this->attributes['region_id'] = $regionId;
     }
 
+    /**
+     * @return string
+     */
     public function getCreatedAt(): string
     {
         return $this->attributes['created_at'];
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedAt(): string
     {
         return $this->attributes['updated_at'];
     }
 
+    /**
+     * Belongs to region
+     *
+     * @return BelongsTo
+     */
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class, 'region_id');
     }
 
+    /**
+     * Has many sites
+     *
+     * @return HasMany
+     */
     public function children(): HasMany
     {
         return $this->hasMany(Site::class, 'department_id');
