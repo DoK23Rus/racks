@@ -11,8 +11,8 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
 {
     /**
      * @var array{
-     *      front: array<int>,
-     *      back: array<int>
+     *     front: array<int>,
+     *     back: array<int>
      *  }
      */
     private array $busyUnits;
