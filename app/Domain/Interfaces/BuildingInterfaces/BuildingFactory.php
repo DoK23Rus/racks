@@ -7,7 +7,15 @@ use App\UseCases\BuildingUseCases\UpdateBuildingUseCase\UpdateBuildingRequestMod
 
 interface BuildingFactory
 {
+    /**
+     * @param  CreateBuildingRequestModel  $request
+     * @return BuildingEntity|BuildingBusinessRules
+     */
     public function makeFromCreateRequest(CreateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules;
 
+    /**
+     * @param  UpdateBuildingRequestModel  $request
+     * @return BuildingEntity|BuildingBusinessRules
+     */
     public function makeFromPatchRequest(UpdateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules;
 }

@@ -18,13 +18,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \App\Models\Building create(array $attributes = [])
  * @method static \Illuminate\Pagination\LengthAwarePaginator paginate(?string $perPage)
  *
- * @property int $id
- * @property string $name
- * @property string $updated_by
- * @property int $department_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $site_id
+ * @property int $id PK
+ * @property string $name Name
+ * @property string $updated_by Updated by user (username)
+ * @property int $department_id Department ID {@see AuthServiceProvider}
+ * @property \Illuminate\Support\Carbon|null $created_at Created at
+ * @property \Illuminate\Support\Carbon|null $updated_at Updated at
+ * @property int $site_id Foreign key
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Room> $children
  * @property-read int|null $children_count
  * @property-read \App\Models\Site $site
@@ -42,6 +42,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Building extends Model implements BuildingBusinessRules, BuildingEntity
 {
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'id',
         'name',
@@ -73,66 +76,113 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->attributes['id'];
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];
     }
 
+    /**
+     * @param  string  $name
+     * @return void
+     */
     public function setName(string $name): void
     {
         $this->attributes['name'] = $name;
     }
 
+    /**
+     * @return int
+     */
     public function getSiteId(): int
     {
         return $this->attributes['site_id'];
     }
 
+    /**
+     * @param  int  $siteId
+     * @return void
+     */
     public function setSiteId(int $siteId): void
     {
         $this->attributes['site_id'] = $siteId;
     }
 
+    /**
+     * @return int
+     */
     public function getDepartmentId(): int
     {
         return $this->attributes['department_id'];
     }
 
+    /**
+     * @param  int  $departmentId
+     * @return void
+     */
     public function setDepartmentId(int $departmentId): void
     {
         $this->attributes['department_id'] = $departmentId;
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedBy(): string
     {
         return $this->attributes['updated_by'];
     }
 
+    /**
+     * @param  string  $updatedBy
+     * @return void
+     */
     public function setUpdatedBy(string $updatedBy): void
     {
         $this->attributes['updated_by'] = $updatedBy;
     }
 
+    /**
+     * @return string
+     */
     public function getCreatedAt(): string
     {
         return $this->attributes['created_at'];
     }
 
+    /**
+     * @return string
+     */
     public function getUpdatedAt(): string
     {
         return $this->attributes['updated_at'];
     }
 
+    /**
+     * Belongs to site
+     *
+     * @return BelongsTo
+     */
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class, 'site_id');
     }
 
+    /**
+     * Has many rooms
+     *
+     * @return HasMany
+     */
     public function children(): HasMany
     {
         return $this->hasMany(Room::class, 'building_id');
