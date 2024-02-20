@@ -13,7 +13,7 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
      * @var array{
      *     front: array<int>,
      *     back: array<int>
-     *  }
+     * }|array<null>
      */
     private array $busyUnits;
 
@@ -31,7 +31,7 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
      * @param  array{
      *     front: array<int>,
      *     back: array<int>
-     * }  $busyUnits Busy units array
+     * }|array<null>  $busyUnits Busy units array
      */
     public function __construct(array $busyUnits)
     {
@@ -44,7 +44,7 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
      * @return array{
      *      front: array<int>,
      *      back: array<int>
-     *  }
+     *  }|array<null>
      */
     public function toArray(): array
     {
