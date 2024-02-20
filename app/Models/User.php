@@ -8,6 +8,7 @@ use App\Models\ValueObjects\EmailValueObject;
 use App\Models\ValueObjects\PasswordValueObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -198,6 +199,16 @@ class User extends Authenticatable implements JWTSubject, UserBusinessRules, Use
     public function setPassword(PasswordValueObject $password): void
     {
         $this->attributes['password'] = $password;
+    }
+
+    /**
+     * Belongs to department
+     *
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     // Rest omitted for brevity

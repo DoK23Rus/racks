@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('updated_by', 255);
-            $table->integer('department_id');
             $table->timestamps();
             $table->foreignId('building_id')
                 ->constrained('buildings')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('department_id')
+                ->constrained('departments')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

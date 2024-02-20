@@ -5,6 +5,7 @@ namespace App\Domain\Interfaces\UserInterfaces;
 use App\Models\User;
 use App\Models\ValueObjects\EmailValueObject;
 use App\Models\ValueObjects\PasswordValueObject;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * User entity
@@ -79,4 +80,9 @@ interface UserEntity
      * @return void
      */
     public function setPassword(PasswordValueObject $password): void;
+
+    /**
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo;
 }

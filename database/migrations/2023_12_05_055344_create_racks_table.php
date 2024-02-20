@@ -42,10 +42,13 @@ return new class extends Migration
             $table->boolean('has_external_ups')->default(false);
             $table->boolean('has_cooler')->default(false);
             $table->string('updated_by', 255);
-            $table->integer('department_id');
             $table->timestamps();
             $table->foreignId('room_id')
                 ->constrained('rooms')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('department_id')
+                ->constrained('departments')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

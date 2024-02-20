@@ -6,6 +6,7 @@ use App\Models\Rack;
 use App\Models\ValueObjects\RackAttributesValueObject;
 use App\Models\ValueObjects\RackBusyUnitsValueObject;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Rack entity
@@ -319,11 +320,6 @@ interface RackEntity
     public function setRoomId(?int $roomId): void;
 
     /**
-     * @return BelongsTo
-     */
-    public function room(): BelongsTo;
-
-    /**
      * @return RackBusyUnitsValueObject
      */
     public function getBusyUnits(): RackBusyUnitsValueObject;
@@ -381,6 +377,21 @@ interface RackEntity
      * @return string|null
      */
     public function getOldName(): ?string;
+
+    /**
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo;
+
+    /**
+     * @return BelongsTo
+     */
+    public function room(): BelongsTo;
+
+    /**
+     * @return HasMany
+     */
+    public function devices(): HasMany;
 
     /**
      * @return array<mixed>

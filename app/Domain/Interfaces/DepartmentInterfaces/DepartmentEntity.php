@@ -61,4 +61,14 @@ interface DepartmentEntity
      * @return HasMany
      */
     public function children(): HasMany;
+
+    /**
+     * @return HasMany
+     */
+    public function users(): HasMany;
+
+    /**
+     * @return HasMany
+     */
+    public function buildings(): HasMany;
 }

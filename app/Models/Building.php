@@ -179,6 +179,16 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     }
 
     /**
+     * Belongs to department
+     *
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    /**
      * Has many rooms
      *
      * @return HasMany

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Device
@@ -664,6 +665,26 @@ class Device extends Model implements DeviceBusinessRules, DeviceEntity
     public function getAttributeSet(): DeviceAttributesValueObject
     {
         return App()->makeWith(DeviceAttributesValueObject::class, ['device' => $this]);
+    }
+
+    /**
+     * Belongs to rack
+     *
+     * @return BelongsTo
+     */
+    public function rack(): BelongsTo
+    {
+        return $this->belongsTo(Rack::class, 'rack_id');
+    }
+
+    /**
+     * Belongs to department
+     *
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     /**

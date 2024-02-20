@@ -186,6 +186,16 @@ class Room extends Model implements RoomBusinessRules, RoomEntity
     }
 
     /**
+     * Belongs to department
+     *
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    /**
      * Has many racks
      *
      * @return HasMany

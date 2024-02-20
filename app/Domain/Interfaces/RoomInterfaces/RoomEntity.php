@@ -85,6 +85,11 @@ interface RoomEntity
     public function building(): BelongsTo;
 
     /**
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo;
+
+    /**
      * @return HasMany
      */
     public function children(): HasMany;

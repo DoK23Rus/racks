@@ -129,4 +129,54 @@ class Department extends Model implements DepartmentEntity, DeviceBusinessRules
     {
         return $this->hasMany(Site::class, 'department_id');
     }
+
+    /**
+     * Has many users
+     *
+     * @return HasMany
+     */
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'department_id');
+    }
+
+    /**
+     * Has many buildings
+     *
+     * @return HasMany
+     */
+    public function buildings(): HasMany
+    {
+        return $this->hasMany(Building::class, 'department_id');
+    }
+
+    /**
+     * Has many rooms
+     *
+     * @return HasMany
+     */
+    public function rooms(): HasMany
+    {
+        return $this->hasMany(Room::class, 'department_id');
+    }
+
+    /**
+     * Has many racks
+     *
+     * @return HasMany
+     */
+    public function racks(): HasMany
+    {
+        return $this->hasMany(Rack::class, 'department_id');
+    }
+
+    /**
+     * Has many devices
+     *
+     * @return HasMany
+     */
+    public function devices(): HasMany
+    {
+        return $this->hasMany(Device::class, 'department_id');
+    }
 }

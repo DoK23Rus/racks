@@ -6,6 +6,7 @@ use App\Models\Device;
 use App\Models\ValueObjects\DeviceAttributesValueObject;
 use App\Models\ValueObjects\DeviceUnitsValueObject;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Device entity
@@ -338,6 +339,13 @@ interface DeviceEntity
      * @return Model|null ?Model
      */
     public function fresh(array|string $with): ?Model;
+
+    /**
+     * Belongs to rack
+     *
+     * @return BelongsTo
+     */
+    public function rack(): BelongsTo;
 
     /**
      * @return array<mixed>

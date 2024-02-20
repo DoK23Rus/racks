@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Rack
@@ -933,6 +934,26 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class, 'room_id');
+    }
+
+    /**
+     * Belongs to department
+     *
+     * @return BelongsTo
+     */
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    /**
+     * Has many racks
+     *
+     * @return HasMany
+     */
+    public function devices(): HasMany
+    {
+        return $this->hasMany(Device::class, 'rack_id');
     }
 
     /**
