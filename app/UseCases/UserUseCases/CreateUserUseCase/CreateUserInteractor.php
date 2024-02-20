@@ -9,6 +9,12 @@ use App\Domain\Interfaces\ViewModel;
 
 class CreateUserInteractor implements CreateUserInputPort
 {
+    /**
+     * @param  CreateUserOutputPort  $output
+     * @param  UserRepository  $userRepository
+     * @param  DepartmentRepository  $departmentRepository
+     * @param  UserFactory  $userFactory
+     */
     public function __construct(
         private readonly CreateUserOutputPort $output,
         private readonly UserRepository $userRepository,
@@ -17,6 +23,12 @@ class CreateUserInteractor implements CreateUserInputPort
     ) {
     }
 
+    /**
+     * @param  CreateUserRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createUser(CreateUserRequestModel $request): ViewModel
     {
         $user = $this->userFactory->makeFromCreateRequest($request);

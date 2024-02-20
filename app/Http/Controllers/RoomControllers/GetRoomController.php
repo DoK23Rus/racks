@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\RoomControllers\Swagger\GetRoomController
+ */
 class GetRoomController extends Controller
 {
+    /**
+     * @param  GetRoomInputPort  $interactor
+     */
     public function __construct(
         private readonly GetRoomInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  GetRoomRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(GetRoomRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->getRoom(

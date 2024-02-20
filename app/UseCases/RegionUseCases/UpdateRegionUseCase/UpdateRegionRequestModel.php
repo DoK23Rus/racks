@@ -12,11 +12,17 @@ class UpdateRegionRequestModel
     ) {
     }
 
+    /**
+     * @return string
+     */
     public function getId(): string
     {
         return $this->attributes['id'];
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];

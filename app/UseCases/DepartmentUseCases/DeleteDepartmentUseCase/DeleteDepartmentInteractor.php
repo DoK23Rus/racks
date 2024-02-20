@@ -8,12 +8,22 @@ use App\UseCases\DepartmentUseCases\UpdateDepartmentUseCase\UpdateDepartmentResp
 
 class DeleteDepartmentInteractor implements DeleteDepartmentInputPort
 {
+    /**
+     * @param  DeleteDepartmentOutputPort  $output
+     * @param  DepartmentRepository  $departmentRepository
+     */
     public function __construct(
         private readonly DeleteDepartmentOutputPort $output,
         private readonly DepartmentRepository $departmentRepository
     ) {
     }
 
+    /**
+     * @param  DeleteDepartmentRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteDepartment(DeleteDepartmentRequestModel $request): ViewModel
     {
         try {

@@ -11,6 +11,10 @@ use App\UseCases\BuildingUseCases\UpdateBuildingUseCase\UpdateBuildingRequestMod
 
 class BuildingModelFactory implements BuildingFactory
 {
+    /**
+     * @param  CreateBuildingRequestModel  $request
+     * @return BuildingEntity|BuildingBusinessRules
+     */
     public function makeFromCreateRequest(CreateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules
     {
         return new Building([
@@ -19,6 +23,10 @@ class BuildingModelFactory implements BuildingFactory
         ]);
     }
 
+    /**
+     * @param  UpdateBuildingRequestModel  $request
+     * @return BuildingEntity|BuildingBusinessRules
+     */
     public function makeFromPatchRequest(UpdateBuildingRequestModel $request): BuildingEntity|BuildingBusinessRules
     {
         return new Building([

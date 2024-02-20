@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\RackControllers\Swagger\CreateRackController
+ */
 class CreateRackController extends Controller
 {
+    /**
+     * @param  CreateRackInputPort  $interactor
+     */
     public function __construct(
         private readonly CreateRackInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  CreateRackRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(CreateRackRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->createRack(

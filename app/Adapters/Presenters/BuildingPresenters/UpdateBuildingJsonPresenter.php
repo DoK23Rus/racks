@@ -14,6 +14,12 @@ use App\UseCases\BuildingUseCases\UpdateBuildingUseCase\UpdateBuildingResponseMo
 
 class UpdateBuildingJsonPresenter implements UpdateBuildingOutputPort
 {
+    /**
+     * @param  UpdateBuildingResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function buildingUpdated(UpdateBuildingResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -25,6 +31,12 @@ class UpdateBuildingJsonPresenter implements UpdateBuildingOutputPort
         );
     }
 
+    /**
+     * @param  UpdateBuildingResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchBuilding(UpdateBuildingResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -36,6 +48,12 @@ class UpdateBuildingJsonPresenter implements UpdateBuildingOutputPort
         );
     }
 
+    /**
+     * @param  UpdateBuildingResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function buildingNameException(UpdateBuildingResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -47,6 +65,14 @@ class UpdateBuildingJsonPresenter implements UpdateBuildingOutputPort
         );
     }
 
+    /**
+     * @param  UpdateBuildingResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToUpdateBuilding(UpdateBuildingResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -62,6 +88,12 @@ class UpdateBuildingJsonPresenter implements UpdateBuildingOutputPort
         );
     }
 
+    /**
+     * @param  UpdateBuildingResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(UpdateBuildingResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class DeviceDatabaseRepository implements DeviceRepository
 {
+    /**
+     * @param  int  $id
+     * @return DeviceEntity
+     */
     public function getById(int $id): DeviceEntity
     {
         return Device::where('id', $id)
@@ -16,6 +20,10 @@ class DeviceDatabaseRepository implements DeviceRepository
             ->firstOrFail();
     }
 
+    /**
+     * @param  string|null  $rackId
+     * @return array<mixed>
+     */
     public function getByRackId(?string $rackId): array
     {
         return Device::where('rack_id', $rackId)
@@ -23,6 +31,10 @@ class DeviceDatabaseRepository implements DeviceRepository
             ->toArray();
     }
 
+    /**
+     * @param  DeviceEntity  $device
+     * @return int
+     */
     public function updateUnits(DeviceEntity $device): int
     {
         return Device::where('id', $device->getId())
@@ -32,6 +44,10 @@ class DeviceDatabaseRepository implements DeviceRepository
             ]);
     }
 
+    /**
+     * @param  DeviceEntity  $device
+     * @return int
+     */
     public function delete(DeviceEntity $device): int
     {
         return Device::where('id', $device->getId())
@@ -39,6 +55,10 @@ class DeviceDatabaseRepository implements DeviceRepository
             ->delete();
     }
 
+    /**
+     * @param  DeviceEntity  $device
+     * @return DeviceEntity
+     */
     public function update(DeviceEntity $device): DeviceEntity
     {
         return tap(Device::where('id', $device->getId())
@@ -48,11 +68,19 @@ class DeviceDatabaseRepository implements DeviceRepository
             );
     }
 
+    /**
+     * @param  DeviceEntity  $device
+     * @return DeviceEntity
+     */
     public function create(DeviceEntity $device): DeviceEntity
     {
         return Device::create($device->getAttributeSet()->toArray());
     }
 
+    /**
+     * @param  string|null  $id
+     * @return array<mixed>
+     */
     public function getLocation(?string $id): array
     {
         return DB::table('devices')
@@ -75,6 +103,9 @@ class DeviceDatabaseRepository implements DeviceRepository
             ->toArray();
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getVendors(): array
     {
         return DB::table('devices')
@@ -84,6 +115,9 @@ class DeviceDatabaseRepository implements DeviceRepository
             ->toArray();
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getModels(): array
     {
         return DB::table('devices')

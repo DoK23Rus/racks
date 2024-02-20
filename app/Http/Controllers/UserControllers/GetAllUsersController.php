@@ -18,12 +18,19 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class GetAllUsersController extends Controller
 {
+    /**
+     * @param  UserRepository  $userRepository
+     */
     public function __construct(
         private readonly UserRepository $userRepository
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  Request  $request
+     * @return LengthAwarePaginator
+     */
     public function __invoke(Request $request): LengthAwarePaginator
     {
         return $this->userRepository->getAll(

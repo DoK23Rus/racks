@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class UpdateRegionCliPresenter implements UpdateRegionOutputPort
 {
+    /**
+     * @param  UpdateRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function regionUpdated(UpdateRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class UpdateRegionCliPresenter implements UpdateRegionOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRegion(UpdateRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,13 @@ class UpdateRegionCliPresenter implements UpdateRegionOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRegionResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToUpdateRegion(UpdateRegionResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

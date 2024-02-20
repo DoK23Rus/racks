@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Log;
 
 class CreateSiteInteractor implements CreateSiteInputPort
 {
+    /**
+     * @param  CreateSiteOutputPort  $output
+     * @param  SiteRepository  $siteRepository
+     * @param  DepartmentRepository  $departmentRepository
+     * @param  SiteFactory  $siteFactory
+     */
     public function __construct(
         private readonly CreateSiteOutputPort $output,
         private readonly SiteRepository $siteRepository,
@@ -19,6 +25,12 @@ class CreateSiteInteractor implements CreateSiteInputPort
     ) {
     }
 
+    /**
+     * @param  CreateSiteRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createSite(CreateSiteRequestModel $request): ViewModel
     {
         $site = $this->siteFactory->makeFromCreateRequest($request);

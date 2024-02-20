@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\SiteControllers\Swagger\DeleteSiteController
+ */
 class DeleteSiteController extends Controller
 {
+    /**
+     * @param  DeleteSiteInputPort  $interactor
+     */
     public function __construct(
         private readonly DeleteSiteInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  DeleteSiteRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(DeleteSiteRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->deleteSite(

@@ -9,12 +9,22 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteRoomInteractor implements DeleteRoomInputPort
 {
+    /**
+     * @param  DeleteRoomOutputPort  $output
+     * @param  RoomRepository  $roomRepository
+     */
     public function __construct(
         private readonly DeleteRoomOutputPort $output,
         private readonly RoomRepository $roomRepository
     ) {
     }
 
+    /**
+     * @param  DeleteRoomRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteRoom(DeleteRoomRequestModel $request): ViewModel
     {
         try {

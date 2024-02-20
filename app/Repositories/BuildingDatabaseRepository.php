@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class BuildingDatabaseRepository implements BuildingRepository
 {
+    /**
+     * @param  int  $id
+     * @return BuildingEntity
+     */
     public function getById(int $id): BuildingEntity
     {
         return Building::where('id', $id)
@@ -27,6 +31,10 @@ class BuildingDatabaseRepository implements BuildingRepository
             ->toArray();
     }
 
+    /**
+     * @param  BuildingEntity  $building
+     * @return BuildingEntity
+     */
     public function create(BuildingEntity $building): BuildingEntity
     {
         return Building::create([
@@ -37,6 +45,10 @@ class BuildingDatabaseRepository implements BuildingRepository
         ]);
     }
 
+    /**
+     * @param  BuildingEntity  $building
+     * @return BuildingEntity
+     */
     public function update(BuildingEntity $building): BuildingEntity
     {
         return tap(Building::where('id', $building->getId())
@@ -46,6 +58,10 @@ class BuildingDatabaseRepository implements BuildingRepository
             ]);
     }
 
+    /**
+     * @param  BuildingEntity  $building
+     * @return int
+     */
     public function delete(BuildingEntity $building): int
     {
         return Building::where('id', $building->getId())
@@ -53,12 +69,19 @@ class BuildingDatabaseRepository implements BuildingRepository
             ->delete();
     }
 
+    /**
+     * @return void
+     */
     public function lockTable(): void
     {
         DB::table('building')
             ->sharedLock();
     }
 
+    /**
+     * @param  string|null  $perPage
+     * @return LengthAwarePaginator
+     */
     public function getAll(?string $perPage): LengthAwarePaginator
     {
         return Building::paginate($perPage);

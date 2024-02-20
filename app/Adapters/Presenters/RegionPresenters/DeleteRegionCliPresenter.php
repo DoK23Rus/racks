@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class DeleteRegionCliPresenter implements DeleteRegionOutputPort
 {
+    /**
+     * @param  DeleteRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function regionDeleted(DeleteRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class DeleteRegionCliPresenter implements DeleteRegionOutputPort
         );
     }
 
+    /**
+     * @param  DeleteRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRegion(DeleteRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,13 @@ class DeleteRegionCliPresenter implements DeleteRegionOutputPort
         );
     }
 
+    /**
+     * @param  DeleteRegionResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToDeleteRegion(DeleteRegionResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

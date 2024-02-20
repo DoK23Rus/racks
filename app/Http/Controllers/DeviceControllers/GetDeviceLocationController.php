@@ -16,14 +16,24 @@ use Illuminate\Http\Request;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\DeviceControllers\Swagger\GetDeviceLocationController
+ */
 class GetDeviceLocationController extends Controller
 {
+    /**
+     * @param  DeviceRepository  $deviceRepository
+     */
     public function __construct(
         private readonly DeviceRepository $deviceRepository,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     */
     public function __invoke(Request $request): JsonResponse
     {
         try {

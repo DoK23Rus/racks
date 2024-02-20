@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteDeviceInteractor implements DeleteDeviceInputPort
 {
+    /**
+     * @param  DeleteDeviceOutputPort  $output
+     * @param  DeviceRepository  $deviceRepository
+     * @param  RackRepository  $rackRepository
+     */
     public function __construct(
         private readonly DeleteDeviceOutputPort $output,
         private readonly DeviceRepository $deviceRepository,
@@ -18,6 +23,12 @@ class DeleteDeviceInteractor implements DeleteDeviceInputPort
     ) {
     }
 
+    /**
+     * @param  DeleteDeviceRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteDevice(DeleteDeviceRequestModel $request): ViewModel
     {
         try {

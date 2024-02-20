@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class CreateDepartmentCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected $signature = 'create:department {name} {region_id}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Creates a department';
 
+    /**
+     * @param  CreateDepartmentInputPort  $interactor
+     */
     public function __construct(
         private readonly CreateDepartmentInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $attributes = [

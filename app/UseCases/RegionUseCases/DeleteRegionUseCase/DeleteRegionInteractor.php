@@ -7,12 +7,22 @@ use App\Domain\Interfaces\ViewModel;
 
 class DeleteRegionInteractor implements DeleteRegionInputPort
 {
+    /**
+     * @param  DeleteRegionOutputPort  $output
+     * @param  RegionRepository  $regionRepository
+     */
     public function __construct(
         private readonly DeleteRegionOutputPort $output,
         private readonly RegionRepository $regionRepository
     ) {
     }
 
+    /**
+     * @param  DeleteRegionRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteRegion(DeleteRegionRequestModel $request): ViewModel
     {
         try {

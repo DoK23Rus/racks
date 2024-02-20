@@ -10,6 +10,10 @@ use App\UseCases\SiteUseCases\UpdateSiteUseCase\UpdateSiteRequestModel;
 
 class SiteModelFactory implements SiteFactory
 {
+    /**
+     * @param  CreateSiteRequestModel  $request
+     * @return SiteEntity
+     */
     public function makeFromCreateRequest(CreateSiteRequestModel $request): SiteEntity
     {
         return new Site([
@@ -18,6 +22,10 @@ class SiteModelFactory implements SiteFactory
         ]);
     }
 
+    /**
+     * @param  UpdateSiteRequestModel  $request
+     * @return SiteEntity
+     */
     public function makeFromPatchRequest(UpdateSiteRequestModel $request): SiteEntity
     {
         return new Site([

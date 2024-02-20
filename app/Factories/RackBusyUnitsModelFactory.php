@@ -8,6 +8,10 @@ use App\Models\ValueObjects\RackBusyUnitsValueObject;
 
 class RackBusyUnitsModelFactory implements RackBusyUnitsFactory
 {
+    /**
+     * @param  array<mixed>  $attributes
+     * @return RackBusyUnitsInterface
+     */
     public function make(array $attributes = []): RackBusyUnitsInterface
     {
         return new RackBusyUnitsValueObject($attributes);

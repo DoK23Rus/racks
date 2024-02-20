@@ -51,8 +51,14 @@ use OpenApi\Annotations as OA;
  */
 class RoomUpdatedResource extends JsonResource
 {
+    /**
+     * @var RoomEntity
+     */
     protected RoomEntity $room;
 
+    /**
+     * @param  RoomEntity  $room
+     */
     public function __construct(RoomEntity $room)
     {
         parent::__construct($room);
@@ -60,8 +66,7 @@ class RoomUpdatedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

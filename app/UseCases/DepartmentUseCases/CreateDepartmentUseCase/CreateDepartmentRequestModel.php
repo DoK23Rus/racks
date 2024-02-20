@@ -12,11 +12,17 @@ class CreateDepartmentRequestModel
     ) {
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];
     }
 
+    /**
+     * @return int
+     */
     public function getRegionId(): int
     {
         return $this->attributes['region_id'];

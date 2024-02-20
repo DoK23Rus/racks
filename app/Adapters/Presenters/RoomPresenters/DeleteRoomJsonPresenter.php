@@ -14,6 +14,12 @@ use App\UseCases\RoomUseCases\DeleteRoomUseCase\DeleteRoomResponseModel;
 
 class DeleteRoomJsonPresenter implements DeleteRoomOutputPort
 {
+    /**
+     * @param  DeleteRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function roomDeleted(DeleteRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -25,6 +31,12 @@ class DeleteRoomJsonPresenter implements DeleteRoomOutputPort
         );
     }
 
+    /**
+     * @param  DeleteRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRoom(DeleteRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -36,6 +48,14 @@ class DeleteRoomJsonPresenter implements DeleteRoomOutputPort
         );
     }
 
+    /**
+     * @param  DeleteRoomResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToDeleteRoom(DeleteRoomResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -51,6 +71,12 @@ class DeleteRoomJsonPresenter implements DeleteRoomOutputPort
         );
     }
 
+    /**
+     * @param  CreateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(CreateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

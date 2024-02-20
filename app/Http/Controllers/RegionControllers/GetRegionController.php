@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\RegionControllers\Swagger\GetRegionController
+ */
 class GetRegionController extends Controller
 {
+    /**
+     * @param  GetRegionInputPort  $interactor
+     */
     public function __construct(
         private readonly GetRegionInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  GetRegionRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(GetRegionRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->getRegion(

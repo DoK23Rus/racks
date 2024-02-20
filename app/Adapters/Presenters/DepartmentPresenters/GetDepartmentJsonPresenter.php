@@ -11,6 +11,12 @@ use App\UseCases\DepartmentUseCases\GetDepartmentUseCase\GetDepartmentResponseMo
 
 class GetDepartmentJsonPresenter implements GetDepartmentOutputPort
 {
+    /**
+     * @param  GetDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function retrieveDepartment(GetDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -22,6 +28,12 @@ class GetDepartmentJsonPresenter implements GetDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  GetDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDepartment(GetDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

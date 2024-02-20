@@ -4,12 +4,18 @@ namespace App\Http\Validators\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
+/**
+ * Rule for checking units array
+ * must be an array of range between last and first unit
+ */
 class DeviceUnitsRule implements Rule
 {
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
+     * @param  mixed  $attribute
+     * @param  mixed  $value
+     * @return bool
      */
     public function passes(mixed $attribute, mixed $value): bool
     {
@@ -31,6 +37,8 @@ class DeviceUnitsRule implements Rule
 
     /**
      * Get the validation error message.
+     *
+     * @return string
      */
     public function message(): string
     {

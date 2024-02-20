@@ -9,6 +9,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class SiteDatabaseRepository implements SiteRepository
 {
+    /**
+     * @param  int  $id
+     * @return SiteEntity
+     */
     public function getById(int $id): SiteEntity
     {
         return Site::where('id', $id)
@@ -16,6 +20,10 @@ class SiteDatabaseRepository implements SiteRepository
             ->firstOrFail();
     }
 
+    /**
+     * @param  SiteEntity  $site
+     * @return SiteEntity
+     */
     public function create(SiteEntity $site): SiteEntity
     {
         return Site::create([
@@ -25,6 +33,10 @@ class SiteDatabaseRepository implements SiteRepository
         ]);
     }
 
+    /**
+     * @param  SiteEntity  $site
+     * @return SiteEntity
+     */
     public function update(SiteEntity $site): SiteEntity
     {
         return tap(Site::where('id', $site->getId())
@@ -34,6 +46,10 @@ class SiteDatabaseRepository implements SiteRepository
             ]);
     }
 
+    /**
+     * @param  SiteEntity  $site
+     * @return int
+     */
     public function delete(SiteEntity $site): int
     {
         return Site::where('id', $site->getId())
@@ -41,6 +57,10 @@ class SiteDatabaseRepository implements SiteRepository
             ->delete();
     }
 
+    /**
+     * @param  string|null  $perPage
+     * @return LengthAwarePaginator
+     */
     public function getAll(?string $perPage): LengthAwarePaginator
     {
         return Site::paginate($perPage);

@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateDeviceInteractor implements UpdateDeviceInputPort
 {
+    /**
+     * @param  UpdateDeviceOutputPort  $output
+     * @param  DeviceRepository  $deviceRepository
+     * @param  RackRepository  $rackRepository
+     * @param  DeviceFactory  $deviceFactory
+     */
     public function __construct(
         private readonly UpdateDeviceOutputPort $output,
         private readonly DeviceRepository $deviceRepository,
@@ -20,6 +26,12 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
     ) {
     }
 
+    /**
+     * @param  UpdateDeviceRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateDevice(UpdateDeviceRequestModel $request): ViewModel
     {
         $deviceUpdating = $this->deviceFactory->makeFromPatchRequest($request);

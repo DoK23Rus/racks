@@ -15,8 +15,14 @@ use OpenApi\Annotations as OA;
  */
 class BuildingDeletedResource extends JsonResource
 {
+    /**
+     * @var BuildingEntity
+     */
     protected BuildingEntity $building;
 
+    /**
+     * @param  BuildingEntity  $building
+     */
     public function __construct(BuildingEntity $building)
     {
         parent::__construct($building);
@@ -24,8 +30,7 @@ class BuildingDeletedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

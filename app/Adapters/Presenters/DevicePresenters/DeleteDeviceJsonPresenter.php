@@ -14,6 +14,12 @@ use App\UseCases\DeviceUseCases\DeleteDeviceUseCase\DeleteDeviceResponseModel;
 
 class DeleteDeviceJsonPresenter implements DeleteDeviceOutputPort
 {
+    /**
+     * @param  DeleteDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deviceDeleted(DeleteDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -25,6 +31,12 @@ class DeleteDeviceJsonPresenter implements DeleteDeviceOutputPort
         );
     }
 
+    /**
+     * @param  DeleteDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDevice(DeleteDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -36,6 +48,14 @@ class DeleteDeviceJsonPresenter implements DeleteDeviceOutputPort
         );
     }
 
+    /**
+     * @param  DeleteDeviceResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function deletionFailed(DeleteDeviceResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -51,6 +71,14 @@ class DeleteDeviceJsonPresenter implements DeleteDeviceOutputPort
         );
     }
 
+    /**
+     * @param  DeleteDeviceResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToDeleteDevice(DeleteDeviceResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -66,6 +94,12 @@ class DeleteDeviceJsonPresenter implements DeleteDeviceOutputPort
         );
     }
 
+    /**
+     * @param  DeleteDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(DeleteDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

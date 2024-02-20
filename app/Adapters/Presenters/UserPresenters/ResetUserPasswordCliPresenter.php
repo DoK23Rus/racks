@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class ResetUserPasswordCliPresenter implements ResetUserPasswordOutputPort
 {
+    /**
+     * @param  ResetUserPasswordResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function passwordReseted(ResetUserPasswordResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class ResetUserPasswordCliPresenter implements ResetUserPasswordOutputPort
         );
     }
 
+    /**
+     * @param  ResetUserPasswordResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchUser(ResetUserPasswordResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,13 @@ class ResetUserPasswordCliPresenter implements ResetUserPasswordOutputPort
         );
     }
 
+    /**
+     * @param  ResetUserPasswordResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToResetPassword(ResetUserPasswordResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

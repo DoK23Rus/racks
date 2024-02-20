@@ -11,6 +11,12 @@ use App\UseCases\RegionUseCases\GetRegionUseCase\GetRegionResponseModel;
 
 class GetRegionJsonPresenter implements GetRegionOutputPort
 {
+    /**
+     * @param  GetRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function retrieveRegion(GetRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -22,6 +28,12 @@ class GetRegionJsonPresenter implements GetRegionOutputPort
         );
     }
 
+    /**
+     * @param  GetRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRegion(GetRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

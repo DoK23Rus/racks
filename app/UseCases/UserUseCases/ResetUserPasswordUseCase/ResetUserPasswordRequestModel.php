@@ -12,11 +12,17 @@ class ResetUserPasswordRequestModel
     ) {
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->attributes['id'] ?? 0;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword(): string
     {
         return $this->attributes['password'] ?? '';

@@ -8,6 +8,11 @@ use App\Domain\Interfaces\ViewModel;
 
 class UpdateRegionInteractor implements UpdateRegionInputPort
 {
+    /**
+     * @param  UpdateRegionOutputPort  $output
+     * @param  RegionRepository  $regionRepository
+     * @param  RegionFactory  $regionFactory
+     */
     public function __construct(
         private readonly UpdateRegionOutputPort $output,
         private readonly RegionRepository $regionRepository,
@@ -15,6 +20,12 @@ class UpdateRegionInteractor implements UpdateRegionInputPort
     ) {
     }
 
+    /**
+     * @param  UpdateRegionRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateRegion(UpdateRegionRequestModel $request): ViewModel
     {
         $regionUpdating = $this->regionFactory->makeFromPatchRequest($request);

@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class CreateDeviceInteractor implements CreateDeviceInputPort
 {
+    /**
+     * @param  CreateDeviceOutputPort  $output
+     * @param  DeviceRepository  $deviceRepository
+     * @param  RackRepository  $rackRepository
+     * @param  DeviceFactory  $deviceFactory
+     */
     public function __construct(
         private readonly CreateDeviceOutputPort $output,
         private readonly DeviceRepository $deviceRepository,
@@ -20,6 +26,12 @@ class CreateDeviceInteractor implements CreateDeviceInputPort
     ) {
     }
 
+    /**
+     * @param  CreateDeviceRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createDevice(CreateDeviceRequestModel $request): ViewModel
     {
         $device = $this->deviceFactory->makeFromPostRequest($request);

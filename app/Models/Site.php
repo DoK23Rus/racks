@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $updated_by Updated by user (username)
  * @property \Illuminate\Support\Carbon|null $created_at Created at
  * @property \Illuminate\Support\Carbon|null $updated_at Updated at
- * @property int $department_id Department id {@see AuthServiceProvider}
+ * @property int $department_id Department ID {@see AuthServiceProvider}
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Building> $children
  * @property-read int|null $children_count
  * @property-read \App\Models\Department $department

@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateRoomInteractor implements UpdateRoomInputPort
 {
+    /**
+     * @param  UpdateRoomOutputPort  $output
+     * @param  RoomRepository  $roomRepository
+     * @param  BuildingRepository  $buildingRepository
+     * @param  RoomFactory  $roomFactory
+     */
     public function __construct(
         private readonly UpdateRoomOutputPort $output,
         private readonly RoomRepository $roomRepository,
@@ -20,6 +26,12 @@ class UpdateRoomInteractor implements UpdateRoomInputPort
     ) {
     }
 
+    /**
+     * @param  UpdateRoomRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateRoom(UpdateRoomRequestModel $request): ViewModel
     {
         $roomUpdating = $this->roomFactory->makeFromPutRequest($request);

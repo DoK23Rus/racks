@@ -210,11 +210,6 @@ class UpdateRackRequest extends FormRequest
      */
     public function rules(): array
     {
-        /**
-         * Get the validation rules that apply to the request.
-         *
-         * @return array<array>
-         */
         return [
             'id' => ['prohibited'],
             'name' => ['string', 'nullable'],

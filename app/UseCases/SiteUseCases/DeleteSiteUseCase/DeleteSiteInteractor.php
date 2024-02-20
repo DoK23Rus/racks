@@ -9,12 +9,22 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteSiteInteractor implements DeleteSiteInputPort
 {
+    /**
+     * @param  DeleteSiteOutputPort  $output
+     * @param  SiteRepository  $siteRepository
+     */
     public function __construct(
         private readonly DeleteSiteOutputPort $output,
         private readonly SiteRepository $siteRepository
     ) {
     }
 
+    /**
+     * @param  DeleteSiteRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteSite(DeleteSiteRequestModel $request): ViewModel
     {
         try {

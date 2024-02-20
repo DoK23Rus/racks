@@ -16,14 +16,24 @@ use Illuminate\Http\Request;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\RegionControllers\Swagger\GetTreeViewController
+ */
 class GetTreeViewController extends Controller
 {
+    /**
+     * @param  RegionRepository  $regionRepository
+     */
     public function __construct(
         private readonly RegionRepository $regionRepository,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     */
     public function __invoke(Request $request): JsonResponse
     {
         return response()->json(

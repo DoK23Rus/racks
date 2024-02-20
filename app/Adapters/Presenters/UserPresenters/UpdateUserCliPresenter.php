@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class UpdateUserCliPresenter implements UpdateUserOutputPort
 {
+    /**
+     * @param  UpdateUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function userUpdated(UpdateUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class UpdateUserCliPresenter implements UpdateUserOutputPort
         );
     }
 
+    /**
+     * @param  UpdateUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchUser(UpdateUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,12 @@ class UpdateUserCliPresenter implements UpdateUserOutputPort
         );
     }
 
+    /**
+     * @param  UpdateUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDepartment(UpdateUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -46,6 +64,13 @@ class UpdateUserCliPresenter implements UpdateUserOutputPort
         );
     }
 
+    /**
+     * @param  UpdateUserResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToUpdateUser(UpdateUserResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

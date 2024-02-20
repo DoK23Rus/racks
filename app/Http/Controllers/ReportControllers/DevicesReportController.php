@@ -25,6 +25,10 @@ class DevicesReportController extends Controller
         $this->middleware('auth:web');
     }
 
+    /**
+     * @param  Request  $request
+     * @return BinaryFileResponse
+     */
     public function __invoke(Request $request): BinaryFileResponse
     {
         $fileName = ExportService::createCsvReport((new Device()), 200, 'id');

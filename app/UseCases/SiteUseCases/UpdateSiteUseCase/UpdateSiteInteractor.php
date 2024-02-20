@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateSiteInteractor implements UpdateSiteInputPort
 {
+    /**
+     * @param  UpdateSiteOutputPort  $output
+     * @param  SiteRepository  $siteRepository
+     * @param  SiteFactory  $siteFactory
+     */
     public function __construct(
         private readonly UpdateSiteOutputPort $output,
         private readonly SiteRepository $siteRepository,
@@ -17,6 +22,12 @@ class UpdateSiteInteractor implements UpdateSiteInputPort
     ) {
     }
 
+    /**
+     * @param  UpdateSiteRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateSite(UpdateSiteRequestModel $request): ViewModel
     {
         $siteUpdating = $this->siteFactory->makeFromPatchRequest($request);

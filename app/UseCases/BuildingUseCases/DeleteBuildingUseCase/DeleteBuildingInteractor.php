@@ -9,12 +9,22 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteBuildingInteractor implements DeleteBuildingInputPort
 {
+    /**
+     * @param  DeleteBuildingOutputPort  $output
+     * @param  BuildingRepository  $buildingRepository
+     */
     public function __construct(
         private readonly DeleteBuildingOutputPort $output,
         private readonly BuildingRepository $buildingRepository
     ) {
     }
 
+    /**
+     * @param  DeleteBuildingRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteBuilding(DeleteBuildingRequestModel $request): ViewModel
     {
         try {

@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class UpdateDepartmentCliPresenter implements UpdateDepartmentOutputPort
 {
+    /**
+     * @param  UpdateDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function departmentUpdated(UpdateDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class UpdateDepartmentCliPresenter implements UpdateDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDepartment(UpdateDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,13 @@ class UpdateDepartmentCliPresenter implements UpdateDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDepartmentResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToUpdateDepartment(UpdateDepartmentResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

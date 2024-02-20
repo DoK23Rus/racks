@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\SiteResources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Annotations as OA;
 
@@ -25,8 +26,14 @@ use OpenApi\Annotations as OA;
  */
 class UnableToDeleteSiteResource extends JsonResource
 {
+    /**
+     * @var \Throwable
+     */
     protected \Throwable $e;
 
+    /**
+     * @param  \Throwable  $e
+     */
     public function __construct(\Throwable $e)
     {
         parent::__construct($e);
@@ -34,12 +41,10 @@ class UnableToDeleteSiteResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array<mixed>
      */
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'message' => 'Unable to delete site',

@@ -29,8 +29,6 @@ use OpenApi\Annotations as OA;
 class CreateBuildingRequest extends FormRequest
 {
     /**
-     * Get the validation rules that apply to the request.
-     *
      * @return array<array<mixed>>
      */
     public function rules(): array

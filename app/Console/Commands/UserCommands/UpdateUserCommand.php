@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class UpdateUserCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected $signature = 'update:user {id} {name} {full_name} {email} {department_id}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Updates an user';
 
+    /**
+     * @param  UpdateUserInputPort  $interactor
+     */
     public function __construct(
         private UpdateUserInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $viewModel = $this->interactor->updateUser(

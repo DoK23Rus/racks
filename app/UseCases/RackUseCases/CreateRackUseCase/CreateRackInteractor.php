@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class CreateRackInteractor implements CreateRackInputPort
 {
+    /**
+     * @param  CreateRackOutputPort  $output
+     * @param  RackRepository  $rackRepository
+     * @param  RoomRepository  $roomRepository
+     * @param  RackFactory  $rackFactory
+     */
     public function __construct(
         private readonly CreateRackOutputPort $output,
         private readonly RackRepository $rackRepository,
@@ -20,6 +26,12 @@ class CreateRackInteractor implements CreateRackInputPort
     ) {
     }
 
+    /**
+     * @param  CreateRackRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createRack(CreateRackRequestModel $request): ViewModel
     {
         $rack = $this->rackFactory->makeFromCreateRequest($request);

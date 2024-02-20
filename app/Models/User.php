@@ -26,12 +26,12 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \App\Models\User create(array $attributes = [])
  * @method static \Illuminate\Pagination\LengthAwarePaginator paginate(?string $perPage)
  *
- * @property int $id
- * @property string $full_name
+ * @property int $id PK
+ * @property string $full_name Full name
  * @property string|null $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $department_id
+ * @property \Illuminate\Support\Carbon|null $created_at Created at
+ * @property \Illuminate\Support\Carbon|null $updated_at Updated at
+ * @property int $department_id Department ID {@see AuthServiceProvider}
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
@@ -84,46 +84,79 @@ class User extends Authenticatable implements JWTSubject, UserBusinessRules, Use
     // -----------------------------------------------------------------------
     // UserEntity methods
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->attributes['id'];
     }
 
+    /**
+     * @param  int  $id
+     * @return void
+     */
     public function setId(int $id): void
     {
         $this->attributes['id'] = $id;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];
     }
 
+    /**
+     * @param  string  $name
+     * @return void
+     */
     public function setName(string $name): void
     {
         $this->attributes['name'] = $name;
     }
 
+    /**
+     * @return string
+     */
     public function getFullName(): string
     {
         return $this->attributes['full_name'];
     }
 
+    /**
+     * @param  string  $fullName
+     * @return void
+     */
     public function setFullName(string $fullName): void
     {
         $this->attributes['full_name'] = $fullName;
     }
 
+    /**
+     * @return int
+     */
     public function getDepartmentId(): int
     {
         return $this->attributes['department_id'];
     }
 
+    /**
+     * @param  int  $departmentId
+     * @return void
+     */
     public function setDepartmentId(int $departmentId): void
     {
         $this->attributes['department_id'] = $departmentId;
     }
 
+    /**
+     * @return EmailValueObject
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function getEmail(): EmailValueObject
     {
         $email = $this->attributes['email'];
@@ -134,11 +167,20 @@ class User extends Authenticatable implements JWTSubject, UserBusinessRules, Use
         return App()->makeWith(EmailValueObject::class, ['value' => $this->attributes['email']]);
     }
 
+    /**
+     * @param  EmailValueObject  $email
+     * @return void
+     */
     public function setEmail(EmailValueObject $email): void
     {
         $this->attributes['email'] = $email;
     }
 
+    /**
+     * @return PasswordValueObject
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function getPassword(): PasswordValueObject
     {
         $password = $this->attributes['password'];
@@ -149,6 +191,10 @@ class User extends Authenticatable implements JWTSubject, UserBusinessRules, Use
         return App()->makeWith(PasswordValueObject::class, ['value' => $this->attributes['password']]);
     }
 
+    /**
+     * @param  PasswordValueObject  $password
+     * @return void
+     */
     public function setPassword(PasswordValueObject $password): void
     {
         $this->attributes['password'] = $password;
@@ -158,6 +204,8 @@ class User extends Authenticatable implements JWTSubject, UserBusinessRules, Use
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
      */
     public function getJWTIdentifier(): mixed
     {

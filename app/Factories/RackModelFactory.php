@@ -11,6 +11,10 @@ use App\UseCases\RackUseCases\UpdateRackUseCase\UpdateRackRequestModel;
 
 class RackModelFactory implements RackFactory
 {
+    /**
+     * @param  CreateRackRequestModel  $request
+     * @return RackEntity|RackBusinessRules
+     */
     public function makeFromCreateRequest(CreateRackRequestModel $request): RackEntity|RackBusinessRules
     {
         return new Rack([
@@ -44,6 +48,10 @@ class RackModelFactory implements RackFactory
         ]);
     }
 
+    /**
+     * @param  UpdateRackRequestModel  $request
+     * @return RackEntity
+     */
     public function makeFromPatchRequest(UpdateRackRequestModel $request): RackEntity
     {
         return new Rack([

@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id PK
  * @property string $name Room name or number including floor
  * @property string $updated_by Updated by user (username)
- * @property int $department_id Department id {@see AuthServiceProvider}
+ * @property int $department_id Department ID {@see AuthServiceProvider}
  * @property \Illuminate\Support\Carbon|null $created_at Created at
  * @property \Illuminate\Support\Carbon|null $updated_at Updated at
  * @property int $building_id Foreign key

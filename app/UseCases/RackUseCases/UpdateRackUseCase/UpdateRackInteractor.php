@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateRackInteractor implements UpdateRackInputPort
 {
+    /**
+     * @param  UpdateRackOutputPort  $output
+     * @param  RackRepository  $rackRepository
+     * @param  RoomRepository  $roomRepository
+     * @param  RackFactory  $rackFactory
+     */
     public function __construct(
         private readonly UpdateRackOutputPort $output,
         private readonly RackRepository $rackRepository,
@@ -20,6 +26,12 @@ class UpdateRackInteractor implements UpdateRackInputPort
     ) {
     }
 
+    /**
+     * @param  UpdateRackRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateRack(UpdateRackRequestModel $request): ViewModel
     {
         $rackUpdating = $this->rackFactory->makeFromPatchRequest($request);

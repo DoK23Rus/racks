@@ -22,8 +22,14 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchRegionResource extends JsonResource
 {
+    /**
+     * @var RegionEntity|null
+     */
     protected ?RegionEntity $region;
 
+    /**
+     * @param  RegionEntity|null  $region
+     */
     public function __construct(?RegionEntity $region)
     {
         parent::__construct($region);
@@ -31,8 +37,7 @@ class NoSuchRegionResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

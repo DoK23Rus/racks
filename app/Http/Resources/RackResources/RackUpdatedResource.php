@@ -212,8 +212,14 @@ use OpenApi\Annotations as OA;
  */
 class RackUpdatedResource extends JsonResource
 {
+    /**
+     * @var RackEntity
+     */
     protected RackEntity $rack;
 
+    /**
+     * @param  RackEntity  $rack
+     */
     public function __construct(RackEntity $rack)
     {
         parent::__construct($rack);
@@ -221,8 +227,7 @@ class RackUpdatedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

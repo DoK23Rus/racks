@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class CreateRoomInteractor implements CreateRoomInputPort
 {
+    /**
+     * @param  CreateRoomOutputPort  $output
+     * @param  BuildingRepository  $buildingRepository
+     * @param  RoomRepository  $roomRepository
+     * @param  RoomFactory  $roomFactory
+     */
     public function __construct(
         private readonly CreateRoomOutputPort $output,
         private readonly BuildingRepository $buildingRepository,
@@ -20,6 +26,12 @@ class CreateRoomInteractor implements CreateRoomInputPort
     ) {
     }
 
+    /**
+     * @param  CreateRoomRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createRoom(CreateRoomRequestModel $request): ViewModel
     {
         $room = $this->roomFactory->makeFromCreateRequest($request);

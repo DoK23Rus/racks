@@ -7,12 +7,22 @@ use App\Domain\Interfaces\ViewModel;
 
 class GetBuildingInteractor implements GetBuildingInputPort
 {
+    /**
+     * @param  GetBuildingOutputPort  $output
+     * @param  BuildingRepository  $buildingRepository
+     */
     public function __construct(
         private readonly GetBuildingOutputPort $output,
         private readonly BuildingRepository $buildingRepository
     ) {
     }
 
+    /**
+     * @param  GetBuildingRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function getBuilding(GetBuildingRequestModel $request): ViewModel
     {
         try {

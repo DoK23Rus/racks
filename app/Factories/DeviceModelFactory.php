@@ -11,6 +11,12 @@ use App\UseCases\DeviceUseCases\UpdateDeviceUseCase\UpdateDeviceRequestModel;
 
 class DeviceModelFactory implements DeviceFactory
 {
+    /**
+     * @param  CreateDeviceRequestModel  $request
+     * @return DeviceEntity
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function makeFromPostRequest(CreateDeviceRequestModel $request): DeviceEntity
     {
         return new Device([
@@ -42,6 +48,12 @@ class DeviceModelFactory implements DeviceFactory
         ]);
     }
 
+    /**
+     * @param  UpdateDeviceRequestModel  $request
+     * @return DeviceEntity
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function makeFromPatchRequest(UpdateDeviceRequestModel $request): DeviceEntity
     {
         return new Device([

@@ -11,6 +11,12 @@ use App\UseCases\RackUseCases\GetRackUseCase\GetRackResponseModel;
 
 class GetRackJsonPresenter implements GetRackOutputPort
 {
+    /**
+     * @param  GetRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function retrieveRack(GetRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -22,6 +28,12 @@ class GetRackJsonPresenter implements GetRackOutputPort
         );
     }
 
+    /**
+     * @param  GetRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRack(GetRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

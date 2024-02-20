@@ -19,7 +19,7 @@ use Illuminate\Http\JsonResponse;
 */
 
 /**
- * Docs: @see \App\Http\Controllers\BuildingControllers\Swagger\CreateBuildingController
+ * API Docs: @see \App\Http\Controllers\BuildingControllers\Swagger\CreateBuildingController
  */
 class CreateBuildingController extends Controller
 {

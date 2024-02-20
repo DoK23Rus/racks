@@ -41,8 +41,14 @@ use OpenApi\Annotations as OA;
  */
 class RetrieveDepartmentResource extends JsonResource
 {
+    /**
+     * @var DepartmentEntity
+     */
     protected DepartmentEntity $department;
 
+    /**
+     * @param  DepartmentEntity  $department
+     */
     public function __construct(DepartmentEntity $department)
     {
         parent::__construct($department);
@@ -50,8 +56,7 @@ class RetrieveDepartmentResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

@@ -14,13 +14,13 @@ use OpenApi\Annotations as OA;
  *     schema="CreateRackRequest",
  *     title="Create rack request",
  *
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         nullable=false,
  *         description="Rack name",
  *         example="Rack name",
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="room_id",
  *         type="integer",
@@ -220,8 +220,6 @@ use OpenApi\Annotations as OA;
 class CreateRackRequest extends FormRequest
 {
     /**
-     * Get the validation rules that apply to the request.
-     *
      * @return array<array<mixed>>
      */
     public function rules(): array

@@ -8,6 +8,11 @@ use App\Domain\Interfaces\ViewModel;
 
 class CreateRegionInteractor implements CreateRegionInputPort
 {
+    /**
+     * @param  CreateRegionOutputPort  $output
+     * @param  RegionRepository  $regionRepository
+     * @param  RegionFactory  $regionFactory
+     */
     public function __construct(
         private readonly CreateRegionOutputPort $output,
         private readonly RegionRepository $regionRepository,
@@ -15,6 +20,12 @@ class CreateRegionInteractor implements CreateRegionInputPort
     ) {
     }
 
+    /**
+     * @param  CreateRegionRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createRegion(CreateRegionRequestModel $request): ViewModel
     {
         $region = $this->regionFactory->makeFromCreateRequest($request);

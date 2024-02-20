@@ -11,6 +11,10 @@ use App\UseCases\RoomUseCases\UpdateRoomUseCase\UpdateRoomRequestModel;
 
 class RoomModelFactory implements RoomFactory
 {
+    /**
+     * @param  CreateRoomRequestModel  $request
+     * @return RoomEntity|RoomBusinessRules
+     */
     public function makeFromCreateRequest(CreateRoomRequestModel $request): RoomEntity|RoomBusinessRules
     {
         return new Room([
@@ -19,6 +23,10 @@ class RoomModelFactory implements RoomFactory
         ]);
     }
 
+    /**
+     * @param  UpdateRoomRequestModel  $request
+     * @return RoomEntity|RoomBusinessRules
+     */
     public function makeFromPutRequest(UpdateRoomRequestModel $request): RoomEntity|RoomBusinessRules
     {
         return new Room([

@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class CreateBuildingInteractor implements CreateBuildingInputPort
 {
+    /**
+     * @param  CreateBuildingOutputPort  $output
+     * @param  BuildingRepository  $buildingRepository
+     * @param  SiteRepository  $siteRepository
+     * @param  BuildingFactory  $buildingFactory
+     */
     public function __construct(
         private readonly CreateBuildingOutputPort $output,
         private readonly BuildingRepository $buildingRepository,
@@ -20,6 +26,12 @@ class CreateBuildingInteractor implements CreateBuildingInputPort
     ) {
     }
 
+    /**
+     * @param  CreateBuildingRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createBuilding(CreateBuildingRequestModel $request): ViewModel
     {
         $building = $this->buildingFactory->makeFromCreateRequest($request);

@@ -13,6 +13,12 @@ use App\UseCases\SiteUseCases\DeleteSiteUseCase\DeleteSiteResponseModel;
 
 class DeleteSiteJsonPresenter implements DeleteSiteOutputPort
 {
+    /**
+     * @param  DeleteSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function siteDeleted(DeleteSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -24,6 +30,12 @@ class DeleteSiteJsonPresenter implements DeleteSiteOutputPort
         );
     }
 
+    /**
+     * @param  DeleteSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchSite(DeleteSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -35,6 +47,12 @@ class DeleteSiteJsonPresenter implements DeleteSiteOutputPort
         );
     }
 
+    /**
+     * @param  DeleteSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(DeleteSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -46,6 +64,14 @@ class DeleteSiteJsonPresenter implements DeleteSiteOutputPort
         );
     }
 
+    /**
+     * @param  DeleteSiteResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToDeleteSite(DeleteSiteResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {

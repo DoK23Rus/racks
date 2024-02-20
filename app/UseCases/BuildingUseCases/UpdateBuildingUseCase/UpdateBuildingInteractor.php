@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class UpdateBuildingInteractor implements UpdateBuildingInputPort
 {
+    /**
+     * @param  UpdateBuildingOutputPort  $output
+     * @param  BuildingRepository  $buildingRepository
+     * @param  SiteRepository  $siteRepository
+     * @param  BuildingFactory  $buildingFactory
+     */
     public function __construct(
         private readonly UpdateBuildingOutputPort $output,
         private readonly BuildingRepository $buildingRepository,
@@ -20,6 +26,12 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
     ) {
     }
 
+    /**
+     * @param  UpdateBuildingRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateBuilding(UpdateBuildingRequestModel $request): ViewModel
     {
         $buildingUpdating = $this->buildingFactory->makeFromPatchRequest($request);

@@ -218,8 +218,14 @@ use OpenApi\Annotations as OA;
  */
 class DeviceCreatedResource extends JsonResource
 {
+    /**
+     * @var DeviceEntity
+     */
     protected DeviceEntity $device;
 
+    /**
+     * @param  DeviceEntity  $device
+     */
     public function __construct(DeviceEntity $device)
     {
         parent::__construct($device);
@@ -227,8 +233,7 @@ class DeviceCreatedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

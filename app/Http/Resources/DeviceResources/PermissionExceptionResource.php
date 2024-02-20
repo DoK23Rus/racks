@@ -8,8 +8,14 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PermissionExceptionResource extends JsonResource
 {
+    /**
+     * @var DeviceEntity
+     */
     protected DeviceEntity $device;
 
+    /**
+     * @param  DeviceEntity  $device
+     */
     public function __construct(DeviceEntity $device)
     {
         parent::__construct($device);
@@ -17,8 +23,7 @@ class PermissionExceptionResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

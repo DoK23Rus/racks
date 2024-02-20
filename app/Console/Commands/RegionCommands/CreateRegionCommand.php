@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class CreateRegionCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected $signature = 'create:region {name}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Creates a region';
 
+    /**
+     * @param  CreateRegionInputPort  $interactor
+     */
     public function __construct(
         private readonly CreateRegionInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $attributes = [

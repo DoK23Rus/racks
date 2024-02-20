@@ -36,8 +36,14 @@ use OpenApi\Annotations as OA;
  */
 class RetrieveRegionResource extends JsonResource
 {
+    /**
+     * @var RegionEntity
+     */
     protected RegionEntity $region;
 
+    /**
+     * @param  RegionEntity  $region
+     */
     public function __construct(RegionEntity $region)
     {
         parent::__construct($region);
@@ -45,8 +51,7 @@ class RetrieveRegionResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
-     *
+     * @param  Request  $request
      * @return array<mixed>
      */
     public function toArray(Request $request): array

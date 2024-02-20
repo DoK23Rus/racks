@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class DeleteDepartmentCliPresenter implements DeleteDepartmentOutputPort
 {
+    /**
+     * @param  DeleteDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function departmentDeleted(DeleteDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class DeleteDepartmentCliPresenter implements DeleteDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  DeleteDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDepartment(DeleteDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,13 @@ class DeleteDepartmentCliPresenter implements DeleteDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  DeleteDepartmentResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToDeleteDepartment(DeleteDepartmentResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(
