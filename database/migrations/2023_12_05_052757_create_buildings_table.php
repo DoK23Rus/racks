@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('buildings', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->text('description')->nullable();
             $table->string('updated_by', 255);
             $table->timestamps();
             $table->foreignId('site_id')
