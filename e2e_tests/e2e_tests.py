@@ -238,6 +238,7 @@ class NameDuplicationCase(E2ETestCase):
         self.driver.switch_to.window(self.driver.window_handles[1])
         room_form = FormPage(self.driver)
         room_form.enter_room_name(Params.room_name)
+        room_form.enter_room_floor(Params.room_floor)
         room_form.click_submit()
         time.sleep(1)
         self.assertTrue(room_form.get_room_name_busy_loc())
