@@ -79,12 +79,12 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     }
 
     /**
-     * @param  string  $roomOldName
+     * @param  string  $buildingOldName
      * @return bool
      */
-    public function isNameChanging(string $roomOldName): bool
+    public function isNameChanging(string $buildingOldName): bool
     {
-        if ($this->getName() !== $roomOldName) {
+        if ($this->getName() !== $buildingOldName) {
             return true;
         }
 
