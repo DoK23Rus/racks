@@ -88,6 +88,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereUpdatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Device whereVendor($value)
+ *
+ * @property-read \App\Models\Department $department
+ * @property-read \App\Models\Rack $rack
  */
 class Device extends Model implements DeviceBusinessRules, DeviceEntity
 {
