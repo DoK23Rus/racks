@@ -338,7 +338,7 @@ interface DeviceEntity
      * @param  array<mixed>|string  $with  Reload param
      * @return Model|null ?Model
      */
-    public function fresh(array|string $with): ?Model;
+    public function fresh($with): ?Model;
 
     /**
      * Belongs to rack

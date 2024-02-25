@@ -15,7 +15,7 @@ interface RackFactory
 
     /**
      * @param  UpdateRackRequestModel  $request
-     * @return RackEntity
+     * @return RackEntity|RackBusinessRules
      */
-    public function makeFromPatchRequest(UpdateRackRequestModel $request): RackEntity;
+    public function makeFromPatchRequest(UpdateRackRequestModel $request): RackEntity|RackBusinessRules;
 }

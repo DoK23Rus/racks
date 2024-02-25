@@ -71,6 +71,15 @@ class Region extends Model implements RegionBusinessRules, RegionEntity
     }
 
     /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with = []): ?Model
+    {
+        return parent::fresh($with);
+    }
+
+    /**
      * @return string
      */
     public function getCreatedAt(): string

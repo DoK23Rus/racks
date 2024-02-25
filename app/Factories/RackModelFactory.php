@@ -50,9 +50,9 @@ class RackModelFactory implements RackFactory
 
     /**
      * @param  UpdateRackRequestModel  $request
-     * @return RackEntity
+     * @return RackEntity|RackBusinessRules
      */
-    public function makeFromPatchRequest(UpdateRackRequestModel $request): RackEntity
+    public function makeFromPatchRequest(UpdateRackRequestModel $request): RackEntity|RackBusinessRules
     {
         return new Rack([
             'name' => $request->getName(),

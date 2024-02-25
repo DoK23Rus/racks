@@ -49,6 +49,8 @@ class CreateUserInteractor implements CreateUserInputPort
 
         try {
             $user = $this->userRepository->create($user);
+
+            $user = $user->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateUser(
                 App()->makeWith(CreateUserResponseModel::class, ['user' => $user]),

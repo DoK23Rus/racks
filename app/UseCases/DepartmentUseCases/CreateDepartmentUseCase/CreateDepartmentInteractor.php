@@ -49,6 +49,8 @@ class CreateDepartmentInteractor implements CreateDepartmentInputPort
 
         try {
             $department = $this->departmentRepository->create($department);
+
+            $department = $department->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateDepartment(
                 App()->makeWith(CreateDepartmentResponseModel::class, ['department' => $department]),

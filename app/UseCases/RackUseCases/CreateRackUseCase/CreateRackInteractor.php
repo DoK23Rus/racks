@@ -66,6 +66,8 @@ class CreateRackInteractor implements CreateRackInputPort
 
         try {
             $rack = $this->rackRepository->create($rack);
+
+            $rack = $rack->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateRack(
                 App()->makeWith(CreateRackResponseModel::class, ['rack' => $rack]),

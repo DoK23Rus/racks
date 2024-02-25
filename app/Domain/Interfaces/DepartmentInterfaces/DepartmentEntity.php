@@ -3,6 +3,7 @@
 namespace App\Domain\Interfaces\DepartmentInterfaces;
 
 use App\Models\Department;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -71,4 +72,10 @@ interface DepartmentEntity
      * @return HasMany
      */
     public function buildings(): HasMany;
+
+    /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with): ?Model;
 }

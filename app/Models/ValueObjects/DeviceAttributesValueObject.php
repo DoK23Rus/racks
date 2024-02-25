@@ -81,7 +81,7 @@ class DeviceAttributesValueObject
     public function setLocation(): void
     {
         $location = $this->device->getLocation();
-        if ($location !== null) {
+        if (! is_null($location)) {
             $this->attributesForDevice += ['has_backside_location' => $location];
         }
     }

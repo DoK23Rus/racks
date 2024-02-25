@@ -12,13 +12,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::group([
-    'middleware' => 'web',
-    'prefix' => 'export',
-], function ($router) {
-    Route::get('devices', \App\Http\Controllers\ReportControllers\DevicesReportController::class);
-    Route::get('racks', \App\Http\Controllers\ReportControllers\RacksReportController::class);
-});
 
 Route::get('/', function () {
     return 'Container healthcheck OK';

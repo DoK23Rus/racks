@@ -237,6 +237,7 @@ class UpdateDeviceRequest extends FormRequest
             'has_backside_location' => ['required', 'boolean'],
             'units' => ['required', new DeviceUnitsRule()],
             'rack_id' => ['prohibited'],
+            'department_id' => ['prohibited'],
             'hostname' => ['string', 'nullable'],
             'ip' => ['ip', 'nullable'],
             'stack' => ['integer', 'nullable'],

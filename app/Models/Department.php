@@ -36,6 +36,17 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Department whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Department whereRegionId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Department whereUpdatedAt($value)
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Building> $buildings
+ * @property-read int|null $buildings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Device> $devices
+ * @property-read int|null $devices_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Rack> $racks
+ * @property-read int|null $racks_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Room> $rooms
+ * @property-read int|null $rooms_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read int|null $users_count
  */
 class Department extends Model implements DepartmentEntity, DeviceBusinessRules
 {
@@ -118,6 +129,15 @@ class Department extends Model implements DepartmentEntity, DeviceBusinessRules
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class, 'region_id');
+    }
+
+    /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with = []): ?Model
+    {
+        return parent::fresh($with);
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Domain\Interfaces\UserInterfaces\UserEntity;
 use App\Models\ValueObjects\EmailValueObject;
 use App\Models\ValueObjects\PasswordValueObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +52,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ *
+ * @property-read \App\Models\Department $department
  */
 class User extends Authenticatable implements JWTSubject, UserBusinessRules, UserEntity
 {
@@ -231,5 +234,14 @@ class User extends Authenticatable implements JWTSubject, UserBusinessRules, Use
     public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with = []): ?Model
+    {
+        return parent::fresh($with);
     }
 }

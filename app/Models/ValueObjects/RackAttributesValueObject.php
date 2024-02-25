@@ -26,6 +26,7 @@ class RackAttributesValueObject
     {
         $this->rack = $rack;
         $this->setVendor();
+        $this->setAmount();
         $this->setName();
         $this->setUpdatedBy();
         $this->setDepth();
@@ -62,6 +63,17 @@ class RackAttributesValueObject
         $name = $this->rack->getName();
         if ($name) {
             $this->attributesForRack += ['name' => $name];
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function setAmount(): void
+    {
+        $amount = $this->rack->getAmount();
+        if ($amount) {
+            $this->attributesForRack += ['amount' => $amount];
         }
     }
 
@@ -324,7 +336,7 @@ class RackAttributesValueObject
     public function setHasExternalUps(): void
     {
         $hasExternalUps = $this->rack->getHasExternalUps();
-        if ($hasExternalUps) {
+        if (! is_null($hasExternalUps)) {
             $this->attributesForRack += ['has_external_ups' => $hasExternalUps];
         }
     }
@@ -335,7 +347,7 @@ class RackAttributesValueObject
     public function setHasCooler(): void
     {
         $hasCooler = $this->rack->getHasCooler();
-        if ($hasCooler) {
+        if (! is_null($hasCooler)) {
             $this->attributesForRack += ['has_cooler' => $hasCooler];
         }
     }

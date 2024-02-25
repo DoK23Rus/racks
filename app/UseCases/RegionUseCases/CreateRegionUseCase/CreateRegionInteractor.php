@@ -38,6 +38,8 @@ class CreateRegionInteractor implements CreateRegionInputPort
 
         try {
             $region = $this->regionRepository->create($region);
+
+            $region = $region->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateRegion(
                 App()->makeWith(CreateRegionResponseModel::class, ['region' => $region]),

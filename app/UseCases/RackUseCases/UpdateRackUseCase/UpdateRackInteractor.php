@@ -37,7 +37,7 @@ class UpdateRackInteractor implements UpdateRackInputPort
         $rackUpdating = $this->rackFactory->makeFromPatchRequest($request);
 
         try {
-            $rack = $this->rackRepository->getById($rackUpdating->getId());
+            $rack = $this->rackRepository->getById($request->getId());
         } catch (\Exception $e) {
             return $this->output->noSuchRack(
                 App()->makeWith(UpdateRackResponseModel::class, ['rack' => $rackUpdating])
@@ -66,7 +66,7 @@ class UpdateRackInteractor implements UpdateRackInputPort
 
         $rackNamesList = $this->rackRepository->getNamesListByRoomId($room->getId());
 
-        if (! $rack->isNameValid($rackNamesList) && $rack->isNameChanging($rackUpdating->getOldName())) {
+        if (! $rackUpdating->isNameValid($rackNamesList) && $rackUpdating->isNameChanging($rackUpdating->getOldName())) {
             return $this->output->rackNameException(
                 App()->makeWith(UpdateRackResponseModel::class, ['rack' => $rackUpdating])
             );

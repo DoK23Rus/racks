@@ -61,6 +61,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updated_at Updated at
  * @property int $room_id Foreign key
  * @property-read \App\Models\Room $room
+ * @property-read \App\Models\Department $department
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Device> $devices
+ * @property-read int|null $devices_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Rack newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Rack newQuery()
@@ -954,6 +957,15 @@ class Rack extends Model implements RackBusinessRules, RackEntity
     public function devices(): HasMany
     {
         return $this->hasMany(Device::class, 'rack_id');
+    }
+
+    /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with = []): ?Model
+    {
+        return parent::fresh($with);
     }
 
     /**

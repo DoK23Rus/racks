@@ -215,6 +215,7 @@ class UpdateRackRequest extends FormRequest
             'name' => ['string', 'nullable'],
             'amount' => ['prohibited'],
             'room_id' => ['prohibited'],
+            'department_id' => ['prohibited'],
             'busy_units' => ['prohibited'],
             'vendor' => ['string', 'nullable'],
             'model' => ['string', 'nullable'],
