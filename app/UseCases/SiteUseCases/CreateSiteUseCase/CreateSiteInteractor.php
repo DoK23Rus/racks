@@ -53,6 +53,8 @@ class CreateSiteInteractor implements CreateSiteInputPort
 
         try {
             $site = $this->siteRepository->create($site);
+
+            $site = $site->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateSite(
                 App()->makeWith(CreateSiteResponseModel::class, ['site' => $site]),

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Domain\Interfaces\SiteInterfaces\SiteBusinessRules;
 use App\Domain\Interfaces\SiteInterfaces\SiteEntity;
+use App\Models\ValueObjects\SiteAttributesValueObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
@@ -28,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Building> $children
  * @property-read int|null $children_count
  * @property-read \App\Models\Department $department
+ * @property string|null $description
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Site newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Site newQuery()
@@ -38,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Site whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Site whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Site whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Site whereDescription($value)
  */
 class Site extends Model implements SiteBusinessRules, SiteEntity
 {
@@ -49,6 +52,7 @@ class Site extends Model implements SiteBusinessRules, SiteEntity
     protected $fillable = [
         'id',
         'name',
+        'description',
         'department_id',
         'updated_by',
         'created_at',
@@ -64,52 +68,79 @@ class Site extends Model implements SiteBusinessRules, SiteEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->attributes['name'];
     }
 
     /**
-     * @param  string  $name
+     * @param  string|null  $name
      * @return void
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->attributes['name'] = $name;
     }
 
     /**
-     * @return int
+     * @return string|null
      */
-    public function getDepartmentId(): int
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    /**
+     * @param  string|null  $description
+     * @return void
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->attributes['description'] = $description;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getDepartmentId(): ?int
     {
         return $this->attributes['department_id'];
     }
 
     /**
-     * @param  int  $departmentId
+     * @param  int|null  $departmentId
      * @return void
      */
-    public function setDepartmentId(int $departmentId): void
+    public function setDepartmentId(?int $departmentId): void
     {
         $this->attributes['department_id'] = $departmentId;
     }
 
     /**
-     * @return string
+     * @return SiteAttributesValueObject
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function getUpdatedBy(): string
+    public function getAttributeSet(): SiteAttributesValueObject
+    {
+        return App()->makeWith(SiteAttributesValueObject::class, ['site' => $this]);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUpdatedBy(): ?string
     {
         return $this->attributes['updated_by'];
     }
 
     /**
-     * @param  string  $updatedBy
+     * @param  string|null  $updatedBy
      * @return void
      */
-    public function setUpdatedBy(string $updatedBy): void
+    public function setUpdatedBy(?string $updatedBy): void
     {
         $this->attributes['updated_by'] = $updatedBy;
     }
@@ -156,5 +187,14 @@ class Site extends Model implements SiteBusinessRules, SiteEntity
     public function children(): HasMany
     {
         return $this->hasMany(Building::class, 'site_id');
+    }
+
+    /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with = []): ?Model
+    {
+        return parent::fresh($with);
     }
 }

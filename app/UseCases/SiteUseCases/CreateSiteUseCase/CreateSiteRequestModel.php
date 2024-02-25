@@ -29,7 +29,7 @@ class CreateSiteRequestModel
      */
     public function getName(): string
     {
-        return $this->attributes['name'] ?? '';
+        return $this->attributes['name'];
     }
 
     /**
@@ -38,5 +38,13 @@ class CreateSiteRequestModel
     public function getDepartmentId(): int
     {
         return $this->attributes['department_id'];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'] ?? null;
     }
 }

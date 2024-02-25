@@ -18,6 +18,7 @@ class SiteModelFactory implements SiteFactory
     {
         return new Site([
             'name' => $request->getName(),
+            'description' => $request->getDescription(),
             'department_id' => $request->getDepartmentId(),
         ]);
     }
@@ -31,6 +32,8 @@ class SiteModelFactory implements SiteFactory
         return new Site([
             'id' => $request->getId(),
             'name' => $request->getName(),
+            'description' => $request->getDescription(),
+            'department_id' => $request->getDepartmentId(),
         ]);
     }
 }

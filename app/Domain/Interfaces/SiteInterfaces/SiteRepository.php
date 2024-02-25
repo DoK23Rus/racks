@@ -31,6 +31,15 @@ interface SiteRepository
     public function delete(SiteEntity $site): int;
 
     /**
+     * @param  string|null  $id
+     * @return array<array{
+     *     region_name: string,
+     *     department_name: string
+     * }>
+     */
+    public function getLocation(?string $id): array;
+
+    /**
      * @param  string|null  $perPage
      * @return LengthAwarePaginator
      */

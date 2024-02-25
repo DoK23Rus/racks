@@ -23,6 +23,11 @@ use OpenApi\Annotations as OA;
  *         example="Site name"
  *     ),
  *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         example="Some info about site"
+ *     ),
+ *     @OA\Property(
  *         property="department_id",
  *         type="integer",
  *         example=1
@@ -64,6 +69,7 @@ class SiteCreatedResource extends JsonResource
         return [
             'id' => $this->site->getId(),
             'name' => $this->site->getName(),
+            'description' => $this->site->getDescription(),
             'department_id' => $this->site->getDepartmentId(),
             'created_at' => $this->site->getCreatedAt(),
             'updated_at' => $this->site->getUpdatedAt(),

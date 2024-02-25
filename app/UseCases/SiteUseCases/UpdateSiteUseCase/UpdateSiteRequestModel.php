@@ -34,11 +34,21 @@ class UpdateSiteRequestModel
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName(): string
+    public function getName(): ?string
     {
-        return $this->attributes['name'];
+        return $this->attributes['name'] ?? null;
+    }
+
+    public function getDepartmentId(): ?int
+    {
+        return null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'] ?? null;
     }
 }
