@@ -129,7 +129,7 @@ then
     "PHPstan status code - $PHPSTAN\n"\
     "PHPunit status code - $PHPUNIT\n"\
     "E2E tests status code - $E2E\n"\
-    "============================================================\n" | tee -a ./logs/run.log
+    "============================================================\n" | tee -a ./build_logs/run.log
     exit 1
 else
     echo -e "\n ============================================================\n"\
@@ -139,6 +139,6 @@ else
     "PHPstan status code - $PHPSTAN\n"\
     "PHPunit status code - $PHPUNIT\n"\
     "E2E tests status code - $E2E\n"\
-    "============================================================\n" | tee -a ./logs/run.log
+    "============================================================\n" | tee -a ./build_logs/run.log
 fi
 exit 0
