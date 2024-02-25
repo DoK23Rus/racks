@@ -41,12 +41,14 @@ class DatabaseSeeder extends Seeder
 
         $testSite = Site::create([
             'name' => 'Test site',
+            'description' => 'Main site',
             'updated_by' => 'tester',
             'department_id' => $firstTestDepartment['id'],
         ]);
 
         $testBuilding = Building::create([
             'name' => 'Test building',
+            'description' => 'Central office',
             'updated_by' => 'tester',
             'site_id' => $testSite['id'],
             'department_id' => $firstTestDepartment['id'],
@@ -54,6 +56,15 @@ class DatabaseSeeder extends Seeder
 
         $testRoom = Room::create([
             'name' => 'Test room',
+            'building_floor' => '2nd',
+            'description' => 'Server room',
+            'number_of_rack_spaces' => 6,
+            'area' => 12,
+            'responsible' => 'Smith W.',
+            'cooling_system' => 'Centralized',
+            'fire_suppression_system' => 'Centralized',
+            'access_is_open' => false,
+            'has_raised_floor' => false,
             'updated_by' => 'tester',
             'building_id' => $testBuilding['id'],
             'department_id' => $firstTestDepartment['id'],
