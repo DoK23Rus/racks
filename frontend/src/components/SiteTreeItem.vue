@@ -2,8 +2,7 @@
   <div v-bind="{
       id: id,
       name: name,
-      isOpen: isOpen,
-      deleteItem: deleteItem
+      isOpen: isOpen
     }"
   >
     <span
@@ -24,22 +23,15 @@
         </button>
       </router-link>
       <router-link
-        :to="{path: `/site/${id}/update`}"
+        :to="{path: `/site/${id}`}"
         target="_blank">
         <button
           class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs
           px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
         >
-          Edit
+          Info
         </button>
       </router-link>
-      <button
-        class="text-white font-light bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs
-        px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-        v-on:click="deleteItem(id, name, 'site')"
-      >
-        Delete
-      </button>
     </span>
   </div>
 </template>
@@ -59,8 +51,7 @@ export default {
   props: {
     id: Number,
     name: String,
-    isOpen: Boolean,
-    deleteItem: Function
+    isOpen: Boolean
   },
   methods: {
     getCaretClass: getCaretClass,
