@@ -49,16 +49,19 @@ update:user {id} {name} {full_name} {email} {department_id}
 ```
 
 ### Screenshots:
-| ![tree](https://user-images.githubusercontent.com/96002587/202865424-5f57d33c-c63a-408e-9f22-4954feb4a296.png) |
+| ![tree](./screens/tree.png) |
 |:--:| 
 | *Racks map* |
 
-| ![rack](https://user-images.githubusercontent.com/96002587/202865427-89bec5c8-be2b-4deb-b27d-4561139d4c3a.png) |
+| ![rack](./screens/rack.png) |
 |:--:| 
 | *Rack scheme* |
 
-| ![device](https://user-images.githubusercontent.com/96002587/202913588-40c33092-f082-41b4-bda2-e986c5b4e89a.png) |
+| ![device](./screens/device.png) |
 |:--:| 
 | *Device card* |
 
+### DB schema:
+| ![graph](graph.png) |
+|:-------------------:|
 
