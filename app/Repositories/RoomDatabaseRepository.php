@@ -38,12 +38,7 @@ class RoomDatabaseRepository implements RoomRepository
      */
     public function create(RoomEntity $room): RoomEntity
     {
-        return Room::create([
-            'name' => $room->getName(),
-            'building_id' => $room->getBuildingId(),
-            'department_id' => $room->getDepartmentId(),
-            'updated_by' => $room->getUpdatedBy(),
-        ]);
+        return Room::create($room->getAttributeSet()->toArray());
     }
 
     /**
@@ -54,9 +49,9 @@ class RoomDatabaseRepository implements RoomRepository
     {
         return tap(Room::where('id', $room->getId())
             ->first())
-            ->update([
-                'name' => $room->getName(),
-            ]);
+            ->update(
+                $room->getAttributeSet()->toArray()
+            );
     }
 
     /**
@@ -86,5 +81,32 @@ class RoomDatabaseRepository implements RoomRepository
     public function getAll(?string $perPage): LengthAwarePaginator
     {
         return Room::paginate($perPage);
+    }
+
+    /**
+     * @param  string|null  $id
+     * @return array<array{
+     *     region_name: string,
+     *     department_name: string,
+     *     site_name: string,
+     *     building_name: string
+     * }>
+     */
+    public function getLocation(?string $id): array
+    {
+        return DB::table('rooms')
+            ->where('rooms.id', $id)
+            ->select(
+                'regions.name as region_name',
+                'departments.name as department_name',
+                'sites.name as site_name',
+                'buildings.name as building_name',
+            )
+            ->join('buildings', 'rooms.building_id', '=', 'buildings.id')
+            ->join('sites', 'buildings.site_id', '=', 'sites.id')
+            ->join('departments', 'sites.department_id', '=', 'departments.id')
+            ->join('regions', 'departments.region_id', '=', 'regions.id')
+            ->get()
+            ->toArray();
     }
 }

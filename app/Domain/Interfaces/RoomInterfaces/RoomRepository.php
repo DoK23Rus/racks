@@ -14,7 +14,7 @@ interface RoomRepository
 
     /**
      * @param  int  $buildingId
-     * @return array<string> Room names list for building
+     * @return array<string>
      */
     public function getNamesListByBuildingId(int $buildingId): array;
 
@@ -37,8 +37,6 @@ interface RoomRepository
     public function delete(RoomEntity $room): int;
 
     /**
-     * Lock Room table
-     *
      * @return void
      */
     public function lockTable(): void;
@@ -48,4 +46,15 @@ interface RoomRepository
      * @return LengthAwarePaginator
      */
     public function getAll(?string $perPage): LengthAwarePaginator;
+
+    /**
+     * @param  string|null  $id
+     * @return array<array{
+     *      region_name: string,
+     *      department_name: string,
+     *      site_name: string,
+     *      building_name: string
+     * }>
+     */
+    public function getLocation(?string $id): array;
 }

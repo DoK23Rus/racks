@@ -66,6 +66,8 @@ class CreateRoomInteractor implements CreateRoomInputPort
 
         try {
             $room = $this->roomRepository->create($room);
+
+            $room = $room->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateRoom(
                 App()->makeWith(CreateRoomResponseModel::class, ['room' => $room]),

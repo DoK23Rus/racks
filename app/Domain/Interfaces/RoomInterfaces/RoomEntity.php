@@ -3,6 +3,8 @@
 namespace App\Domain\Interfaces\RoomInterfaces;
 
 use App\Models\Room;
+use App\Models\ValueObjects\RoomAttributesValueObject;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -21,63 +23,173 @@ interface RoomEntity
     public function getId(): int;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string;
+    public function getName(): ?string;
 
     /**
-     * @param  string  $name
+     * @param  string|null  $name
      * @return void
      */
-    public function setName(string $name): void;
+    public function setName(?string $name): void;
 
     /**
-     * @return int
+     * @return string|null
      */
-    public function getBuildingId(): int;
+    public function getBuildingFloor(): ?string;
 
     /**
-     * @param  int  $buildingId
+     * @param  string|null  $buildingFloor
      * @return void
      */
-    public function setBuildingId(int $buildingId): void;
+    public function setBuildingFloor(?string $buildingFloor): void;
 
     /**
-     * @return int
+     * @return string|null
      */
-    public function getDepartmentId(): int;
+    public function getDescription(): ?string;
 
     /**
-     * @param  int  $departmentId
+     * @param  string|null  $description
      * @return void
      */
-    public function setDepartmentId(int $departmentId): void;
+    public function setDescription(?string $description): void;
 
     /**
-     * @return string
+     * @return int|null
      */
-    public function getUpdatedBy(): string;
+    public function getNumberOfRackSpaces(): ?int;
 
     /**
-     * @param  string  $updatedBy
+     * @param  int|null  $numberOfRackSpaces
      * @return void
      */
-    public function setUpdatedBy(string $updatedBy): void;
+    public function setNumberOfRackSpaces(?int $numberOfRackSpaces): void;
 
     /**
-     * @return string
+     * @return int|null
      */
-    public function getCreatedAt(): string;
+    public function getArea(): ?int;
 
     /**
-     * @return string
+     * @param  int|null  $area
+     * @return void
      */
-    public function getUpdatedAt(): string;
+    public function setArea(?int $area): void;
 
     /**
-     * @return array<mixed>
+     * @return string|null
      */
-    public function toArray(): array;
+    public function getResponsible(): ?string;
+
+    /**
+     * @param  string|null  $responsible
+     * @return void
+     */
+    public function setResponsible(?string $responsible): void;
+
+    /**
+     * @param  string|null  $coolingSystem
+     * @return void
+     */
+    public function setCoolingSystem(?string $coolingSystem): void;
+
+    /**
+     * @return string|null
+     */
+    public function getCoolingSystem(): ?string;
+
+    /**
+     * @return string|null
+     */
+    public function getFireSuppressionSystem(): ?string;
+
+    /**
+     * @param  string|null  $fireSuppressionSystem
+     * @return void
+     */
+    public function setFireSuppressionSystem(?string $fireSuppressionSystem): void;
+
+    /**
+     * @return bool|null
+     */
+    public function getAccessIsOpen(): ?bool;
+
+    /**
+     * @param  bool|null  $accessIsOpen
+     * @return void
+     */
+    public function setAccessIsOpen(?bool $accessIsOpen): void;
+
+    /**
+     * @return bool|null
+     */
+    public function getHasRaisedFloor(): ?bool;
+
+    /**
+     * @param  bool|null  $hasRaisedFloor
+     * @return void
+     */
+    public function setHasRaisedFloor(?bool $hasRaisedFloor): void;
+
+    /**
+     * @return int|null
+     */
+    public function getBuildingId(): ?int;
+
+    /**
+     * @param  int|null  $buildingId
+     * @return void
+     */
+    public function setBuildingId(?int $buildingId): void;
+
+    /**
+     * @return int|null
+     */
+    public function getDepartmentId(): ?int;
+
+    /**
+     * @param  int|null  $departmentId
+     * @return void
+     */
+    public function setDepartmentId(?int $departmentId): void;
+
+    /**
+     * @return string|null
+     */
+    public function getUpdatedBy(): ?string;
+
+    /**
+     * @param  string|null  $updatedBy
+     * @return void
+     */
+    public function setUpdatedBy(?string $updatedBy): void;
+
+    /**
+     * @return string|null
+     */
+    public function getUpdatedAt(): ?string;
+
+    /**
+     * @param  string|null  $oldName
+     * @return void
+     */
+    public function setOldName(?string $oldName): void;
+
+    /**
+     * @return string|null
+     */
+    public function getOldName(): ?string;
+
+    /**
+     * @return string|null
+     */
+    public function getCreatedAt(): ?string;
+
+    /**
+     * @return RoomAttributesValueObject
+     */
+    public function getAttributeSet(): RoomAttributesValueObject;
 
     /**
      * @return BelongsTo
@@ -93,4 +205,15 @@ interface RoomEntity
      * @return HasMany
      */
     public function children(): HasMany;
+
+    /**
+     * @return array<mixed>
+     */
+    public function toArray(): array;
+
+    /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with): ?Model;
 }

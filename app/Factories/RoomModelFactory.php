@@ -20,6 +20,15 @@ class RoomModelFactory implements RoomFactory
         return new Room([
             'name' => $request->getName(),
             'building_id' => $request->getBuildingId(),
+            'building_floor' => $request->getBuildingFloor(),
+            'description' => $request->getDescription(),
+            'number_of_rack_spaces' => $request->getNumberOfRackSpaces(),
+            'area' => $request->getArea(),
+            'responsible' => $request->getResponsible(),
+            'cooling_system' => $request->getCoolingSystem(),
+            'fire_suppression_system' => $request->getFireSuppressionSystem(),
+            'access_is_open' => $request->getAccessIsOpen(),
+            'has_raised_floor' => $request->getHasRaisedFloor(),
         ]);
     }
 
@@ -32,6 +41,17 @@ class RoomModelFactory implements RoomFactory
         return new Room([
             'id' => $request->getId(),
             'name' => $request->getName(),
+            'building_id' => $request->getBuildingId(),
+            'department_id' => $request->getDepartmentId(),
+            'building_floor' => $request->getBuildingFloor(),
+            'description' => $request->getDescription(),
+            'number_of_rack_spaces' => $request->getNumberOfRackSpaces(),
+            'area' => $request->getArea(),
+            'responsible' => $request->getResponsible(),
+            'cooling_system' => $request->getCoolingSystem(),
+            'fire_suppression_system' => $request->getFireSuppressionSystem(),
+            'access_is_open' => $request->getAccessIsOpen(),
+            'has_raised_floor' => $request->getHasRaisedFloor(),
         ]);
     }
 }

@@ -35,6 +35,7 @@ class UpdateRoomController extends Controller
     /**
      * @param  UpdateRoomRequest  $request
      * @return JsonResponse|null
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function __invoke(UpdateRoomRequest $request): ?JsonResponse
