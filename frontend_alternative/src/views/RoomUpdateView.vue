@@ -30,8 +30,18 @@ export default {
   data() {
     return {
       formProps: {
-        oldName: ''
+        oldName: '',
+        oldBuildingFloor: '',
+        oldDescription: '',
+        oldNumberOfRackSpaces: null,
+        oldArea: null,
+        oldResponsible: '',
+        oldCoolingSystem: 'Centralized',
+        oldFireSuppressionSystem: 'Centralized',
+        oldAccessIsOpen: false,
+        oldHasRaisedFloor: false
       },
+      buildingId: null,
       messageProps: {
         message: '',
         success: false,
@@ -48,7 +58,16 @@ export default {
      */
     async submitForm(form) {
       const formData = {
-        name: form.name
+        name: form.name,
+        building_floor: form.buildingFloor,
+        description: form.description,
+        number_of_rack_spaces: form.numberOfRackSpaces,
+        area: form.area,
+        responsible: form.responsible,
+        cooling_system: form.coolingSystem,
+        fire_suppression_system: form.fireSuppressionSystem,
+        access_is_open: form.accessIsOpen,
+        has_raised_floor: form.hasRaisedFloor
       };
       const response = await putObject('room', this.$route.params.id, formData);
       if (response.status === RESPONSE_STATUS.ACCEPTED) {
@@ -69,7 +88,18 @@ export default {
       if (response.status === RESPONSE_STATUS.NOT_FOUND) {
         this.$router.push('/404');
       }
-      this.formProps.oldName = response.data.data.name
+      const room = response.data.data;
+      this.formProps.oldName = room.name;
+      this.formProps.oldBuildingFloor = room.building_floor;
+      this.formProps.oldDescription = room.description;
+      this.formProps.oldNumberOfRackSpaces = room.number_of_rack_spaces;
+      this.formProps.oldArea = room.area;
+      this.formProps.oldResponsible = room.responsible;
+      this.formProps.oldCoolingSystem = room.cooling_system;
+      this.formProps.oldFireSuppressionSystem = room.fire_suppression_system;
+      this.formProps.oldAccessIsOpen = room.access_is_open;
+      this.formProps.oldHasRaisedFloor = room.has_raised_floor;
+      this.buildingId = room.building_id;
     }
   }
 };

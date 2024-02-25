@@ -51,7 +51,6 @@
       <TreeItem
         v-for="child in item.children"
         :item="child"
-        :deleteItem="deleteItem"
       />
     </ul>
   </li>
@@ -71,8 +70,7 @@ import {getCaretClass, getId} from '@/functions';
 export default {
   name: 'TreeItem',
   props: {
-    item: Object,
-    deleteItem: Function,
+    item: Object
   },
   components: {
     RegionTreeItem,
