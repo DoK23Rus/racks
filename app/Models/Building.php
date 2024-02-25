@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Domain\Interfaces\BuildingInterfaces\BuildingBusinessRules;
 use App\Domain\Interfaces\BuildingInterfaces\BuildingEntity;
+use App\Models\ValueObjects\BuildingAttributesValueObject;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $id PK
  * @property string $name Name
+ * @property string|null $description Description
  * @property string $updated_by Updated by user (username)
  * @property int $department_id Department ID {@see AuthServiceProvider}
  * @property \Illuminate\Support\Carbon|null $created_at Created at
@@ -28,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Room> $children
  * @property-read int|null $children_count
  * @property-read \App\Models\Site $site
+ * @property-read \App\Models\Department $department
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Building newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Building newQuery()
@@ -39,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereSiteId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereDescription($value)
  */
 class Building extends Model implements BuildingBusinessRules, BuildingEntity
 {
@@ -48,6 +52,7 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     protected $fillable = [
         'id',
         'name',
+        'description',
         'site_id',
         'department_id',
         'updated_by',
@@ -72,6 +77,19 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
 
         return true;
     }
+
+    /**
+     * @param  string  $roomOldName
+     * @return bool
+     */
+    public function isNameChanging(string $roomOldName): bool
+    {
+        if ($this->getName() !== $roomOldName) {
+            return true;
+        }
+
+        return false;
+    }
     /*
     |--------------------------------------------------------------------------
     */
@@ -85,71 +103,115 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->attributes['name'];
     }
 
     /**
-     * @param  string  $name
+     * @param  string|null  $name
      * @return void
      */
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->attributes['name'] = $name;
     }
 
     /**
-     * @return int
+     * @return string|null
      */
-    public function getSiteId(): int
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'];
+    }
+
+    /**
+     * @param  string|null  $description
+     * @return void
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->attributes['description'] = $description;
+    }
+
+    /**
+     * @param  string|null  $oldName
+     * @return void
+     */
+    public function setOldName(?string $oldName): void
+    {
+        $this->attributes['old_name'] = $oldName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOldName(): ?string
+    {
+        return $this->attributes['old_name'];
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getSiteId(): ?int
     {
         return $this->attributes['site_id'];
     }
 
     /**
-     * @param  int  $siteId
+     * @param  int|null  $siteId
      * @return void
      */
-    public function setSiteId(int $siteId): void
+    public function setSiteId(?int $siteId): void
     {
         $this->attributes['site_id'] = $siteId;
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getDepartmentId(): int
+    public function getDepartmentId(): ?int
     {
         return $this->attributes['department_id'];
     }
 
     /**
-     * @param  int  $departmentId
+     * @param  int|null  $departmentId
      * @return void
      */
-    public function setDepartmentId(int $departmentId): void
+    public function setDepartmentId(?int $departmentId): void
     {
         $this->attributes['department_id'] = $departmentId;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedBy(): string
+    public function getUpdatedBy(): ?string
     {
         return $this->attributes['updated_by'];
     }
 
     /**
-     * @param  string  $updatedBy
+     * @param  string|null  $updatedBy
      * @return void
      */
-    public function setUpdatedBy(string $updatedBy): void
+    public function setUpdatedBy(?string $updatedBy): void
     {
         $this->attributes['updated_by'] = $updatedBy;
+    }
+
+    /**
+     * @return BuildingAttributesValueObject
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function getAttributeSet(): BuildingAttributesValueObject
+    {
+        return App()->makeWith(BuildingAttributesValueObject::class, ['building' => $this]);
     }
 
     /**
@@ -204,5 +266,14 @@ class Building extends Model implements BuildingBusinessRules, BuildingEntity
     public function toArray(): array
     {
         return parent::toArray();
+    }
+
+    /**
+     * @param  array<mixed>|string  $with
+     * @return Model|null
+     */
+    public function fresh($with = []): ?Model
+    {
+        return parent::fresh($with);
     }
 }

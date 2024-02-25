@@ -16,7 +16,13 @@ use OpenApi\Annotations as OA;
  *         description="Building name",
  *         nullable=false,
  *         example="Some building"
- *     )
+ *     ),
+ *         @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         description="Building description",
+ *         example="Building description"
+ *     ),
  *  )
  */
 class UpdateBuildingRequest extends FormRequest
@@ -28,7 +34,8 @@ class UpdateBuildingRequest extends FormRequest
     {
         return [
             'id' => ['prohibited'],
-            'name' => ['required', 'string'],
+            'name' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
             'site_id' => ['prohibited'],
         ];
     }

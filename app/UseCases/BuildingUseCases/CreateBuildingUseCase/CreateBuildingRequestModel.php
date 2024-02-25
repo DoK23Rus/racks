@@ -33,6 +33,14 @@ class CreateBuildingRequestModel
     }
 
     /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'] ?? null;
+    }
+
+    /**
      * @return string
      */
     public function getUserName(): string

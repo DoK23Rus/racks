@@ -23,7 +23,13 @@ use OpenApi\Annotations as OA;
  *         description="Building name",
  *         nullable=false,
  *         example="Some building"
- *     )
+ *     ),
+ *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         description="Building description",
+ *         example="Building description"
+ *     ),
  *  )
  */
 class CreateBuildingRequest extends FormRequest
@@ -35,6 +41,7 @@ class CreateBuildingRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'site_id' => ['required', 'int'],
         ];
     }

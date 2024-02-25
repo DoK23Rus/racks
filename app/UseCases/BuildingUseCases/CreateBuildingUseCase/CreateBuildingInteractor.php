@@ -66,6 +66,8 @@ class CreateBuildingInteractor implements CreateBuildingInputPort
 
         try {
             $building = $this->buildingRepository->create($building);
+
+            $building = $building->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateBuilding(
                 App()->makeWith(CreateBuildingResponseModel::class, ['building' => $building]),

@@ -19,6 +19,7 @@ class BuildingModelFactory implements BuildingFactory
     {
         return new Building([
             'name' => $request->getName(),
+            'description' => $request->getDescription(),
             'site_id' => $request->getSiteId(),
         ]);
     }
@@ -31,7 +32,10 @@ class BuildingModelFactory implements BuildingFactory
     {
         return new Building([
             'id' => $request->getId(),
+            'description' => $request->getDescription(),
             'name' => $request->getName(),
+            'site_id' => $request->getSiteId(),
+            'department_id' => $request->getDepartmentId(),
         ]);
     }
 }

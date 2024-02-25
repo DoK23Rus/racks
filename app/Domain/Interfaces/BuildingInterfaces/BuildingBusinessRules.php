@@ -14,4 +14,10 @@ interface BuildingBusinessRules
      * @return bool
      */
     public function isNameValid(array $namesList): bool;
+
+    /**
+     * @param  string  $roomOldName
+     * @return bool
+     */
+    public function isNameChanging(string $roomOldName): bool;
 }

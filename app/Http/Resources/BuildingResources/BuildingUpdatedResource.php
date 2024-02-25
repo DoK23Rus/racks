@@ -23,6 +23,11 @@ use OpenApi\Annotations as OA;
  *         example="Building name"
  *     ),
  *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         example="Some info about building"
+ *     ),
+ *     @OA\Property(
  *         property="site_id",
  *         type="integer",
  *         example=1
@@ -74,6 +79,7 @@ class BuildingUpdatedResource extends JsonResource
         return [
             'id' => $this->building->getId(),
             'name' => $this->building->getName(),
+            'description' => $this->building->getDescription(),
             'site_id' => $this->building->getSiteId(),
             'department_id' => $this->building->getDepartmentId(),
             'created_at' => $this->building->getCreatedAt(),

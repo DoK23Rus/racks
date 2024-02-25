@@ -44,7 +44,7 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
             );
         }
 
-        $site = $this->siteRepository->getById($buildingUpdating->getSiteId());
+        $site = $this->siteRepository->getById($building->getSiteId());
 
         if (! Gate::allows('departmentCheck', $building->getDepartmentId())) {
             return $this->output->permissionException(
@@ -54,11 +54,16 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
 
         $buildingUpdating->setUpdatedBy($request->getUserName());
 
+        $buildingUpdating->setOldName($building->getName());
+
         DB::beginTransaction();
 
         $this->buildingRepository->lockTable();
 
-        if (! $buildingUpdating->isNameValid($this->buildingRepository->getNamesListBySiteId($site->getId()))) {
+        $buildingNamesList = $this->buildingRepository->getNamesListBySiteId($site->getId());
+
+        if (! $buildingUpdating->isNameValid($buildingNamesList) &&
+            $buildingUpdating->isNameChanging($buildingUpdating->getOldName())) {
             return $this->output->buildingNameException(
                 App()->makeWith(UpdateBuildingResponseModel::class, ['building' => $buildingUpdating])
             );

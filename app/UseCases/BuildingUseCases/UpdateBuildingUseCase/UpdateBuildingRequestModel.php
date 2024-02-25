@@ -27,11 +27,19 @@ class UpdateBuildingRequestModel
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
-        return $this->attributes['name'];
+        return $this->attributes['name'] ?? null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'] ?? null;
     }
 
     /**
@@ -40,5 +48,15 @@ class UpdateBuildingRequestModel
     public function getUserName(): string
     {
         return $this->user['name'];
+    }
+
+    public function getSiteId(): ?int
+    {
+        return null;
+    }
+
+    public function getDepartmentId(): ?int
+    {
+        return null;
     }
 }

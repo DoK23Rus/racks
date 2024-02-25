@@ -37,12 +37,7 @@ class BuildingDatabaseRepository implements BuildingRepository
      */
     public function create(BuildingEntity $building): BuildingEntity
     {
-        return Building::create([
-            'name' => $building->getName(),
-            'site_id' => $building->getSiteId(),
-            'department_id' => $building->getDepartmentId(),
-            'updated_by' => $building->getUpdatedBy(),
-        ]);
+        return Building::create($building->getAttributeSet()->toArray());
     }
 
     /**
@@ -53,9 +48,9 @@ class BuildingDatabaseRepository implements BuildingRepository
     {
         return tap(Building::where('id', $building->getId())
             ->first())
-            ->update([
-                'name' => $building->getName(),
-            ]);
+            ->update(
+                $building->getAttributeSet()->toArray()
+            );
     }
 
     /**
@@ -67,6 +62,30 @@ class BuildingDatabaseRepository implements BuildingRepository
         return Building::where('id', $building->getId())
             ->first()
             ->delete();
+    }
+
+    /**
+     * @param  string|null  $id
+     * @return array<array{
+     *     region_name: string,
+     *     department_name: string,
+     *     site_name: string
+     * }>
+     */
+    public function getLocation(?string $id): array
+    {
+        return DB::table('buildings')
+            ->where('buildings.id', $id)
+            ->select(
+                'regions.name as region_name',
+                'departments.name as department_name',
+                'sites.name as site_name',
+            )
+            ->join('sites', 'buildings.site_id', '=', 'sites.id')
+            ->join('departments', 'sites.department_id', '=', 'departments.id')
+            ->join('regions', 'departments.region_id', '=', 'regions.id')
+            ->get()
+            ->toArray();
     }
 
     /**

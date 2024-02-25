@@ -13,8 +13,7 @@ interface BuildingRepository
     public function getById(int $id): BuildingEntity;
 
     /**
-     * @param  int  $siteId
-     * @return array<string> Building names list for site
+     * @return array<string> $items
      */
     public function getNamesListBySiteId(int $siteId): array;
 
@@ -35,6 +34,16 @@ interface BuildingRepository
      * @return int
      */
     public function delete(BuildingEntity $building): int;
+
+    /**
+     * @param  string|null  $id
+     * @return array<array{
+     *     region_name: string,
+     *     department_name: string,
+     *     site_name: string
+     * }>
+     */
+    public function getLocation(?string $id): array;
 
     /**
      * @return void
