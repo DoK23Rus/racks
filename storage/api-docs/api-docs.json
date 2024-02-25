@@ -533,6 +533,95 @@
                 ]
             }
         },
+        "/api/auth/building/{id}/location": {
+            "get": {
+                "tags": [
+                    "Building"
+                ],
+                "summary": "Get building location",
+                "description": "Get building location",
+                "operationId": "GetBuildingLocation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Building ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get building location",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "anyOf": [
+                                                {
+                                                    "properties": {
+                                                        "region_name": {
+                                                            "type": "string",
+                                                            "example": "Some region"
+                                                        },
+                                                        "department_name": {
+                                                            "type": "string",
+                                                            "example": "Some department"
+                                                        },
+                                                        "site_name": {
+                                                            "type": "string",
+                                                            "example": "Some site"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No such building",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "oneOf": [
+                                                {
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string",
+                                                            "example": "No such building"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/department/all/{per_page}": {
             "get": {
                 "tags": [
@@ -3075,6 +3164,99 @@
                 ]
             }
         },
+        "/api/auth/room/{id}/location": {
+            "get": {
+                "tags": [
+                    "Room"
+                ],
+                "summary": "Get room location",
+                "description": "Get room location",
+                "operationId": "GetRoomLocation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get room location",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "anyOf": [
+                                                {
+                                                    "properties": {
+                                                        "region_name": {
+                                                            "type": "string",
+                                                            "example": "Some region"
+                                                        },
+                                                        "department_name": {
+                                                            "type": "string",
+                                                            "example": "Some department"
+                                                        },
+                                                        "site_name": {
+                                                            "type": "string",
+                                                            "example": "Some site"
+                                                        },
+                                                        "building_name": {
+                                                            "type": "string",
+                                                            "example": "Some building"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No such room",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "oneOf": [
+                                                {
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string",
+                                                            "example": "No such room"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/site": {
             "post": {
                 "tags": [
@@ -3578,6 +3760,91 @@
                     }
                 ]
             }
+        },
+        "/api/auth/site/{id}/location": {
+            "get": {
+                "tags": [
+                    "Site"
+                ],
+                "summary": "Get site location",
+                "description": "Get site location",
+                "operationId": "GetSiteLocation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Site ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 2
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get site location",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "anyOf": [
+                                                {
+                                                    "properties": {
+                                                        "region_name": {
+                                                            "type": "string",
+                                                            "example": "Some region"
+                                                        },
+                                                        "department_name": {
+                                                            "type": "string",
+                                                            "example": "Some department"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No such site",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "oneOf": [
+                                                {
+                                                    "properties": {
+                                                        "message": {
+                                                            "type": "string",
+                                                            "example": "No such site"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -3666,6 +3933,11 @@
                         "type": "string",
                         "example": "Some building",
                         "nullable": false
+                    },
+                    "description": {
+                        "description": "Building description",
+                        "type": "string",
+                        "example": "Building description"
                     }
                 },
                 "type": "object"
@@ -3678,6 +3950,11 @@
                         "type": "string",
                         "example": "Some building",
                         "nullable": false
+                    },
+                    "description": {
+                        "description": "Building description",
+                        "type": "string",
+                        "example": "Building description"
                     }
                 },
                 "type": "object"
@@ -4428,6 +4705,63 @@
                         "type": "string",
                         "example": "Some room",
                         "nullable": false
+                    },
+                    "building_floor": {
+                        "description": "Room floor number",
+                        "type": "string",
+                        "example": "2nd",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Room description",
+                        "type": "string",
+                        "example": "Room description"
+                    },
+                    "number_of_rack_spaces": {
+                        "description": "Number of rack spaces",
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "area": {
+                        "description": "Room area (sq. m)",
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "responsible": {
+                        "description": "Responsible",
+                        "type": "string",
+                        "example": "Some responsible"
+                    },
+                    "cooling_system": {
+                        "description": "Cooling system",
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "fire_suppression_system": {
+                        "description": "Fire suppression system",
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None",
+                            "Alarm only"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "access_is_open": {
+                        "description": "Room access is open?",
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "has_raised_floor": {
+                        "description": "Room has raised floor?",
+                        "type": "boolean",
+                        "example": false
                     }
                 },
                 "type": "object"
@@ -4440,6 +4774,63 @@
                         "type": "string",
                         "example": "Some room",
                         "nullable": false
+                    },
+                    "building_floor": {
+                        "description": "Room floor number",
+                        "type": "string",
+                        "example": "2nd",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Room description",
+                        "type": "string",
+                        "example": "Room description"
+                    },
+                    "number_of_rack_spaces": {
+                        "description": "Number of rack spaces",
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "area": {
+                        "description": "Room area (sq. m)",
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "responsible": {
+                        "description": "Responsible",
+                        "type": "string",
+                        "example": "Some responsible"
+                    },
+                    "cooling_system": {
+                        "description": "Cooling system",
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "fire_suppression_system": {
+                        "description": "Fire suppression system",
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None",
+                            "Alarm only"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "access_is_open": {
+                        "description": "Room access is open?",
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "has_raised_floor": {
+                        "description": "Room has raised floor?",
+                        "type": "boolean",
+                        "example": false
                     }
                 },
                 "type": "object"
@@ -4458,6 +4849,11 @@
                         "type": "string",
                         "example": "Some site",
                         "nullable": false
+                    },
+                    "description": {
+                        "description": "Site description",
+                        "type": "string",
+                        "example": "Site description"
                     }
                 },
                 "type": "object"
@@ -4470,6 +4866,11 @@
                         "type": "string",
                         "example": "Some site",
                         "nullable": false
+                    },
+                    "description": {
+                        "description": "Site description",
+                        "type": "string",
+                        "example": "Site description"
                     }
                 },
                 "type": "object"
@@ -4484,6 +4885,10 @@
                     "name": {
                         "type": "string",
                         "example": "Building name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Some info about building"
                     },
                     "site_id": {
                         "type": "integer",
@@ -4527,6 +4932,10 @@
                     "name": {
                         "type": "string",
                         "example": "Building name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Some info about building"
                     },
                     "site_id": {
                         "type": "integer",
@@ -4581,6 +4990,10 @@
                     "name": {
                         "type": "string",
                         "example": "Building name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Some info about building"
                     },
                     "site_id": {
                         "type": "integer",
@@ -6038,6 +6451,53 @@
                         "type": "string",
                         "example": "Room name"
                     },
+                    "building_floor": {
+                        "type": "string",
+                        "example": "2nd"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Room description"
+                    },
+                    "number_of_rack_spaces": {
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "area": {
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "responsible": {
+                        "type": "string",
+                        "example": "Some responsible"
+                    },
+                    "cooling_system": {
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "fire_suppression_system": {
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None",
+                            "Alarm only"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "access_is_open": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "has_raised_floor": {
+                        "type": "boolean",
+                        "example": false
+                    },
                     "building_id": {
                         "type": "integer",
                         "example": 1
@@ -6071,6 +6531,53 @@
                     "name": {
                         "type": "string",
                         "example": "Room name"
+                    },
+                    "building_floor": {
+                        "type": "string",
+                        "example": "2nd"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Room description"
+                    },
+                    "number_of_rack_spaces": {
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "area": {
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "responsible": {
+                        "type": "string",
+                        "example": "Some responsible"
+                    },
+                    "cooling_system": {
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "fire_suppression_system": {
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None",
+                            "Alarm only"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "access_is_open": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "has_raised_floor": {
+                        "type": "boolean",
+                        "example": false
                     },
                     "building_id": {
                         "type": "integer",
@@ -6114,6 +6621,53 @@
                     "name": {
                         "type": "string",
                         "example": "Room name"
+                    },
+                    "building_floor": {
+                        "type": "string",
+                        "example": "2nd"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Room description"
+                    },
+                    "number_of_rack_spaces": {
+                        "type": "integer",
+                        "example": 8
+                    },
+                    "area": {
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "responsible": {
+                        "type": "string",
+                        "example": "Some responsible"
+                    },
+                    "cooling_system": {
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "fire_suppression_system": {
+                        "type": "string",
+                        "enum": [
+                            "Centralized",
+                            "Individual",
+                            "None",
+                            "Alarm only"
+                        ],
+                        "example": "Centralized"
+                    },
+                    "access_is_open": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "has_raised_floor": {
+                        "type": "boolean",
+                        "example": false
                     },
                     "building_id": {
                         "type": "integer",
@@ -6211,6 +6765,10 @@
                         "type": "string",
                         "example": "Site name"
                     },
+                    "description": {
+                        "type": "string",
+                        "example": "Some info about site"
+                    },
                     "department_id": {
                         "type": "integer",
                         "example": 1
@@ -6241,6 +6799,10 @@
                         "type": "string",
                         "example": "Site name"
                     },
+                    "description": {
+                        "type": "string",
+                        "example": "Some info about site"
+                    },
                     "department_id": {
                         "type": "integer",
                         "example": 1
@@ -6269,6 +6831,10 @@
                     "name": {
                         "type": "string",
                         "example": "Site name"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Some info about site"
                     },
                     "department_id": {
                         "type": "integer",
