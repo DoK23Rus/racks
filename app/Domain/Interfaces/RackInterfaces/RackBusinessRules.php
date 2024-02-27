@@ -14,6 +14,8 @@ interface RackBusinessRules
      * To install new device in a rack, the intended units must be physically free.
      * For example: device with units 2,3,4 can not be added to rack with busy units 1,2,7,8,9 (one side).
      *
+     * Takes as argument DeviceEntity, checks if it can be added, returns bool
+     *
      * @param  DeviceEntity  $device
      * @return bool
      */
@@ -23,6 +25,8 @@ interface RackBusinessRules
      * Check that rack has such units (units range).
      * The range of intended device units must not exceed the range of all possible rack units.
      * For example: device with units 19,20,21 can not be added to rack with 20 units height.
+     *
+     * Takes as argument DeviceEntity, checks whether such units exist, returns bool
      *
      * @param  DeviceEntity  $device
      * @return bool
@@ -36,6 +40,8 @@ interface RackBusinessRules
      * For example, moving a device occupying several units one unit higher.
      * In this case, the units that the device occupied before the reshuffle will be available to it.
      *
+     * Takes as arguments old and new DeviceEntities, checks if it can be moved, returns bool
+     *
      * @param  DeviceEntity  $device
      * @param  DeviceEntity  $deviceUpdating
      * @return bool
@@ -48,6 +54,8 @@ interface RackBusinessRules
      * In this case, the name of the rack can be repeated throughout the entire project
      * but should not be repeated within the same room.
      *
+     * Takes as arguments list of rack names for this room, checks that it is not on the list, returns bool
+     *
      * @param  array<string>  $namesList  List of Rack names for this room
      * @return bool Is name valid
      */
@@ -59,6 +67,8 @@ interface RackBusinessRules
      * that the name should not be repeated within the same room.
      * In this case, the post request should not be blocked due to repetition of the same name.
      *
+     * Takes as arguments old rack name, checks that it is not the same as old, returns bool
+     *
      * @param  string  $rackOldName
      * @return bool
      */
@@ -69,6 +79,8 @@ interface RackBusinessRules
      * Basic method for updating occupied units based on rack side.
      * Takes as an argument the complete updated list of units for one of the sides of the rack.
      *
+     * Takes as arguments array of busy units and rack side, updates rack busy units for this side
+     *
      * @param  array<int>  $updatedBusyUnitsForSide  Updated units array
      * @param  bool  $side  Rack side (back - true)
      */
@@ -77,6 +89,8 @@ interface RackBusinessRules
     /**
      * Updating rack busy units data by adding new ones (add new device).
      *
+     * Takes as arguments array of new device units and rack side, add these units to rack busy units
+     *
      * @param  array<int>  $newUnits  New units array
      * @param  bool  $side  Rack side (back - true)
      */
@@ -84,6 +98,8 @@ interface RackBusinessRules
 
     /**
      * Updating rack busy units data by deleting units (delete device)
+     *
+     * Takes as arguments array of old device units and rack side, delete these units from rack busy units
      *
      * @param  array<int>  $oldUnits  Old units array
      * @param  bool  $side  Rack side (back - true)
