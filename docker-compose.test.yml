@@ -114,7 +114,6 @@ services:
       - test
 
   hub:
-    &hub
     container_name: hub
     image: selenium/hub:4.1.3
     ports:
