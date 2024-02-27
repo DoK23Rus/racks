@@ -13,7 +13,7 @@ function logError(error, objName, method) {
 }
 
 /**
- * Console gog if response !status
+ * Console log if response !status
  * @param {Object} response Response
  * @param {Number} status Status code
  * @param {String} message Helper message
@@ -114,7 +114,7 @@ export async function getObjectLocation(objName, id) {
 }
 
 /**
- *
+ * GET object for FK
  * @param objNamePlural Object name plural
  * @param parentName Parent object name
  * @param parenId Parent object id
