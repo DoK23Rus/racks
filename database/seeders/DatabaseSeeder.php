@@ -201,7 +201,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('sel_testing'),
             'full_name' => 'Selenium Testing',
             'email' => 'test@mail.com',
-            'department_id' => 1,
+            'department_id' => $firstTestDepartment['id'],
         ]);
 
         User::create([
@@ -209,7 +209,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('first_testing'),
             'full_name' => 'First Testing',
             'email' => 'firsttest@mail.com',
-            'department_id' => 1,
+            'department_id' => $firstTestDepartment['id'],
         ]);
 
         User::create([
@@ -217,7 +217,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('second_testing'),
             'full_name' => 'Second Testing',
             'email' => 'secondtest@mail.com',
-            'department_id' => 2,
+            'department_id' => $secondTestDepartment['id'],
         ]);
     }
 }
