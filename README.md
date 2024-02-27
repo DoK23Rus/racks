@@ -48,6 +48,11 @@ reset_password:user {id}
 update:user {id} {name} {full_name} {email} {department_id}
 ```
 
+### Swagger:
+```
+http://localhost:80/api/documentation
+```
+
 ### Screenshots:
 | ![tree](./screens/tree.png) |
 |:--:| 
