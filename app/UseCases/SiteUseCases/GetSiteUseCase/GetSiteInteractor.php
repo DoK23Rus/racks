@@ -25,6 +25,7 @@ class GetSiteInteractor implements GetSiteInputPort
      */
     public function getSite(GetSiteRequestModel $request): ViewModel
     {
+        // Try to get site
         try {
             $site = $this->siteRepository->getById($request->getId());
         } catch (\Exception $e) {

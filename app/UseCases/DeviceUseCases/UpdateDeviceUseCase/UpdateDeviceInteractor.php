@@ -36,6 +36,7 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
     {
         $deviceUpdating = $this->deviceFactory->makeFromPatchRequest($request);
 
+        // Try to get device
         try {
             $device = $this->deviceRepository->getById($deviceUpdating->getId());
         } catch (\Exception $e) {
@@ -44,6 +45,7 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $device->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(UpdateDeviceResponseModel::class, ['device' => $deviceUpdating])
@@ -52,12 +54,14 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
 
         $deviceUpdating->setUpdatedBy($request->getUserName());
 
+        // If no units in request data
         if (! count($deviceUpdating->getUnits()->toArray())) {
             $deviceUpdating->setUnits($device->getUnits());
         }
 
         $rack = $this->rackRepository->getById($device->getRackId());
 
+        // Check device units exist
         if (! $rack->hasDeviceUnits($deviceUpdating)) {
             return $this->output->noSuchUnits(
                 App()->makeWith(UpdateDeviceResponseModel::class, ['device' => $deviceUpdating])
@@ -66,22 +70,26 @@ class UpdateDeviceInteractor implements UpdateDeviceInputPort
 
         DB::beginTransaction();
 
+        // Try to update
         try {
             $this->rackRepository->lockById($device->getRackId());
 
             $rack = $this->rackRepository->getById($device->getRackId());
 
+            // Delete old units from rack
             $rack->deleteOldBusyUnits(
                 $device->getUnits()->toArray(),
                 $device->getLocation()
             );
 
+            // Check device can be moved
             if (! $rack->isDeviceMovingValid($device, $deviceUpdating)) {
                 return $this->output->unitsAreBusy(
                     App()->makeWith(UpdateDeviceResponseModel::class, ['device' => $deviceUpdating])
                 );
             }
 
+            // Add new units to rack
             $rack->addNewBusyUnits(
                 $request->getUnits(),
                 $request->getLocation()

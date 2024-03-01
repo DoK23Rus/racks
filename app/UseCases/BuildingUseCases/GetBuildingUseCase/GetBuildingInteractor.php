@@ -25,6 +25,7 @@ class GetBuildingInteractor implements GetBuildingInputPort
      */
     public function getBuilding(GetBuildingRequestModel $request): ViewModel
     {
+        // Try to get building
         try {
             $building = $this->buildingRepository->getById($request->getId());
         } catch (\Exception $e) {

@@ -33,6 +33,7 @@ class UpdateUserInteractor implements UpdateUserInputPort
     {
         $userUpdated = $this->userFactory->makeFromUpdateRequest($request);
 
+        // Try to get user
         try {
             $user = $this->userRepository->getById($userUpdated->getId());
         } catch (\Exception $e) {
@@ -41,6 +42,7 @@ class UpdateUserInteractor implements UpdateUserInputPort
             );
         }
 
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($userUpdated->getDepartmentId());
         } catch (\Exception $e) {
@@ -49,6 +51,7 @@ class UpdateUserInteractor implements UpdateUserInputPort
             );
         }
 
+        // Try to update
         try {
             $userUpdated = $this->userRepository->update($userUpdated);
         } catch (\Exception $e) {

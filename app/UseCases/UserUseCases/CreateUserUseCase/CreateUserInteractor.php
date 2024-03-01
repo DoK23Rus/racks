@@ -33,12 +33,14 @@ class CreateUserInteractor implements CreateUserInputPort
     {
         $user = $this->userFactory->makeFromCreateRequest($request);
 
+        // Check user exists
         if ($this->userRepository->exists($user)) {
             return $this->output->userAlreadyExists(
                 App()->makeWith(CreateUserResponseModel::class, ['user' => $user])
             );
         }
 
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($user->getDepartmentId());
         } catch (\Exception $e) {
@@ -47,6 +49,7 @@ class CreateUserInteractor implements CreateUserInputPort
             );
         }
 
+        // Try to create
         try {
             $user = $this->userRepository->create($user);
 

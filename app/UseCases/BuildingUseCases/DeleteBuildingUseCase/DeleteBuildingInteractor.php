@@ -27,6 +27,7 @@ class DeleteBuildingInteractor implements DeleteBuildingInputPort
      */
     public function deleteBuilding(DeleteBuildingRequestModel $request): ViewModel
     {
+        // Try to get building
         try {
             $building = $this->buildingRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -35,12 +36,14 @@ class DeleteBuildingInteractor implements DeleteBuildingInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $building->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(DeleteBuildingResponseModel::class, ['building' => $building])
             );
         }
 
+        // Try to delete
         try {
             $this->buildingRepository->delete($building);
         } catch (\Exception $e) {

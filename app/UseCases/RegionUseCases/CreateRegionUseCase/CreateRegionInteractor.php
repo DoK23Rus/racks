@@ -30,12 +30,14 @@ class CreateRegionInteractor implements CreateRegionInputPort
     {
         $region = $this->regionFactory->makeFromCreateRequest($request);
 
+        // Check region exists
         if ($this->regionRepository->exists($region)) {
             return $this->output->regionAlreadyExists(
                 App()->makeWith(CreateRegionResponseModel::class, ['region' => $region])
             );
         }
 
+        // Try to create
         try {
             $region = $this->regionRepository->create($region);
 

@@ -27,6 +27,7 @@ class DeleteRackInteractor implements DeleteRackInputPort
      */
     public function deleteRack(DeleteRackRequestModel $request): ViewModel
     {
+        // Try to get rack
         try {
             $rack = $this->rackRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -35,12 +36,14 @@ class DeleteRackInteractor implements DeleteRackInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $rack->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(DeleteRackResponseModel::class, ['rack' => $rack])
             );
         }
 
+        // Try to delete
         try {
             $this->rackRepository->delete($rack);
         } catch (\Exception $e) {

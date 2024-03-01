@@ -25,6 +25,7 @@ class DeleteRegionInteractor implements DeleteRegionInputPort
      */
     public function deleteRegion(DeleteRegionRequestModel $request): ViewModel
     {
+        // Try to get region
         try {
             $region = $this->regionRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -33,6 +34,7 @@ class DeleteRegionInteractor implements DeleteRegionInputPort
             );
         }
 
+        // Try to delete
         try {
             $this->regionRepository->delete($region);
         } catch (\Exception $e) {

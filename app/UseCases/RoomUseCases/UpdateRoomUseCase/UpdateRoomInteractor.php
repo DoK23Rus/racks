@@ -36,6 +36,7 @@ class UpdateRoomInteractor implements UpdateRoomInputPort
     {
         $roomUpdating = $this->roomFactory->makeFromPutRequest($request);
 
+        // Try to get room
         try {
             $room = $this->roomRepository->getById($roomUpdating->getId());
         } catch (\Exception $e) {
@@ -48,6 +49,7 @@ class UpdateRoomInteractor implements UpdateRoomInputPort
 
         $roomUpdating = $this->roomFactory->makeFromPutRequest($request);
 
+        // User department check
         if (! Gate::allows('departmentCheck', $room->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(UpdateRoomResponseModel::class, ['room' => $roomUpdating])
@@ -64,6 +66,7 @@ class UpdateRoomInteractor implements UpdateRoomInputPort
 
         $roomNamesList = $this->roomRepository->getNamesListByBuildingId($building->getId());
 
+        // Name check (can not be repeated inside one building)
         if (! $roomUpdating->isNameValid($roomNamesList) &&
             $roomUpdating->isNameChanging($roomUpdating->getOldName())) {
             return $this->output->roomNameException(
@@ -71,6 +74,7 @@ class UpdateRoomInteractor implements UpdateRoomInputPort
             );
         }
 
+        // Try to update
         try {
             $roomUpdating = $this->roomRepository->update($roomUpdating);
         } catch (\Exception $e) {

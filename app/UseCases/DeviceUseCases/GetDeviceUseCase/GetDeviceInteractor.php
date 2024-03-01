@@ -25,6 +25,7 @@ class GetDeviceInteractor implements GetDeviceInputPort
      */
     public function getDevice(GetDeviceRequestModel $request): ViewModel
     {
+        // Try to get device
         try {
             $device = $this->deviceRepository->getById($request->getId());
         } catch (\Exception $e) {

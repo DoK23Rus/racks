@@ -25,6 +25,7 @@ class DeleteUserInteractor implements DeleteUserInputPort
      */
     public function deleteUser(DeleteUserRequestModel $request): ViewModel
     {
+        // Try to get user
         try {
             $user = $this->userRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -33,6 +34,7 @@ class DeleteUserInteractor implements DeleteUserInputPort
             );
         }
 
+        // Try to delete
         try {
             $this->userRepository->delete($user);
         } catch (\Exception $e) {

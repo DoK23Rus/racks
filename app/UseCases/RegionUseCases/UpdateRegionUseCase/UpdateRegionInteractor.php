@@ -30,6 +30,7 @@ class UpdateRegionInteractor implements UpdateRegionInputPort
     {
         $regionUpdating = $this->regionFactory->makeFromPatchRequest($request);
 
+        // Try to get region
         try {
             $region = $this->regionRepository->getById($regionUpdating->getId());
         } catch (\Exception $e) {
@@ -38,6 +39,7 @@ class UpdateRegionInteractor implements UpdateRegionInputPort
             );
         }
 
+        // Try to update
         try {
             $regionUpdating = $this->regionRepository->update($regionUpdating);
         } catch (\Exception $e) {

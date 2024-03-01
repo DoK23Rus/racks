@@ -25,6 +25,7 @@ class GetDepartmentInteractor implements GetDepartmentInputPort
      */
     public function getDepartment(GetDepartmentRequestModel $request): ViewModel
     {
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($request->getId());
         } catch (\Exception $e) {

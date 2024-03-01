@@ -30,6 +30,7 @@ class ResetUserPasswordInteractor implements ResetUserPasswordInputPort
     {
         $userUpdated = $this->userFactory->makeFromResetPasswordRequest($request);
 
+        // Try to get user
         try {
             $user = $this->userRepository->getById($userUpdated->getId());
         } catch (\Exception $e) {
@@ -38,6 +39,7 @@ class ResetUserPasswordInteractor implements ResetUserPasswordInputPort
             );
         }
 
+        // Try to update password
         try {
             $userUpdated = $this->userRepository->updatePassword($userUpdated);
         } catch (\Exception $e) {

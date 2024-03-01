@@ -36,6 +36,7 @@ class CreateRoomInteractor implements CreateRoomInputPort
     {
         $room = $this->roomFactory->makeFromCreateRequest($request);
 
+        // Try to get building
         try {
             $building = $this->buildingRepository->getById($request->getBuildingId());
         } catch (\Exception $e) {
@@ -44,6 +45,7 @@ class CreateRoomInteractor implements CreateRoomInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $building->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(CreateRoomResponseModel::class, ['room' => $room])
@@ -58,12 +60,14 @@ class CreateRoomInteractor implements CreateRoomInputPort
 
         $this->roomRepository->lockTable();
 
+        // Name check (can not be repeated inside one building)
         if (! $room->isNameValid($this->roomRepository->getNamesListByBuildingId($building->getId()))) {
             return $this->output->roomNameException(
                 App()->makeWith(CreateRoomResponseModel::class, ['room' => $room])
             );
         }
 
+        // Try to create
         try {
             $room = $this->roomRepository->create($room);
 

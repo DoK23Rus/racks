@@ -25,6 +25,7 @@ class GetRackInteractor implements GetRackInputPort
      */
     public function getRack(GetRackRequestModel $request): ViewModel
     {
+        // Try to get rack
         try {
             $rack = $this->rackRepository->getById($request->getId());
         } catch (\Exception $e) {

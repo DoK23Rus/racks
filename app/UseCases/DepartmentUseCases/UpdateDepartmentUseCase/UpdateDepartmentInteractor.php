@@ -30,6 +30,7 @@ class UpdateDepartmentInteractor implements UpdateDepartmentInputPort
     {
         $departmentUpdating = $this->departmentFactory->makeFromPatchRequest($request);
 
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($departmentUpdating->getId());
         } catch (\Exception $e) {
@@ -38,6 +39,7 @@ class UpdateDepartmentInteractor implements UpdateDepartmentInputPort
             );
         }
 
+        // Try to update
         try {
             $department = $this->departmentRepository->update($departmentUpdating);
         } catch (\Exception $e) {

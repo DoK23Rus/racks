@@ -36,6 +36,7 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
     {
         $buildingUpdating = $this->buildingFactory->makeFromPatchRequest($request);
 
+        // Try to get building
         try {
             $building = $this->buildingRepository->getById($buildingUpdating->getId());
         } catch (\Exception $e) {
@@ -46,6 +47,7 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
 
         $site = $this->siteRepository->getById($building->getSiteId());
 
+        // User department check
         if (! Gate::allows('departmentCheck', $building->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(UpdateBuildingResponseModel::class, ['building' => $buildingUpdating])
@@ -62,6 +64,7 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
 
         $buildingNamesList = $this->buildingRepository->getNamesListBySiteId($site->getId());
 
+        // Name check (can not be repeated inside one site)
         if (! $buildingUpdating->isNameValid($buildingNamesList) &&
             $buildingUpdating->isNameChanging($buildingUpdating->getOldName())) {
             return $this->output->buildingNameException(
@@ -69,6 +72,7 @@ class UpdateBuildingInteractor implements UpdateBuildingInputPort
             );
         }
 
+        // Try to update
         try {
             $buildingUpdating = $this->buildingRepository->update($buildingUpdating);
         } catch (\Exception $e) {

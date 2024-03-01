@@ -27,6 +27,7 @@ class DeleteRoomInteractor implements DeleteRoomInputPort
      */
     public function deleteRoom(DeleteRoomRequestModel $request): ViewModel
     {
+        // Try to get room
         try {
             $room = $this->roomRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -35,12 +36,14 @@ class DeleteRoomInteractor implements DeleteRoomInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $room->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(DeleteRoomResponseModel::class, ['room' => $room])
             );
         }
 
+        // Try to delete
         try {
             $this->roomRepository->delete($room);
         } catch (\Exception $e) {

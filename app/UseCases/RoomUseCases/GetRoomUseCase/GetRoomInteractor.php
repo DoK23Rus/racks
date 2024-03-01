@@ -25,6 +25,7 @@ class GetRoomInteractor implements GetRoomInputPort
      */
     public function getRoom(GetRoomRequestModel $request): ViewModel
     {
+        // Try to get room
         try {
             $room = $this->roomRepository->getById($request->getId());
         } catch (\Exception $e) {

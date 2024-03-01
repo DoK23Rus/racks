@@ -26,6 +26,7 @@ class DeleteDepartmentInteractor implements DeleteDepartmentInputPort
      */
     public function deleteDepartment(DeleteDepartmentRequestModel $request): ViewModel
     {
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -34,6 +35,7 @@ class DeleteDepartmentInteractor implements DeleteDepartmentInputPort
             );
         }
 
+        // Try to delete
         try {
             $this->departmentRepository->delete($department);
         } catch (\Exception $e) {

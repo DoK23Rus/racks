@@ -27,6 +27,7 @@ class DeleteSiteInteractor implements DeleteSiteInputPort
      */
     public function deleteSite(DeleteSiteRequestModel $request): ViewModel
     {
+        // Try to get site
         try {
             $site = $this->siteRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -35,12 +36,14 @@ class DeleteSiteInteractor implements DeleteSiteInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $site->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(DeleteSiteResponseModel::class, ['site' => $site])
             );
         }
 
+        // Try to delete
         try {
             $this->siteRepository->delete($site);
         } catch (\Exception $e) {

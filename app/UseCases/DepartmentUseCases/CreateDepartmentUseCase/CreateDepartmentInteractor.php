@@ -33,6 +33,7 @@ class CreateDepartmentInteractor implements CreateDepartmentInputPort
     {
         $department = $this->departmentFactory->makeFromCreateRequest($request);
 
+        // Try to get region
         try {
             $region = $this->regionRepository->getById($request->getRegionId());
         } catch (\Exception $e) {
@@ -41,12 +42,14 @@ class CreateDepartmentInteractor implements CreateDepartmentInputPort
             );
         }
 
+        // Check department exists
         if ($this->departmentRepository->exists($department)) {
             return $this->output->departmentAlreadyExists(
                 App()->makeWith(CreateDepartmentResponseModel::class, ['department' => $department])
             );
         }
 
+        // Try to create
         try {
             $department = $this->departmentRepository->create($department);
 

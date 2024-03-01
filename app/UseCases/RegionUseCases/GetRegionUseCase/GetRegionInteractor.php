@@ -25,6 +25,7 @@ class GetRegionInteractor implements GetRegionInputPort
      */
     public function getRegion(GetRegionRequestModel $request): ViewModel
     {
+        // Try to get region
         try {
             $region = $this->regionRepository->getById($request->getId());
         } catch (\Exception $e) {

@@ -53,7 +53,7 @@ update:user {id} {name} {full_name} {email} {department_id}
 ```
 http://localhost:80/api/documentation
 ```
-### Business rules example: 
+### Business rules example:
 [/app/Domain/Interfaces/RackInterfaces/RackBusinessRules.php](/app/Domain/Interfaces/RackInterfaces/RackBusinessRules.php)
 
 ## Models graph:

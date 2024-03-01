@@ -32,6 +32,7 @@ class UpdateSiteInteractor implements UpdateSiteInputPort
     {
         $siteUpdating = $this->siteFactory->makeFromPatchRequest($request);
 
+        // Try to get site
         try {
             $site = $this->siteRepository->getById($siteUpdating->getId());
         } catch (\Exception $e) {
@@ -40,6 +41,7 @@ class UpdateSiteInteractor implements UpdateSiteInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $site->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(UpdateSiteResponseModel::class, ['site' => $siteUpdating])
@@ -48,6 +50,7 @@ class UpdateSiteInteractor implements UpdateSiteInputPort
 
         $siteUpdating->setUpdatedBy($request->getUserName());
 
+        // Try to update
         try {
             $siteUpdating = $this->siteRepository->update($siteUpdating);
         } catch (\Exception $e) {

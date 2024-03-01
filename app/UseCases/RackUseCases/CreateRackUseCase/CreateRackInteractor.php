@@ -36,6 +36,7 @@ class CreateRackInteractor implements CreateRackInputPort
     {
         $rack = $this->rackFactory->makeFromCreateRequest($request);
 
+        // Try to get room
         try {
             $room = $this->roomRepository->getById($request->getRoomId());
         } catch (\Exception $e) {
@@ -44,6 +45,7 @@ class CreateRackInteractor implements CreateRackInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $room->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(CreateRackResponseModel::class, ['rack' => $rack])
@@ -58,12 +60,14 @@ class CreateRackInteractor implements CreateRackInputPort
 
         $this->rackRepository->lockTable();
 
+        // Name check (can not be repeated inside one room)
         if (! $rack->isNameValid($this->rackRepository->getNamesListByRoomId($room->getId()))) {
             return $this->output->rackNameException(
                 App()->makeWith(CreateRackResponseModel::class, ['rack' => $rack])
             );
         }
 
+        // Try to create
         try {
             $rack = $this->rackRepository->create($rack);
 

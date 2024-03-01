@@ -35,6 +35,7 @@ class CreateSiteInteractor implements CreateSiteInputPort
     {
         $site = $this->siteFactory->makeFromCreateRequest($request);
 
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($request->getDepartmentId());
         } catch (\Exception $e) {
@@ -43,6 +44,7 @@ class CreateSiteInteractor implements CreateSiteInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $department->getId())) {
             return $this->output->permissionException(
                 App()->makeWith(CreateSiteResponseModel::class, ['site' => $site])
@@ -51,6 +53,7 @@ class CreateSiteInteractor implements CreateSiteInputPort
 
         $site->setUpdatedBy($request->getUserName());
 
+        // Try to create
         try {
             $site = $this->siteRepository->create($site);
 
