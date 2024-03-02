@@ -61,8 +61,8 @@ services:
       - VUE_APP_AXIOS_URL=http://127.0.0.1:9000
       - VUE_APP_API_VERSION=${API_VERSION}
     volumes:
-      - ./frontend_alternative:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./frontend_alternative:/app
+      - /app/node_modules
     ports:
       - '8080:8080'
     logging:

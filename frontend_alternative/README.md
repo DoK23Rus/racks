@@ -7,9 +7,3 @@
 ```
 docker compose -f docker-compose.alt-front.yml up
 ```
-
-## Rebuild
-
-```
-docker compose -f docker-compose.alt-front.yml up -d --no-deps --build frontend-alternative
-```
