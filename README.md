@@ -2,9 +2,9 @@
 **Racks** is a prototype of a space accounting system for telecommunication cabinets and racks.
 
 ## Stack:
-![](https://img.shields.io/badge/php-8.1-%23625c98) ![](https://img.shields.io/badge/laravel-10-%23c6302b) ![](https://img.shields.io/badge/MySQL-8.0-%23336791)  
-![](https://img.shields.io/badge/vue.js-3.2-%2342b883) ![](https://img.shields.io/badge/tailwindCSS-3.2-%230ea5e9)  
-![](https://img.shields.io/badge/python-3.10-blue)
+![](https://img.shields.io/badge/PHP-8.1-%23625c98) ![](https://img.shields.io/badge/Laravel-10-%23c6302b) ![](https://img.shields.io/badge/MySQL-8.0-%23336791)  
+![](https://img.shields.io/badge/Vue.js-3.2-%2342b883) ![](https://img.shields.io/badge/TailwindCSS-3.2-%230ea5e9)  
+![](https://img.shields.io/badge/Python-3.10-blue)
 
 ## Tools:
 ![](https://img.shields.io/badge/sail-%23c6302b) ![](https://img.shields.io/badge/larastan-%23c6302b) ![](https://img.shields.io/badge/telescope-%23c6302b) ![](https://img.shields.io/badge/pint-%23c6302b)  
