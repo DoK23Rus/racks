@@ -12,7 +12,7 @@ class DeleteRegionCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'delete:region {id}';
+    protected $signature = 'region:delete {id : Region ID}';
 
     /**
      * @var string

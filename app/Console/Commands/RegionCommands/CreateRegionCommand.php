@@ -12,7 +12,7 @@ class CreateRegionCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'create:region {name}';
+    protected $signature = 'region:create {name : Region name}';
 
     /**
      * @var string

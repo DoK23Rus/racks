@@ -12,7 +12,7 @@ class DeleteUserCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'delete:user {id}';
+    protected $signature = 'user:delete {id : User ID}';
 
     /**
      * @var string

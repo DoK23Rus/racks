@@ -12,7 +12,7 @@ class CreateDepartmentCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'create:department {name} {region_id}';
+    protected $signature = 'department:create {name : Department name} {region_id : Region ID}';
 
     /**
      * @var string

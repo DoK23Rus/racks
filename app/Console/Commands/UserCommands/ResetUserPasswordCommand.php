@@ -12,7 +12,7 @@ class ResetUserPasswordCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'reset_password:user {id}';
+    protected $signature = 'user:reset_password {id : User ID}';
 
     /**
      * @var string

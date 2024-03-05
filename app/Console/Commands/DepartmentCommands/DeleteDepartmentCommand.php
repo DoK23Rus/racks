@@ -12,7 +12,7 @@ class DeleteDepartmentCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'delete:department {id}';
+    protected $signature = 'department:delete {id : Department ID}';
 
     /**
      * @var string

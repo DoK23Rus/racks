@@ -30,22 +30,22 @@ Administrative purpose commands for artisan via sail:
 ```
 Region:
 ```
-create:region {name}
-delete:region {id}
-update:region {id} {name}
+region:create {name : Region name}
+region:delete {id : Region ID}
+region:update {id : Region ID} {name : Region name}
 ```
 Department:
 ```
-create:department {name} {region_id}
-delete:department {id}
-update:department {id} {name}
+department:create {name : Department name} {region_id : Region ID}
+department:delete {id : Department ID}
+department:update {id : Department ID} {name : Department name}
 ```
 User:
 ```
-make:user {name} {full_name} {email} {department_id}
-delete:user {id}
-reset_password:user {id}
-update:user {id} {name} {full_name} {email} {department_id}
+user:create {name : User name} {full_name : User full name} {email : User email} {department_id : Department ID}
+user:delete {id : User ID}
+user:reset_password {id : User ID}
+user:update {id : User ID} {name : User name} {full_name : User full name} {email : User email} {department_id : Department ID}
 ```
 
 ## Docs:

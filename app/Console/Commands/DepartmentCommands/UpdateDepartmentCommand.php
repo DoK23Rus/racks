@@ -12,7 +12,7 @@ class UpdateDepartmentCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'update:department {id} {name}';
+    protected $signature = 'department:update {id : Department ID} {name : Department name}';
 
     /**
      * @var string

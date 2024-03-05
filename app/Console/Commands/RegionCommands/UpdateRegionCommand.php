@@ -12,7 +12,7 @@ class UpdateRegionCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'update:region {id} {name}';
+    protected $signature = 'region:update {id : Region ID} {name : Region name}';
 
     /**
      * @var string
