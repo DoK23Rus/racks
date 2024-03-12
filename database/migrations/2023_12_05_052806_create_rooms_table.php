@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Enums\RoomCoolingSystemEnum;
+use App\Models\Enums\RoomFireSuppressionSystemEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,10 +21,10 @@ return new class extends Migration
             $table->integer('number_of_rack_spaces')->nullable();
             $table->integer('area')->nullable();
             $table->string('responsible', 255)->nullable();
-            $table->string('cooling_system', 255)
-                ->default(\App\Models\Enums\RoomCoolingSystemEnum::CENTRALIZED);
-            $table->string('fire_suppression_system', 255)
-                ->default(\App\Models\Enums\RoomFireSuppressionSystemEnum::CENTRALIZED);
+            $table->enum('cooling_system', array_column(RoomCoolingSystemEnum::cases(), 'value'))
+                ->default(RoomCoolingSystemEnum::CENTRALIZED);
+            $table->enum('fire_suppression_system', array_column(RoomFireSuppressionSystemEnum::cases(), 'value'))
+                ->default(RoomFireSuppressionSystemEnum::CENTRALIZED);
             $table->boolean('access_is_open')->default(false);
             $table->boolean('has_raised_floor')->default(false);
             $table->string('updated_by', 255);
