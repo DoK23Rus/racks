@@ -82,6 +82,7 @@ class RetrieveBuildingResource extends JsonResource
             'description' => $this->building->getDescription(),
             'site_id' => $this->building->getSiteId(),
             'department_id' => $this->building->getDepartmentId(),
+            'updated_by' => $this->building->getUpdatedBy(),
             'created_at' => $this->building->getCreatedAt(),
             'updated_at' => $this->building->getUpdatedAt(),
         ];
