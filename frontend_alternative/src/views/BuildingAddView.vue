@@ -28,7 +28,8 @@ export default {
   data() {
     return {
       formProps: {
-        oldName: ''
+        oldName: '',
+        oldDescription: ''
       },
       messageProps: {
         message: '',
@@ -44,6 +45,7 @@ export default {
     async submitForm(form) {
       const formData = {
         name: form.name,
+        description: form.description,
         site_id: this.$route.params.site_id
       };
         const response = await postObject('building', formData);
