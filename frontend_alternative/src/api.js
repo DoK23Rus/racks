@@ -69,6 +69,8 @@ export async function postObject(objName, formData) {
 
 /**
  * PUT object
+ * (technically it is PATCH, because API uses patch for more flexibility,
+ * but client app sends all fields, so on this level it is called PUT)
  * @param {String} objName Object name
  * @param {Object} formData Form data
  * @param {number} id Object id
