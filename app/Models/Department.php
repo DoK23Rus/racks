@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Domain\Interfaces\DepartmentInterfaces\DepartmentEntity;
 use App\Domain\Interfaces\DeviceInterfaces\DeviceBusinessRules;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -50,8 +49,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Department extends Model implements DepartmentEntity, DeviceBusinessRules
 {
-    use HasFactory;
-
     /**
      * @var string[]
      */

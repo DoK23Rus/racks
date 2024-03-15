@@ -6,7 +6,6 @@ use App\Domain\Interfaces\UserInterfaces\UserBusinessRules;
 use App\Domain\Interfaces\UserInterfaces\UserEntity;
 use App\Models\ValueObjects\EmailValueObject;
 use App\Models\ValueObjects\PasswordValueObject;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -58,7 +57,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject, UserBusinessRules, UserEntity
 {
     use HasApiTokens;
-    use HasFactory;
     use Notifiable;
 
     /**

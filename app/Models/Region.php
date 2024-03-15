@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Domain\Interfaces\RegionInterfaces\RegionBusinessRules;
 use App\Domain\Interfaces\RegionInterfaces\RegionEntity;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,8 +34,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Region extends Model implements RegionBusinessRules, RegionEntity
 {
-    use HasFactory;
-
     /**
      * @var string[]
      */

@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Domain\Interfaces\SiteInterfaces\SiteBusinessRules;
 use App\Domain\Interfaces\SiteInterfaces\SiteEntity;
 use App\Models\ValueObjects\SiteAttributesValueObject;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -44,8 +43,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Site extends Model implements SiteBusinessRules, SiteEntity
 {
-    use HasFactory;
-
     /**
      * @var string[]
      */

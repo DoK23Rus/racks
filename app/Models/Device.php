@@ -11,7 +11,6 @@ use App\Models\Enums\DeviceTypeEnum;
 use App\Models\ValueObjects\DeviceAttributesValueObject;
 use App\Models\ValueObjects\DeviceUnitsValueObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -94,8 +93,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Device extends Model implements DeviceBusinessRules, DeviceEntity
 {
-    use HasFactory;
-
     /**
      * @var string[]
      */
