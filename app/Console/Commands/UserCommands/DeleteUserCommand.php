@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class DeleteUserCommand extends Command
 {
-    protected $signature = 'delete:user {id}';
+    /**
+     * @var string
+     */
+    protected $signature = 'user:delete {id : User ID}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Deletes an user';
 
+    /**
+     * @param  DeleteUserInputPort  $interactor
+     */
     public function __construct(
         private DeleteUserInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $viewModel = $this->interactor->deleteUser(

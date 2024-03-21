@@ -8,6 +8,11 @@ use App\Domain\Interfaces\ViewModel;
 
 class UpdateDepartmentInteractor implements UpdateDepartmentInputPort
 {
+    /**
+     * @param  UpdateDepartmentOutputPort  $output
+     * @param  DepartmentRepository  $departmentRepository
+     * @param  DepartmentFactory  $departmentFactory
+     */
     public function __construct(
         private readonly UpdateDepartmentOutputPort $output,
         private readonly DepartmentRepository $departmentRepository,
@@ -15,10 +20,17 @@ class UpdateDepartmentInteractor implements UpdateDepartmentInputPort
     ) {
     }
 
+    /**
+     * @param  UpdateDepartmentRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateDepartment(UpdateDepartmentRequestModel $request): ViewModel
     {
         $departmentUpdating = $this->departmentFactory->makeFromPatchRequest($request);
 
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($departmentUpdating->getId());
         } catch (\Exception $e) {
@@ -27,6 +39,7 @@ class UpdateDepartmentInteractor implements UpdateDepartmentInputPort
             );
         }
 
+        // Try to update
         try {
             $department = $this->departmentRepository->update($departmentUpdating);
         } catch (\Exception $e) {

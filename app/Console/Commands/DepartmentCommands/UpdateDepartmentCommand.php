@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class UpdateDepartmentCommand extends Command
 {
-    protected $signature = 'update:department {id} {name}';
+    /**
+     * @var string
+     */
+    protected $signature = 'department:update {id : Department ID} {name : Department name}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Updates a department';
 
+    /**
+     * @param  UpdateDepartmentInputPort  $interactor
+     */
     public function __construct(
         private readonly UpdateDepartmentInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $attributes = [

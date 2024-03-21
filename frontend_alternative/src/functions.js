@@ -66,7 +66,7 @@ export const getRowSpans = (devices) => {
 };
 
 /**
- *
+ * Get units array for device
  * @param {Number} formFirstUnit First unit
  * @param {Number} formLastUnit Last unit
  * @returns {Array.<number>} Units array

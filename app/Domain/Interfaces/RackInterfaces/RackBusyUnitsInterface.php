@@ -2,13 +2,32 @@
 
 namespace App\Domain\Interfaces\RackInterfaces;
 
+/**
+ * Rack busy units
+ */
 interface RackBusyUnitsInterface
 {
-    public function getArray(bool $side): array;
+    /**
+     * @param  bool  $side  Rack side (back - true)
+     * @return array<int> Busy units for side
+     */
+    public function getUnitsForSide(bool $side): array;
 
-    public function getBusyUnits(): array;
+    /**
+     * @return array{
+     *     front: array<int>,
+     *     back: array<int>
+     * } Busy units array
+     */
+    public function toArray(): array;
 
+    /**
+     * @return void
+     */
     public function setFront(): void;
 
+    /**
+     * @return void
+     */
     public function setBack(): void;
 }

@@ -16,14 +16,24 @@ use Illuminate\Http\Request;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\RackControllers\Swagger\GetRackLocationController
+ */
 class GetRackLocationController extends Controller
 {
+    /**
+     * @param  RackRepository  $rackRepository
+     */
     public function __construct(
         private readonly RackRepository $rackRepository,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     */
     public function __invoke(Request $request): JsonResponse
     {
         try {

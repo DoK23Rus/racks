@@ -22,6 +22,7 @@ Route::group([
     | API v1
     |--------------------------------------------------------------------------
     */
+
     Route::group([
         'prefix' => 'v1',
     ], function ($router) {
@@ -89,6 +90,8 @@ Route::group([
                     ->where(['id' => '[0-9]+']);
                 Route::get('all/{per_page}', \App\Http\Controllers\SiteControllers\GetAllSitesController::class)
                     ->where(['per_page' => '[0-9]+']);
+                Route::get('{id}/location', \App\Http\Controllers\SiteControllers\GetSiteLocationController::class)
+                    ->where(['id' => '[0-9]+']);
             });
             /*
             |--------------------------------------------------------------------------
@@ -107,6 +110,8 @@ Route::group([
                     ->where(['id' => '[0-9]+']);
                 Route::get('all/{per_page}', \App\Http\Controllers\BuildingControllers\GetAllBuildingsController::class)
                     ->where(['per_page' => '[0-9]+']);
+                Route::get('{id}/location', \App\Http\Controllers\BuildingControllers\GetBuildingLocationController::class)
+                    ->where(['id' => '[0-9]+']);
             });
             /*
             |--------------------------------------------------------------------------
@@ -125,6 +130,8 @@ Route::group([
                     ->where(['id' => '[0-9]+']);
                 Route::get('all/{per_page}', \App\Http\Controllers\RoomControllers\GetAllRoomsController::class)
                     ->where(['per_page' => '[0-9]+']);
+                Route::get('{id}/location', \App\Http\Controllers\RoomControllers\GetRoomLocation::class)
+                    ->where(['id' => '[0-9]+']);
             });
             /*
             |--------------------------------------------------------------------------
@@ -163,6 +170,18 @@ Route::group([
                 Route::get('', \App\Http\Controllers\UserControllers\GetUserController::class);
                 Route::get('all/{per_page}', \App\Http\Controllers\UserControllers\GetAllUsersController::class)
                     ->where(['per_page' => '[0-9]+']);
+            });
+            /*
+            |--------------------------------------------------------------------------
+            | export
+            |--------------------------------------------------------------------------
+            */
+            Route::group([
+                'prefix' => 'export',
+            ], function ($router) {
+                Route::get('devices', \App\Http\Controllers\ReportControllers\DevicesReportController::class);
+                Route::get('racks', \App\Http\Controllers\ReportControllers\RacksReportController::class);
+                Route::get('rooms', \App\Http\Controllers\ReportControllers\RoomsReportController::class);
             });
 
             Route::get('tree', \App\Http\Controllers\RegionControllers\GetTreeViewController::class);

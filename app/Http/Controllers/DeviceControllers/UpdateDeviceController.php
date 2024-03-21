@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\DeviceControllers\Swagger\UpdateDeviceController
+ */
 class UpdateDeviceController extends Controller
 {
+    /**
+     * @param  UpdateDeviceInputPort  $interactor
+     */
     public function __construct(
         private readonly UpdateDeviceInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  UpdateDeviceRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(UpdateDeviceRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->updateDevice(

@@ -10,6 +10,10 @@ use App\UseCases\DepartmentUseCases\UpdateDepartmentUseCase\UpdateDepartmentRequ
 
 class DepartmentModelFactory implements DepartmentFactory
 {
+    /**
+     * @param  CreateDepartmentRequestModel  $request
+     * @return DepartmentEntity
+     */
     public function makeFromCreateRequest(CreateDepartmentRequestModel $request): DepartmentEntity
     {
         return new Department([
@@ -18,6 +22,10 @@ class DepartmentModelFactory implements DepartmentFactory
         ]);
     }
 
+    /**
+     * @param  UpdateDepartmentRequestModel  $request
+     * @return DepartmentEntity
+     */
     public function makeFromPatchRequest(UpdateDepartmentRequestModel $request): DepartmentEntity
     {
         return new Department([

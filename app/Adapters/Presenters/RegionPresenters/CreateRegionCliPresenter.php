@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class CreateRegionCliPresenter implements CreateRegionOutputPort
 {
+    /**
+     * @param  CreateRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function regionCreated(CreateRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class CreateRegionCliPresenter implements CreateRegionOutputPort
         );
     }
 
+    /**
+     * @param  CreateRegionResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function regionAlreadyExists(CreateRegionResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,13 @@ class CreateRegionCliPresenter implements CreateRegionOutputPort
         );
     }
 
+    /**
+     * @param  CreateRegionResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToCreateRegion(CreateRegionResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

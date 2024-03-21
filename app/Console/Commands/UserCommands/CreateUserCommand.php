@@ -9,16 +9,34 @@ use Illuminate\Console\Command;
 
 class CreateUserCommand extends Command
 {
-    protected $signature = 'make:user {name} {full_name} {email} {department_id}';
+    /**
+     * @var string
+     */
+    protected $signature = 'user:create 
+                            {name : User name} 
+                            {full_name : User full name} 
+                            {email : User email} 
+                            {department_id : Department ID}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Creates an user';
 
+    /**
+     * @param  CreateUserInputPort  $interactor
+     */
     public function __construct(
         private CreateUserInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $password = $this->ask('Password');

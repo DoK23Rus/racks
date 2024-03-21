@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class RackDatabaseRepository implements RackRepository
 {
+    /**
+     * @param  int  $id
+     * @return RackEntity|RackBusinessRules
+     */
     public function getById(int $id): RackEntity|RackBusinessRules
     {
         return Rack::where('id', $id)
@@ -18,20 +22,32 @@ class RackDatabaseRepository implements RackRepository
             ->firstOrFail();
     }
 
+    /**
+     * @param  RackEntity  $rack
+     * @return RackEntity
+     */
     public function create(RackEntity $rack): RackEntity
     {
-        return Rack::create($rack->getAttributeSet()->getArray());
+        return Rack::create($rack->getAttributeSet()->toArray());
     }
 
+    /**
+     * @param  RackEntity  $rack
+     * @return int
+     */
     public function updateBusyUnits(RackEntity $rack): int
     {
         return Rack::where('id', $rack->getId())
             ->first()
             ->update([
-                'busy_units' => $rack->getBusyUnits()->getBusyUnits(),
+                'busy_units' => $rack->getBusyUnits()->toArray(),
             ]);
     }
 
+    /**
+     * @param  int  $id
+     * @return void
+     */
     public function lockById(int $id): void
     {
         DB::table('racks')
@@ -39,6 +55,10 @@ class RackDatabaseRepository implements RackRepository
             ->sharedLock();
     }
 
+    /**
+     * @param  RackEntity  $rack
+     * @return int
+     */
     public function delete(RackEntity $rack): int
     {
         return Rack::where('id', $rack->getId())
@@ -46,16 +66,24 @@ class RackDatabaseRepository implements RackRepository
             ->delete();
     }
 
+    /**
+     * @param  RackEntity  $rack
+     * @return RackEntity
+     */
     public function update(RackEntity $rack): RackEntity
     {
 
         return tap(Rack::where('id', $rack->getId())
             ->first())
             ->update(
-                $rack->getAttributeSet()->getArray()
+                $rack->getAttributeSet()->toArray()
             );
     }
 
+    /**
+     * @param  int  $roomId
+     * @return array<string>
+     */
     public function getNamesListByRoomId(int $roomId): array
     {
         return Rack::where('room_id', $roomId)
@@ -63,12 +91,19 @@ class RackDatabaseRepository implements RackRepository
             ->toArray();
     }
 
+    /**
+     * @return void
+     */
     public function lockTable(): void
     {
         DB::table('rack')
             ->sharedLock();
     }
 
+    /**
+     * @param  string|null  $id
+     * @return array<mixed>
+     */
     public function getLocation(?string $id): array
     {
         return DB::table('racks')
@@ -89,6 +124,9 @@ class RackDatabaseRepository implements RackRepository
             ->toArray();
     }
 
+    /**
+     * @return array<string>
+     */
     public function getVendors(): array
     {
         return DB::table('racks')
@@ -98,6 +136,9 @@ class RackDatabaseRepository implements RackRepository
             ->toArray();
     }
 
+    /**
+     * @return array<string>
+     */
     public function getModels(): array
     {
         return DB::table('racks')
@@ -107,6 +148,11 @@ class RackDatabaseRepository implements RackRepository
             ->toArray();
     }
 
+    /**
+     * @param  string|null  $perPage
+     * @param  array<string>  $columns
+     * @return LengthAwarePaginator
+     */
     public function getAll(?string $perPage, array $columns): LengthAwarePaginator
     {
         return Rack::paginate($perPage, $columns);

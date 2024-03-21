@@ -4,16 +4,29 @@ namespace App\Models\ValueObjects;
 
 use App\Domain\Interfaces\RackInterfaces\RackEntity;
 
+/**
+ * Value object for rack PATCHing (reverse DTO)
+ */
 class RackAttributesValueObject
 {
+    /**
+     * @var array<mixed>
+     */
     private array $attributesForRack = [];
 
+    /**
+     * @var RackEntity
+     */
     private RackEntity $rack;
 
+    /**
+     * @param  RackEntity  $rack
+     */
     public function __construct(RackEntity $rack)
     {
         $this->rack = $rack;
         $this->setVendor();
+        $this->setAmount();
         $this->setName();
         $this->setUpdatedBy();
         $this->setDepth();
@@ -42,6 +55,9 @@ class RackAttributesValueObject
         $this->setRoomId();
     }
 
+    /**
+     * @return void
+     */
     public function setName(): void
     {
         $name = $this->rack->getName();
@@ -50,6 +66,20 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
+    public function setAmount(): void
+    {
+        $amount = $this->rack->getAmount();
+        if ($amount) {
+            $this->attributesForRack += ['amount' => $amount];
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function setVendor(): void
     {
         $vendor = $this->rack->getVendor();
@@ -58,6 +88,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setUpdatedBy(): void
     {
         $updatedBy = $this->rack->getUpdatedBy();
@@ -66,6 +99,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setModel(): void
     {
         $model = $this->rack->getModel();
@@ -74,6 +110,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setDescription(): void
     {
         $description = $this->rack->getDescription();
@@ -82,6 +121,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setHasNumberingFromTopToBottom(): void
     {
         $hasNumberingFromTopToBottom = $this->rack->getHasNumberingFromTopToBottom();
@@ -90,6 +132,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setResponsible(): void
     {
         $responsible = $this->rack->getResponsible();
@@ -98,6 +143,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setFinanciallyResponsiblePerson(): void
     {
         $financiallyResponsiblePerson = $this->rack->getFinanciallyResponsiblePerson();
@@ -106,6 +154,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setInventoryNumber(): void
     {
         $inventoryNumber = $this->rack->getInventoryNumber();
@@ -114,6 +165,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setFixedAsset(): void
     {
         $fixedAsset = $this->rack->getFixedAsset();
@@ -122,6 +176,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setLinkToDocs(): void
     {
         $linkToDocs = $this->rack->getLinkToDocs();
@@ -130,6 +187,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setRow(): void
     {
         $row = $this->rack->getRow();
@@ -138,6 +198,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPlace(): void
     {
         $place = $this->rack->getPlace();
@@ -146,6 +209,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setHeight(): void
     {
         $height = $this->rack->getHeight();
@@ -154,6 +220,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setWidth(): void
     {
         $width = $this->rack->getWidth();
@@ -162,6 +231,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setDepth(): void
     {
         $depth = $this->rack->getDepth();
@@ -170,6 +242,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setUnitWidth(): void
     {
         $unitWidth = $this->rack->getUnitWidth();
@@ -178,6 +253,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setUnitDepth(): void
     {
         $unitDepth = $this->rack->getUnitDepth();
@@ -186,6 +264,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setType(): void
     {
         $type = $this->rack->getType();
@@ -194,6 +275,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setFrame(): void
     {
         $frame = $this->rack->getFrame();
@@ -202,6 +286,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPlaceType(): void
     {
         $placeType = $this->rack->getPlaceType();
@@ -210,6 +297,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setMaxLoad(): void
     {
         $maxLoad = $this->rack->getMaxLoad();
@@ -218,6 +308,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPowerSockets(): void
     {
         $powerSockets = $this->rack->getPowerSockets();
@@ -226,6 +319,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setPowerSocketsUps(): void
     {
         $powerSocketsUps = $this->rack->getPowerSocketsUps();
@@ -234,22 +330,31 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setHasExternalUps(): void
     {
         $hasExternalUps = $this->rack->getHasExternalUps();
-        if ($hasExternalUps) {
+        if (! is_null($hasExternalUps)) {
             $this->attributesForRack += ['has_external_ups' => $hasExternalUps];
         }
     }
 
+    /**
+     * @return void
+     */
     public function setHasCooler(): void
     {
         $hasCooler = $this->rack->getHasCooler();
-        if ($hasCooler) {
+        if (! is_null($hasCooler)) {
             $this->attributesForRack += ['has_cooler' => $hasCooler];
         }
     }
 
+    /**
+     * @return void
+     */
     public function setDepartmentId(): void
     {
         $departmentId = $this->rack->getDepartmentId();
@@ -258,6 +363,9 @@ class RackAttributesValueObject
         }
     }
 
+    /**
+     * @return void
+     */
     public function setRoomId(): void
     {
         $roomId = $this->rack->getRoomId();
@@ -266,7 +374,10 @@ class RackAttributesValueObject
         }
     }
 
-    public function getArray(): array
+    /**
+     * @return array<mixed> Get attributes array
+     */
+    public function toArray(): array
     {
         return $this->attributesForRack;
     }

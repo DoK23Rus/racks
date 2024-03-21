@@ -7,11 +7,9 @@ use Illuminate\Foundation\Http\FormRequest;
 class CreateDepartmentRequest extends FormRequest
 {
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<array>
+     * @return array<array<mixed>>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => ['required', 'string'],

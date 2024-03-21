@@ -9,14 +9,25 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteSiteInteractor implements DeleteSiteInputPort
 {
+    /**
+     * @param  DeleteSiteOutputPort  $output
+     * @param  SiteRepository  $siteRepository
+     */
     public function __construct(
         private readonly DeleteSiteOutputPort $output,
         private readonly SiteRepository $siteRepository
     ) {
     }
 
+    /**
+     * @param  DeleteSiteRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteSite(DeleteSiteRequestModel $request): ViewModel
     {
+        // Try to get site
         try {
             $site = $this->siteRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -25,12 +36,14 @@ class DeleteSiteInteractor implements DeleteSiteInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $site->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(DeleteSiteResponseModel::class, ['site' => $site])
             );
         }
 
+        // Try to delete
         try {
             $this->siteRepository->delete($site);
         } catch (\Exception $e) {

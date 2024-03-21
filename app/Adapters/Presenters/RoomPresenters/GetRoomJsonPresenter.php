@@ -11,6 +11,12 @@ use App\UseCases\RoomUseCases\GetRoomUseCase\GetRoomResponseModel;
 
 class GetRoomJsonPresenter implements GetRoomOutputPort
 {
+    /**
+     * @param  GetRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function retrieveRoom(GetRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -22,6 +28,12 @@ class GetRoomJsonPresenter implements GetRoomOutputPort
         );
     }
 
+    /**
+     * @param  GetRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRoom(GetRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

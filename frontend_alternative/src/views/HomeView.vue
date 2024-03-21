@@ -41,6 +41,17 @@
         </button>
       <br>
         <button
+          class="text-white w-48 bg-blue-400 border-b-4 border-blue-700
+          hover:border-blue-500 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small text-base
+          px-7 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          type="submit"
+          id="button"
+          v-on:click="downloadReport('rooms', 'rooms_report.csv')"
+        >
+          Export rooms
+        </button>
+      <br>
+        <button
           class="text-white w-48 bg-blue-400 border-b-4 border-blue-700 hover:border-blue-500
           hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small text-base
           px-7 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
@@ -57,8 +68,8 @@
 
 <script>
 import {getUnique, logIfNotStatus} from '@/api';
-import axios from 'axios';
 import {RESPONSE_STATUS} from "@/constants";
+import axios from "axios";
 
 export default {
   name: 'HomeView',
@@ -88,7 +99,7 @@ export default {
     async downloadReport(reportName, fileName) {
       alert('Download will start in a few seconds');
       await axios({
-        url: `${process.env.VUE_APP_AXIOS_URL}/export/${reportName}`,
+        url: `${process.env.VUE_APP_AXIOS_URL}/api/${process.env.VUE_APP_API_VERSION}/auth/export/${reportName}`,
         method: 'GET',
         responseType: 'blob',
       })

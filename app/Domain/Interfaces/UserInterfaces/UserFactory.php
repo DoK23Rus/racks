@@ -8,9 +8,21 @@ use App\UseCases\UserUseCases\UpdateUserUseCase\UpdateUserRequestModel;
 
 interface UserFactory
 {
+    /**
+     * @param  CreateUserRequestModel  $request
+     * @return UserEntity
+     */
     public function makeFromCreateRequest(CreateUserRequestModel $request): UserEntity;
 
+    /**
+     * @param  ResetUserPasswordRequestModel  $request
+     * @return UserEntity
+     */
     public function makeFromResetPasswordRequest(ResetUserPasswordRequestModel $request): UserEntity;
 
+    /**
+     * @param  UpdateUserRequestModel  $request
+     * @return UserEntity
+     */
     public function makeFromUpdateRequest(UpdateUserRequestModel $request): UserEntity;
 }

@@ -455,7 +455,6 @@ export default {
     this.setRackVendors();
     this.setRackModels();
     this.setRackFormProps();
-
   },
   validations() {
     return {

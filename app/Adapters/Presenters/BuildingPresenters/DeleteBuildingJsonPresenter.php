@@ -13,6 +13,12 @@ use App\UseCases\BuildingUseCases\DeleteBuildingUseCase\DeleteBuildingResponseMo
 
 class DeleteBuildingJsonPresenter implements DeleteBuildingOutputPort
 {
+    /**
+     * @param  DeleteBuildingResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function buildingDeleted(DeleteBuildingResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -24,6 +30,12 @@ class DeleteBuildingJsonPresenter implements DeleteBuildingOutputPort
         );
     }
 
+    /**
+     * @param  DeleteBuildingResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchBuilding(DeleteBuildingResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -35,6 +47,14 @@ class DeleteBuildingJsonPresenter implements DeleteBuildingOutputPort
         );
     }
 
+    /**
+     * @param  DeleteBuildingResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToDeleteBuilding(DeleteBuildingResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -50,6 +70,12 @@ class DeleteBuildingJsonPresenter implements DeleteBuildingOutputPort
         );
     }
 
+    /**
+     * @param  DeleteBuildingResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(DeleteBuildingResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

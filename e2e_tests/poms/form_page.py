@@ -30,6 +30,7 @@ class FormPage:
         self.submit_button_id = Locators.submit_button_id
         self.building_name_textbox_id = Locators.building_name_textbox_id
         self.buildind_name = Params.building_name
+        self.room_floor_textbox_id = Locators.room_floor_textbox_id
 
     def get_unit_outside_loc(self):
         """
@@ -87,6 +88,13 @@ class FormPage:
         """
         self.driver \
             .find_element_by_id(self.room_name_textbox_id).send_keys(room_name)
+
+    def enter_room_floor(self, room_floor):
+        """
+        Enter room floor
+        """
+        self.driver \
+            .find_element_by_id(self.room_floor_textbox_id).send_keys(room_floor)
 
     def enter_rack_name(self, rack_name):
         """

@@ -9,18 +9,31 @@ use App\Domain\Interfaces\ViewModel;
 
 class UpdateUserInteractor implements UpdateUserInputPort
 {
+    /**
+     * @param  UpdateUserOutputPort  $output
+     * @param  UserRepository  $userRepository
+     * @param  DepartmentRepository  $departmentRepository
+     * @param  UserFactory  $userFactory
+     */
     public function __construct(
-        private UpdateUserOutputPort $output,
-        private UserRepository $userRepository,
-        private DepartmentRepository $departmentRepository,
-        private UserFactory $userFactory
+        private readonly UpdateUserOutputPort $output,
+        private readonly UserRepository $userRepository,
+        private readonly DepartmentRepository $departmentRepository,
+        private readonly UserFactory $userFactory
     ) {
     }
 
+    /**
+     * @param  UpdateUserRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function updateUser(UpdateUserRequestModel $request): ViewModel
     {
         $userUpdated = $this->userFactory->makeFromUpdateRequest($request);
 
+        // Try to get user
         try {
             $user = $this->userRepository->getById($userUpdated->getId());
         } catch (\Exception $e) {
@@ -29,6 +42,7 @@ class UpdateUserInteractor implements UpdateUserInputPort
             );
         }
 
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($userUpdated->getDepartmentId());
         } catch (\Exception $e) {
@@ -37,6 +51,7 @@ class UpdateUserInteractor implements UpdateUserInputPort
             );
         }
 
+        // Try to update
         try {
             $userUpdated = $this->userRepository->update($userUpdated);
         } catch (\Exception $e) {

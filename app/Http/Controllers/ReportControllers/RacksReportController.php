@@ -22,9 +22,13 @@ class RacksReportController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:web');
+        $this->middleware('auth:api');
     }
 
+    /**
+     * @param  Request  $request
+     * @return BinaryFileResponse
+     */
     public function __invoke(Request $request): BinaryFileResponse
     {
         $fileName = ExportService::createCsvReport((new Rack()), 200, 'id');

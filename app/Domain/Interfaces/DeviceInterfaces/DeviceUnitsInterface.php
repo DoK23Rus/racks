@@ -4,5 +4,8 @@ namespace App\Domain\Interfaces\DeviceInterfaces;
 
 interface DeviceUnitsInterface
 {
-    public function getArray(): array;
+    /**
+     * @return array<int> Units array
+     */
+    public function toArray(): array;
 }

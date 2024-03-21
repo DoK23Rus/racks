@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\SiteControllers\Swagger\CreateSiteController
+ */
 class CreateSiteController extends Controller
 {
+    /**
+     * @param  CreateSiteInputPort  $interactor
+     */
     public function __construct(
         private readonly CreateSiteInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  CreateSiteRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(CreateSiteRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->createSite(

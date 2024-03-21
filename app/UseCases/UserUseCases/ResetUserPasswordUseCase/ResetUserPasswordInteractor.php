@@ -8,17 +8,29 @@ use App\Domain\Interfaces\ViewModel;
 
 class ResetUserPasswordInteractor implements ResetUserPasswordInputPort
 {
+    /**
+     * @param  ResetUserPasswordOutputPort  $output
+     * @param  UserRepository  $userRepository
+     * @param  UserFactory  $userFactory
+     */
     public function __construct(
-        private ResetUserPasswordOutputPort $output,
-        private UserRepository $userRepository,
-        private UserFactory $userFactory,
+        private readonly ResetUserPasswordOutputPort $output,
+        private readonly UserRepository $userRepository,
+        private readonly UserFactory $userFactory,
     ) {
     }
 
+    /**
+     * @param  ResetUserPasswordRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function resetUserPassword(ResetUserPasswordRequestModel $request): ViewModel
     {
         $userUpdated = $this->userFactory->makeFromResetPasswordRequest($request);
 
+        // Try to get user
         try {
             $user = $this->userRepository->getById($userUpdated->getId());
         } catch (\Exception $e) {
@@ -27,6 +39,7 @@ class ResetUserPasswordInteractor implements ResetUserPasswordInputPort
             );
         }
 
+        // Try to update password
         try {
             $userUpdated = $this->userRepository->updatePassword($userUpdated);
         } catch (\Exception $e) {

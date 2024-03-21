@@ -20,6 +20,7 @@ return [
         'sanctum/csrf-cookie',
         'export/devices',
         'export/racks',
+        'export/rooms',
         'backend/*',
     ],
 

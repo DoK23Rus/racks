@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class DeleteDepartmentCommand extends Command
 {
-    protected $signature = 'delete:department {id}';
+    /**
+     * @var string
+     */
+    protected $signature = 'department:delete {id : Department ID}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Deletes a department';
 
+    /**
+     * @param  DeleteDepartmentInputPort  $interactor
+     */
     public function __construct(
         private readonly DeleteDepartmentInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $attributes = [

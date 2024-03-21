@@ -9,6 +9,7 @@ class Params:
     room_name = 'Test room'
     rack_name = 'Test rack №1'
     site_name = 'Test_site_name'
+    room_floor = '2nd'
 
     # Values
     first_device_first_unit_ok = '39'

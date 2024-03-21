@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class CreateDepartmentCliPresenter implements CreateDepartmentOutputPort
 {
+    /**
+     * @param  CreateDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function departmentCreated(CreateDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class CreateDepartmentCliPresenter implements CreateDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  CreateDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function departmentAlreadyExists(CreateDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,12 @@ class CreateDepartmentCliPresenter implements CreateDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  CreateDepartmentResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRegion(CreateDepartmentResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -46,6 +64,13 @@ class CreateDepartmentCliPresenter implements CreateDepartmentOutputPort
         );
     }
 
+    /**
+     * @param  CreateDepartmentResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToCreateDepartment(CreateDepartmentResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class DeleteUserCliPresenter implements DeleteUserOutputPort
 {
+    /**
+     * @param  DeleteUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function userDeleted(DeleteUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class DeleteUserCliPresenter implements DeleteUserOutputPort
         );
     }
 
+    /**
+     * @param  DeleteUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchUser(DeleteUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,13 @@ class DeleteUserCliPresenter implements DeleteUserOutputPort
         );
     }
 
+    /**
+     * @param  DeleteUserResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToDeleteUser(DeleteUserResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

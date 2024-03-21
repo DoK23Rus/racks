@@ -12,6 +12,9 @@ class DeleteRegionRequestModel
     ) {
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->attributes['id'];

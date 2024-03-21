@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class CreateDeviceInteractor implements CreateDeviceInputPort
 {
+    /**
+     * @param  CreateDeviceOutputPort  $output
+     * @param  DeviceRepository  $deviceRepository
+     * @param  RackRepository  $rackRepository
+     * @param  DeviceFactory  $deviceFactory
+     */
     public function __construct(
         private readonly CreateDeviceOutputPort $output,
         private readonly DeviceRepository $deviceRepository,
@@ -20,10 +26,17 @@ class CreateDeviceInteractor implements CreateDeviceInputPort
     ) {
     }
 
+    /**
+     * @param  CreateDeviceRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createDevice(CreateDeviceRequestModel $request): ViewModel
     {
         $device = $this->deviceFactory->makeFromPostRequest($request);
 
+        // Try to get rack
         try {
             $rack = $this->rackRepository->getById($request->getRackId());
         } catch (\Exception $e) {
@@ -32,12 +45,14 @@ class CreateDeviceInteractor implements CreateDeviceInputPort
             );
         }
 
+        // Check  device units exist
         if (! $rack->hasDeviceUnits($device)) {
             return $this->output->noSuchUnits(
                 App()->makeWith(CreateDeviceResponseModel::class, ['device' => $device])
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $rack->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(CreateDeviceResponseModel::class, ['device' => $device])
@@ -50,17 +65,20 @@ class CreateDeviceInteractor implements CreateDeviceInputPort
 
         DB::beginTransaction();
 
+        // Try to create
         try {
             $this->rackRepository->lockById($request->getRackId());
 
             $rack = $this->rackRepository->getById($request->getRackId());
 
+            // Check rack units busy
             if (! $rack->isDeviceAddable($device)) {
                 return $this->output->unitsAreBusy(
                     App()->makeWith(CreateDeviceResponseModel::class, ['device' => $device])
                 );
             }
 
+            // Update rack units
             $rack->addNewBusyUnits(
                 $request->getUnits(),
                 $device->getLocation()

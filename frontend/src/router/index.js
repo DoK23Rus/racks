@@ -3,6 +3,9 @@ import HomeView from '@/views/HomeView.vue';
 import LoginView from '@/views/LoginView.vue';
 import DeviceView from '@/views/DeviceView.vue';
 import RackView from '@/views/RackView.vue';
+import RoomView from '@/views/RoomView.vue';
+import BuildingView from "@/views/BuildingView.vue";
+import SiteView from "@/views/SiteView.vue";
 import TreeView from '@/views/TreeView.vue';
 import UnitsView from '@/views/UnitsView.vue';
 import SiteAddView from '@/views/SiteAddView.vue';
@@ -38,6 +41,21 @@ const routes = [
     path: '/rack/:id',
     name: 'RackView',
     component: RackView
+  },
+  {
+    path: '/room/:id',
+    name: 'RoomView',
+    component: RoomView
+  },
+  {
+    path: '/building/:id',
+    name: 'BuildingView',
+    component: BuildingView
+  },
+  {
+    path: '/site/:id',
+    name: 'SiteView',
+    component: SiteView
   },
   {
     path: '/tree',

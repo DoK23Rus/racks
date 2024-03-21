@@ -22,8 +22,14 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchBuildingResource extends JsonResource
 {
+    /**
+     * @var BuildingEntity|null
+     */
     protected ?BuildingEntity $building;
 
+    /**
+     * @param  BuildingEntity|null  $building
+     */
     public function __construct(?BuildingEntity $building)
     {
         parent::__construct($building);
@@ -31,7 +37,8 @@ class NoSuchBuildingResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

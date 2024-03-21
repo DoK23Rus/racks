@@ -26,8 +26,14 @@ use OpenApi\Annotations as OA;
  */
 class DeviceUpdateFailedResource extends JsonResource
 {
+    /**
+     * @var \Throwable
+     */
     protected \Throwable $e;
 
+    /**
+     * @param  \Throwable  $e
+     */
     public function __construct(\Throwable $e)
     {
         parent::__construct($e);
@@ -35,7 +41,8 @@ class DeviceUpdateFailedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

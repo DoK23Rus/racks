@@ -22,8 +22,14 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchSiteResource extends JsonResource
 {
+    /**
+     * @var SiteEntity|null
+     */
     protected ?SiteEntity $site;
 
+    /**
+     * @param  SiteEntity|null  $site
+     */
     public function __construct(?SiteEntity $site)
     {
         parent::__construct($site);
@@ -31,7 +37,8 @@ class NoSuchSiteResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

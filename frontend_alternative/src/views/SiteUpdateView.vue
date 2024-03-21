@@ -29,7 +29,8 @@ export default {
   data() {
     return {
       formProps: {
-        oldName: ''
+        oldName: '',
+        oldDescription: ''
       },
       messageProps: {
         message: '',
@@ -47,7 +48,8 @@ export default {
      */
     async submitForm(form) {
       const formData = {
-        name: form.name
+        name: form.name,
+        description: form.description
       };
       const response = await putObject('site', this.$route.params.id, formData);
       if (response.status === RESPONSE_STATUS.ACCEPTED) {
@@ -68,7 +70,8 @@ export default {
       if (response.status === RESPONSE_STATUS.NOT_FOUND) {
         this.$router.push('/404');
       }
-      this.formProps.oldName = response.data.data.name
+      this.formProps.oldName = response.data.data.name;
+      this.formProps.oldDescription = response.data.data.description;
     }
   }
 };

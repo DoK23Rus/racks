@@ -12,16 +12,21 @@ use OpenApi\Annotations as OA;
  *     schema="CreateSiteResponse",
  *     title="Site created",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Site name"
- * 	   ),
+ *     ),
+ *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         example="Some info about site"
+ *     ),
  *     @OA\Property(
  *         property="department_id",
  *         type="integer",
@@ -41,8 +46,14 @@ use OpenApi\Annotations as OA;
  */
 class SiteCreatedResource extends JsonResource
 {
+    /**
+     * @var SiteEntity
+     */
     protected SiteEntity $site;
 
+    /**
+     * @param  SiteEntity  $site
+     */
     public function __construct(SiteEntity $site)
     {
         parent::__construct($site);
@@ -50,13 +61,15 @@ class SiteCreatedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->site->getId(),
             'name' => $this->site->getName(),
+            'description' => $this->site->getDescription(),
             'department_id' => $this->site->getDepartmentId(),
             'created_at' => $this->site->getCreatedAt(),
             'updated_at' => $this->site->getUpdatedAt(),

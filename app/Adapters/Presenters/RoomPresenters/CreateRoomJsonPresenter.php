@@ -14,6 +14,12 @@ use App\UseCases\RoomUseCases\CreateRoomUseCase\CreateRoomResponseModel;
 
 class CreateRoomJsonPresenter implements CreateRoomOutputPort
 {
+    /**
+     * @param  CreateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function roomCreated(CreateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -25,6 +31,12 @@ class CreateRoomJsonPresenter implements CreateRoomOutputPort
         );
     }
 
+    /**
+     * @param  CreateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchBuilding(CreateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -36,6 +48,12 @@ class CreateRoomJsonPresenter implements CreateRoomOutputPort
         );
     }
 
+    /**
+     * @param  CreateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function roomNameException(CreateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -47,6 +65,14 @@ class CreateRoomJsonPresenter implements CreateRoomOutputPort
         );
     }
 
+    /**
+     * @param  CreateRoomResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToCreateRoom(CreateRoomResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -62,6 +88,12 @@ class CreateRoomJsonPresenter implements CreateRoomOutputPort
         );
     }
 
+    /**
+     * @param  CreateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(CreateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

@@ -13,7 +13,7 @@ function logError(error, objName, method) {
 }
 
 /**
- * Console gog if response !status
+ * Console log if response !status
  * @param {Object} response Response
  * @param {Number} status Status code
  * @param {String} message Helper message
@@ -69,6 +69,8 @@ export async function postObject(objName, formData) {
 
 /**
  * PUT object
+ * (technically it is PATCH, because API uses patch for more flexibility,
+ * but client app sends all fields, so on this level it is called PUT)
  * @param {String} objName Object name
  * @param {Object} formData Form data
  * @param {number} id Object id
@@ -114,7 +116,7 @@ export async function getObjectLocation(objName, id) {
 }
 
 /**
- *
+ * GET object for FK
  * @param objNamePlural Object name plural
  * @param parentName Parent object name
  * @param parenId Parent object id
@@ -122,7 +124,7 @@ export async function getObjectLocation(objName, id) {
  */
 export async function getObjectsForParent(objNamePlural, parentName, parenId) {
   try {
-    return axios.get(`${BASE_PATH}/${parentName}/${parenId}/${objNamePlural}`);
+    return await axios.get(`${BASE_PATH}/${parentName}/${parenId}/${objNamePlural}`);
   } catch (error) {
     logError(error, `${objNamePlural} for ${parentName}`, 'get');
     return error.response;

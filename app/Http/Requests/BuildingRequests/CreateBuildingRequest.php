@@ -23,20 +23,25 @@ use OpenApi\Annotations as OA;
  *         description="Building name",
  *         nullable=false,
  *         example="Some building"
- *     )
+ *     ),
+ *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         description="Building description",
+ *         example="Building description"
+ *     ),
  *  )
  */
 class CreateBuildingRequest extends FormRequest
 {
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<array>
+     * @return array<array<mixed>>
      */
     public function rules(): array
     {
         return [
             'name' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'site_id' => ['required', 'int'],
         ];
     }

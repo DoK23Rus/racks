@@ -98,4 +98,5 @@ use OpenApi\Annotations as OA;
  */
 class MainController extends Controller
 {
+    //
 }

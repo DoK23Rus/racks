@@ -8,6 +8,7 @@ class CreateBuildingRequestModel
 {
     /**
      * @param  array<mixed>  $attributes
+     * @param  User  $user
      */
     public function __construct(
         private readonly array $attributes,
@@ -15,16 +16,33 @@ class CreateBuildingRequestModel
     ) {
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];
     }
 
+    /**
+     * @return int
+     */
     public function getSiteId(): int
     {
         return $this->attributes['site_id'];
     }
 
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->attributes['description'] ?? null;
+    }
+
+    /**
+     * @return string
+     */
     public function getUserName(): string
     {
         return $this->user['name'];

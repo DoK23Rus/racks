@@ -1,9 +1,9 @@
-#4 [pint internal] load build definition from test.Dockerfile
-#7 [pint internal] load .dockerignore
-#10 [pint internal] load metadata for docker.io/library/composer:2.6.5
-#16 [pint internal] load build context
-#11 [pint] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
-#25 [pint] exporting to image
+#1 [pint internal] load build definition from test.Dockerfile
+#2 [pint internal] load .dockerignore
+#12 [pint stage-0 1/9] FROM docker.io/library/php:8.1-fpm@sha256:a00e69234cca6a1dcdc017a58718038764c1851d49ed43f19896adeefceca2a6
+#14 [pint internal] load build context
+#14 [pint internal] load build context
+#14 [pint internal] load build context
 #25 naming to docker.io/library/racks-pint done
  Container pint  Creating
  Container pint  Created
@@ -15,9 +15,9 @@ pint              |   ..........................................................
 pint              |   ............................................................................
 pint              |   ............................................................................
 pint              |   ............................................................................
-pint              |   ..................................................................
+pint              |   ......................................................................
 pint              | 
 pint              |   ──────────────────────────────────────────────────────────────────── Laravel  
-pint              |     PASS   ......................................................... 522 files  
+pint              |     PASS   ......................................................... 526 files  
 pint              | 
 pint exited with code 0

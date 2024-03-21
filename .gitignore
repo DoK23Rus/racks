@@ -42,3 +42,4 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 /logs/*.log
+/public/vendor/

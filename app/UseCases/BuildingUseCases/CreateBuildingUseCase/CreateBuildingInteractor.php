@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Log;
 
 class CreateBuildingInteractor implements CreateBuildingInputPort
 {
+    /**
+     * @param  CreateBuildingOutputPort  $output
+     * @param  BuildingRepository  $buildingRepository
+     * @param  SiteRepository  $siteRepository
+     * @param  BuildingFactory  $buildingFactory
+     */
     public function __construct(
         private readonly CreateBuildingOutputPort $output,
         private readonly BuildingRepository $buildingRepository,
@@ -20,10 +26,17 @@ class CreateBuildingInteractor implements CreateBuildingInputPort
     ) {
     }
 
+    /**
+     * @param  CreateBuildingRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createBuilding(CreateBuildingRequestModel $request): ViewModel
     {
         $building = $this->buildingFactory->makeFromCreateRequest($request);
 
+        // Try to get site
         try {
             $site = $this->siteRepository->getById($request->getSiteId());
         } catch (\Exception $e) {
@@ -32,6 +45,7 @@ class CreateBuildingInteractor implements CreateBuildingInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $site->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(CreateBuildingResponseModel::class, ['building' => $building])
@@ -46,14 +60,18 @@ class CreateBuildingInteractor implements CreateBuildingInputPort
 
         $this->buildingRepository->lockTable();
 
+        // Name check (can not be repeated inside one site)
         if (! $building->isNameValid($this->buildingRepository->getNamesListBySiteId($site->getId()))) {
             return $this->output->buildingNameException(
                 App()->makeWith(CreateBuildingResponseModel::class, ['building' => $building])
             );
         }
 
+        // Try to create
         try {
             $building = $this->buildingRepository->create($building);
+
+            $building = $building->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateBuilding(
                 App()->makeWith(CreateBuildingResponseModel::class, ['building' => $building]),

@@ -9,14 +9,25 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteRackInteractor implements DeleteRackInputPort
 {
+    /**
+     * @param  DeleteRackOutputPort  $output
+     * @param  RackRepository  $rackRepository
+     */
     public function __construct(
         private readonly DeleteRackOutputPort $output,
         private readonly RackRepository $rackRepository
     ) {
     }
 
+    /**
+     * @param  DeleteRackRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteRack(DeleteRackRequestModel $request): ViewModel
     {
+        // Try to get rack
         try {
             $rack = $this->rackRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -25,12 +36,14 @@ class DeleteRackInteractor implements DeleteRackInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $rack->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(DeleteRackResponseModel::class, ['rack' => $rack])
             );
         }
 
+        // Try to delete
         try {
             $this->rackRepository->delete($rack);
         } catch (\Exception $e) {

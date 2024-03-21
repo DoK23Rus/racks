@@ -5,7 +5,6 @@ namespace App\Logging;
 use Illuminate\Support\Facades\DB;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Level;
-use Monolog\Logger;
 use Monolog\LogRecord;
 
 class MySQLLoggingHandler extends AbstractProcessingHandler
@@ -16,12 +15,20 @@ class MySQLLoggingHandler extends AbstractProcessingHandler
      */
     private string $table;
 
+    /**
+     * @param  $level
+     * @param  $bubble
+     */
     public function __construct($level = Level::Info, $bubble = true)
     {
         $this->table = 'action_log';
         parent::__construct($level, $bubble);
     }
 
+    /**
+     * @param  LogRecord  $record
+     * @return void
+     */
     protected function write(LogRecord $record): void
     {
         $data = [

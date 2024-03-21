@@ -9,6 +9,12 @@ use App\Domain\Interfaces\ViewModel;
 
 class CreateDepartmentInteractor implements CreateDepartmentInputPort
 {
+    /**
+     * @param  CreateDepartmentOutputPort  $output
+     * @param  DepartmentRepository  $departmentRepository
+     * @param  RegionRepository  $regionRepository
+     * @param  DepartmentFactory  $departmentFactory
+     */
     public function __construct(
         private readonly CreateDepartmentOutputPort $output,
         private readonly DepartmentRepository $departmentRepository,
@@ -17,10 +23,17 @@ class CreateDepartmentInteractor implements CreateDepartmentInputPort
     ) {
     }
 
+    /**
+     * @param  CreateDepartmentRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createDepartment(CreateDepartmentRequestModel $request): ViewModel
     {
         $department = $this->departmentFactory->makeFromCreateRequest($request);
 
+        // Try to get region
         try {
             $region = $this->regionRepository->getById($request->getRegionId());
         } catch (\Exception $e) {
@@ -29,14 +42,18 @@ class CreateDepartmentInteractor implements CreateDepartmentInputPort
             );
         }
 
+        // Check department exists
         if ($this->departmentRepository->exists($department)) {
             return $this->output->departmentAlreadyExists(
                 App()->makeWith(CreateDepartmentResponseModel::class, ['department' => $department])
             );
         }
 
+        // Try to create
         try {
             $department = $this->departmentRepository->create($department);
+
+            $department = $department->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateDepartment(
                 App()->makeWith(CreateDepartmentResponseModel::class, ['department' => $department]),

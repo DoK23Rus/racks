@@ -1,236 +1,238 @@
 <template>
-  <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
-    <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-xl">
-      <TheMessage :messageProps="messageProps"/>
-    </div>
-    Device №{{device.id}}
-    <router-link
-      :to="{path: `/device/${device.id}/update`}"
-      target="_blank"
-    >
-      <button
-        id="e2e_device_edit"
-        class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs
-        px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      >
-        Edit
-      </button>
-    </router-link>
-    <button
-      class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs
-      px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-      v-on:click="deleteDevice(device.id, `${device.vendor} ${device.model}`)"
-    >
-      Delete
-    </button>
-    <br>
-    <div class="text-xs pb-4 text-slate-500">
-      {{location.regionName}} &#9002; {{location.departmentName}} &#9002;
-      {{location.siteName}} &#9002; {{location.buildingName}} &#9002;
-      {{location.roomName}} &#9002; {{location.rackName}}
-    </div>
-    <div class="text-base">
-      Status:
-      <text class="text-slate-500">
-        {{device.status}}
-      </text>
-      <br>
-      Description:
-      <text class="text-slate-500">
-        {{device.description}}
-      </text>
-      <br>
-      <template v-if="device.hasBacksideLocation">
-        Located on the back of the rack:
-        <text class="text-slate-500">
-          Yes
-        </text>
-      </template>
-      <template v-else>
-        Located on the back of the rack:
-        <text class="text-slate-500">
-          No
-        </text>
-      </template>
-      <br>
-      Installed in:
-      <a
-        class="text-slate-500"
-        v-bind:href="`/rack/${device.rackId}`"
+  <div class="min-h-screen">
+    <div class="container px-4 mx-auto  justify-between text-xl pl-8 pt-4 font-sans font-light">
+      <div class="container px-4 mx-auto justify-between pl-8 font-sans font-light text-xl">
+        <TheMessage :messageProps="messageProps"/>
+      </div>
+      Device №{{device.id}}
+      <router-link
+        :to="{path: `/device/${device.id}/update`}"
         target="_blank"
       >
-        <text class="text-blue-300">
-          &#9873;
+        <button
+          id="e2e_device_edit"
+          class="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs
+          px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >
+          Edit
+        </button>
+      </router-link>
+      <button
+        class="text-white bg-blue-400 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-small rounded-lg text-xs
+        px-5 py-0.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        v-on:click="deleteDevice(device.id, `${device.vendor} ${device.model}`)"
+      >
+        Delete
+      </button>
+      <br>
+      <div class="text-xs pb-4 text-slate-500">
+        {{location.regionName}} &#9002; {{location.departmentName}} &#9002;
+        {{location.siteName}} &#9002; {{location.buildingName}} &#9002;
+        {{location.roomName}} &#9002; {{location.rackName}}
+      </div>
+      <div class="text-base">
+        Status:
+        <text class="text-slate-500">
+          {{device.status}}
         </text>
-        Rack №{{device.rackId}}
-      </a>
-      <br>
-      Units:
-      <text class="text-slate-500">
-        {{device.units}}
-      </text>
-      <br>
-      Ownership:
-      <text class="text-slate-500">
-        {{device.ownership}}
-      </text>
-      <br>
-      Responsible:
-      <text class="text-slate-500">
-        {{device.responsible}}
-      </text>
-      <br>
-      Project:
-      <text class="text-slate-500">
-        {{device.project}}
-      </text>
-      <br>
-      Inventory number:
-      <text class="text-slate-500">
-        {{device.inventoryNumber}}
-      </text>
-      <br>
-      Financially responsible:
-      <text class="text-slate-500">
-        {{device.financiallyResponsiblePerson}}
-      </text>
-      <br>
-      Fixed asset:
-      <text class="text-slate-500">
-        {{device.fixedAsset}}
-      </text>
-      <br>
-      <template v-if="device.link">
-        Link to docs:
+        <br>
+        Description:
+        <text class="text-slate-500">
+          {{device.description}}
+        </text>
+        <br>
+        <template v-if="device.hasBacksideLocation">
+          Located on the back of the rack:
+          <text class="text-slate-500">
+            Yes
+          </text>
+        </template>
+        <template v-else>
+          Located on the back of the rack:
+          <text class="text-slate-500">
+            No
+          </text>
+        </template>
+        <br>
+        Installed in:
         <a
           class="text-slate-500"
-          v-bind:href="device.linkToDocs"
+          v-bind:href="`/rack/${device.rackId}`"
+          target="_blank"
         >
           <text class="text-blue-300">
             &#9873;
           </text>
-          {{device.linkToDocs}}
+          Rack №{{device.rackId}}
         </a>
-      </template>
-      <template v-else>
-        Link to docs:
-      </template>
-      <br>
-      <br>
-      Vendor:
-      <text class="text-slate-500">
-        {{device.vendor}}
-      </text>
-      <br>
-      Model:
-      <text class="text-slate-500">
-        {{device.model}}
-      </text>
-      <br>
-      Device type:
-      <text class="text-slate-500">
-        {{device.type}}
-      </text>
-      <br>
-      <template v-if="devicesWithOS.includes(device.type)">
-        Hostname:
+        <br>
+        Units:
         <text class="text-slate-500">
-          {{device.hostname}}
+          {{device.units}}
         </text>
         <br>
-        <template v-if="device.ip">
-          IP-address:
-          <text class="text-slate-500">
-            {{device.ip}}
-          </text>
-        </template>
-        <template v-else>
-          IP-address:
-        </template>
+        Ownership:
+        <text class="text-slate-500">
+          {{device.ownership}}
+        </text>
         <br>
-        <template v-if="device.stack">
-          Stack/Reserve (reserve ID):
+        Responsible:
+        <text class="text-slate-500">
+          {{device.responsible}}
+        </text>
+        <br>
+        Project:
+        <text class="text-slate-500">
+          {{device.project}}
+        </text>
+        <br>
+        Inventory number:
+        <text class="text-slate-500">
+          {{device.inventoryNumber}}
+        </text>
+        <br>
+        Financially responsible:
+        <text class="text-slate-500">
+          {{device.financiallyResponsiblePerson}}
+        </text>
+        <br>
+        Fixed asset:
+        <text class="text-slate-500">
+          {{device.fixedAsset}}
+        </text>
+        <br>
+        <template v-if="device.link">
+          Link to docs:
           <a
             class="text-slate-500"
-            v-bind:href="`/device/${device.stack}`"
-            target="_blank"
+            v-bind:href="device.linkToDocs"
           >
             <text class="text-blue-300">
               &#9873;
             </text>
-            Device №{{device.stack}}
+            {{device.linkToDocs}}
           </a>
         </template>
         <template v-else>
-          Stack/Reserve (reserve ID):
+          Link to docs:
         </template>
         <br>
-        <template v-if="device.softwareVersion">
-          Software version:
+        <br>
+        Vendor:
+        <text class="text-slate-500">
+          {{device.vendor}}
+        </text>
+        <br>
+        Model:
+        <text class="text-slate-500">
+          {{device.model}}
+        </text>
+        <br>
+        Device type:
+        <text class="text-slate-500">
+          {{device.type}}
+        </text>
+        <br>
+        <template v-if="devicesWithOS.includes(device.type)">
+          Hostname:
           <text class="text-slate-500">
-            {{device.device.softwareVersion}}
+            {{device.hostname}}
+          </text>
+          <br>
+          <template v-if="device.ip">
+            IP-address:
+            <text class="text-slate-500">
+              {{device.ip}}
+            </text>
+          </template>
+          <template v-else>
+            IP-address:
+          </template>
+          <br>
+          <template v-if="device.stack">
+            Stack/Reserve (reserve ID):
+            <a
+              class="text-slate-500"
+              v-bind:href="`/device/${device.stack}`"
+              target="_blank"
+            >
+              <text class="text-blue-300">
+                &#9873;
+              </text>
+              Device №{{device.stack}}
+            </a>
+          </template>
+          <template v-else>
+            Stack/Reserve (reserve ID):
+          </template>
+          <br>
+          <template v-if="device.softwareVersion">
+            Software version:
+            <text class="text-slate-500">
+              {{device.softwareVersion}}
+            </text>
+          </template>
+          <template v-else>
+            Software version:
+          </template>
+        </template>
+        <br>
+        <template v-if="devicesWithPorts.includes(device.type)">
+          <template v-if="device.portsAmount">
+            Port capacity:
+            <text class="text-slate-500">
+              {{device.portsAmount}}
+            </text>
+          </template>
+          <template>
+            Port capacity:
+          </template>
+        </template>
+        <br>
+        Serial number:
+        <text class="text-slate-500">
+          {{device.serialNumber}}
+        </text>
+        <br>
+        Socket type:
+        <text class="text-slate-500">
+          {{device.powerType}}
+        </text>
+        <br>
+        <template v-if="device.powerW">
+          Power requirement (W):
+          <text class="text-slate-500">
+            {{device.powerW}}
           </text>
         </template>
         <template v-else>
-          Software version:
+          Power requirement (W):
         </template>
-      </template>
-      <br>
-      <template v-if="devicesWithPorts.includes(device.type)">
-        <template v-if="device.portsAmount">
-          Port capacity:
+        <br>
+        <template v-if="device.powerV">
+          Voltage (V):
           <text class="text-slate-500">
-            {{device.portsAmount}}
+            {{device.powerV}}
           </text>
         </template>
-        <template>
-          Port capacity:
+        <template v-else>
+          Voltage (V):
         </template>
-      </template>
+      </div>
       <br>
-      Serial number:
-      <text class="text-slate-500">
-        {{device.serialNumber}}
-      </text>
-      <br>
-      Socket type:
-      <text class="text-slate-500">
-        {{device.powerType}}
-      </text>
-      <br>
-      <template v-if="device.powerW">
-        Power requirement (W):
+      <div class="text-xs">
+        Updated by:
         <text class="text-slate-500">
-          {{device.powerW}}
+          {{device.updatedBy}}
         </text>
-      </template>
-      <template v-else>
-        Power requirement (W):
-      </template>
-      <br>
-      <template v-if="device.powerV">
-        Voltage (V):
+        <br>
+        Updated at:
         <text class="text-slate-500">
-          {{device.powerV}}
+          {{device.updatedAt}}
         </text>
-      </template>
-      <template v-else>
-        Voltage (V):
-      </template>
-    </div>
-    <br>
-    <div class="text-xs">
-      Updated by:
-      <text class="text-slate-500">
-        {{device.updatedBy}}
-      </text>
+      </div>
       <br>
-      Updated at:
-      <text class="text-slate-500">
-        {{device.updatedAt}}
-      </text>
     </div>
-    <br>
   </div>
 </template>
 

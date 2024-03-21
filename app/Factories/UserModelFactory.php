@@ -13,6 +13,12 @@ use App\UseCases\UserUseCases\UpdateUserUseCase\UpdateUserRequestModel;
 
 class UserModelFactory implements UserFactory
 {
+    /**
+     * @param  CreateUserRequestModel  $request
+     * @return UserEntity
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function makeFromCreateRequest(CreateUserRequestModel $request): UserEntity
     {
         return new User([
@@ -24,6 +30,12 @@ class UserModelFactory implements UserFactory
         ]);
     }
 
+    /**
+     * @param  ResetUserPasswordRequestModel  $request
+     * @return UserEntity
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function makeFromResetPasswordRequest(ResetUserPasswordRequestModel $request): UserEntity
     {
         return new User([
@@ -32,6 +44,12 @@ class UserModelFactory implements UserFactory
         ]);
     }
 
+    /**
+     * @param  UpdateUserRequestModel  $request
+     * @return UserEntity
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function makeFromUpdateRequest(UpdateUserRequestModel $request): UserEntity
     {
         return new User([

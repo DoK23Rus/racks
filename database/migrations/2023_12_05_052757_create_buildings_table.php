@@ -14,11 +14,15 @@ return new class extends Migration
         Schema::create('buildings', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->text('description')->nullable();
             $table->string('updated_by', 255);
-            $table->integer('department_id');
             $table->timestamps();
             $table->foreignId('site_id')
                 ->constrained('sites')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('department_id')
+                ->constrained('departments')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

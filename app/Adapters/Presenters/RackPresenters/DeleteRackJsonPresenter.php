@@ -13,6 +13,12 @@ use App\UseCases\RackUseCases\DeleteRackUseCase\DeleteRackResponseModel;
 
 class DeleteRackJsonPresenter implements DeleteRackOutputPort
 {
+    /**
+     * @param  DeleteRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function rackDeleted(DeleteRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -24,6 +30,12 @@ class DeleteRackJsonPresenter implements DeleteRackOutputPort
         );
     }
 
+    /**
+     * @param  DeleteRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRack(DeleteRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -35,6 +47,14 @@ class DeleteRackJsonPresenter implements DeleteRackOutputPort
         );
     }
 
+    /**
+     * @param  DeleteRackResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToDeleteRack(DeleteRackResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -50,6 +70,12 @@ class DeleteRackJsonPresenter implements DeleteRackOutputPort
         );
     }
 
+    /**
+     * @param  DeleteRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(DeleteRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

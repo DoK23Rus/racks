@@ -225,9 +225,7 @@ use OpenApi\Annotations as OA;
 class UpdateDeviceRequest extends FormRequest
 {
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<array>
+     * @return array<array<mixed>>
      */
     public function rules(): array
     {
@@ -239,6 +237,7 @@ class UpdateDeviceRequest extends FormRequest
             'has_backside_location' => ['required', 'boolean'],
             'units' => ['required', new DeviceUnitsRule()],
             'rack_id' => ['prohibited'],
+            'department_id' => ['prohibited'],
             'hostname' => ['string', 'nullable'],
             'ip' => ['ip', 'nullable'],
             'stack' => ['integer', 'nullable'],
@@ -260,7 +259,10 @@ class UpdateDeviceRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    /**
+     * @return array<array<mixed>>
+     */
+    public function messages(): array
     {
         return [
             'type' => [

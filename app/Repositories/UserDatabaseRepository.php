@@ -9,6 +9,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserDatabaseRepository implements UserRepository
 {
+    /**
+     * @param  UserEntity  $user
+     * @return bool
+     */
     public function exists(UserEntity $user): bool
     {
         return User::where([
@@ -17,6 +21,10 @@ class UserDatabaseRepository implements UserRepository
         ])->exists();
     }
 
+    /**
+     * @param  UserEntity  $user
+     * @return UserEntity
+     */
     public function create(UserEntity $user): UserEntity
     {
         return User::create([
@@ -28,6 +36,10 @@ class UserDatabaseRepository implements UserRepository
         ]);
     }
 
+    /**
+     * @param  UserEntity  $user
+     * @return UserEntity
+     */
     public function update(UserEntity $user): UserEntity
     {
         return tap(User::where('id', $user->getId())
@@ -40,11 +52,19 @@ class UserDatabaseRepository implements UserRepository
             ]);
     }
 
+    /**
+     * @param  string|null  $perPage
+     * @return LengthAwarePaginator
+     */
     public function getAll(?string $perPage): LengthAwarePaginator
     {
         return User::paginate($perPage);
     }
 
+    /**
+     * @param  int  $id
+     * @return UserEntity
+     */
     public function getById(int $id): UserEntity
     {
         return User::where('id', $id)
@@ -52,6 +72,10 @@ class UserDatabaseRepository implements UserRepository
             ->firstOrFail();
     }
 
+    /**
+     * @param  UserEntity  $user
+     * @return UserEntity
+     */
     public function updatePassword(UserEntity $user): UserEntity
     {
         return tap(User::where('id', $user->getId())
@@ -61,6 +85,10 @@ class UserDatabaseRepository implements UserRepository
             ]);
     }
 
+    /**
+     * @param  UserEntity  $user
+     * @return int
+     */
     public function delete(UserEntity $user): int
     {
         return User::where('id', $user->getId())

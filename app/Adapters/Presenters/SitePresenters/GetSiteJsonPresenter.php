@@ -11,6 +11,12 @@ use App\UseCases\SiteUseCases\GetSiteUseCase\GetSiteResponseModel;
 
 class GetSiteJsonPresenter implements GetSiteOutputPort
 {
+    /**
+     * @param  GetSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function retrieveSite(GetSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -22,6 +28,12 @@ class GetSiteJsonPresenter implements GetSiteOutputPort
         );
     }
 
+    /**
+     * @param  GetSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchSite(GetSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

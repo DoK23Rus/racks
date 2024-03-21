@@ -12,16 +12,21 @@ use OpenApi\Annotations as OA;
  *     schema="BuildingUpdatedResponse",
  *     title="Update building",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Building name"
- * 	   ),
+ *     ),
+ *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         example="Some info about building"
+ *     ),
  *     @OA\Property(
  *         property="site_id",
  *         type="integer",
@@ -51,8 +56,14 @@ use OpenApi\Annotations as OA;
  */
 class BuildingUpdatedResource extends JsonResource
 {
+    /**
+     * @var BuildingEntity
+     */
     protected BuildingEntity $building;
 
+    /**
+     * @param  BuildingEntity  $building
+     */
     public function __construct(BuildingEntity $building)
     {
         parent::__construct($building);
@@ -60,13 +71,15 @@ class BuildingUpdatedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->building->getId(),
             'name' => $this->building->getName(),
+            'description' => $this->building->getDescription(),
             'site_id' => $this->building->getSiteId(),
             'department_id' => $this->building->getDepartmentId(),
             'created_at' => $this->building->getCreatedAt(),

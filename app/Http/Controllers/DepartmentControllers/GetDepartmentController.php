@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\DepartmentControllers\Swagger\GetDepartmentController
+ */
 class GetDepartmentController extends Controller
 {
+    /**
+     * @param  GetDepartmentInputPort  $interactor
+     */
     public function __construct(
         private readonly GetDepartmentInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  GetDepartmentRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(GetDepartmentRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->getDepartment(

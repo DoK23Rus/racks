@@ -9,6 +9,12 @@ use App\Domain\Interfaces\ViewModel;
 
 class CreateUserInteractor implements CreateUserInputPort
 {
+    /**
+     * @param  CreateUserOutputPort  $output
+     * @param  UserRepository  $userRepository
+     * @param  DepartmentRepository  $departmentRepository
+     * @param  UserFactory  $userFactory
+     */
     public function __construct(
         private readonly CreateUserOutputPort $output,
         private readonly UserRepository $userRepository,
@@ -17,16 +23,24 @@ class CreateUserInteractor implements CreateUserInputPort
     ) {
     }
 
+    /**
+     * @param  CreateUserRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function createUser(CreateUserRequestModel $request): ViewModel
     {
         $user = $this->userFactory->makeFromCreateRequest($request);
 
+        // Check user exists
         if ($this->userRepository->exists($user)) {
             return $this->output->userAlreadyExists(
                 App()->makeWith(CreateUserResponseModel::class, ['user' => $user])
             );
         }
 
+        // Try to get department
         try {
             $department = $this->departmentRepository->getById($user->getDepartmentId());
         } catch (\Exception $e) {
@@ -35,8 +49,11 @@ class CreateUserInteractor implements CreateUserInputPort
             );
         }
 
+        // Try to create
         try {
             $user = $this->userRepository->create($user);
+
+            $user = $user->fresh([]);
         } catch (\Exception $e) {
             return $this->output->unableToCreateUser(
                 App()->makeWith(CreateUserResponseModel::class, ['user' => $user]),

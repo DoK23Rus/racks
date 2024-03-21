@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\DeviceControllers\Swagger\DeleteDeviceController
+ */
 class DeleteDeviceController extends Controller
 {
+    /**
+     * @param  DeleteDeviceInputPort  $interactor
+     */
     public function __construct(
         private readonly DeleteDeviceInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  DeleteDeviceRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(DeleteDeviceRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->deleteDevice(

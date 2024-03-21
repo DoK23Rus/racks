@@ -12,16 +12,16 @@ use OpenApi\Annotations as OA;
  *     schema="RetrieveRegionResponse",
  *     title="Get region",
  *
- * 	   @OA\Property(
- * 		   property="id",
- * 		   type="integer",
+ *     @OA\Property(
+ *         property="id",
+ *         type="integer",
  *         example=1
- * 	   ),
- * 	   @OA\Property(
- * 		   property="name",
- * 		   type="string",
+ *     ),
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
  *         example="Region name"
- * 	   ),
+ *     ),
  *     @OA\Property(
  *         property="created_at",
  *         type="string",
@@ -36,8 +36,14 @@ use OpenApi\Annotations as OA;
  */
 class RetrieveRegionResource extends JsonResource
 {
+    /**
+     * @var RegionEntity
+     */
     protected RegionEntity $region;
 
+    /**
+     * @param  RegionEntity  $region
+     */
     public function __construct(RegionEntity $region)
     {
         parent::__construct($region);
@@ -45,7 +51,8 @@ class RetrieveRegionResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

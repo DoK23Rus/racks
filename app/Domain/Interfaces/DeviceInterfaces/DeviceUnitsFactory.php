@@ -7,7 +7,8 @@ use App\Models\ValueObjects\DeviceUnitsValueObject;
 interface DeviceUnitsFactory
 {
     /**
-     * @param  array<mixed>  $attributes
+     * @param  array<int>  $attributes
+     * @return DeviceUnitsValueObject
      */
     public function make(array $attributes = []): DeviceUnitsValueObject;
 }

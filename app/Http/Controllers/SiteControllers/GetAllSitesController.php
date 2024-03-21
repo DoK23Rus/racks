@@ -16,14 +16,24 @@ use Illuminate\Pagination\LengthAwarePaginator;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\SiteControllers\Swagger\GetAllSitesController
+ */
 class GetAllSitesController extends Controller
 {
+    /**
+     * @param  SiteRepository  $siteRepository
+     */
     public function __construct(
         private readonly SiteRepository $siteRepository
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  Request  $request
+     * @return LengthAwarePaginator
+     */
     public function __invoke(Request $request): LengthAwarePaginator
     {
         return $this->siteRepository->getAll(

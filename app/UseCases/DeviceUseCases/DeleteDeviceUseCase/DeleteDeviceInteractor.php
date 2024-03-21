@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Log;
 
 class DeleteDeviceInteractor implements DeleteDeviceInputPort
 {
+    /**
+     * @param  DeleteDeviceOutputPort  $output
+     * @param  DeviceRepository  $deviceRepository
+     * @param  RackRepository  $rackRepository
+     */
     public function __construct(
         private readonly DeleteDeviceOutputPort $output,
         private readonly DeviceRepository $deviceRepository,
@@ -18,8 +23,15 @@ class DeleteDeviceInteractor implements DeleteDeviceInputPort
     ) {
     }
 
+    /**
+     * @param  DeleteDeviceRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deleteDevice(DeleteDeviceRequestModel $request): ViewModel
     {
+        // Try to get device
         try {
             $device = $this->deviceRepository->getById($request->getId());
         } catch (\Exception $e) {
@@ -28,6 +40,7 @@ class DeleteDeviceInteractor implements DeleteDeviceInputPort
             );
         }
 
+        // User department check
         if (! Gate::allows('departmentCheck', $device->getDepartmentId())) {
             return $this->output->permissionException(
                 App()->makeWith(DeleteDeviceResponseModel::class, ['device' => $device])
@@ -38,13 +51,15 @@ class DeleteDeviceInteractor implements DeleteDeviceInputPort
 
         DB::beginTransaction();
 
+        // Try to delete
         try {
             $this->rackRepository->lockById($rack->getId());
 
             $rack = $this->rackRepository->getById($rack->getId());
 
+            // Delete old units from rack
             $rack->deleteOldBusyUnits(
-                $device->getUnits()->getArray(),
+                $device->getUnits()->toArray(),
                 $device->getLocation()
             );
 

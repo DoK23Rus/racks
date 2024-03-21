@@ -22,8 +22,14 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchRackResource extends JsonResource
 {
+    /**
+     * @var RackEntity|null
+     */
     protected ?RackEntity $rack;
 
+    /**
+     * @param  RackEntity|null  $rack
+     */
     public function __construct(?RackEntity $rack)
     {
         parent::__construct($rack);
@@ -31,7 +37,8 @@ class NoSuchRackResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

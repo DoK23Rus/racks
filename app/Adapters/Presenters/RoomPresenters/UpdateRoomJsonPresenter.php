@@ -14,6 +14,12 @@ use App\UseCases\RoomUseCases\UpdateRoomUseCase\UpdateRoomResponseModel;
 
 class UpdateRoomJsonPresenter implements UpdateRoomOutputPort
 {
+    /**
+     * @param  UpdateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function roomUpdated(UpdateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -25,6 +31,12 @@ class UpdateRoomJsonPresenter implements UpdateRoomOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRoom(UpdateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -36,6 +48,12 @@ class UpdateRoomJsonPresenter implements UpdateRoomOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function roomNameException(UpdateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -47,6 +65,14 @@ class UpdateRoomJsonPresenter implements UpdateRoomOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRoomResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToUpdateRoom(UpdateRoomResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -62,6 +88,12 @@ class UpdateRoomJsonPresenter implements UpdateRoomOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRoomResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(UpdateRoomResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

@@ -22,8 +22,14 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchDepartmentResource extends JsonResource
 {
+    /**
+     * @var DepartmentEntity|null
+     */
     protected ?DepartmentEntity $department;
 
+    /**
+     * @param  DepartmentEntity|null  $department
+     */
     public function __construct(?DepartmentEntity $department)
     {
         parent::__construct($department);
@@ -31,7 +37,8 @@ class NoSuchDepartmentResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

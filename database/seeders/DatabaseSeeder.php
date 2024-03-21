@@ -6,6 +6,10 @@ namespace Database\Seeders;
 use App\Models\Building;
 use App\Models\Department;
 use App\Models\Device;
+use App\Models\Enums\DeviceStatusEnum;
+use App\Models\Enums\DeviceTypeEnum;
+use App\Models\Enums\RoomCoolingSystemEnum;
+use App\Models\Enums\RoomFireSuppressionSystemEnum;
 use App\Models\Rack;
 use App\Models\Region;
 use App\Models\Room;
@@ -41,12 +45,14 @@ class DatabaseSeeder extends Seeder
 
         $testSite = Site::create([
             'name' => 'Test site',
+            'description' => 'Main site',
             'updated_by' => 'tester',
             'department_id' => $firstTestDepartment['id'],
         ]);
 
         $testBuilding = Building::create([
             'name' => 'Test building',
+            'description' => 'Central office',
             'updated_by' => 'tester',
             'site_id' => $testSite['id'],
             'department_id' => $firstTestDepartment['id'],
@@ -54,6 +60,15 @@ class DatabaseSeeder extends Seeder
 
         $testRoom = Room::create([
             'name' => 'Test room',
+            'building_floor' => '2nd',
+            'description' => 'Server room',
+            'number_of_rack_spaces' => 6,
+            'area' => 12,
+            'responsible' => 'Smith W.',
+            'cooling_system' => RoomCoolingSystemEnum::CENTRALIZED,
+            'fire_suppression_system' => RoomFireSuppressionSystemEnum::CENTRALIZED,
+            'access_is_open' => false,
+            'has_raised_floor' => false,
             'updated_by' => 'tester',
             'building_id' => $testBuilding['id'],
             'department_id' => $firstTestDepartment['id'],
@@ -100,7 +115,7 @@ class DatabaseSeeder extends Seeder
 
         Device::create([
             'units' => '[41]',
-            'type' => 'RJ45 patch panel',
+            'type' => DeviceTypeEnum::RJ45_PANEL,
             'updated_by' => 'tester',
             'rack_id' => $firstTestRack['id'],
             'department_id' => $firstTestDepartment['id'],
@@ -110,7 +125,7 @@ class DatabaseSeeder extends Seeder
             'vendor' => 'Cisco',
             'model' => '2911',
             'units' => '[35, 36]',
-            'type' => 'Switch',
+            'type' => DeviceTypeEnum::ROUTER,
             'updated_by' => 'tester',
             'rack_id' => $firstTestRack['id'],
             'department_id' => $firstTestDepartment['id'],
@@ -121,7 +136,7 @@ class DatabaseSeeder extends Seeder
             'model' => 'back-UPS',
             'units' => '[5, 6]',
             'has_backside_location' => true,
-            'type' => 'UPC',
+            'type' => DeviceTypeEnum::UPS,
             'inventory_number' => '123456789023',
             'updated_by' => 'tester',
             'rack_id' => $firstTestRack['id'],
@@ -132,7 +147,7 @@ class DatabaseSeeder extends Seeder
             'vendor' => 'Defective',
             'model' => 'switch',
             'units' => '[38]',
-            'status' => 'Device failed',
+            'status' => DeviceStatusEnum::FAILED,
             'has_backside_location' => false,
             'updated_by' => 'tester',
             'rack_id' => $firstTestRack['id'],
@@ -144,7 +159,7 @@ class DatabaseSeeder extends Seeder
             'model' => 'switch',
             'units' => '[42]',
             'has_backside_location' => false,
-            'type' => 'Switch',
+            'type' => DeviceTypeEnum::SWITCH,
             'ownership' => 'Providers equipment',
             'responsible' => 'Duane Denison',
             'updated_by' => 'tester',
@@ -156,7 +171,7 @@ class DatabaseSeeder extends Seeder
             'vendor' => 'Cisco',
             'model' => '2960',
             'units' => '[39]',
-            'type' => 'Switch',
+            'type' => DeviceTypeEnum::SWITCH,
             'hostname' => 'Switch_SW1f_1',
             'ip' => '192.168.15.74',
             'ports_amount' => 24,
@@ -179,7 +194,7 @@ class DatabaseSeeder extends Seeder
 
         Device::create([
             'units' => '[2, 3, 4]',
-            'type' => 'UPS',
+            'type' => DeviceTypeEnum::UPS,
             'updated_by' => 'tester',
             'rack_id' => $secondTestRack['id'],
             'department_id' => $firstTestDepartment['id'],
@@ -190,7 +205,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('sel_testing'),
             'full_name' => 'Selenium Testing',
             'email' => 'test@mail.com',
-            'department_id' => 1,
+            'department_id' => $firstTestDepartment['id'],
         ]);
 
         User::create([
@@ -198,7 +213,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('first_testing'),
             'full_name' => 'First Testing',
             'email' => 'firsttest@mail.com',
-            'department_id' => 1,
+            'department_id' => $firstTestDepartment['id'],
         ]);
 
         User::create([
@@ -206,7 +221,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('second_testing'),
             'full_name' => 'Second Testing',
             'email' => 'secondtest@mail.com',
-            'department_id' => 2,
+            'department_id' => $secondTestDepartment['id'],
         ]);
     }
 }

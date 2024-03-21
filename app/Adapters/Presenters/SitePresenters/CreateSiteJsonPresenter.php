@@ -13,6 +13,12 @@ use App\UseCases\SiteUseCases\CreateSiteUseCase\CreateSiteResponseModel;
 
 class CreateSiteJsonPresenter implements CreateSiteOutputPort
 {
+    /**
+     * @param  CreateSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function siteCreated(CreateSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -24,6 +30,14 @@ class CreateSiteJsonPresenter implements CreateSiteOutputPort
         );
     }
 
+    /**
+     * @param  CreateSiteResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToCreateSite(CreateSiteResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -39,6 +53,12 @@ class CreateSiteJsonPresenter implements CreateSiteOutputPort
         );
     }
 
+    /**
+     * @param  CreateSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(CreateSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -50,6 +70,12 @@ class CreateSiteJsonPresenter implements CreateSiteOutputPort
         );
     }
 
+    /**
+     * @param  CreateSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDepartment(CreateSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

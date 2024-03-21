@@ -1,0 +1,28 @@
+#8 [phpstan internal] load .dockerignore
+#9 [phpstan internal] load build definition from test.Dockerfile
+#7 [phpstan internal] load metadata for docker.io/library/php:8.1-fpm
+#7 [phpstan internal] load metadata for docker.io/library/php:8.1-fpm
+#15 [phpstan internal] load build context
+#15 [phpstan internal] load build context
+#15 [phpstan internal] load build context
+#17 [phpstan stage-0 2/9] RUN apt-get update -y
+#18 [phpstan stage-0 3/9] RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev &&   docker-php-ext-install pdo pdo_mysql bcmath
+#11 [phpstan] FROM docker.io/library/composer:2.6.5@sha256:67f1bec07666f688791bff2c13b34b9c35042cc4c1e42fbb5bd4dbe4ae70f0fb
+#19 [phpstan stage-0 4/9] COPY . .
+#19 [phpstan stage-0 4/9] COPY . .
+#20 [phpstan stage-0 5/9] RUN addgroup --gid 1000 www || :
+#21 [phpstan stage-0 6/9] RUN adduser --no-create-home --disabled-password --uid 1000 --ingroup www www || :
+#22 [phpstan stage-0 7/9] RUN chown -R www:www /var/www
+#23 [phpstan stage-0 8/9] COPY --from=composer:2.6.5 /usr/bin/composer /usr/bin/composer
+#24 [phpstan stage-0 9/9] WORKDIR /var/www
+#25 naming to docker.io/library/racks-phpstan 0.0s done
+ Container phpstan  Creating
+ Container phpstan  Created
+Attaching to backend-testing, db-testing, e2e-tests, frontend-testing, hub, phpstan, phpunit, pint, racks-selenium-1, racks-selenium-2
+phpstan           | Note: Using configuration file /var/www/phpstan.neon.
+phpstan           |    0/478 [░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0%[1G[2K  20/478 [▓░░░░░░░░░░░░░░░░░░░░░░░░░░░]   4%[1G[2K  40/478 [▓▓░░░░░░░░░░░░░░░░░░░░░░░░░░]   8%[1G[2K  60/478 [▓▓▓░░░░░░░░░░░░░░░░░░░░░░░░░]  12%[1G[2K 100/478 [▓▓▓▓▓░░░░░░░░░░░░░░░░░░░░░░░]  20%[1G[2K 160/478 [▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░░░]  33%[1G[2K 200/478 [▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░░░░]  41%[1G[2K 240/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░░░░]  50%[1G[2K 300/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░░]  62%[1G[2K 340/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░]  71%[1G[2K 400/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░]  83%[1G[2K 440/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░]  92%[1G[2K 478/478 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+phpstan           | 
+phpstan           | 
+phpstan           |  [OK] No errors                                                                 
+phpstan           | 
+phpstan exited with code 0

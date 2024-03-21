@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\DB;
 
 class BuildingDatabaseRepository implements BuildingRepository
 {
+    /**
+     * @param  int  $id
+     * @return BuildingEntity
+     */
     public function getById(int $id): BuildingEntity
     {
         return Building::where('id', $id)
@@ -18,7 +22,7 @@ class BuildingDatabaseRepository implements BuildingRepository
     }
 
     /**
-     * @return array<mixed> $items
+     * @return array<string> $items
      */
     public function getNamesListBySiteId(int $siteId): array
     {
@@ -27,25 +31,32 @@ class BuildingDatabaseRepository implements BuildingRepository
             ->toArray();
     }
 
+    /**
+     * @param  BuildingEntity  $building
+     * @return BuildingEntity
+     */
     public function create(BuildingEntity $building): BuildingEntity
     {
-        return Building::create([
-            'name' => $building->getName(),
-            'site_id' => $building->getSiteId(),
-            'department_id' => $building->getDepartmentId(),
-            'updated_by' => $building->getUpdatedBy(),
-        ]);
+        return Building::create($building->getAttributeSet()->toArray());
     }
 
+    /**
+     * @param  BuildingEntity  $building
+     * @return BuildingEntity
+     */
     public function update(BuildingEntity $building): BuildingEntity
     {
         return tap(Building::where('id', $building->getId())
             ->first())
-            ->update([
-                'name' => $building->getName(),
-            ]);
+            ->update(
+                $building->getAttributeSet()->toArray()
+            );
     }
 
+    /**
+     * @param  BuildingEntity  $building
+     * @return int
+     */
     public function delete(BuildingEntity $building): int
     {
         return Building::where('id', $building->getId())
@@ -53,12 +64,43 @@ class BuildingDatabaseRepository implements BuildingRepository
             ->delete();
     }
 
+    /**
+     * @param  string|null  $id
+     * @return array<array{
+     *     region_name: string,
+     *     department_name: string,
+     *     site_name: string
+     * }>
+     */
+    public function getLocation(?string $id): array
+    {
+        return DB::table('buildings')
+            ->where('buildings.id', $id)
+            ->select(
+                'regions.name as region_name',
+                'departments.name as department_name',
+                'sites.name as site_name',
+            )
+            ->join('sites', 'buildings.site_id', '=', 'sites.id')
+            ->join('departments', 'sites.department_id', '=', 'departments.id')
+            ->join('regions', 'departments.region_id', '=', 'regions.id')
+            ->get()
+            ->toArray();
+    }
+
+    /**
+     * @return void
+     */
     public function lockTable(): void
     {
         DB::table('building')
             ->sharedLock();
     }
 
+    /**
+     * @param  string|null  $perPage
+     * @return LengthAwarePaginator
+     */
     public function getAll(?string $perPage): LengthAwarePaginator
     {
         return Building::paginate($perPage);

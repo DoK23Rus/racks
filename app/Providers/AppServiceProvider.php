@@ -7,21 +7,37 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     /**
+     * @var array|string[]
+     */
+    public array $bindings = [
+        \App\Domain\Interfaces\UserInterfaces\UserFactory::class => \App\Factories\UserModelFactory::class,
+        \App\Domain\Interfaces\UserInterfaces\UserRepository::class => \App\Repositories\UserDatabaseRepository::class,
+        \App\Domain\Interfaces\RackInterfaces\RackFactory::class => \App\Factories\RackModelFactory::class,
+        \App\Domain\Interfaces\RackInterfaces\RackRepository::class => \App\Repositories\RackDatabaseRepository::class,
+        \App\Domain\Interfaces\DeviceInterfaces\DeviceFactory::class => \App\Factories\DeviceModelFactory::class,
+        \App\Domain\Interfaces\DeviceInterfaces\DeviceRepository::class => \App\Repositories\DeviceDatabaseRepository::class,
+        \App\Domain\Interfaces\RegionInterfaces\RegionFactory::class => \App\Factories\RegionModelFactory::class,
+        \App\Domain\Interfaces\RegionInterfaces\RegionRepository::class => \App\Repositories\RegionDatabaseRepository::class,
+        \App\Domain\Interfaces\DepartmentInterfaces\DepartmentFactory::class => \App\Factories\DepartmentModelFactory::class,
+        \App\Domain\Interfaces\DepartmentInterfaces\DepartmentRepository::class => \App\Repositories\DepartmentDatabaseRepository::class,
+        \App\Domain\Interfaces\SiteInterfaces\SiteFactory::class => \App\Factories\SiteModelFactory::class,
+        \App\Domain\Interfaces\SiteInterfaces\SiteRepository::class => \App\Repositories\SiteDatabaseRepository::class,
+        \App\Domain\Interfaces\BuildingInterfaces\BuildingFactory::class => \App\Factories\BuildingModelFactory::class,
+        \App\Domain\Interfaces\BuildingInterfaces\BuildingRepository::class => \App\Repositories\BuildingDatabaseRepository::class,
+        \App\Domain\Interfaces\RoomInterfaces\RoomFactory::class => \App\Factories\RoomModelFactory::class,
+        \App\Domain\Interfaces\RoomInterfaces\RoomRepository::class => \App\Repositories\RoomDatabaseRepository::class,
+    ];
+
+    /**
      * Register any application services.
      */
     public function register(): void
     {
-        // USER
-        $this->app->bind(
-            \App\Domain\Interfaces\UserInterfaces\UserFactory::class,
-            \App\Factories\UserModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\UserInterfaces\UserRepository::class,
-            \App\Repositories\UserDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | USER
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Console\Commands\UserCommands\CreateUserCommand::class)
             ->needs(\App\UseCases\UserUseCases\CreateUserUseCase\CreateUserInputPort::class)
@@ -60,17 +76,11 @@ class AppServiceProvider extends ServiceProvider
                     ]);
             });
 
-        // RACK
-        $this->app->bind(
-            \App\Domain\Interfaces\RackInterfaces\RackFactory::class,
-            \App\Factories\RackModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\RackInterfaces\RackRepository::class,
-            \App\Repositories\RackDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | RACK
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Http\Controllers\RackControllers\CreateRackController::class)
             ->needs(\App\UseCases\RackUseCases\CreateRackUseCase\CreateRackInputPort::class)
@@ -107,17 +117,11 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             });
 
-        // DEVICE
-        $this->app->bind(
-            \App\Domain\Interfaces\DeviceInterfaces\DeviceFactory::class,
-            \App\Factories\DeviceModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\DeviceInterfaces\DeviceRepository::class,
-            \App\Repositories\DeviceDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | DEVICE
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Http\Controllers\DeviceControllers\GetDeviceController::class)
             ->needs(\App\UseCases\DeviceUseCases\GetDeviceUseCase\GetDeviceInputPort::class)
@@ -154,17 +158,11 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             });
 
-        //REGION
-        $this->app->bind(
-            \App\Domain\Interfaces\RegionInterfaces\RegionFactory::class,
-            \App\Factories\RegionModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\RegionInterfaces\RegionRepository::class,
-            \App\Repositories\RegionDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | REGION
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Http\Controllers\RegionControllers\GetRegionController::class)
             ->needs(\App\UseCases\RegionUseCases\GetRegionUseCase\GetRegionInputPort::class)
@@ -207,17 +205,11 @@ class AppServiceProvider extends ServiceProvider
                     ]);
             });
 
-        //DEPARTMENT
-        $this->app->bind(
-            \App\Domain\Interfaces\DepartmentInterfaces\DepartmentFactory::class,
-            \App\Factories\DepartmentModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\DepartmentInterfaces\DepartmentRepository::class,
-            \App\Repositories\DepartmentDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | DEPARTMENT
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Http\Controllers\DepartmentControllers\GetDepartmentController::class)
             ->needs(\App\UseCases\DepartmentUseCases\GetDepartmentUseCase\GetDepartmentInputPort::class)
@@ -262,17 +254,11 @@ class AppServiceProvider extends ServiceProvider
                     ]);
             });
 
-        // SITE
-        $this->app->bind(
-            \App\Domain\Interfaces\SiteInterfaces\SiteFactory::class,
-            \App\Factories\SiteModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\SiteInterfaces\SiteRepository::class,
-            \App\Repositories\SiteDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | SITE
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Http\Controllers\SiteControllers\CreateSiteController::class)
             ->needs(\App\UseCases\SiteUseCases\CreateSiteUseCase\CreateSiteInputPort::class)
@@ -309,17 +295,11 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             });
 
-        // BUILDING
-        $this->app->bind(
-            \App\Domain\Interfaces\BuildingInterfaces\BuildingFactory::class,
-            \App\Factories\BuildingModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\BuildingInterfaces\BuildingRepository::class,
-            \App\Repositories\BuildingDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | BUILDING
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Http\Controllers\BuildingControllers\GetBuildingController::class)
             ->needs(\App\UseCases\BuildingUseCases\GetBuildingUseCase\GetBuildingInputPort::class)
@@ -362,17 +342,11 @@ class AppServiceProvider extends ServiceProvider
                     ]);
             });
 
-        // ROOM
-        $this->app->bind(
-            \App\Domain\Interfaces\RoomInterfaces\RoomFactory::class,
-            \App\Factories\RoomModelFactory::class,
-        );
-
-        $this->app->bind(
-            \App\Domain\Interfaces\RoomInterfaces\RoomRepository::class,
-            \App\Repositories\RoomDatabaseRepository::class,
-        );
-
+        /*
+        |--------------------------------------------------------------------------
+        | ROOM
+        |--------------------------------------------------------------------------
+        */
         $this->app
             ->when(\App\Http\Controllers\RoomControllers\GetRoomController::class)
             ->needs(\App\UseCases\RoomUseCases\GetRoomUseCase\GetRoomInputPort::class)

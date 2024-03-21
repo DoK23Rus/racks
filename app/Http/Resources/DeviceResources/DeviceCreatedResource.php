@@ -218,8 +218,14 @@ use OpenApi\Annotations as OA;
  */
 class DeviceCreatedResource extends JsonResource
 {
+    /**
+     * @var DeviceEntity
+     */
     protected DeviceEntity $device;
 
+    /**
+     * @param  DeviceEntity  $device
+     */
     public function __construct(DeviceEntity $device)
     {
         parent::__construct($device);
@@ -227,7 +233,8 @@ class DeviceCreatedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {
@@ -238,7 +245,7 @@ class DeviceCreatedResource extends JsonResource
             'type' => $this->device->getType(),
             'status' => $this->device->getStatus(),
             'has_backside_location' => $this->device->getLocation(),
-            'units' => $this->device->getUnits()->getArray(),
+            'units' => $this->device->getUnits()->toArray(),
             'hostname' => $this->device->getHostname(),
             'ip' => $this->device->getIp(),
             'stack' => $this->device->getStack(),

@@ -22,8 +22,14 @@ use OpenApi\Annotations as OA;
  */
 class NoSuchRoomResource extends JsonResource
 {
+    /**
+     * @var RoomEntity|null
+     */
     protected ?RoomEntity $room;
 
+    /**
+     * @param  RoomEntity|null  $room
+     */
     public function __construct(?RoomEntity $room)
     {
         parent::__construct($room);
@@ -31,7 +37,8 @@ class NoSuchRoomResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

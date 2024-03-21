@@ -7,14 +7,25 @@ use App\Domain\Interfaces\ViewModel;
 
 class GetSiteInteractor implements GetSiteInputPort
 {
+    /**
+     * @param  GetSiteOutputPort  $output
+     * @param  SiteRepository  $siteRepository
+     */
     public function __construct(
         private readonly GetSiteOutputPort $output,
         private readonly SiteRepository $siteRepository
     ) {
     }
 
+    /**
+     * @param  GetSiteRequestModel  $request
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function getSite(GetSiteRequestModel $request): ViewModel
     {
+        // Try to get site
         try {
             $site = $this->siteRepository->getById($request->getId());
         } catch (\Exception $e) {

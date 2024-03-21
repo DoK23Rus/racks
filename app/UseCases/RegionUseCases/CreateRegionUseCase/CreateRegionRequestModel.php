@@ -12,6 +12,9 @@ class CreateRegionRequestModel
     ) {
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->attributes['name'];

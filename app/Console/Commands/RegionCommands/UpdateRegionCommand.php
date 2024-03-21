@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class UpdateRegionCommand extends Command
 {
-    protected $signature = 'update:region {id} {name}';
+    /**
+     * @var string
+     */
+    protected $signature = 'region:update {id : Region ID} {name : Region name}';
 
+    /**
+     * @var string
+     */
     protected $description = 'Updates a region';
 
+    /**
+     * @param  UpdateRegionInputPort  $interactor
+     */
     public function __construct(
         private readonly UpdateRegionInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $attributes = [

@@ -16,16 +16,26 @@ use OpenApi\Annotations as OA;
  *         description="Site name",
  *         nullable=false,
  *         example="Some site"
- *     )
+ *     ),
+ *     @OA\Property(
+ *         property="description",
+ *         type="string",
+ *         description="Site description",
+ *         example="Site description"
+ *     ),
  *  )
  */
 class UpdateSiteRequest extends FormRequest
 {
+    /**
+     * @return array<array<mixed>>
+     */
     public function rules(): array
     {
         return [
             'id' => ['prohibited'],
-            'name' => ['required', 'string'],
+            'name' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
             'department_id' => ['prohibited'],
         ];
     }

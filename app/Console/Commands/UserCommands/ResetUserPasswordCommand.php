@@ -9,16 +9,30 @@ use Illuminate\Console\Command;
 
 class ResetUserPasswordCommand extends Command
 {
-    protected $signature = 'reset_password:user {id}';
+    /**
+     * @var string
+     */
+    protected $signature = 'user:reset_password {id : User ID}';
 
+    /**
+     * @var string
+     */
     protected $description = 'User password reset';
 
+    /**
+     * @param  ResetUserPasswordInputPort  $interactor
+     */
     public function __construct(
         private ResetUserPasswordInputPort $interactor
     ) {
         parent::__construct();
     }
 
+    /**
+     * @return int
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function handle(): int
     {
         $password = $this->ask('Password');

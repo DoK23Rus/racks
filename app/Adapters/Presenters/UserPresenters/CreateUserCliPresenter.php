@@ -10,6 +10,12 @@ use Illuminate\Console\Command;
 
 class CreateUserCliPresenter implements CreateUserOutputPort
 {
+    /**
+     * @param  CreateUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function userCreated(CreateUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -22,6 +28,12 @@ class CreateUserCliPresenter implements CreateUserOutputPort
         );
     }
 
+    /**
+     * @param  CreateUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function userAlreadyExists(CreateUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -34,6 +46,12 @@ class CreateUserCliPresenter implements CreateUserOutputPort
         );
     }
 
+    /**
+     * @param  CreateUserResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDepartment(CreateUserResponseModel $response): ViewModel
     {
         return App()->makeWith(
@@ -46,6 +64,13 @@ class CreateUserCliPresenter implements CreateUserOutputPort
         );
     }
 
+    /**
+     * @param  CreateUserResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unableToCreateUser(CreateUserResponseModel $response, \Throwable $e): ViewModel
     {
         return App()->makeWith(

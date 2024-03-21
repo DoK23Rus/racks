@@ -9,6 +9,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class RegionDatabaseRepository implements RegionRepository
 {
+    /**
+     * @param  int  $id
+     * @return RegionEntity
+     */
     public function getById(int $id): RegionEntity
     {
         return Region::where('id', $id)
@@ -16,6 +20,9 @@ class RegionDatabaseRepository implements RegionRepository
             ->firstOrFail();
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function getTreeView(): array
     {
         return Region::with(
@@ -32,6 +39,10 @@ class RegionDatabaseRepository implements RegionRepository
             ->toArray();
     }
 
+    /**
+     * @param  RegionEntity  $region
+     * @return bool
+     */
     public function exists(RegionEntity $region): bool
     {
         return Region::where([
@@ -39,6 +50,10 @@ class RegionDatabaseRepository implements RegionRepository
         ])->exists();
     }
 
+    /**
+     * @param  RegionEntity  $region
+     * @return RegionEntity
+     */
     public function create(RegionEntity $region): RegionEntity
     {
         return Region::create([
@@ -46,6 +61,10 @@ class RegionDatabaseRepository implements RegionRepository
         ]);
     }
 
+    /**
+     * @param  RegionEntity  $region
+     * @return int
+     */
     public function delete(RegionEntity $region): int
     {
         return Region::where('id', $region->getId())
@@ -53,6 +72,10 @@ class RegionDatabaseRepository implements RegionRepository
             ->delete();
     }
 
+    /**
+     * @param  RegionEntity  $region
+     * @return RegionEntity
+     */
     public function update(RegionEntity $region): RegionEntity
     {
         return tap(Region::where('id', $region->getId())
@@ -62,6 +85,10 @@ class RegionDatabaseRepository implements RegionRepository
             ]);
     }
 
+    /**
+     * @param  string|null  $perPage
+     * @return LengthAwarePaginator
+     */
     public function getAll(?string $perPage): LengthAwarePaginator
     {
         return Region::paginate($perPage);

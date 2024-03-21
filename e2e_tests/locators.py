@@ -25,6 +25,7 @@ class Locators():
     site_name_textbox_id = 'e2e_site_name'
     building_name_textbox_id = 'e2e_building_name'
     room_name_textbox_id = 'e2e_room_name'
+    room_floor_textbox_id = 'e2e_room_floor'
     rack_name_textbox_id = 'e2e_rack_name'
     rack_amount_textbox_id = 'e2e_rack_amount'
     username_textbox_id = 'e2e_username'

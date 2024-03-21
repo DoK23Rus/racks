@@ -18,14 +18,26 @@ use Illuminate\Http\JsonResponse;
 |
 */
 
+/**
+ * API Docs: @see \App\Http\Controllers\BuildingControllers\Swagger\DeleteBuildingController
+ */
 class DeleteBuildingController extends Controller
 {
+    /**
+     * @param  DeleteBuildingInputPort  $interactor
+     */
     public function __construct(
         private readonly DeleteBuildingInputPort $interactor,
     ) {
         $this->middleware('auth:api');
     }
 
+    /**
+     * @param  DeleteBuildingRequest  $request
+     * @return JsonResponse|null
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function __invoke(DeleteBuildingRequest $request): ?JsonResponse
     {
         $viewModel = $this->interactor->deleteBuilding(

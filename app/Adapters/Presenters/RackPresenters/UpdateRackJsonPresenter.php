@@ -14,6 +14,12 @@ use App\UseCases\RackUseCases\UpdateRackUseCase\UpdateRackResponseModel;
 
 class UpdateRackJsonPresenter implements UpdateRackOutputPort
 {
+    /**
+     * @param  UpdateRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function rackUpdated(UpdateRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -25,6 +31,12 @@ class UpdateRackJsonPresenter implements UpdateRackOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRack(UpdateRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -36,6 +48,12 @@ class UpdateRackJsonPresenter implements UpdateRackOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function rackNameException(UpdateRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -47,6 +65,14 @@ class UpdateRackJsonPresenter implements UpdateRackOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRackResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToUpdateRack(UpdateRackResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -62,6 +88,12 @@ class UpdateRackJsonPresenter implements UpdateRackOutputPort
         );
     }
 
+    /**
+     * @param  UpdateRackResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(UpdateRackResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

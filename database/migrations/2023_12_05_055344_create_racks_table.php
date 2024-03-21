@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Enums\RackFrameEnum;
+use App\Models\Enums\RackPlaceTypeEnum;
+use App\Models\Enums\RackTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Blueprint;
@@ -33,19 +36,25 @@ return new class extends Migration
             $table->integer('depth')->nullable();
             $table->integer('unit_width')->nullable();
             $table->integer('unit_depth')->nullable();
-            $table->string('type', 255)->default(\App\Models\Enums\RackTypeEnum::RACK);
-            $table->string('frame', 255)->default(\App\Models\Enums\RackFrameEnum::DOUBLE);
-            $table->string('place_type', 255)->default(\App\Models\Enums\RackPlaceTypeEnum::FLOOR);
+            $table->enum('type', array_column(RackTypeEnum::cases(), 'value'))
+                ->default(RackTypeEnum::RACK);
+            $table->enum('frame', array_column(RackFrameEnum::cases(), 'value'))
+                ->default(RackFrameEnum::DOUBLE);
+            $table->enum('place_type', array_column(RackPlaceTypeEnum::cases(), 'value'))
+                ->default(RackPlaceTypeEnum::FLOOR);
             $table->integer('max_load')->nullable();
             $table->integer('power_sockets')->nullable();
             $table->integer('power_sockets_ups')->nullable();
             $table->boolean('has_external_ups')->default(false);
             $table->boolean('has_cooler')->default(false);
             $table->string('updated_by', 255);
-            $table->integer('department_id');
             $table->timestamps();
             $table->foreignId('room_id')
                 ->constrained('rooms')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('department_id')
+                ->constrained('departments')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
         });

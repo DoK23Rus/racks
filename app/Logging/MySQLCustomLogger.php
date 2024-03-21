@@ -9,10 +9,9 @@ class MySQLCustomLogger
     /**
      * Create a custom Monolog instance.
      *
-     *
-     * @return \Monolog\Logger
+     * @param  array<mixed>  $config
      */
-    public function __invoke(array $config)
+    public function __invoke(array $config): Logger
     {
         $logger = new Logger('MySQLLoggingHandler');
 

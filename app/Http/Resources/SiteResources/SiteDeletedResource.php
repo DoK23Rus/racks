@@ -15,8 +15,14 @@ use OpenApi\Annotations as OA;
  */
 class SiteDeletedResource extends JsonResource
 {
+    /**
+     * @var SiteEntity
+     */
     protected SiteEntity $site;
 
+    /**
+     * @param  SiteEntity  $site
+     */
     public function __construct(SiteEntity $site)
     {
         parent::__construct($site);
@@ -24,7 +30,8 @@ class SiteDeletedResource extends JsonResource
     }
 
     /**
-     * Transform the resource into an array.
+     * @param  Request  $request
+     * @return array<mixed>
      */
     public function toArray(Request $request): array
     {

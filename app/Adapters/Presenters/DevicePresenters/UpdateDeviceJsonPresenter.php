@@ -16,6 +16,12 @@ use App\UseCases\DeviceUseCases\UpdateDeviceUseCase\UpdateDeviceResponseModel;
 
 class UpdateDeviceJsonPresenter implements UpdateDeviceOutputPort
 {
+    /**
+     * @param  UpdateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deviceUpdated(UpdateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -27,6 +33,12 @@ class UpdateDeviceJsonPresenter implements UpdateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchUnits(UpdateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -38,6 +50,12 @@ class UpdateDeviceJsonPresenter implements UpdateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unitsAreBusy(UpdateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -49,6 +67,14 @@ class UpdateDeviceJsonPresenter implements UpdateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDeviceResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function updateFailed(UpdateDeviceResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -64,6 +90,12 @@ class UpdateDeviceJsonPresenter implements UpdateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDevice(UpdateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -75,6 +107,14 @@ class UpdateDeviceJsonPresenter implements UpdateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDeviceResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToUpdateDevice(UpdateDeviceResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -90,6 +130,12 @@ class UpdateDeviceJsonPresenter implements UpdateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  UpdateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(UpdateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

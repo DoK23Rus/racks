@@ -11,6 +11,12 @@ use App\UseCases\DeviceUseCases\GetDeviceUseCase\GetDeviceResponseModel;
 
 class GetDeviceJsonPresenter implements GetDeviceOutputPort
 {
+    /**
+     * @param  GetDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function retrieveDevice(GetDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -22,6 +28,12 @@ class GetDeviceJsonPresenter implements GetDeviceOutputPort
         );
     }
 
+    /**
+     * @param  GetDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchDevice(GetDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,

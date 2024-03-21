@@ -4,14 +4,35 @@ namespace App\Models\ValueObjects;
 
 use App\Domain\Interfaces\RackInterfaces\RackBusyUnitsInterface;
 
+/**
+ * Value object for rack busy units data
+ */
 class RackBusyUnitsValueObject implements RackBusyUnitsInterface
 {
+    /**
+     * @var array{
+     *     front: array<int>,
+     *     back: array<int>
+     * }|array<null>
+     */
     private array $busyUnits;
 
+    /**
+     * @var array<int>
+     */
     private array $front;
 
+    /**
+     * @var array<int>
+     */
     private array $back;
 
+    /**
+     * @param  array{
+     *     front: array<int>,
+     *     back: array<int>
+     * }|array<null>  $busyUnits Busy units array
+     */
     public function __construct(array $busyUnits)
     {
         $this->busyUnits = $busyUnits;
@@ -19,17 +40,22 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         $this->setBack();
     }
 
-    public function getBusyUnits(): array
+    /**
+     * @return array{
+     *      front: array<int>,
+     *      back: array<int>
+     *  }|array<null>
+     */
+    public function toArray(): array
     {
         return $this->busyUnits;
     }
 
-    public function getBusyUnitsJson(): string
-    {
-        return json_encode($this->busyUnits);
-    }
-
-    public function getArray(bool $side): array
+    /**
+     * @param  bool  $side
+     * @return int[]
+     */
+    public function getUnitsForSide(bool $side): array
     {
         if (! $side) {
             return $this->front;
@@ -38,6 +64,9 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         return $this->back;
     }
 
+    /**
+     * @return void
+     */
     public function setFront(): void
     {
         if (! array_key_exists('front', $this->busyUnits)) {
@@ -48,6 +77,9 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         $this->front = $front;
     }
 
+    /**
+     * @return void
+     */
     public function setBack(): void
     {
         if (! array_key_exists('back', $this->busyUnits)) {
@@ -56,10 +88,5 @@ class RackBusyUnitsValueObject implements RackBusyUnitsInterface
         $back = $this->busyUnits['back'];
         sort($back);
         $this->back = $back;
-    }
-
-    public function test(): int
-    {
-        return 123;
     }
 }

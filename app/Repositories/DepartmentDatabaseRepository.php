@@ -9,6 +9,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class DepartmentDatabaseRepository implements DepartmentRepository
 {
+    /**
+     * @param  int  $id
+     * @return DepartmentEntity
+     */
     public function getById(int $id): DepartmentEntity
     {
         return Department::where('id', $id)
@@ -16,6 +20,10 @@ class DepartmentDatabaseRepository implements DepartmentRepository
             ->firstOrFail();
     }
 
+    /**
+     * @param  DepartmentEntity  $department
+     * @return bool
+     */
     public function exists(DepartmentEntity $department): bool
     {
         return Department::where([
@@ -24,6 +32,10 @@ class DepartmentDatabaseRepository implements DepartmentRepository
         ])->exists();
     }
 
+    /**
+     * @param  DepartmentEntity  $department
+     * @return DepartmentEntity
+     */
     public function create(DepartmentEntity $department): DepartmentEntity
     {
         return Department::create([
@@ -32,6 +44,10 @@ class DepartmentDatabaseRepository implements DepartmentRepository
         ]);
     }
 
+    /**
+     * @param  DepartmentEntity  $department
+     * @return int
+     */
     public function delete(DepartmentEntity $department): int
     {
         return Department::where('id', $department->getId())
@@ -39,6 +55,10 @@ class DepartmentDatabaseRepository implements DepartmentRepository
             ->delete();
     }
 
+    /**
+     * @param  DepartmentEntity  $department
+     * @return DepartmentEntity
+     */
     public function update(DepartmentEntity $department): DepartmentEntity
     {
         return tap(Department::where('id', $department->getId())
@@ -48,6 +68,10 @@ class DepartmentDatabaseRepository implements DepartmentRepository
             ]);
     }
 
+    /**
+     * @param  string|null  $perPage
+     * @return LengthAwarePaginator
+     */
     public function getAll(?string $perPage): LengthAwarePaginator
     {
         return Department::paginate($perPage);

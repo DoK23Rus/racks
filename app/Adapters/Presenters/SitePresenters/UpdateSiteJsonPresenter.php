@@ -13,6 +13,12 @@ use App\UseCases\SiteUseCases\UpdateSiteUseCase\UpdateSiteResponseModel;
 
 class UpdateSiteJsonPresenter implements UpdateSiteOutputPort
 {
+    /**
+     * @param  UpdateSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function siteUpdated(UpdateSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -24,6 +30,12 @@ class UpdateSiteJsonPresenter implements UpdateSiteOutputPort
         );
     }
 
+    /**
+     * @param  UpdateSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchSite(UpdateSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -35,6 +47,12 @@ class UpdateSiteJsonPresenter implements UpdateSiteOutputPort
         );
     }
 
+    /**
+     * @param  UpdateSiteResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(UpdateSiteResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -46,6 +64,14 @@ class UpdateSiteJsonPresenter implements UpdateSiteOutputPort
         );
     }
 
+    /**
+     * @param  UpdateSiteResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToUpdateSite(UpdateSiteResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {

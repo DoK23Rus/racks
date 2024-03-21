@@ -16,6 +16,12 @@ use App\UseCases\DeviceUseCases\CreateDeviceUseCase\CreateDeviceResponseModel;
 
 class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
 {
+    /**
+     * @param  CreateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function deviceCreated(CreateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -27,6 +33,12 @@ class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  CreateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchUnits(CreateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -37,6 +49,12 @@ class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  CreateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function unitsAreBusy(CreateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -48,6 +66,14 @@ class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  CreateDeviceResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function creationFailed(CreateDeviceResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -62,6 +88,12 @@ class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  CreateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function noSuchRack(CreateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
@@ -72,6 +104,14 @@ class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  CreateDeviceResponseModel  $response
+     * @param  \Throwable  $e
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Throwable
+     */
     public function unableToCreateDevice(CreateDeviceResponseModel $response, \Throwable $e): ViewModel
     {
         if (config('app.debug')) {
@@ -87,6 +127,12 @@ class CreateDeviceJsonPresenter implements CreateDeviceOutputPort
         );
     }
 
+    /**
+     * @param  CreateDeviceResponseModel  $response
+     * @return ViewModel
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function permissionException(CreateDeviceResponseModel $response): ViewModel
     {
         return App()->makeWith(JsonResourceViewModel::class,
